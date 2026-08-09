@@ -1,0 +1,153 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_2",
+  "attempt": 2,
+  "candidate_revision": "0091cbed01f019b9131c961b379390029e0549d1",
+  "criteria": [
+    {
+      "id": "G2.1",
+      "result": "PASS",
+      "evidence": [
+        "src/world/types.ts:1 defines 64 m chunks.",
+        "src/world/seed.ts:15-24 and src/world/generator.ts:68-121 derive each signed chunk from world seed, chunk coordinates, and freeski-world-v1.",
+        "Independent npm test passed all 24 tests.",
+        "Independent production-source scan found no Phaser imports, browser globals, or ambient Math.random in src/world or src/simulation."
+      ],
+      "notes": "Chunk generation is deterministic, versioned, signed-coordinate aware, and engine independent."
+    },
+    {
+      "id": "G2.2",
+      "result": "PASS",
+      "evidence": [
+        "src/world/classicMountain.ts:45-97 declares left Slalom, center Free Style, right Tree Slalom, 13 lift towers, two chair lanes, and four boundary Yeti triggers.",
+        "src/render/scenes/AlpineScene.ts:383-517 renders course and lift overlays from world data rather than scene-local geometry.",
+        "Fresh direct Chromium inspection at 1280x800 and 768x600 showed course gates, markers, lift geometry, populated terrain, corridor diagnostics, and a readable player view.",
+        "Frame-synchronized G input independently hid and restored the debug overlay."
+      ],
+      "notes": "All required fixed overlays and boundary trigger data remain present and rendered at supported viewport sizes."
+    },
+    {
+      "id": "G2.3",
+      "result": "PASS",
+      "evidence": [
+        "docs/SKIFREE_RESEARCH_AND_DESIGN.md:111,119,126 specifies authoritative lengths of 540, 1,040, and 1,040 meters.",
+        "src/world/classicMountain.ts:45-75 now records lengthMeters as 540/1,040/1,040.",
+        "Start gates remain exactly Y=40 with ranges -36..-20, -10..10, and 20..32; finish gates remain exactly Y=540/1,040/1,040.",
+        "Markers remain 24 at 60-520 m for Slalom and 39 at 65-1,015 m for Tree Slalom.",
+        "git diff 64ec314b9ed9b4960bafb6d41e164b9b9cc98af1..0091cbed01f019b9131c961b379390029e0549d1 changes only three canonical length values and their three unit assertions."
+      ],
+      "notes": "The attempt-1 length defect is corrected without changing the already-correct classic coordinates."
+    },
+    {
+      "id": "G2.4",
+      "result": "PASS",
+      "evidence": [
+        "src/world/spawnProfiles.ts:20-42 contains exact open 5/45/20/5/20/2/2/1, Free Style 2/18/30/10/20/20, Tree Slalom 63/1, and Slalom mogul-only weights.",
+        "src/world/spawnProfiles.ts:53-86 selects zones and weighted object types from data, including 2:1 bump and 3:1 rock/stump variants.",
+        "Independent unit tests passed the exact weight-table assertions."
+      ],
+      "notes": "All four researched population profiles remain exact and data driven."
+    },
+    {
+      "id": "G2.5",
+      "result": "PASS",
+      "evidence": [
+        "src/world/generator.ts:19-53 and 137-225 implement deterministic jittered-cell, footprint-aware placement with priority-based conflict rejection across chunk seams.",
+        "src/world/classicMountain.ts:99-132 and src/world/generator.ts:191-209 enforce course, marker, lift, and corridor exclusions.",
+        "src/world/generator.ts:82-100 reserves up to 18 m of ramp landing clearance.",
+        "src/world/corridor.ts:4-33 defines a 4.5 m guaranteed corridor, exactly 2.5 times the 1.8 m player footprint.",
+        "Independent unit tests found no footprint overlap, exclusion violation, landing blocker, or guaranteed-corridor blocker."
+      ],
+      "notes": "Placement remains footprint aware, course safe, landing safe, and navigable."
+    },
+    {
+      "id": "G2.6",
+      "result": "PASS",
+      "evidence": [
+        "src/world/mountainStream.ts:42-83 activates one row behind and two ahead in either travel direction while retaining a bounded cache.",
+        "Direct Chromium downhill traversal reached row 1 with ahead rows [2,3], 35 cached chunks, and zero missing chunks.",
+        "Direct Chromium reversal returned to row 0 with negative velocity, ahead rows [-1,-2], 47 cached chunks, and zero missing chunks.",
+        "Fresh desktop rendering remained continuously populated through both transitions without visible blank rows or pop-in."
+      ],
+      "notes": "Forward and reverse streaming independently demonstrated the required lookahead and rear retention."
+    },
+    {
+      "id": "G2.7",
+      "result": "PASS",
+      "evidence": [
+        "Independent unit suite passed same-seed reload/viewport stability, alternate-seed variance with fixed overlays, immutable generated content, and 2,100 m continuity tests.",
+        "Direct Chromium preserved generated signature e791de4d and overlay signature 59d3acb3 across reload and 1280x800-to-768x600 viewport change.",
+        "Changing the seed changed generated signature to f00b488b while overlay signature remained 59d3acb3.",
+        "Direct browser audit reached 2100.2525833333916 m in 2,970 fixed steps across 33 rows with missingChunks=0, corridorBlockers=0, and passed=true.",
+        "Full independent Playwright run passed 6/6 tests, including deterministic mountain, 2,100 m audit, minimum viewport, and Gate 1 control playthroughs.",
+        "No console errors, page errors, failed requests, or HTTP error responses occurred during direct Chromium inspection."
+      ],
+      "notes": "Determinism, seed variance, viewport independence, long-run continuity, runtime health, and prior control behavior all remain demonstrated."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Read docs/GAUNTLET_LOOP_PROMPT.md, README.md, docs/SKIFREE_RESEARCH_AND_DESIGN.md, and sprite-sheet authoritative inputs completely.",
+      "result": "Identified all G2.1-G2.7 requirements and authoritative classic coordinates, lengths, weights, placement, streaming, and determinism rules."
+    },
+    {
+      "command_or_action": "Verify frozen candidate, ancestry, worktree state, and attempt-2 diff.",
+      "result": "HEAD exactly 0091cbed01f019b9131c961b379390029e0549d1; direct parent/base exactly 64ec314b9ed9b4960bafb6d41e164b9b9cc98af1; frozen worktree clean; diff contains only 3+3 line substitutions in classicMountain.ts and worldGeneration.test.ts."
+    },
+    {
+      "command_or_action": "Validate attempt-2 submission packet and all referenced attempt-2 and attempt-1 artifacts.",
+      "result": "Candidate/base metadata matched; every referenced report and screenshot existed; raw reports were read; both historical screenshots were inspected at original 1280x800 and 768x600 resolution."
+    },
+    {
+      "command_or_action": "Create a pristine /tmp export of the exact candidate and run npm ci.",
+      "result": "Exit 0; 164 packages installed."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "Exit 0; all files matched Prettier formatting."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "Exit 0; 6 test files and 24 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "Exit 0; production build completed. Only the disclosed non-failing large-bundle advisory was emitted."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --workers=1 --reporter=line",
+      "result": "Exit 0; all 6 Chromium E2E tests passed in 33.1 seconds."
+    },
+    {
+      "command_or_action": "Static dependency audit of production src/world and src/simulation modules.",
+      "result": "No Phaser import, window/document dependency, or Math.random call found."
+    },
+    {
+      "command_or_action": "Fresh direct Chromium playthrough at 1280x800 and 768x600.",
+      "result": "Both layouts loaded ready with continuous populated terrain, zero missing chunks, visible classic overlays/debug data, and no console, page, request, or HTTP errors; fresh screenshots were inspected at original resolution."
+    },
+    {
+      "command_or_action": "Direct reload, viewport, alternate-seed, debug-toggle, downhill, reverse-uphill, and 2,100 m audit sequence.",
+      "result": "Reload and viewport signatures were stable; alternate seed changed random content only; G toggled diagnostics; forward/reverse ahead rows were correct with zero gaps; 2,100 m audit passed with zero blockers."
+    },
+    {
+      "command_or_action": "Gate 1 regression coverage through full E2E plus direct Turbo, pause/resume, and reset input.",
+      "result": "Automated carve/jump/landing/Turbo/pause/reset/pointer tests passed; direct controls changed state and reset advanced runNumber to 2 without runtime errors."
+    },
+    {
+      "command_or_action": "Final frozen-worktree integrity check.",
+      "result": "Candidate remained at the exact submitted revision with no tracked or staged changes."
+    }
+  ],
+  "confidence": 0.995
+}

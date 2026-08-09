@@ -20,7 +20,7 @@ This is the append-only public record for independently judged build gates. Prod
 | ---------------------------------- | -------------------------: | ------------------- | --------- |
 | Gate 0 — Repository baseline       |                          1 | PASS                | `602d4c8` |
 | Gate 1 — Skiing vertical slice     |                          1 | PASS                | `1d923ed` |
-| Gate 2 — Deterministic mountain    |                          1 | FAIL                | `de8884f` |
+| Gate 2 — Deterministic mountain    |                          2 | PASS                | `0091cbe` |
 | Gate 3 — Collisions, air and Style |                          — | NOT STARTED         | —         |
 | Gate 4 — Event modes and records   |                          — | NOT STARTED         | —         |
 | Gate 5 — Living slope and Yeti     |                          — | NOT STARTED         | —         |
@@ -66,3 +66,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: clean install, formatting, typecheck, lint, 24 unit tests, production build, repeated 6-test Chromium E2E, desktop/minimum-viewport inspection, forward/reverse streaming and 2,100 m audit
 - Required remediation: set canonical course lengths to the researched `540`, `1,040` and `1,040` meters and update their unit assertions without changing the correct start/finish coordinates.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-2/attempt-1/judge-verdict.json`
+
+### Gate 2 — attempt 2
+
+- Candidate revision: `0091cbed01f019b9131c961b379390029e0549d1`
+- Evidence commit: `5c4db076949bcce977ea6d6d47c479518eaf4999`
+- Judge isolation: new fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.995`
+- Criteria: G2.1–G2.7 all PASS
+- Independent checks: pristine install, formatting, typecheck, lint, 24 unit tests, production build, 6 Chromium E2E tests, direct desktop/minimum-viewport inspection, seed/reload invariants, forward/reverse streaming and 2,100 m audit
+- Repair verified: canonical lengths are `540`, `1,040` and `1,040` meters while all researched coordinates remain unchanged.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-2/attempt-2/judge-verdict.json`
