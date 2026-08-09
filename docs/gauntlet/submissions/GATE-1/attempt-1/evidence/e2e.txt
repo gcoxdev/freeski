@@ -1,0 +1,19 @@
+$ FREESKI_GATE1_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-1/attempt-1/evidence FREESKI_GATE1_TELEMETRY=docs/gauntlet/submissions/GATE-1/attempt-1/evidence/playthrough-telemetry.json npm run test:e2e -- --workers=1 --reporter=line
+
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test --workers=1 --reporter=line
+[WebServer] npm notice run freeski@0.1.0 dev
+[WebServer] npm notice run vite
+
+Running 4 tests using 1 worker
+
+[1/4] [chromium] › tests/e2e/baseline.spec.ts:20:1 › loads an interactive Phaser baseline without console errors
+[2/4] [chromium] › tests/e2e/baseline.spec.ts:60:1 › remains playable at the minimum supported viewport
+[3/4] [chromium] › tests/e2e/baseline.spec.ts:74:1 › plays the full fixed-step skiing control sequence
+[4/4] [chromium] › tests/e2e/baseline.spec.ts:292:1 › keeps pointer steering opt-in and click-to-jump functional
+  4 passed (41.6s)
+
+The load and full-playthrough tests explicitly collected browser `console.error`
+and uncaught page errors and asserted that both arrays remained empty.
+
+Exit code: 0

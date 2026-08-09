@@ -1,0 +1,93 @@
+{
+  "gate": "GATE_1",
+  "attempt": 1,
+  "candidate_revision": "1d923ede81cd2e39bc4e2f9117710fc34d5ac0e7",
+  "base_revision": "e008f9c3733ff70bcb7fff8e04a0f91cfd53c714",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE1_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-1/attempt-1/evidence FREESKI_GATE1_TELEMETRY=docs/gauntlet/submissions/GATE-1/attempt-1/evidence/playthrough-telemetry.json npm run test:e2e -- --workers=1 --reporter=line",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/e2e.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/normal-carve.png",
+      "demonstrates": ["G1.1", "G1.3", "G1.4", "G1.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/turbo-descent.png",
+      "demonstrates": ["G1.1", "G1.4", "G1.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/paused.png",
+      "demonstrates": ["G1.2", "G1.4", "G1.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/clean-jump.png",
+      "demonstrates": ["G1.3", "G1.5", "G1.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/crash.png",
+      "demonstrates": ["G1.5", "G1.6"]
+    },
+    {
+      "type": "replay",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/playthrough-telemetry.json",
+      "demonstrates": ["G1.1", "G1.2", "G1.3", "G1.5", "G1.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/unit-tests.txt",
+      "demonstrates": ["G1.1", "G1.5", "G1.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-1/attempt-1/evidence/e2e.txt",
+      "demonstrates": ["G1.2", "G1.3", "G1.4", "G1.5", "G1.6"]
+    }
+  ],
+  "known_limitations": [
+    "The temporary skier and snowfield are code-rendered Gate 1 visuals; approved ultra-realistic sprite ingestion remains reserved for Gate 6.",
+    "Phaser remains in one 1.22 MB minified JavaScript chunk, so Vite reports its advisory 500 kB chunk-size warning; meaningful scene and asset splitting is deferred.",
+    "The renderer is pinned to Phaser Canvas for deterministic headless and browser behavior after Chromium software WebGL exposed intermittent framebuffer/context failures; later WebGL-only VFX will require a guarded capability path with Canvas fallback.",
+    "Crash initiation in this obstacle-free slice is demonstrated through an intentionally off-axis manual-jump landing; terrain and actor collision crashes belong to Gate 3."
+  ],
+  "executor_claimed_criteria": ["G1.1", "G1.2", "G1.3", "G1.4", "G1.5", "G1.6"]
+}
