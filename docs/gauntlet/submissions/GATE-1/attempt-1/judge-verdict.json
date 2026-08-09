@@ -1,0 +1,143 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_1",
+  "attempt": 1,
+  "candidate_revision": "1d923ede81cd2e39bc4e2f9117710fc34d5ac0e7",
+  "criteria": [
+    {
+      "id": "G1.1",
+      "result": "PASS",
+      "evidence": [
+        "/tmp/freeski-gate1-judge-1d923ed/src/simulation/player.ts:72 defines fixed-step tuning; lines 149-163 define downhill, tuck, brake, three carve targets per side, traverse and uphill targets; lines 219-408 implement deterministic state updates and world integration.",
+        "Independent verbose Vitest run passed PlayerSimulation coverage for downhill acceleration, lateral momentum, all carve intensities, traverse/uphill, tuck, braking and Turbo.",
+        "Independent Chromium telemetry reached carve-left/right levels 1, 2 and 3; observed downhill delta Y +21.64 m, left-carve delta X -7.41 m and uphill delta Y -2.25 m with velocityY -6.5 m/s.",
+        "Independent Chromium playthrough measured normal tuck at 18.0 m/s and Turbo tuck at 42.545 m/s; braking reduced speed to 1.595 m/s."
+      ],
+      "notes": "The pure simulation provides the complete required movement state set and demonstrated directional momentum and speed behavior."
+    },
+    {
+      "id": "G1.2",
+      "result": "PASS",
+      "evidence": [
+        "/tmp/freeski-gate1-judge-1d923ed/src/input/actions.ts:21-31 explicitly maps arrows/WASD, Space, F, Escape/F3, R/F2 and Shift/B.",
+        "/tmp/freeski-gate1-judge-1d923ed/src/input/browserInput.ts:22-156 implements held and edge actions plus disabled-by-default pointer aim and pointer jump.",
+        "Independent Chromium input telemetry contained ArrowLeft, KeyA, ArrowRight, KeyD, ArrowUp, KeyW, ArrowDown, KeyS, ShiftLeft, KeyB, KeyF, Escape, F3, Space, KeyR, F2, PointerMove and PointerPrimary.",
+        "Direct observation confirmed pointer movement had no effect while disabled, then the POINTER toggle enabled right steering and click-to-jump.",
+        "Independent keyboard-action unit tests passed."
+      ],
+      "notes": "Every required keyboard action and alias worked directly, and pointer control remained opt-in."
+    },
+    {
+      "id": "G1.3",
+      "result": "PASS",
+      "evidence": [
+        "/tmp/freeski-gate1-judge-1d923ed/src/render/scenes/AlpineScene.ts:19 fixes PLAYER_SCREEN_RATIO at 0.35; lines 203-305 render scrolling world references from world coordinates; lines 330-340 anchor the skier.",
+        "At 1365x768, independent Chromium telemetry reported playerScreenY 228.2 on a 652 px canvas, exactly 35%.",
+        "At the supported 768x600 viewport, the canvas measured 766x484 and playerScreenY was 169.4, exactly 35% of canvas height.",
+        "Independent play advanced continuously through downhill, lateral and uphill world-coordinate changes while the screen anchor remained fixed.",
+        "/tmp/freeski-g1-judge-minimum.png and /tmp/freeski-g1-judge-desktop-air.png were visually inspected."
+      ],
+      "notes": "The rendering adapter keeps the grounded player at the fixed camera anchor while world-space motion continues."
+    },
+    {
+      "id": "G1.4",
+      "result": "PASS",
+      "evidence": [
+        "/tmp/freeski-gate1-judge-1d923ed/src/render/scenes/AlpineScene.ts:142-193 renders the temporary skier and in-canvas labels; lines 203-327 render the snowfield and moving references; lines 355-384 update HUD and pause/Turbo presentation.",
+        "/tmp/freeski-gate1-judge-1d923ed/index.html:28-66 defines the game canvas, pause card, speed, distance, form, Turbo and pointer controls.",
+        "Supplied normal-carve.png, turbo-descent.png, paused.png, clean-jump.png and crash.png were verified and visually inspected.",
+        "Independent desktop and minimum-viewport screenshots showed the snowfield, skier, speed, meters, motion, Turbo and pause state without gameplay-obscuring layout defects."
+      ],
+      "notes": "The temporary Gate 1 presentation visibly exposes all required gameplay and state information."
+    },
+    {
+      "id": "G1.5",
+      "result": "PASS",
+      "evidence": [
+        "/tmp/freeski-gate1-judge-1d923ed/src/simulation/player.ts:327-403 implements jump initiation, airborne physics, clean landing, off-axis crash, crash deceleration and timed recovery.",
+        "Independent verbose Vitest run passed neutral clean-landing and off-axis crash/recovery cases.",
+        "Independent Chromium play observed airborne height 0.250 m during capture, a clean grounded landing, then motion=crashed with crashCount=1 followed by automatic recovery to grounded.",
+        "/tmp/freeski-g1-judge-desktop-air.png and /tmp/freeski-g1-judge-desktop-crash.png were independently captured and inspected; supplied clean-jump.png and crash.png corroborated the visible states."
+      ],
+      "notes": "Manual jumping, explicit air state, clean landing, crash and recovery all worked end to end."
+    },
+    {
+      "id": "G1.6",
+      "result": "PASS",
+      "evidence": [
+        "Independent `npm run test:e2e -- --workers=1 --reporter=line` completed with 4/4 Chromium tests passing in 40.9 seconds.",
+        "/tmp/freeski-gate1-judge-1d923ed/tests/e2e/baseline.spec.ts:74-290 automates start, both carve directions, uphill travel, braking, tuck, Turbo, pause/resume, clean jump/landing, crash/recovery and both reset bindings.",
+        "Independent verbose Vitest run passed FixedStepClock equivalence and the PlayerSimulation 30 Hz versus 120 Hz frame-rate-independence test.",
+        "/tmp/freeski-gate1-judge-1d923ed/src/render/scenes/AlpineScene.ts:38 and 119-139 run simulation through the 60 Hz FixedStepClock.",
+        "Independent direct Chromium play completed 916 fixed steps and 851 render frames with droppedSeconds=0; telemetry included all required headings and event types.",
+        "Independent monitoring observed no console errors, uncaught page errors, failed requests or HTTP responses at or above 400."
+      ],
+      "notes": "The automated and independent direct playthroughs completed the whole sequence with deterministic fixed stepping and responsive normal/Turbo control."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Read docs/GAUNTLET_LOOP_PROMPT.md, README.md, docs/SKIFREE_RESEARCH_AND_DESIGN.md, assets/sprite-sheets/README.md and manifest.json",
+      "result": "Completed against the frozen candidate."
+    },
+    {
+      "command_or_action": "git rev-parse HEAD; git status --short",
+      "result": "HEAD exactly 1d923ede81cd2e39bc4e2f9117710fc34d5ac0e7; frozen worktree clean."
+    },
+    {
+      "command_or_action": "Inspect git diff e008f9c3733ff70bcb7fff8e04a0f91cfd53c714..1d923ede81cd2e39bc4e2f9117710fc34d5ac0e7 and graph-assisted source relationships",
+      "result": "Simulation, browser input, rendering/runtime telemetry and tests remain separated through explicit module boundaries."
+    },
+    {
+      "command_or_action": "Validate submission.json paths, raw logs, telemetry, screenshots and SHA-256-readable artifact contents",
+      "result": "Every referenced evidence artifact existed and was readable."
+    },
+    {
+      "command_or_action": "npm ci in pristine disposable archive copy of candidate",
+      "result": "Exit 0; 164 packages installed."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "Exit 0; all matched candidate files use Prettier style."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "Exit 0; 5 files and 15 tests passed."
+    },
+    {
+      "command_or_action": "npm test -- --reporter=verbose src/simulation/player.test.ts src/simulation/fixedStep.test.ts src/input/actions.test.ts",
+      "result": "Exit 0; all 10 targeted simulation, fixed-step and binding tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "Exit 0; Vite production output built successfully, with only the documented advisory chunk-size warning."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --workers=1 --reporter=line",
+      "result": "Exit 0; all 4 Chromium E2E tests passed."
+    },
+    {
+      "command_or_action": "Independent Chromium desktop and 768x600 direct playthrough using /tmp/freeski-g1-direct-check.cjs",
+      "result": "Completed all required keyboard aliases, six carve states, downhill/lateral/uphill movement, tuck, brake, Turbo, pause/resume, jump/landing, crash/recovery, R/F2 reset and pointer opt-in checks."
+    },
+    {
+      "command_or_action": "Independent browser console, page-error, request-failure and HTTP error monitoring",
+      "result": "No errors, failed requests or HTTP error responses observed."
+    },
+    {
+      "command_or_action": "Visual inspection of supplied artifacts and independently captured desktop/minimum screenshots",
+      "result": "Required player, camera, HUD, Turbo, pause, air, crash and responsive minimum-viewport states were visibly demonstrated."
+    }
+  ],
+  "confidence": 0.99
+}

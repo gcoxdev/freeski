@@ -19,7 +19,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate                               | Latest adjudicated attempt | Independent verdict | Candidate |
 | ---------------------------------- | -------------------------: | ------------------- | --------- |
 | Gate 0 — Repository baseline       |                          1 | PASS                | `602d4c8` |
-| Gate 1 — Skiing vertical slice     |                          — | NOT STARTED         | —         |
+| Gate 1 — Skiing vertical slice     |                          1 | PASS                | `1d923ed` |
 | Gate 2 — Deterministic mountain    |                          — | NOT STARTED         | —         |
 | Gate 3 — Collisions, air and Style |                          — | NOT STARTED         | —         |
 | Gate 4 — Event modes and records   |                          — | NOT STARTED         | —         |
@@ -42,3 +42,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: clean install, formatting, typecheck, lint, 7 unit tests, production build, 2 Chromium E2E tests, desktop/minimum-viewport runtime and visual inspection
 - Non-blocking note: Vite reports an advisory Phaser chunk-size warning; code splitting remains deferred until later content creates meaningful boundaries.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-0/attempt-1/judge-verdict.json`
+
+### Gate 1 — attempt 1
+
+- Candidate revision: `1d923ede81cd2e39bc4e2f9117710fc34d5ac0e7`
+- Evidence commit: `888f5055f7efafe3b90dd23546fe9c0d25ad29f4`
+- Judge isolation: fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.99`
+- Criteria: G1.1–G1.6 all PASS
+- Independent checks: clean install, formatting, typecheck, lint, 15 unit tests, production build, 4 Chromium E2E tests, direct full-control playthrough, desktop/minimum-viewport runtime and visual inspection
+- Non-blocking notes: temporary code-rendered art remains until Gate 6; Phaser's advisory chunk-size warning and deterministic Canvas fallback are disclosed in the submission packet.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-1/attempt-1/judge-verdict.json`
