@@ -20,7 +20,7 @@ This is the append-only public record for independently judged build gates. Prod
 | ---------------------------------- | -------------------------: | ------------------- | --------- |
 | Gate 0 — Repository baseline       |                          1 | PASS                | `602d4c8` |
 | Gate 1 — Skiing vertical slice     |                          1 | PASS                | `1d923ed` |
-| Gate 2 — Deterministic mountain    |                          — | NOT STARTED         | —         |
+| Gate 2 — Deterministic mountain    |                          1 | FAIL                | `de8884f` |
 | Gate 3 — Collisions, air and Style |                          — | NOT STARTED         | —         |
 | Gate 4 — Event modes and records   |                          — | NOT STARTED         | —         |
 | Gate 5 — Living slope and Yeti     |                          — | NOT STARTED         | —         |
@@ -54,3 +54,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: clean install, formatting, typecheck, lint, 15 unit tests, production build, 4 Chromium E2E tests, direct full-control playthrough, desktop/minimum-viewport runtime and visual inspection
 - Non-blocking notes: temporary code-rendered art remains until Gate 6; Phaser's advisory chunk-size warning and deterministic Canvas fallback are disclosed in the submission packet.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-1/attempt-1/judge-verdict.json`
+
+### Gate 2 — attempt 1
+
+- Candidate revision: `de8884f65f5e499173e31102e13f23953e09c83a`
+- Evidence commit: `e79d5d870cd2a49b1ce7b6d9ae1fd6889843269c`
+- Judge isolation: fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **FAIL**
+- Confidence: `0.99`
+- Criteria: G2.1, G2.2 and G2.4–G2.7 PASS; G2.3 FAIL
+- Independent checks: clean install, formatting, typecheck, lint, 24 unit tests, production build, repeated 6-test Chromium E2E, desktop/minimum-viewport inspection, forward/reverse streaming and 2,100 m audit
+- Required remediation: set canonical course lengths to the researched `540`, `1,040` and `1,040` meters and update their unit assertions without changing the correct start/finish coordinates.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-2/attempt-1/judge-verdict.json`

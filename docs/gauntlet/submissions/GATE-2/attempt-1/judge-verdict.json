@@ -1,0 +1,156 @@
+{
+  "verdict": "FAIL",
+  "gate": "GATE_2",
+  "attempt": 1,
+  "candidate_revision": "de8884f65f5e499173e31102e13f23953e09c83a",
+  "criteria": [
+    {
+      "id": "G2.1",
+      "result": "PASS",
+      "evidence": [
+        "src/world/types.ts:1 defines CHUNK_SIZE_METERS = 64.",
+        "src/world/seed.ts:13 and src/world/generator.ts:68 derive chunks from generator version, world seed, and signed chunk coordinates.",
+        "src/world/generator.ts:72-121 returns frozen 64 m bounds, chunk coordinates, chunkSeed, and freeski-world-v1.",
+        "Independent npm test: 6 files and 24 tests passed."
+      ],
+      "notes": "Chunk identity includes the exact required seed, signed coordinates, and generator version. Pure world/simulation source has no Phaser, browser-global, or ambient Math.random dependency."
+    },
+    {
+      "id": "G2.2",
+      "result": "PASS",
+      "evidence": [
+        "src/world/classicMountain.ts:45-97 declares left Slalom, center Free Style, right Tree Slalom, 13 lift towers, uphill/downhill chair lanes, and all four Yeti thresholds.",
+        "src/render/scenes/AlpineScene.ts:383 and :478 render course and lift overlays from world data.",
+        "Independent desktop and 768x600 Chromium screenshots showed all three start gates, lift geometry, generated terrain, corridor, and chunk diagnostics.",
+        "Frame-synchronized Chromium input verified G hides and restores the diagnostics overlay with matching aria-pressed and runtime state."
+      ],
+      "notes": "The required fixed overlays and trigger data are present outside scene code and render at both supported viewport sizes."
+    },
+    {
+      "id": "G2.3",
+      "result": "FAIL",
+      "evidence": [
+        "docs/SKIFREE_RESEARCH_AND_DESIGN.md:111,119,126 specifies 540 m Slalom and 1,040 m Tree Slalom/Free Style events.",
+        "docs/SKIFREE_RESEARCH_AND_DESIGN.md:169,171,174 places their finishes at Y=540 and Y=1,040 and :240 requires exact classic lengths.",
+        "src/world/classicMountain.ts:51 declares Slalom lengthMeters: 500; :61 and :71 declare Free Style and Tree Slalom lengthMeters: 1,000.",
+        "src/world/worldGeneration.test.ts:48,57,63 incorrectly locks those shortened values into the test suite."
+      ],
+      "notes": "Gate and marker coordinates/counts are correct, but the canonical course-length fields contradict the authoritative researched lengths by subtracting the 40 m start-gate position."
+    },
+    {
+      "id": "G2.4",
+      "result": "PASS",
+      "evidence": [
+        "src/world/spawnProfiles.ts:20-42 contains exact open 5/45/20/5/20/2/2/1, Free Style 2/18/30/10/20/20, Tree Slalom 63/1, and Slalom mogul-only weights.",
+        "src/world/spawnProfiles.ts:53-86 performs data-driven zone selection and weighted object choice, including researched 2:1 bump and 3:1 rock/stump variants.",
+        "Independent unit suite passed the exact weight-table assertions."
+      ],
+      "notes": "All four researched zone profiles are represented in data and consumed by the generator."
+    },
+    {
+      "id": "G2.5",
+      "result": "PASS",
+      "evidence": [
+        "src/world/generator.ts:19-53 implements globally keyed jittered-cell placement with footprint radii and deterministic priority conflict resolution.",
+        "src/world/generator.ts:91-100 reserves ramp landing clearance through 18 m.",
+        "src/world/classicMountain.ts:99-132 and src/world/generator.ts:191-209 enforce gate, marker, lift, and guaranteed-corridor exclusions.",
+        "src/world/corridor.ts:4-32 defines a 4.5 m corridor, exactly 2.5 times the 1.8 m player footprint.",
+        "Independent seam-spanning unit audit passed with no footprint overlaps, landing blockers, exclusion violations, or corridor blockers."
+      ],
+      "notes": "Placement is footprint-aware and globally stable across seams; fixed features, ramp landings, and the navigable corridor remain clear."
+    },
+    {
+      "id": "G2.6",
+      "result": "PASS",
+      "evidence": [
+        "src/world/mountainStream.ts:42-83 keeps current-1 through current+2 downhill and current-2 through current+1 uphill.",
+        "Direct Chromium downhill transition moved from row 0 to row 1 with ahead rows [2,3], zero missing chunks, and visible continuous terrain.",
+        "Direct Chromium reversal crossed back to row 0 with negative velocity, ahead rows [-1,-2], zero missing chunks, and visible continuous terrain.",
+        "Independent transition screenshots showed populated terrain and active/cache telemetry without an exposed blank row."
+      ],
+      "notes": "Two-ahead/one-behind streaming works in both travel directions without observed pop-in."
+    },
+    {
+      "id": "G2.7",
+      "result": "PASS",
+      "evidence": [
+        "Direct Chromium same-seed reload and 1280x800-to-768x600 reload preserved generated signature e791de4d and overlay signature 4b00be77.",
+        "Changing seed changed generated signature from e791de4d to f00b488b while overlay signature remained 4b00be77.",
+        "Browser-side runAutomatedDescent(2100) reached 2100.2526 m in 2,970 fixed steps across 33 rows with missingChunks=0, corridorBlockers=0, and passed=true.",
+        "src/world/chunkDeltas.ts:7-22 separates mutable deltas from frozen generated chunks; independent immutability tests passed.",
+        "Full Playwright rerun passed all 6 tests, including minimum viewport, deterministic world, live streaming, Gate 1 skiing controls, and the 2,100 m audit."
+      ],
+      "notes": "Determinism, viewport independence, seed variance, immutable generated truth, long-descent continuity, and earlier skiing behavior were independently demonstrated."
+    }
+  ],
+  "failures": [
+    {
+      "severity": "P2",
+      "criterion_id": "G2.3",
+      "summary": "Canonical course-length data records 500/1,000/1,000 m instead of the researched 540/1,040/1,040 m event lengths.",
+      "reproduction": [
+        "Open docs/SKIFREE_RESEARCH_AND_DESIGN.md at lines 111-126 and confirm the three event lengths are 540 m, 1,040 m, and 1,040 m.",
+        "Open src/world/classicMountain.ts at lines 45-75 and inspect lengthMeters for Slalom, Free Style, and Tree Slalom.",
+        "Observe values 500, 1,000, and 1,000 despite finish coordinates of 540 and 1,040.",
+        "Open src/world/worldGeneration.test.ts at lines 48-63 and observe that tests assert the incorrect shortened values."
+      ],
+      "required_fix": "Represent the authoritative classic event lengths as 540 m, 1,040 m, and 1,040 m in canonical course data, and make tests assert those researched values while preserving the existing start/finish coordinates."
+    }
+  ],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Read docs/GAUNTLET_LOOP_PROMPT.md completely and the relevant world/classic-layout sections of docs/SKIFREE_RESEARCH_AND_DESIGN.md.",
+      "result": "G2.1-G2.7 and authoritative coordinates, weights, lengths, streaming, corridor, and determinism requirements identified."
+    },
+    {
+      "command_or_action": "Verify frozen candidate and base revisions; inspect git diff and status.",
+      "result": "HEAD exactly de8884f65f5e499173e31102e13f23953e09c83a; base 2b618c6dc6253d71f5b848fcd4b24d7a091d6637; frozen worktree remained clean."
+    },
+    {
+      "command_or_action": "Validate external submission.json, raw reports, artifact existence, and both supplied screenshots.",
+      "result": "Packet references the exact candidate/base; all reports and screenshots exist and were inspected at original resolution."
+    },
+    {
+      "command_or_action": "Pristine local clone in /tmp followed by npm ci.",
+      "result": "Exit 0; 164 packages installed."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "Exit 0; all files matched Prettier formatting."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "Exit 0; 6 test files and 24 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "Exit 0; production bundle built successfully. Vite emitted only its non-failing large-chunk advisory."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --workers=1 --reporter=line",
+      "result": "First run produced one non-reproducible 30 s baseline timeout with 5/6 passing; the isolated failed test passed on retry, and a complete second run passed 6/6 in 41.3 s."
+    },
+    {
+      "command_or_action": "Static dependency scan of non-test src/world and src/simulation modules.",
+      "result": "No Phaser imports, browser globals, or Math.random calls found."
+    },
+    {
+      "command_or_action": "Direct Chromium observations at 1280x800 and 768x600 with independent screenshots.",
+      "result": "World and debug information remained readable; generated content was dense and continuous. Some bottom HUD text and the debug button edge truncate at 768x600, but this did not obscure terrain, diagnostics, or violate a G2 criterion."
+    },
+    {
+      "command_or_action": "Direct Chromium reload, viewport, alternate-seed, G-toggle, downhill/uphill transition, and 2,100 m audit sequence.",
+      "result": "All deterministic and streaming assertions succeeded; no console, page, request, or HTTP response errors occurred."
+    }
+  ],
+  "confidence": 0.99
+}
