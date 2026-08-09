@@ -1,0 +1,17 @@
+$ FREESKI_GATE0_SCREENSHOT=docs/gauntlet/submissions/GATE-0/attempt-1/evidence/baseline-scene.png npm run test:e2e -- --workers=1 --reporter=line
+
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test --workers=1 --reporter=line
+[WebServer] npm notice run freeski@0.1.0 dev
+[WebServer] npm notice run vite
+
+Running 2 tests using 1 worker
+
+[1/2] [chromium] › tests/e2e/baseline.spec.ts:3:1 › loads an interactive Phaser baseline without console errors
+[2/2] [chromium] › tests/e2e/baseline.spec.ts:43:1 › remains playable at the minimum supported viewport
+  2 passed (27.2s)
+
+The first test explicitly collected browser `console.error` and uncaught page errors,
+asserted both arrays were empty, verified Phaser runtime metadata, and exercised ArrowLeft.
+
+Exit code: 0

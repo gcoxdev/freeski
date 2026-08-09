@@ -1,0 +1,71 @@
+{
+  "gate": "GATE_0",
+  "attempt": 1,
+  "candidate_revision": "602d4c8bcd1327efdbb9e382eb016a9365bfa85e",
+  "base_revision": "e63675c",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE0_SCREENSHOT=docs/gauntlet/submissions/GATE-0/attempt-1/evidence/baseline-scene.png npm run test:e2e -- --workers=1 --reporter=line",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/e2e.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/baseline-scene.png",
+      "demonstrates": ["G0.1", "G0.4", "G0.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/e2e.txt",
+      "demonstrates": ["G0.4", "G0.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/unit-tests.txt",
+      "demonstrates": ["G0.3", "G0.4", "G0.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-0/attempt-1/evidence/production-build.txt",
+      "demonstrates": ["G0.1", "G0.6"]
+    }
+  ],
+  "known_limitations": [
+    "The production JavaScript contains Phaser in a single 1.20 MB minified chunk, so Vite reports its advisory 500 kB chunk-size warning; load-time code splitting is deferred until later scenes and assets provide meaningful boundaries.",
+    "The Gate 0 canvas is an intentionally provisional vector calibration range; skiing simulation, content sprites, and full controls belong to later gates."
+  ],
+  "executor_claimed_criteria": ["G0.1", "G0.2", "G0.3", "G0.4", "G0.5", "G0.6"]
+}

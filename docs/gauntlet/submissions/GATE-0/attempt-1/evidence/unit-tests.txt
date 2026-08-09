@@ -1,0 +1,12 @@
+$ npm test
+
+npm notice run freeski@0.1.0 test
+npm notice run vitest run
+
+ RUN  v4.1.10 /home/drpepper/Desktop/CodexProjects/freeski
+
+ Test Files  3 passed (3)
+      Tests  7 passed (7)
+   Duration  1.24s
+
+Exit code: 0
