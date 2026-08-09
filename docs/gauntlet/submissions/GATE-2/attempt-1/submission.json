@@ -1,0 +1,86 @@
+{
+  "gate": "GATE_2",
+  "attempt": 1,
+  "candidate_revision": "de8884f65f5e499173e31102e13f23953e09c83a",
+  "base_revision": "2b618c6dc6253d71f5b848fcd4b24d7a091d6637",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1 --reporter=line",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/e2e.txt"
+    },
+    {
+      "command": "FREESKI_GATE2_EVIDENCE_DIR=/home/drpepper/Desktop/CodexProjects/freeski/docs/gauntlet/submissions/GATE-2/attempt-1/evidence npm run test:e2e -- tests/e2e/world.spec.ts --workers=1 --reporter=line",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/e2e-evidence.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/world-stream-desktop.png",
+      "demonstrates": ["G2.2", "G2.3", "G2.5", "G2.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/world-minimum-viewport.png",
+      "demonstrates": ["G2.2", "G2.5", "G2.6", "G2.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/unit-tests.txt",
+      "demonstrates": ["G2.1", "G2.3", "G2.4", "G2.5", "G2.6", "G2.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/e2e.txt",
+      "demonstrates": ["G2.2", "G2.6", "G2.7"]
+    }
+  ],
+  "known_limitations": [
+    "Gate 2 renders fixed event geometry but event timing, scoring and marker state belong to Gate 4; Yeti trigger geometry is present but directional Yeti behavior belongs to Gate 5.",
+    "Generated actors are deterministic static placements in this gate; collisions belong to Gate 3 and NPC behavior belongs to Gate 5.",
+    "World objects remain code-rendered functional sprites while approved ultra-realistic sprite ingestion is reserved for Gate 6.",
+    "Phaser remains in one approximately 1.23 MB minified JavaScript chunk, so Vite reports its advisory 500 kB chunk-size warning; the renderer retains the Gate 1 deterministic Canvas path."
+  ],
+  "executor_claimed_criteria": [
+    "G2.1",
+    "G2.2",
+    "G2.3",
+    "G2.4",
+    "G2.5",
+    "G2.6",
+    "G2.7"
+  ]
+}

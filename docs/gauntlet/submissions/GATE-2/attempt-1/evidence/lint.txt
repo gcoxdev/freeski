@@ -1,0 +1,6 @@
+$ npm run lint
+
+npm notice run freeski@0.1.0 lint
+npm notice run eslint .
+
+Exit code: 0

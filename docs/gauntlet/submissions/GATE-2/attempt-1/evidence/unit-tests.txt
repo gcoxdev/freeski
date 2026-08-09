@@ -1,0 +1,17 @@
+$ npm test
+
+npm notice run freeski@0.1.0 test
+npm notice run vitest run
+
+ RUN  v4.1.10 /home/drpepper/Desktop/CodexProjects/freeski
+
+ Test Files  6 passed (6)
+      Tests  24 passed (24)
+   Duration  5.69s
+
+World coverage includes exact classic coordinates and weight tables, seeded
+random injection, cross-chunk footprint spacing, exclusions, ramp landing
+clearance, a 4.5 m guaranteed corridor, immutable chunks/separate deltas,
+viewport/reload/alternate-seed snapshots, and 2,100 m stream continuity.
+
+Exit code: 0

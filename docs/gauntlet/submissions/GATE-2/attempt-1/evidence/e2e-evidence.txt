@@ -1,0 +1,24 @@
+$ FREESKI_GATE2_EVIDENCE_DIR=/home/drpepper/Desktop/CodexProjects/freeski/docs/gauntlet/submissions/GATE-2/attempt-1/evidence npm run test:e2e -- tests/e2e/world.spec.ts --workers=1 --reporter=line
+
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test tests/e2e/world.spec.ts --workers=1 --reporter=line
+
+Running 2 tests using 1 worker
+
+[1/2] streams and renders a deterministic classic mountain
+[2/2] audits a 2100m fixed-step descent without missing chunks or blockers
+
+2 passed (40.9s)
+
+Artifacts written:
+- world-minimum-viewport.png (768x600)
+- world-stream-desktop.png (1280x800)
+
+Both screenshots were opened at original resolution and inspected. Course
+markers/gates, lift, deterministic objects, chunk grid, corridor lines,
+stream/cache/ahead telemetry and unobscured player/HUD are visible. The first
+sandboxed evidence invocation could not bind the local Vite port (`listen
+EPERM`); granting the already-approved local test-server permission produced
+this successful run without a code change.
+
+Exit code: 0
