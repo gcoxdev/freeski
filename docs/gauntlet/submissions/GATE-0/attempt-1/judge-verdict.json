@@ -1,0 +1,127 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_0",
+  "attempt": 1,
+  "candidate_revision": "602d4c8bcd1327efdbb9e382eb016a9365bfa85e",
+  "criteria": [
+    {
+      "id": "G0.1",
+      "result": "PASS",
+      "evidence": [
+        "package.json:6-33 defines Node >=22.12, Phaser 3.90.0, Vite, TypeScript, Vitest, Playwright, and scripts dev/build/typecheck/lint/test/test:e2e",
+        "README.md documents installation, launch, formatting, typecheck, lint, unit, build, and E2E commands",
+        "Independent npm ci, typecheck, lint, unit-test, build, and E2E runs succeeded"
+      ],
+      "notes": "The frozen candidate is a working, documented Vite/TypeScript/Phaser baseline with all required scripts."
+    },
+    {
+      "id": "G0.2",
+      "result": "PASS",
+      "evidence": [
+        "src/render/createGame.ts and src/render/scenes/AlpineScene.ts contain the Phaser-facing adapter and scene",
+        "src/simulation/fixedStep.ts contains engine-independent fixed-step logic",
+        "src/world/seed.ts, src/world/generatorVersion.ts, and src/world/boundaries.ts contain pure world logic",
+        "Independent source scan found Phaser references only under src/render and no Phaser/browser references under src/simulation or src/world"
+      ],
+      "notes": "Engine-facing rendering is cleanly separated from pure simulation and world modules."
+    },
+    {
+      "id": "G0.3",
+      "result": "PASS",
+      "evidence": [
+        "src/world/generatorVersion.ts:2 defines GENERATOR_VERSION as freeski-world-v1",
+        "src/world/seed.ts:5-48 implements stable seed hashing, generator-versioned chunk hashing, and a deterministic PRNG",
+        "src/world/seed.test.ts verifies repeatability, coordinate sensitivity, and invalid-coordinate rejection",
+        "Independent npm test run passed all 7 tests"
+      ],
+      "notes": "Deterministic seed utilities and an explicit generator-version constant are present and tested."
+    },
+    {
+      "id": "G0.4",
+      "result": "PASS",
+      "evidence": [
+        "vitest.config.ts defines a Node-based CI-friendly unit-test configuration",
+        "playwright.config.ts defines a deterministic Chromium project and managed Vite web server",
+        "tests/e2e/baseline.spec.ts:3-36 collects and asserts empty browser console-error and uncaught-page-error arrays",
+        "Independent browser inspection at 1280x720 and 768x600 observed no console errors, page errors, failed requests, or HTTP responses >=400"
+      ],
+      "notes": "Minimal unit/E2E test infrastructure is present, and independent runtime inspection found no unchecked browser errors."
+    },
+    {
+      "id": "G0.5",
+      "result": "PASS",
+      "evidence": [
+        "docs/BUILD_GAUNTLET.md exists at the frozen revision",
+        "docs/BUILD_GAUNTLET.md records base revision e63675c, stack, package manager, coordinate unit, fixed-step target, default seed, generator version, architecture boundary, and pending gate table"
+      ],
+      "notes": "The baseline gauntlet log exists and records the required repository baseline without prematurely claiming acceptance."
+    },
+    {
+      "id": "G0.6",
+      "result": "PASS",
+      "evidence": [
+        "Independent clean install: Node v26.4.0, npm 12.0.2, npm ci added 164 packages successfully",
+        "Independent npm run format:check, npm run typecheck, npm run lint, npm test, and npm run build all exited 0",
+        "Independent npm run test:e2e -- --workers=1 --reporter=line passed 2/2 Chromium tests",
+        "Direct Chromium inspection loaded http://127.0.0.1:4173/?seed=judge-direct with data-game-ready=true, Phaser runtime metadata, correct seed/generator labels, and visible 1278x604 desktop and 766x484 minimum-viewport canvases",
+        "Direct keyboard inspection changed the rendered canvas after ArrowLeft/ArrowUp inputs and recorded lastInput=ArrowUp",
+        "Direct screenshots /tmp/gate0-judge-desktop.png and /tmp/gate0-judge-minimum.png were visually inspected and showed a coherent, unobstructed playable calibration scene",
+        "Supplied artifact docs/gauntlet/submissions/GATE-0/attempt-1/evidence/baseline-scene.png exists, is a valid 1280x720 PNG, and was independently inspected"
+      ],
+      "notes": "Fresh installation and the complete check matrix succeeded; independent browser loading, input, runtime-error inspection, and visual inspection demonstrate the playable baseline scene."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "git rev-parse HEAD; verify submission metadata and evidence paths",
+      "result": "HEAD and submitted candidate both equal 602d4c8bcd1327efdbb9e382eb016a9365bfa85e; all referenced artifacts exist"
+    },
+    {
+      "command_or_action": "git diff --stat/--name-status/--check e63675c..HEAD and independent changed-source inspection",
+      "result": "27-file Gate 0 baseline diff inspected; no diff-check errors"
+    },
+    {
+      "command_or_action": "node --version && npm --version && npm ci",
+      "result": "Node v26.4.0, npm 12.0.2; clean installation succeeded with 164 packages"
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "Exit 0; all matched files use Prettier formatting"
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "Exit 0"
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "Exit 0"
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "Exit 0; 3 test files and 7 tests passed"
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "Exit 0; Vite production build completed, with only the disclosed non-failing Phaser chunk-size advisory"
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --workers=1 --reporter=line",
+      "result": "Exit 0; 2/2 Chromium tests passed"
+    },
+    {
+      "command_or_action": "Direct headless Chromium scene inspection at 1280x720 and 768x600",
+      "result": "Scene ready and visible at both sizes; keyboard input changed rendered pixels; runtime metadata was correct; no console/page/network/HTTP errors"
+    },
+    {
+      "command_or_action": "Visual inspection of supplied and independently captured screenshots",
+      "result": "Rendered calibration scene is coherent and playable with no blank canvas, clipping, or blocking overlay"
+    },
+    {
+      "command_or_action": "git status --short after judgment",
+      "result": "No tracked or untracked project-file changes"
+    }
+  ],
+  "confidence": 0.99
+}
