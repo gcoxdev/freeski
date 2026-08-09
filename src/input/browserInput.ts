@@ -13,6 +13,7 @@ interface ScreenPoint {
 }
 
 const EDGE_ACTIONS: ReadonlySet<GameAction> = new Set([
+  "debug",
   "jump",
   "pause",
   "reset",
@@ -57,6 +58,7 @@ export class BrowserInputAdapter {
         ? this.pointerSteer
         : keyboardSteer;
     const frame: ActionFrame = {
+      debugPressed: this.consume("debug"),
       pausePressed: this.consume("pause"),
       player: {
         brake: this.held.has("brake"),

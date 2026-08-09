@@ -208,6 +208,39 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.world-debug {
+  position: absolute;
+  z-index: 3;
+  top: 72px;
+  right: 18px;
+  display: grid;
+  width: min(260px, calc(100% - 36px));
+  gap: 5px;
+  padding: 13px 15px;
+  border: 1px solid rgb(255 255 255 / 50%);
+  color: #f7f9f5;
+  background: rgb(16 41 51 / 88%);
+  box-shadow: 0 12px 36px rgb(16 41 51 / 22%);
+  backdrop-filter: blur(9px);
+  font:
+    700 10px/1.35 "Courier New",
+    monospace;
+  letter-spacing: 0.06em;
+}
+
+.world-debug[hidden] {
+  display: none;
+}
+
+.world-debug small {
+  color: #ff7956;
+  letter-spacing: 0.15em;
+}
+
+.world-debug span {
+  color: #b7cacc;
+}
+
 .pause-card[hidden] {
   display: none;
 }

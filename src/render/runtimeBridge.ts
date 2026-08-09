@@ -1,6 +1,15 @@
 import type { InputTelemetryEvent } from "../input/browserInput";
 import type { PlayerEvent, PlayerSnapshot } from "../simulation/player";
 
+export interface DescentAuditReport {
+  corridorBlockers: number;
+  endY: number;
+  fixedSteps: number;
+  missingChunks: number;
+  passed: boolean;
+  visitedRows: number;
+}
+
 export interface TelemetrySample {
   airHeight: number;
   fixedStep: number;
@@ -29,6 +38,7 @@ export interface FreeSkiRuntime {
   seed: string;
   seedHash: number;
   settings: {
+    debugVisible: boolean;
     pointerSteeringEnabled: boolean;
   };
   telemetry: {
@@ -38,11 +48,28 @@ export interface FreeSkiRuntime {
     playerEvents: PlayerEvent[];
     renderFrames: number;
     samples: TelemetrySample[];
+    worldTransitions: number;
+  };
+  world: {
+    activeChunks: number;
+    aheadRows: readonly number[];
+    cachedChunks: number;
+    chunkSizeMeters: number;
+    corridorWidthMeters: number;
+    currentChunk: string;
+    generatedSignature: string;
+    missingRequiredChunks: number;
+    overlaySignature: string;
+    visibleObjects: number;
   };
 }
 
 declare global {
   interface Window {
     __FREE_SKI__?: FreeSkiRuntime;
+    __FREE_SKI_DEBUG__?: {
+      runAutomatedDescent: (distanceMeters?: number) => DescentAuditReport;
+      setVisible: (visible: boolean) => void;
+    };
   }
 }

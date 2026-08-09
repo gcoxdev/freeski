@@ -33,6 +33,13 @@
         <span>Escape or F3 to return to the slope</span>
       </aside>
 
+      <aside id="world-debug" class="world-debug" hidden aria-live="polite">
+        <small>WORLD STREAM / G</small>
+        <strong id="world-debug-chunk">CHUNK 0,0</strong>
+        <span id="world-debug-stream">ACTIVE — · CACHE —</span>
+        <span id="world-debug-ahead">AHEAD — · CORRIDOR 4.5M</span>
+      </aside>
+
       <footer class="instrument-strip" aria-label="Run information">
         <div class="metric metric--speed">
           <small>SPEED</small
@@ -63,6 +70,15 @@
           title="Enable optional pointer steering and click-to-jump"
         >
           POINTER OFF
+        </button>
+        <button
+          id="world-debug-toggle"
+          class="pointer-toggle"
+          type="button"
+          aria-pressed="false"
+          title="Toggle deterministic world diagnostics (G)"
+        >
+          WORLD GRID
         </button>
       </footer>
     </main>

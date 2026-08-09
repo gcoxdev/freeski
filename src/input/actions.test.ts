@@ -19,5 +19,6 @@ describe("keyboard action map", () => {
     expect(KEY_BINDINGS.pause).toEqual(["Escape", "F3"]);
     expect(KEY_BINDINGS.reset).toEqual(["KeyR", "F2"]);
     expect(KEY_BINDINGS.brake).toEqual(["ShiftLeft", "ShiftRight", "KeyB"]);
+    expect(KEY_BINDINGS.debug).toEqual(["KeyG"]);
   });
 });

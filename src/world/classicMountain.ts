@@ -1,0 +1,154 @@
+import { WORLD_BOUNDARIES_METERS } from "./boundaries";
+import type { WorldBounds, WorldPoint, WorldZone } from "./types";
+
+export interface CourseMarker extends WorldPoint {
+  readonly color: "blue" | "red";
+  readonly index: number;
+}
+
+export interface CourseGate {
+  readonly leftX: number;
+  readonly rightX: number;
+  readonly y: number;
+}
+
+export interface ClassicCourse {
+  readonly centerX: number;
+  readonly finishGate: CourseGate;
+  readonly halfWidth: number;
+  readonly id: WorldZone;
+  readonly lengthMeters: number;
+  readonly markers: readonly CourseMarker[];
+  readonly name: string;
+  readonly startGate: CourseGate;
+}
+
+function alternatingMarkers(
+  count: number,
+  firstY: number,
+  spacing: number,
+  leftX: number,
+  rightX: number,
+): readonly CourseMarker[] {
+  return Object.freeze(
+    Array.from({ length: count }, (_, index) =>
+      Object.freeze({
+        color: index % 2 === 0 ? ("red" as const) : ("blue" as const),
+        index: index + 1,
+        x: index % 2 === 0 ? leftX : rightX,
+        y: firstY + index * spacing,
+      }),
+    ),
+  );
+}
+
+export const CLASSIC_COURSES: readonly ClassicCourse[] = Object.freeze([
+  Object.freeze({
+    centerX: -28,
+    finishGate: Object.freeze({ leftX: -36, rightX: -20, y: 540 }),
+    halfWidth: 8,
+    id: "slalom" as const,
+    lengthMeters: 500,
+    markers: alternatingMarkers(24, 60, 20, -31, -25),
+    name: "SLALOM",
+    startGate: Object.freeze({ leftX: -36, rightX: -20, y: 40 }),
+  }),
+  Object.freeze({
+    centerX: 0,
+    finishGate: Object.freeze({ leftX: -10, rightX: 10, y: 1_040 }),
+    halfWidth: 10,
+    id: "free-style" as const,
+    lengthMeters: 1_000,
+    markers: Object.freeze([]),
+    name: "FREE STYLE",
+    startGate: Object.freeze({ leftX: -10, rightX: 10, y: 40 }),
+  }),
+  Object.freeze({
+    centerX: 26,
+    finishGate: Object.freeze({ leftX: 20, rightX: 32, y: 1_040 }),
+    halfWidth: 6,
+    id: "tree-slalom" as const,
+    lengthMeters: 1_000,
+    markers: alternatingMarkers(39, 65, 25, 25, 27),
+    name: "TREE SLALOM",
+    startGate: Object.freeze({ leftX: 20, rightX: 32, y: 40 }),
+  }),
+]);
+
+export const CLASSIC_LIFT = Object.freeze({
+  chairs: Object.freeze([
+    Object.freeze({ direction: "uphill" as const, laneX: -7, phaseY: 0 }),
+    Object.freeze({ direction: "downhill" as const, laneX: -9, phaseY: 64 }),
+  ]),
+  loopLengthMeters: 1_536,
+  towerX: -8,
+  towers: Object.freeze(
+    Array.from({ length: 13 }, (_, index) =>
+      Object.freeze({ x: -8, y: -64 + index * 128 }),
+    ),
+  ),
+});
+
+export const CLASSIC_YETI_TRIGGERS = Object.freeze([
+  Object.freeze({ axis: "y" as const, edge: "top" as const, value: -125 }),
+  Object.freeze({ axis: "y" as const, edge: "bottom" as const, value: 2_000 }),
+  Object.freeze({ axis: "x" as const, edge: "left" as const, value: -1_000 }),
+  Object.freeze({ axis: "x" as const, edge: "right" as const, value: 1_000 }),
+]);
+
+export const CLASSIC_EXCLUSIONS: readonly WorldBounds[] = Object.freeze([
+  ...CLASSIC_COURSES.flatMap((course) => [
+    Object.freeze({
+      minX: course.startGate.leftX - 3,
+      maxX: course.startGate.rightX + 3,
+      minY: course.startGate.y - 5,
+      maxY: course.startGate.y + 5,
+    }),
+    Object.freeze({
+      minX: course.finishGate.leftX - 3,
+      maxX: course.finishGate.rightX + 3,
+      minY: course.finishGate.y - 5,
+      maxY: course.finishGate.y + 5,
+    }),
+  ]),
+  ...CLASSIC_COURSES.flatMap((course) =>
+    course.markers.map((marker) =>
+      Object.freeze({
+        minX: marker.x - 2,
+        maxX: marker.x + 2,
+        minY: marker.y - 2,
+        maxY: marker.y + 2,
+      }),
+    ),
+  ),
+  ...CLASSIC_LIFT.towers.map((tower) =>
+    Object.freeze({
+      minX: tower.x - 3,
+      maxX: tower.x + 3,
+      minY: tower.y - 4,
+      maxY: tower.y + 4,
+    }),
+  ),
+]);
+
+export function classicOverlaySignature(): string {
+  return JSON.stringify({
+    boundaries: WORLD_BOUNDARIES_METERS,
+    courses: CLASSIC_COURSES,
+    lift: CLASSIC_LIFT,
+    yeti: CLASSIC_YETI_TRIGGERS,
+  });
+}
+
+export function pointInsideBounds(
+  point: WorldPoint,
+  bounds: WorldBounds,
+  padding = 0,
+): boolean {
+  return (
+    point.x >= bounds.minX - padding &&
+    point.x <= bounds.maxX + padding &&
+    point.y >= bounds.minY - padding &&
+    point.y <= bounds.maxY + padding
+  );
+}

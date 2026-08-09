@@ -2,6 +2,7 @@ import type { PlayerInputFrame } from "../simulation/player";
 
 export type GameAction =
   | "brake"
+  | "debug"
   | "jump"
   | "pause"
   | "reset"
@@ -12,6 +13,7 @@ export type GameAction =
   | "uphill";
 
 export interface ActionFrame {
+  debugPressed: boolean;
   pausePressed: boolean;
   player: PlayerInputFrame;
   resetPressed: boolean;
@@ -21,6 +23,7 @@ export interface ActionFrame {
 export const KEY_BINDINGS: Readonly<Record<GameAction, readonly string[]>> =
   Object.freeze({
     brake: ["ShiftLeft", "ShiftRight", "KeyB"],
+    debug: ["KeyG"],
     jump: ["Space"],
     pause: ["Escape", "F3"],
     reset: ["KeyR", "F2"],
