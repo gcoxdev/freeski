@@ -45,7 +45,7 @@ describe("classic mountain declarative overlays", () => {
     const treeSlalom = CLASSIC_COURSES[2]!;
     expect(slalom).toMatchObject({
       centerX: -28,
-      lengthMeters: 500,
+      lengthMeters: 540,
       startGate: { leftX: -36, rightX: -20, y: 40 },
       finishGate: { leftX: -36, rightX: -20, y: 540 },
     });
@@ -54,13 +54,13 @@ describe("classic mountain declarative overlays", () => {
     expect(slalom.markers.at(-1)).toMatchObject({ x: -25, y: 520 });
 
     expect(freeStyle).toMatchObject({
-      lengthMeters: 1_000,
+      lengthMeters: 1_040,
       startGate: { leftX: -10, rightX: 10, y: 40 },
       finishGate: { leftX: -10, rightX: 10, y: 1_040 },
     });
     expect(treeSlalom).toMatchObject({
       centerX: 26,
-      lengthMeters: 1_000,
+      lengthMeters: 1_040,
       startGate: { leftX: 20, rightX: 32, y: 40 },
       finishGate: { leftX: 20, rightX: 32, y: 1_040 },
     });
