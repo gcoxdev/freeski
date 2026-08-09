@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="FreeSki — an original browser-first downhill arcade game."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23102933'/%3E%3Cpath d='M12 16h40L31 52z' fill='%23e84d2a'/%3E%3C/svg%3E"
+    />
+    <title>FreeSki — Alpine Systems Online</title>
+  </head>
+  <body>
+    <main id="game-shell" aria-label="FreeSki game">
+      <header class="masthead" aria-label="Game status">
+        <div class="wordmark" aria-label="FreeSki">
+          <span>Free</span><strong>Ski</strong>
+        </div>
+        <div class="system-state">
+          <span class="system-state__light" aria-hidden="true"></span>
+          <span id="system-label">Preparing mountain</span>
+        </div>
+      </header>
+
+      <section id="game-canvas" aria-label="Playable mountain canvas"></section>
+
+      <footer class="instrument-strip" aria-label="Run information">
+        <div>
+          <small>WORLD SEED</small><span id="seed-label">classic-1991</span>
+        </div>
+        <div><small>GENERATOR</small><span id="generator-label">—</span></div>
+        <div class="instrument-strip__hint">
+          <small>SYSTEM CHECK</small
+          ><span>Use arrow keys to test the slope beacon</span>
+        </div>
+      </footer>
+    </main>
+    <noscript>FreeSki requires JavaScript to run.</noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

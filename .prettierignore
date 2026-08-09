@@ -1,0 +1,10 @@
+dist/
+node_modules/
+playwright-report/
+test-results/
+assets/sprite-sheets/*.png
+assets/sprite-sheets/source-chroma/
+assets/sprite-sheets/*.md
+assets/sprite-sheets/*.json
+docs/GAUNTLET_LOOP_PROMPT.md
+docs/SKIFREE_RESEARCH_AND_DESIGN.md
