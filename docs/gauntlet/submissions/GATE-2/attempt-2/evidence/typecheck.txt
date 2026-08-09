@@ -1,0 +1,6 @@
+$ npm run typecheck
+
+npm notice run freeski@0.1.0 typecheck
+npm notice run tsc -b --pretty false
+
+Exit code: 0

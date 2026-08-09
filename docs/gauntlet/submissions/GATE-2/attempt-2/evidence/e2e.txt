@@ -1,0 +1,17 @@
+$ npm run test:e2e -- --workers=1 --reporter=line
+
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test --workers=1 --reporter=line
+
+Running 6 tests using 1 worker
+
+[1/6] loads an interactive Phaser baseline without console errors
+[2/6] remains playable at the minimum supported viewport
+[3/6] plays the full fixed-step skiing control sequence
+[4/6] keeps pointer steering opt-in and click-to-jump functional
+[5/6] streams and renders a deterministic classic mountain
+[6/6] audits a 2100m fixed-step descent without missing chunks or blockers
+
+6 passed (1.1m)
+
+Exit code: 0

@@ -1,0 +1,23 @@
+$ npm test -- --run src/world/worldGeneration.test.ts --reporter=verbose
+
+npm notice run freeski@0.1.0 test
+npm notice run vitest run --run src/world/worldGeneration.test.ts --reporter=verbose
+
+ RUN  v4.1.10 /home/drpepper/Desktop/CodexProjects/freeski
+
+9 world tests passed, including:
+- classic mountain declarative overlays preserves researched geometry/counts
+- exact researched zone weight tables
+- same-seed reload and viewport stability
+- alternate-seed random content with fixed overlays
+- seeded random injection
+- footprint spacing, exclusions, ramp clearance and guaranteed corridor
+- immutable generated truth with separate deltas
+- pure module dependency boundary
+- 2,100 m stream continuity
+
+Test Files  1 passed (1)
+     Tests  9 passed (9)
+  Duration  6.02s
+
+Exit code: 0

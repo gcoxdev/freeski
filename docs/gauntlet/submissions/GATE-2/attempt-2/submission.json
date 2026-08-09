@@ -1,0 +1,104 @@
+{
+  "gate": "GATE_2",
+  "attempt": 2,
+  "candidate_revision": "0091cbed01f019b9131c961b379390029e0549d1",
+  "base_revision": "64ec314b9ed9b4960bafb6d41e164b9b9cc98af1",
+  "diff_path": null,
+  "g2_3_mapping": [
+    {
+      "course": "Slalom",
+      "length_meters": 540,
+      "start_gate_y": 40,
+      "finish_gate_y": 540
+    },
+    {
+      "course": "Free Style",
+      "length_meters": 1040,
+      "start_gate_y": 40,
+      "finish_gate_y": 1040
+    },
+    {
+      "course": "Tree Slalom",
+      "length_meters": 1040,
+      "start_gate_y": 40,
+      "finish_gate_y": 1040
+    }
+  ],
+  "commands": [
+    {
+      "command": "npm test -- --run src/world/worldGeneration.test.ts --reporter=verbose",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/focused-world-tests.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/production-build.txt"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1 --reporter=line",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/e2e.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/focused-world-tests.txt",
+      "demonstrates": ["G2.3"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/unit-tests.txt",
+      "demonstrates": ["G2.1", "G2.3", "G2.4", "G2.5", "G2.6", "G2.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-2/evidence/e2e.txt",
+      "demonstrates": ["G2.2", "G2.6", "G2.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/world-stream-desktop.png",
+      "demonstrates": ["G2.2", "G2.5", "G2.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-2/attempt-1/evidence/world-minimum-viewport.png",
+      "demonstrates": ["G2.2", "G2.5", "G2.6", "G2.7"]
+    }
+  ],
+  "known_limitations": [
+    "This repair changes only canonical event-length metadata and its assertions; the unchanged Gate 2 limitations remain documented in attempt 1.",
+    "The production build retains the previously disclosed advisory for the single Phaser bundle."
+  ],
+  "executor_claimed_criteria": [
+    "G2.1",
+    "G2.2",
+    "G2.3",
+    "G2.4",
+    "G2.5",
+    "G2.6",
+    "G2.7"
+  ]
+}
