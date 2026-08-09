@@ -3,7 +3,7 @@ import { AlpineScene } from "./scenes/AlpineScene";
 
 export function createGame(parent: string, seed: string): Phaser.Game {
   return new Phaser.Game({
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     parent,
     backgroundColor: "#dbe9e9",
     scale: {
@@ -14,7 +14,6 @@ export function createGame(parent: string, seed: string): Phaser.Game {
     render: {
       antialias: true,
       roundPixels: false,
-      powerPreference: "high-performance",
     },
     banner: false,
     scene: [new AlpineScene(seed)],

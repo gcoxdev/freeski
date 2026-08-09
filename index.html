@@ -27,15 +27,43 @@
 
       <section id="game-canvas" aria-label="Playable mountain canvas"></section>
 
+      <aside id="pause-card" class="pause-card" hidden aria-live="polite">
+        <small>RUN SUSPENDED</small>
+        <strong>PAUSED</strong>
+        <span>Escape or F3 to return to the slope</span>
+      </aside>
+
       <footer class="instrument-strip" aria-label="Run information">
-        <div>
-          <small>WORLD SEED</small><span id="seed-label">classic-1991</span>
+        <div class="metric metric--speed">
+          <small>SPEED</small
+          ><span><strong id="speed-label">0</strong> KM/H</span>
         </div>
-        <div><small>GENERATOR</small><span id="generator-label">—</span></div>
+        <div class="metric">
+          <small>DISTANCE</small
+          ><span><strong id="distance-label">0</strong> M</span>
+        </div>
+        <div class="metric">
+          <small>FORM</small><span id="motion-label">DOWNHILL</span>
+        </div>
+        <div class="metric">
+          <small>WORLD / <span id="generator-label">—</span></small>
+          <span id="seed-label">classic-1991</span>
+        </div>
         <div class="instrument-strip__hint">
-          <small>SYSTEM CHECK</small
-          ><span>Use arrow keys to test the slope beacon</span>
+          <small
+            ><span id="turbo-indicator">TURBO OFF</span> · SHIFT/B BRAKE</small
+          >
+          <span>ARROWS/WASD · SPACE JUMP · F TURBO · ESC PAUSE · R RESET</span>
         </div>
+        <button
+          id="pointer-toggle"
+          class="pointer-toggle"
+          type="button"
+          aria-pressed="false"
+          title="Enable optional pointer steering and click-to-jump"
+        >
+          POINTER OFF
+        </button>
       </footer>
     </main>
     <noscript>FreeSki requires JavaScript to run.</noscript>

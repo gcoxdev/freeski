@@ -11,7 +11,7 @@ This workspace contains the research and approval package for **FreeSki**, a cle
 
 The generated art is a visual-direction package. It is intentionally separated from the original game's copyrighted bitmap resources and is not yet a production-cut atlas with per-frame pivots and collision metadata.
 
-## Run the baseline
+## Run FreeSki
 
 FreeSki requires Node.js 22.12 or newer. Install and launch the browser build:
 
@@ -20,7 +20,20 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. The Gate 0 scene is an interactive renderer/system check; use the arrow keys or WASD to move its slope beacon. Full skiing controls arrive in Gate 1.
+Open the local URL printed by Vite and ski immediately.
+
+| Action              | Keyboard                                           |
+| ------------------- | -------------------------------------------------- |
+| Carve left/right    | Left/right arrows or A/D; hold to deepen the carve |
+| Traverse/ski uphill | Up arrow or W                                      |
+| Point downhill/tuck | Down arrow or S                                    |
+| Brake               | Shift or B                                         |
+| Jump                | Space                                              |
+| Turbo               | F                                                  |
+| Pause               | Escape or F3                                       |
+| Reset run           | R or F2                                            |
+
+Optional pointer steering and click-to-jump are disabled by default. Enable them with the **POINTER OFF** control below the game or add `?pointer=1` to the URL.
 
 Project checks are available as separate CI-friendly scripts:
 

@@ -122,10 +122,7 @@ body {
 
 .instrument-strip {
   display: grid;
-  grid-template-columns: minmax(160px, 0.7fr) minmax(130px, 0.5fr) minmax(
-      300px,
-      1.5fr
-    );
+  grid-template-columns: 0.58fr 0.58fr 0.78fr 1fr minmax(290px, 1.6fr) auto;
   gap: 1px;
   padding: 1px 20px;
   border-top: 1px solid rgb(255 255 255 / 12%);
@@ -155,8 +152,85 @@ body {
   white-space: nowrap;
 }
 
+.instrument-strip strong {
+  color: #f7f9f5;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.metric--speed strong,
+[data-turbo="true"] #turbo-indicator {
+  color: #ff6b45;
+}
+
 .instrument-strip__hint {
   text-align: right;
+}
+
+.pointer-toggle {
+  min-width: 86px;
+  margin: 10px 0 10px 10px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 2px;
+  color: #b4c4c6;
+  background: transparent;
+  font:
+    800 9px/1 "Courier New",
+    monospace;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.pointer-toggle:hover,
+.pointer-toggle:focus-visible,
+.pointer-toggle[aria-pressed="true"] {
+  border-color: #ff6b45;
+  color: #fff;
+  outline: none;
+  background: rgb(232 77 42 / 14%);
+}
+
+.pause-card {
+  position: absolute;
+  z-index: 3;
+  top: 42%;
+  left: 50%;
+  display: grid;
+  min-width: 280px;
+  translate: -50% -50%;
+  place-items: center;
+  gap: 7px;
+  padding: 22px 28px 20px;
+  border: 1px solid rgb(255 255 255 / 32%);
+  color: #f7f9f5;
+  background: rgb(16 41 51 / 92%);
+  box-shadow: 0 18px 55px rgb(16 41 51 / 30%);
+  backdrop-filter: blur(10px);
+}
+
+.pause-card[hidden] {
+  display: none;
+}
+
+.pause-card small,
+.pause-card span {
+  color: #a8bec1;
+  font:
+    700 9px/1.4 "Courier New",
+    monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pause-card strong {
+  color: #ff6b45;
+  font-family: Copperplate, "Copperplate Gothic Light", serif;
+  font-size: 30px;
+  letter-spacing: 0.12em;
+}
+
+[data-paused="true"] #game-canvas canvas {
+  filter: saturate(0.45) contrast(0.92);
 }
 
 @media (max-width: 700px) {
@@ -165,12 +239,20 @@ body {
   }
 
   .instrument-strip {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr auto;
     padding-inline: 10px;
   }
 
   .instrument-strip__hint {
     display: none !important;
+  }
+
+  .metric:nth-of-type(4) {
+    display: none;
+  }
+
+  .pointer-toggle {
+    margin-left: 2px;
   }
 }
 
