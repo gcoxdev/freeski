@@ -24,7 +24,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 3 — Collisions, air and Style |                          1 | PASS                | `9472d8c` |
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
 | Gate 5 — Living slope and Yeti     |                          2 | PASS                | `9e23730` |
-| Gate 6 — Art, VFX, UI and audio    |                          2 | FAIL                | `d1edaff` |
+| Gate 6 — Art, VFX, UI and audio    |                          3 | PASS                | `dcdbf9a` |
 | Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
 
 No gate is accepted by this baseline entry. Only a fresh judge verdict recorded below may change a gate to PASS.
@@ -151,3 +151,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Repair verified: real 4 px extrusion and scale-consistent metadata, source preservation, complete seed, 0→1 audio lifecycle across reload, zero fallbacks at 301/512 stress, protected status/HUD, and clean production visuals all passed.
 - Required remediation: keep production-atlas player content at least 48 px tall at 768×600 across grounded, airborne, crash and recovery states; the judge measured airborne at 46.04–47.32 px, crash at 32.48 px and recovery at 26.80 px.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-6/attempt-2/judge-verdict.json`
+
+### Gate 6 — attempt 3
+
+- Candidate revision: `dcdbf9a4e8396eeab3a6a84c8d255f7a5a56d065`
+- Evidence commit: `111ae15653aec9c4acc4473e399eb7436498932b`
+- Judge isolation: new fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.99`
+- Criteria: G6.1–G6.7 all PASS
+- Independent checks: two deterministic atlas rebuilds, independent full atlas/provenance and 24-player-frame alpha/scale audits, pristine install, formatting, typecheck, lint, 92 unit tests, production build, focused 6/6 and complete sequential 12/12 Chromium suites, judge-authored 768/1440/1920 runtime diagnostic and original-resolution inspection of all supplied and judge-captured states
+- Repair verified: every production player frame renders with uniform aspect-preserving content height between 52 and 56 px; independent grounded, airborne, crash and recovery samples measured 56/54/52/52 px at 768×600 with stable anchors and zero fallbacks. All prior atlas, source, HUD, audio, pool, VFX, depth and browser-error repairs remain green.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-6/attempt-3/judge-verdict.json`

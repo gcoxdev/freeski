@@ -1,0 +1,135 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_6",
+  "attempt": 3,
+  "candidate_revision": "dcdbf9a4e8396eeab3a6a84c8d255f7a5a56d065",
+  "criteria": [
+    {
+      "id": "G6.1",
+      "result": "PASS",
+      "evidence": [
+        "Two fresh atlas rebuilds and `assets:check` independently reported 112 frames, 4px padding, zero extrusion mismatch pixels, zero geometry mismatches, and zero padding overlaps.",
+        "Independent Pillow audit verified all 112 interiors, 448 side bands, and 448 corner blocks: every extrusion was pixel-exact, every side contained content, and no padded rectangles overlapped.",
+        "Independent provenance/geometry audit found exact manifest/atlas/metadata name sets, zero source/cell provenance failures, zero Phaser/runtime trim or scale-formula failures, zero pivot failures, and valid footprint/clearance geometry for all frames.",
+        "Atlas matte audit found one isolated classified pixel in `player/uphill-left` among 3,843 opaque pixels in that frame and no visible fringe in original-resolution bright/dark captures."
+      ],
+      "notes": "Non-destructive slicing, bounded family normalization, matte cleanup, trim/pivot/gameplay geometry, scale-consistent Phaser metadata, and genuine content-edge extrusion all pass."
+    },
+    {
+      "id": "G6.2",
+      "result": "PASS",
+      "evidence": [
+        "SHA-256 values for all six approved sheets and all six source-chroma originals were identical before, between, and after two rebuilds.",
+        "The PNG, Phaser JSON, and provenance metadata rebuilt byte-identically with hashes `45c4307…`, `2a7cef8…`, and `e3d2a10…`.",
+        "Source files remain under `assets/sprite-sheets/`; derived runtime assets remain separately under `public/assets/production/`."
+      ],
+      "notes": "The retained sources are preserved and the production pipeline is deterministic and non-destructive."
+    },
+    {
+      "id": "G6.3",
+      "result": "PASS",
+      "evidence": [
+        "Static mapping confirmed integrated scalable shadows, powder, left/right carve fans, tracks, landing/crash plumes, ice impacts, breath mist, ramp glints, trick sparkles, flame embers, speed streaks, and crash decals.",
+        "The complete 12-test browser run exercised ordinary skiing, ramp tricks, crashes, secrets, population, foreshadowing, and Yeti sequences.",
+        "Independent stress instrumentation kept VFX within 56 effects and 48 tracks at both 1440x900 and 1920x1080."
+      ],
+      "notes": "Required art and VFX coverage is atlas-backed, gameplay-integrated, scalable, and bounded."
+    },
+    {
+      "id": "G6.4",
+      "result": "PASS",
+      "evidence": [
+        "HUD values and labels are DOM/code-rendered and updated through `AlpineScene.updateHud`.",
+        "Course names are Phaser text drawn over `course/blank-wood-sign`; primary localizable course copy does not depend on baked sign text.",
+        "Independent 768x600 and desktop captures showed readable HUD, mode, feedback, and canvas status text."
+      ],
+      "notes": "Primary HUD and practical course signage use code-rendered text."
+    },
+    {
+      "id": "G6.5",
+      "result": "PASS",
+      "evidence": [
+        "Independent 768x600 DOM measurements showed time, distance, speed, Form, Style, Turbo, mode, full seed, and controls visible and unclipped; the full seed measured 130x19 with equal client/scroll dimensions plus complete title and ARIA text.",
+        "Measured major panel boxes were separated: header ended at y=46, mode began at y=58, feedback occupied y=216–262, and the footer began at y=532.",
+        "The focused and complete browser suites exercised pause/resume and confirmed the pause card presentation."
+      ],
+      "notes": "The HUD remains compact, complete, readable, and non-intersecting at desktop and the minimum viewport."
+    },
+    {
+      "id": "G6.6",
+      "result": "PASS",
+      "evidence": [
+        "`AlpineAudio.ts` defines 26 oscillator/noise cues and three continuous glide/wind/carve layers covering movement, jumps, landings, crashes, gates, NPCs, lift, secrets, UI, and Yeti events.",
+        "Independent runtime instrumentation observed one gesture-created context, 8 oscillator nodes and 11 procedural buffer sources during the four-state scenario, with zero media-element sources, decode calls, or audio resources.",
+        "Repository scanning found no shipped audio files, external audio URLs, Phaser audio loads, or copied sound dependency."
+      ],
+      "notes": "The sound bank is complete, original procedural Web Audio with no external/copied resources."
+    },
+    {
+      "id": "G6.7",
+      "result": "PASS",
+      "evidence": [
+        "Independent alpha-bounding audit covered all 24 actual `player/` atlas frames at thresholds 0, 8, 16, and 24; every frame occupied its full trimmed height and rendered to exactly 52–56px under one uniform aspect-preserving scale.",
+        "Judge-authored 768x600 runtime staging measured grounded `player/downhill` at 56px, ordinary manual-airborne `player/air-neutral` at 54px, crashed `player/wipeout` at 52px, and recovering `player/landing-crouch` at 52px; CSS scale was exactly 1 and all fallback counters were zero.",
+        "The render-only diff retains existing player position, grounded/airborne origins, rotations, and simulation/collision code; target variation is limited to 56/52, and original-resolution supplied and judge captures showed stable anchors without conspicuous pumping.",
+        "Independent cold/reload lifecycle was 0 AudioContexts before input and exactly 1 after a gesture; mute persisted as `freeski.audio.muted.v1=true` and reloaded muted/locked.",
+        "Staged population/chair-drop stress peaked at 338/512 sprites at 1440x900 and 403/512 at 1920x1080 with zero cumulative, per-frame, capacity, or missing-frame fallbacks; status depth remained 90 and VFX stayed bounded.",
+        "All eight supplied images and four independent state images were inspected at original resolution; silhouettes remained readable with no visible magenta fringe, transparent boxes, primitive fallbacks, or UI overlap. Console, page, request, and HTTP-error collections were empty."
+      ],
+      "notes": "All autoplay, persistence, bounded-presentation, artifact, readability, and explicit four-state 48px requirements pass."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Verify detached HEAD, base/merge-base, exact diff, index/tracked cleanliness, packet references, and untracked scope",
+      "result": "PASS; detached HEAD exactly `dcdbf9a4e8396eeab3a6a84c8d255f7a5a56d065`, merge-base exactly `066f69039f55c2e8203c2c89954fbb766b1b8632`, five expected changed files, clean tracked/index state, and all 23 untracked files confined to the attempt-3 packet."
+    },
+    {
+      "command_or_action": "Read authoritative README, design brief, gauntlet prompt, sprite README/manifest/prompts, attempt-1 verdict, attempt-2 verdict, and attempt-3 packet",
+      "result": "Completed; prior findings were independently retested."
+    },
+    {
+      "command_or_action": "`npm ci`",
+      "result": "PASS; 164 packages installed from the lockfile."
+    },
+    {
+      "command_or_action": "Two consecutive `npm run assets:build` executions and `npm run assets:check` with pre/intermediate/post hashes",
+      "result": "PASS; 112 deterministic frames, all 12 retained source hashes and all three generated hashes unchanged."
+    },
+    {
+      "command_or_action": "Independent read-only Pillow atlas/provenance audit",
+      "result": "PASS; 448/448 side bands and 448/448 corners exact, zero empty bands, overlaps, geometry, pivot, formula, gameplay-geometry, or provenance failures."
+    },
+    {
+      "command_or_action": "Independent exhaustive 24-frame player alpha/scale/anchor audit",
+      "result": "PASS; actual visible bounding heights equal 52–56px through alpha threshold 24; uniform aspect-preserving scales and bounded anchor behavior confirmed."
+    },
+    {
+      "command_or_action": "`npm run format:check`; `npm run typecheck`; `npm run lint`; `npm test`; `npm run build`",
+      "result": "PASS; formatting, types, and lint clean; 17 files/92 unit tests passed; production build succeeded with only the existing large-chunk advisory."
+    },
+    {
+      "command_or_action": "`npm run test:e2e -- tests/e2e/baseline.spec.ts tests/e2e/presentation.spec.ts --workers=1`",
+      "result": "PASS; 6/6 focused browser tests passed sequentially."
+    },
+    {
+      "command_or_action": "`npm run test:e2e -- --workers=1`",
+      "result": "PASS; complete 12/12 E2E tests passed sequentially in 3.0 minutes."
+    },
+    {
+      "command_or_action": "Judge-authored isolated Chromium diagnostic at 768x600, 1440x900, and 1920x1080",
+      "result": "PASS; four player states 56/54/52/52px, cold/reload audio 0→1, mute persistence, procedural-only audio, full unclipped HUD, pool peaks 338 and 403 of 512 with zero fallbacks, bounded VFX, status depth 90, and no browser/network errors."
+    },
+    {
+      "command_or_action": "Original-resolution inspection of all eight supplied images and four judge state captures",
+      "result": "PASS; coherent hierarchy, readable silhouettes, stable player anchoring, and no visible fringe, boxes, primitive fallback art, or UI intersections."
+    },
+    {
+      "command_or_action": "Final revision, hashes, and worktree verification",
+      "result": "PASS; candidate revision unchanged, all source/derived hashes unchanged, tracked tree and index clean, and only the declared attempt-3 packet remains untracked."
+    }
+  ],
+  "confidence": 0.99
+}
