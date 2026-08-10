@@ -1,0 +1,6 @@
+# Gate 6 direct visual and interaction inspection
+
+- `bright-snow-desktop.png` was inspected at its original 1280 × 720 resolution. The production player, beginner, snowboarder, dog, chairs, walking tree, evergreens, dead trees, rocks, bumps, ramp, lift and course props have readable silhouettes and coherent ground pivots. Powder/tracks and atlas shadows are visible. No magenta halo or rectangular texture backing is visible.
+- `dark-snow-768x600.png` was inspected at its original 768 × 600 resolution after the post-1,800 m atmosphere ramp. Player, dog, beginner, trees, bumps and rocks remain readable against the blue-gray snow. The compact HUD keeps Time, Distance, Speed, Form, Style, Turbo, active mode and Seed readable; Sound, Pointer and Grid controls remain separate with no box overlap.
+- The focused browser flow began with `audio.unlocked=false` and `gestureRequired=true`, unlocked Web Audio from the first keyboard gesture, muted through the Sound control, verified `freeski.audio.muted.v1=true`, reloaded into a still-muted and still-locked state, then unlocked/unmuted from a new pointer gesture.
+- The same flow asserted hard VFX bounds, production atlas load/count, and empty console-error, page-error, failed-request and HTTP >=400 response arrays.

@@ -1,0 +1,113 @@
+{
+  "art": {
+    "atlasFrameCount": 112,
+    "atlasLoaded": true,
+    "pooledSprites": 163,
+    "spriteCapacity": 196
+  },
+  "audio": {
+    "activeAmbientLayers": 3,
+    "availableCues": 26,
+    "cueCount": 11,
+    "gestureRequired": false,
+    "lastCue": "landing",
+    "muted": false,
+    "unlocked": true
+  },
+  "player": {
+    "airHeight": 0,
+    "airPitch": 0,
+    "airSpin": 0,
+    "airTilt": 0,
+    "crashCount": 0,
+    "heading": "downhill",
+    "jumpCount": 1,
+    "lastLanding": "clean",
+    "motion": "grounded",
+    "paused": false,
+    "recoveryGraceSeconds": 0,
+    "runNumber": 1,
+    "simulationSeconds": 6.583333333333315,
+    "speedMetersPerSecond": 19,
+    "turbo": false,
+    "velocityX": 0,
+    "velocityY": 19,
+    "worldX": 0,
+    "worldY": 1915.2233333333115
+  },
+  "vfx": {
+    "activeEffects": 10,
+    "activeTracks": 25,
+    "emitted": 89,
+    "maximumEffects": 56,
+    "maximumTracks": 48
+  },
+  "yeti": {
+    "events": [],
+    "snapshot": {
+      "activeBoundaries": [],
+      "capturePhase": "none",
+      "capturedBy": null,
+      "controllers": [
+        {
+          "active": false,
+          "boundary": "top",
+          "id": "yeti-top",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "bottom",
+          "id": "yeti-bottom",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "left",
+          "id": "yeti-left",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "right",
+          "id": "yeti-right",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        }
+      ],
+      "foreshadow": {
+        "breathMist": 0.44157095898479837,
+        "intensity": 0.6132929985899978,
+        "warningLayer": 0.3557099391821987,
+        "windStreaks": 6
+      },
+      "lastEvent": "none",
+      "playerRemoved": false,
+      "resetRequested": false,
+      "turboEvasionSeconds": 0
+    }
+  }
+}

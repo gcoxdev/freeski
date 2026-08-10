@@ -1,0 +1,3 @@
+npm notice run freeski@0.1.0 assets:check
+npm notice run python3 scripts/build_runtime_atlas.py --check
+{"atlas": "1024x2048", "frames": 112, "magentaPixelRatio": 8.23e-06, "paddingPixels": 4, "transparentCorners": true}
