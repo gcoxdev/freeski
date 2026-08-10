@@ -49,6 +49,22 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
   );
   await evidenceScreenshot(page, "living-population.png");
 
+  await page.waitForFunction(() =>
+    window.__FREE_SKI__?.livingSlope.events.some(
+      (event) =>
+        event.type === "snowboarder-jumped" &&
+        event.terrainObjectId === "scenario-living-ramp",
+    ),
+  );
+  expect(
+    await page.evaluate(() =>
+      window.__FREE_SKI__?.livingSlope.events.find(
+        (event) => event.type === "snowboarder-jumped",
+      ),
+    ),
+  ).toMatchObject({ terrainObjectId: "scenario-living-ramp" });
+  await evidenceScreenshot(page, "snowboarder-ramp-encounter.png");
+
   await page.waitForFunction(() => {
     const types = window.__FREE_SKI__?.livingSlope.events.map(
       (event) => event.type,

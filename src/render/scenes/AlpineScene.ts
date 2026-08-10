@@ -24,6 +24,7 @@ import {
   LivingSlopeSimulation,
   type LivingActorEvent,
   type LivingActorSnapshot,
+  type LivingSlopeRamp,
 } from "../../simulation/livingSlope";
 import {
   YetiSimulation,
@@ -336,7 +337,7 @@ export class AlpineScene extends Phaser.Scene {
             worldY: player.worldY,
           });
         }
-        this.livingSlope.step(player, deltaSeconds);
+        this.livingSlope.step(player, deltaSeconds, this.getLivingSlopeRamps());
         this.yeti.step(player, deltaSeconds);
         this.fixedSteps += 1;
         this.capturePlayerEvents();
@@ -1428,6 +1429,33 @@ export class AlpineScene extends Phaser.Scene {
     return objects;
   }
 
+  private getLivingSlopeRamps(): readonly LivingSlopeRamp[] {
+    const ramps: LivingSlopeRamp[] = [];
+    for (const chunk of this.stream.getActiveChunks()) {
+      for (const object of chunk.objects) {
+        if (object.type !== "ramp") continue;
+        const delta = this.interactions.deltas.get(object.id);
+        if (delta?.consumed || delta?.destroyed) continue;
+        ramps.push({
+          footprintRadius: object.interaction.footprint.radius,
+          id: object.id,
+          worldX: object.x + (delta?.offsetX ?? 0),
+          worldY: object.y,
+        });
+      }
+    }
+    for (const object of this.scenarioObjects) {
+      if (object.type !== "ramp") continue;
+      ramps.push({
+        footprintRadius: object.interaction.footprint.radius,
+        id: object.id,
+        worldX: object.x,
+        worldY: object.y,
+      });
+    }
+    return ramps.sort((left, right) => left.id.localeCompare(right.id));
+  }
+
   private stageInteractionScenario(scenario: GateThreeScenario): boolean {
     const valid: readonly GateThreeScenario[] = [
       "none",
@@ -1609,6 +1637,16 @@ export class AlpineScene extends Phaser.Scene {
     if (scenario === "population") {
       this.simulation.reposition(14, 0, 0, 3.5);
       const staged = this.simulation.getSnapshot();
+      this.scenario = "none";
+      this.scenarioObjects = [
+        {
+          id: "scenario-living-ramp",
+          interaction: interactionFor("ramp"),
+          type: "ramp",
+          x: staged.worldX + 8,
+          y: staged.worldY + 4,
+        },
+      ];
       this.livingSlope.repositionActor(
         "beginner-0",
         staged.worldX - 10,
@@ -1794,8 +1832,12 @@ export class AlpineScene extends Phaser.Scene {
       .reverse()
       .find((event) => event.kind === "audio");
     if (latestVisual) {
-      this.feedbackVisibleUntil =
-        latestVisual.atSeconds + FEEDBACK_VISIBLE_SECONDS;
+      const priorityUntil = latestVisual.atSeconds + FEEDBACK_VISIBLE_SECONDS;
+      this.feedbackVisibleUntil = priorityUntil;
+      this.feedbackPriorityUntil = Math.max(
+        this.feedbackPriorityUntil,
+        priorityUntil,
+      );
       const feedback = document.querySelector<HTMLElement>("#feedback-card");
       const label = document.querySelector<HTMLElement>("#feedback-label");
       if (feedback) {
@@ -1858,6 +1900,10 @@ export class AlpineScene extends Phaser.Scene {
     this.feedbackVisibleUntil =
       this.simulation.getSnapshot().simulationSeconds +
       FEEDBACK_VISIBLE_SECONDS;
+    this.feedbackPriorityUntil = Math.max(
+      this.feedbackPriorityUntil,
+      this.feedbackVisibleUntil,
+    );
   }
 
   private captureLivingEvents(): void {

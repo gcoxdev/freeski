@@ -4,6 +4,7 @@ import {
   LIVING_SLOPE_TUNING,
   LivingSlopeSimulation,
   type LivingSlopePlayer,
+  type LivingSlopeRamp,
 } from "./livingSlope";
 
 const STEP = 1 / 60;
@@ -15,11 +16,12 @@ function runFor(
     worldX: 0,
     worldY: 0,
   },
+  ramps: readonly LivingSlopeRamp[] = [],
 ): void {
   let time = simulation.getSnapshot().simulationSeconds;
   for (let index = 0; index < Math.ceil(seconds / STEP); index += 1) {
     time += STEP;
-    simulation.step({ ...player, simulationSeconds: time }, STEP);
+    simulation.step({ ...player, simulationSeconds: time }, STEP, ramps);
   }
 }
 
@@ -62,21 +64,37 @@ describe("LivingSlopeSimulation", () => {
     expect(["cruising", "wobble"]).toContain(beginner.state);
   });
 
-  it("runs top-entry snowboarder carve, jump, four tumble phases, and landing", () => {
-    const simulation = new LivingSlopeSimulation("boarder");
+  it("triggers the top-entry snowboarder's jump and tumble only on ramp geometry", () => {
+    const withRamp = new LivingSlopeSimulation("boarder");
+    const withoutRamp = new LivingSlopeSimulation("boarder");
+    const ramps = [
+      {
+        footprintRadius: 2,
+        id: "test-ramp",
+        worldX: 11,
+        worldY: -24,
+      },
+    ] as const;
     const states = new Set<string>();
     for (let frame = 0; frame < 210; frame += 1) {
-      simulation.step(
+      withRamp.step(
         { simulationSeconds: (frame + 1) * STEP, worldX: 0, worldY: 0 },
         STEP,
+        ramps,
+      );
+      withoutRamp.step(
+        { simulationSeconds: (frame + 1) * STEP, worldX: 0, worldY: 0 },
+        STEP,
+        [],
       );
       states.add(
-        simulation
+        withRamp
           .getSnapshot()
           .actors.find((value) => value.id === "snowboarder-top")!.state,
       );
     }
-    const eventTypes = simulation.drainEvents().map((event) => event.type);
+    const events = withRamp.drainEvents();
+    const eventTypes = events.map((event) => event.type);
     expect(eventTypes).toEqual(
       expect.arrayContaining([
         "snowboarder-entered",
@@ -85,8 +103,15 @@ describe("LivingSlopeSimulation", () => {
         "snowboarder-landed",
       ]),
     );
+    expect(
+      events.find((event) => event.type === "snowboarder-jumped"),
+    ).toMatchObject({ terrainObjectId: "test-ramp" });
     for (const phase of [1, 2, 3, 4])
       expect(states.has(`tumbling-${phase}`)).toBe(true);
+    const rampFreeTypes = withoutRamp.drainEvents().map((event) => event.type);
+    expect(rampFreeTypes).toContain("snowboarder-entered");
+    expect(rampFreeTypes).not.toContain("snowboarder-jumped");
+    expect(rampFreeTypes).not.toContain("snowboarder-tumbled");
   });
 
   it("knocks a dog without crashing the player, leaves a yellow-snow event, and recovers", () => {

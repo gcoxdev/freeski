@@ -10,6 +10,7 @@ export const LIVING_SLOPE_TUNING = Object.freeze({
   chairSpeedMetersPerSecond: 2,
   dogContactRadiusMeters: 1.35,
   maximumActors: 22,
+  snowboarderFootprintRadiusMeters: 0.75,
   snowboarderEntryDistanceMeters: 46,
   walkingTreeWakeRadiusMeters: 14,
 });
@@ -73,6 +74,7 @@ export interface LivingActorEvent {
   readonly actorId: string;
   readonly atSeconds: number;
   readonly id: string;
+  readonly terrainObjectId: string | null;
   readonly type: LivingActorEventType;
   readonly worldX: number;
   readonly worldY: number;
@@ -93,11 +95,19 @@ export interface LivingSlopePlayer {
   readonly worldY: number;
 }
 
+export interface LivingSlopeRamp {
+  readonly footprintRadius: number;
+  readonly id: string;
+  readonly worldX: number;
+  readonly worldY: number;
+}
+
 interface MutableActor {
   active: boolean;
   direction: -1 | 0 | 1;
   id: string;
   kind: LivingActorKind;
+  lastRampId: string | null;
   riderCount: 0 | 1 | 2;
   source: "chairlift" | "mountain" | "top-entry";
   state: LivingActorState;
@@ -109,15 +119,47 @@ interface MutableActor {
 }
 
 function actor(
-  value: Omit<MutableActor, "stateSeconds" | "velocityX" | "velocityY"> &
+  value: Omit<
+    MutableActor,
+    "lastRampId" | "stateSeconds" | "velocityX" | "velocityY"
+  > &
     Partial<Pick<MutableActor, "stateSeconds" | "velocityX" | "velocityY">>,
 ): MutableActor {
   return {
+    lastRampId: null,
     stateSeconds: 0,
     velocityX: 0,
     velocityY: 0,
     ...value,
   };
+}
+
+function distanceToSegment(
+  pointX: number,
+  pointY: number,
+  startX: number,
+  startY: number,
+  endX: number,
+  endY: number,
+): number {
+  const segmentX = endX - startX;
+  const segmentY = endY - startY;
+  const lengthSquared = segmentX * segmentX + segmentY * segmentY;
+  const ratio =
+    lengthSquared === 0
+      ? 0
+      : Math.max(
+          0,
+          Math.min(
+            1,
+            ((pointX - startX) * segmentX + (pointY - startY) * segmentY) /
+              lengthSquared,
+          ),
+        );
+  return Math.hypot(
+    pointX - (startX + segmentX * ratio),
+    pointY - (startY + segmentY * ratio),
+  );
 }
 
 function wrapChairY(worldY: number): number {
@@ -287,7 +329,11 @@ export class LivingSlopeSimulation {
     this.forcedChairDrop = true;
   }
 
-  step(player: Readonly<LivingSlopePlayer>, deltaSeconds: number): void {
+  step(
+    player: Readonly<LivingSlopePlayer>,
+    deltaSeconds: number,
+    ramps: readonly LivingSlopeRamp[] = [],
+  ): void {
     if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0)
       throw new RangeError("deltaSeconds must be finite and positive");
     this.simulationSeconds = player.simulationSeconds;
@@ -299,7 +345,7 @@ export class LivingSlopeSimulation {
       if (value.kind === "beginner")
         this.stepBeginner(value, player, deltaSeconds);
       else if (value.kind === "snowboarder")
-        this.stepSnowboarder(value, player, deltaSeconds);
+        this.stepSnowboarder(value, player, ramps, deltaSeconds);
       else if (value.kind === "dog") this.stepDog(value, player, deltaSeconds);
       else if (value.kind === "walking-tree")
         this.stepWalkingTree(value, player, deltaSeconds);
@@ -351,8 +397,21 @@ export class LivingSlopeSimulation {
   private stepSnowboarder(
     value: MutableActor,
     player: Readonly<LivingSlopePlayer>,
+    ramps: readonly LivingSlopeRamp[],
     deltaSeconds: number,
   ): void {
+    const previousX = value.worldX;
+    const previousY = value.worldY;
+    if (
+      value.lastRampId &&
+      !ramps.some(
+        (ramp) =>
+          ramp.id === value.lastRampId &&
+          Math.hypot(value.worldX - ramp.worldX, value.worldY - ramp.worldY) <=
+            ramp.footprintRadius + 5,
+      )
+    )
+      value.lastRampId = null;
     if (value.state === "entering") {
       value.velocityY = 13.5;
       if (value.stateSeconds >= 0.45) {
@@ -367,8 +426,10 @@ export class LivingSlopeSimulation {
       value.velocityY = 15.5;
       if (value.stateSeconds >= 0.72) {
         value.direction = value.state === "carve-left" ? 1 : -1;
-        this.changeState(value, "jumping");
-        this.emit("snowboarder-jumped", value);
+        this.changeState(
+          value,
+          value.direction < 0 ? "carve-left" : "carve-right",
+        );
       }
     } else if (value.state === "jumping") {
       value.velocityX *= 0.98;
@@ -399,6 +460,37 @@ export class LivingSlopeSimulation {
     }
     value.worldX += value.velocityX * deltaSeconds;
     value.worldY += value.velocityY * deltaSeconds;
+    if (value.state === "carve-left" || value.state === "carve-right") {
+      const ramp = ramps
+        .filter((candidate) => candidate.id !== value.lastRampId)
+        .map((candidate) => ({
+          candidate,
+          distance: distanceToSegment(
+            candidate.worldX,
+            candidate.worldY,
+            previousX,
+            previousY,
+            value.worldX,
+            value.worldY,
+          ),
+        }))
+        .filter(
+          ({ candidate, distance }) =>
+            distance <=
+            candidate.footprintRadius +
+              LIVING_SLOPE_TUNING.snowboarderFootprintRadiusMeters,
+        )
+        .sort(
+          (left, right) =>
+            left.distance - right.distance ||
+            left.candidate.id.localeCompare(right.candidate.id),
+        )[0]?.candidate;
+      if (ramp) {
+        value.lastRampId = ramp.id;
+        this.changeState(value, "jumping");
+        this.emit("snowboarder-jumped", value, ramp.id);
+      }
+    }
     if (
       value.source === "top-entry" &&
       (value.worldY > player.worldY + 90 ||
@@ -535,13 +627,18 @@ export class LivingSlopeSimulation {
     value.stateSeconds = 0;
   }
 
-  private emit(type: LivingActorEventType, value: MutableActor): void {
+  private emit(
+    type: LivingActorEventType,
+    value: MutableActor,
+    terrainObjectId: string | null = null,
+  ): void {
     this.lastEvent = type;
     this.events.push(
       Object.freeze({
         actorId: value.id,
         atSeconds: this.simulationSeconds,
         id: `living-${this.eventSequence++}`,
+        terrainObjectId,
         type,
         worldX: value.worldX,
         worldY: value.worldY,
