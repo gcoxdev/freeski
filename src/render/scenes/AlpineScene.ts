@@ -77,7 +77,7 @@ import { GENERATOR_VERSION } from "../../world/generatorVersion";
 import { interactionFor } from "../../world/interactionCatalog";
 import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
-import { CHUNK_SIZE_METERS } from "../../world/types";
+import { CHUNK_SIZE_METERS, type WorldChunk } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
 import {
   PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
@@ -107,6 +107,8 @@ const MAX_TELEMETRY_EVENTS = 240;
 const MAX_TELEMETRY_SAMPLES = 600;
 const FEEDBACK_VISIBLE_SECONDS = 1.15;
 const PRESENTATION_SYNC_FIXED_STEPS = 30;
+const EMPTY_INTERACTIVE_OBJECTS: readonly InteractiveWorldObject[] =
+  Object.freeze([]);
 
 const COLORS = {
   blueSuit: 0x1d5b85,
@@ -185,7 +187,24 @@ export class AlpineScene extends Phaser.Scene {
   private renderFrames = 0;
   private droppedSeconds = 0;
   private debugVisible = false;
-  private previousChunk = "";
+  private previousChunkX: number | undefined;
+  private previousChunkY: number | undefined;
+  private readonly screenCoordinates: [number, number] = [0, 0];
+  private readonly contourPoints = [
+    new Phaser.Geom.Point(),
+    new Phaser.Geom.Point(),
+    new Phaser.Geom.Point(),
+    new Phaser.Geom.Point(),
+  ];
+  private readonly groomerPoints = [
+    new Phaser.Geom.Point(),
+    new Phaser.Geom.Point(),
+    new Phaser.Geom.Point(),
+  ];
+  private livingSlopeRampChunks?: readonly WorldChunk[];
+  private livingSlopeRampScenario?: readonly InteractiveWorldObject[];
+  private livingSlopeRampDeltaRevision = -1;
+  private livingSlopeRampValue: readonly LivingSlopeRamp[] = Object.freeze([]);
   private visibleObjects = 0;
   private worldTransitions = 0;
   private lastReplaySnapshotStep = 0;
@@ -757,16 +776,11 @@ export class AlpineScene extends Phaser.Scene {
     ) {
       const y = line * contourSpacing + verticalOffset;
       const bend = Math.sin((player.worldY + line * 8) * 0.05) * 15;
-      this.background.strokePoints(
-        [
-          new Phaser.Geom.Point(-30, y + bend),
-          new Phaser.Geom.Point(width * 0.27 + horizontalOffset, y - 8),
-          new Phaser.Geom.Point(width * 0.58 + horizontalOffset, y + 9),
-          new Phaser.Geom.Point(width + 30, y - bend),
-        ],
-        false,
-        false,
-      );
+      this.contourPoints[0]!.setTo(-30, y + bend);
+      this.contourPoints[1]!.setTo(width * 0.27 + horizontalOffset, y - 8);
+      this.contourPoints[2]!.setTo(width * 0.58 + horizontalOffset, y + 9);
+      this.contourPoints[3]!.setTo(width + 30, y - bend);
+      this.background.strokePoints(this.contourPoints, false, false);
     }
 
     this.drawGroomerTracks(player, anchorY, height);
@@ -788,15 +802,13 @@ export class AlpineScene extends Phaser.Scene {
     const drift = Math.max(-70, Math.min(70, -player.velocityX * 3.2));
     this.background.lineStyle(1, COLORS.ink, 0.1);
     for (const skiOffset of [-7, 7]) {
-      const points = [
-        new Phaser.Geom.Point(centerX + skiOffset, anchorY + 13),
-        new Phaser.Geom.Point(
-          centerX + skiOffset + drift * 0.25,
-          anchorY + height * 0.18,
-        ),
-        new Phaser.Geom.Point(centerX + skiOffset + drift, height + 20),
-      ];
-      this.background.strokePoints(points, false, false);
+      this.groomerPoints[0]!.setTo(centerX + skiOffset, anchorY + 13);
+      this.groomerPoints[1]!.setTo(
+        centerX + skiOffset + drift * 0.25,
+        anchorY + height * 0.18,
+      );
+      this.groomerPoints[2]!.setTo(centerX + skiOffset + drift, height + 20);
+      this.background.strokePoints(this.groomerPoints, false, false);
     }
   }
 
@@ -1765,11 +1777,12 @@ export class AlpineScene extends Phaser.Scene {
     worldY: number,
     player: PlayerSnapshot,
   ): [number, number] {
-    return [
-      this.scale.width * 0.5 + (worldX - player.worldX) * PIXELS_PER_METER,
+    this.screenCoordinates[0] =
+      this.scale.width * 0.5 + (worldX - player.worldX) * PIXELS_PER_METER;
+    this.screenCoordinates[1] =
       this.scale.height * PLAYER_SCREEN_RATIO +
-        (worldY - player.worldY) * PIXELS_PER_METER,
-    ];
+      (worldY - player.worldY) * PIXELS_PER_METER;
+    return this.screenCoordinates;
   }
 
   private updateSkier(player: PlayerSnapshot): void {
@@ -2124,16 +2137,20 @@ export class AlpineScene extends Phaser.Scene {
       worldX: player.worldX,
       worldY: player.worldY,
     });
-    const currentChunk = `${snapshot.currentX},${snapshot.currentY}`;
-    if (currentChunk !== this.previousChunk) {
-      this.previousChunk = currentChunk;
+    if (
+      snapshot.currentX !== this.previousChunkX ||
+      snapshot.currentY !== this.previousChunkY
+    ) {
+      this.previousChunkX = snapshot.currentX;
+      this.previousChunkY = snapshot.currentY;
       this.worldTransitions += 1;
     }
   }
 
   private getInteractiveObjects(): readonly InteractiveWorldObject[] {
     if (this.scenario !== "none") return this.scenarioObjects;
-    if (this.trainingMode || this.courseTestMode) return [];
+    if (this.trainingMode || this.courseTestMode)
+      return EMPTY_INTERACTIVE_OBJECTS;
     const objects: InteractiveWorldObject[] = [];
     for (const chunk of this.stream.getActiveChunks()) {
       for (const object of chunk.objects) objects.push(object);
@@ -2162,8 +2179,17 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private getLivingSlopeRamps(): readonly LivingSlopeRamp[] {
+    const activeChunks = this.stream.getActiveChunks();
+    const deltaRevision = this.interactions.deltas.revision;
+    if (
+      activeChunks === this.livingSlopeRampChunks &&
+      this.scenarioObjects === this.livingSlopeRampScenario &&
+      deltaRevision === this.livingSlopeRampDeltaRevision
+    ) {
+      return this.livingSlopeRampValue;
+    }
     const ramps: LivingSlopeRamp[] = [];
-    for (const chunk of this.stream.getActiveChunks()) {
+    for (const chunk of activeChunks) {
       for (const object of chunk.objects) {
         if (object.type !== "ramp") continue;
         const delta = this.interactions.deltas.get(object.id);
@@ -2185,7 +2211,13 @@ export class AlpineScene extends Phaser.Scene {
         worldY: object.y,
       });
     }
-    return ramps.sort((left, right) => left.id.localeCompare(right.id));
+    this.livingSlopeRampChunks = activeChunks;
+    this.livingSlopeRampScenario = this.scenarioObjects;
+    this.livingSlopeRampDeltaRevision = deltaRevision;
+    this.livingSlopeRampValue = Object.freeze(
+      ramps.sort((left, right) => left.id.localeCompare(right.id)),
+    );
+    return this.livingSlopeRampValue;
   }
 
   private stageInteractionScenario(scenario: GateThreeScenario): boolean {

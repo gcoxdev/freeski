@@ -10,29 +10,32 @@ export interface ObjectDelta {
 }
 
 export class ChunkDeltaStore {
-  private readonly deltas = new Map<string, ObjectDelta>();
+  private readonly deltas = new Map<string, Readonly<ObjectDelta>>();
+  private revisionValue = 0;
+
+  get revision(): number {
+    return this.revisionValue;
+  }
 
   get(objectId: string): Readonly<ObjectDelta> | undefined {
-    const delta = this.deltas.get(objectId);
-    return delta ? Object.freeze({ ...delta }) : undefined;
+    return this.deltas.get(objectId);
   }
 
   patch(objectId: string, delta: ObjectDelta): void {
-    this.deltas.set(objectId, { ...this.deltas.get(objectId), ...delta });
+    this.deltas.set(
+      objectId,
+      Object.freeze({ ...this.deltas.get(objectId), ...delta }),
+    );
+    this.revisionValue += 1;
   }
 
   clear(): void {
+    if (this.deltas.size === 0) return;
     this.deltas.clear();
+    this.revisionValue += 1;
   }
 
   snapshot(): Readonly<Record<string, Readonly<ObjectDelta>>> {
-    return Object.freeze(
-      Object.fromEntries(
-        [...this.deltas.entries()].map(([id, delta]) => [
-          id,
-          Object.freeze({ ...delta }),
-        ]),
-      ),
-    );
+    return Object.freeze(Object.fromEntries(this.deltas.entries()));
   }
 }

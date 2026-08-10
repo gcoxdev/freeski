@@ -27,6 +27,11 @@ function keySort(a: string, b: string): number {
 export class MountainStream {
   private readonly cache = new Map<string, WorldChunk>();
   private activeKeys: readonly string[] = Object.freeze([]);
+  private activeChunksValue: readonly WorldChunk[] = Object.freeze([]);
+  private streamedCurrentX: number | undefined;
+  private streamedCurrentY: number | undefined;
+  private streamedDirection: "downhill" | "uphill" | undefined;
+  private streamedXRadius: number | undefined;
   private snapshotValue: StreamSnapshot = Object.freeze({
     activeKeys: Object.freeze([]),
     aheadRows: Object.freeze([]),
@@ -47,6 +52,14 @@ export class MountainStream {
       2,
       Math.ceil(position.viewportWidthMeters / 2 / CHUNK_SIZE_METERS) + 1,
     );
+    if (
+      currentX === this.streamedCurrentX &&
+      currentY === this.streamedCurrentY &&
+      direction === this.streamedDirection &&
+      xRadius === this.streamedXRadius
+    ) {
+      return this.snapshotValue;
+    }
     const firstY = direction === "downhill" ? currentY - 1 : currentY - 2;
     const lastY = direction === "downhill" ? currentY + 2 : currentY + 1;
     const required: string[] = [];
@@ -60,6 +73,11 @@ export class MountainStream {
       }
     }
     this.activeKeys = Object.freeze(required.sort(keySort));
+    this.activeChunksValue = Object.freeze(
+      this.activeKeys
+        .map((key) => this.cache.get(key))
+        .filter((chunk): chunk is WorldChunk => chunk !== undefined),
+    );
 
     for (const key of this.cache.keys()) {
       const [x = 0, y = 0] = key.split(",").map(Number);
@@ -81,15 +99,15 @@ export class MountainStream {
       direction,
       missingRequiredKeys: Object.freeze(missingRequiredKeys),
     });
+    this.streamedCurrentX = currentX;
+    this.streamedCurrentY = currentY;
+    this.streamedDirection = direction;
+    this.streamedXRadius = xRadius;
     return this.snapshotValue;
   }
 
   getActiveChunks(): readonly WorldChunk[] {
-    return Object.freeze(
-      this.activeKeys
-        .map((key) => this.cache.get(key))
-        .filter((chunk): chunk is WorldChunk => chunk !== undefined),
-    );
+    return this.activeChunksValue;
   }
 
   getSnapshot(): StreamSnapshot {

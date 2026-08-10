@@ -225,7 +225,15 @@ describe("deterministic chunk generation", () => {
     const object = chunk.objects[0]!;
     expect(object).toBeDefined();
     store.patch(object.id, { destroyed: true });
-    expect(store.get(object.id)).toEqual({ destroyed: true });
+    const firstDelta = store.get(object.id);
+    expect(firstDelta).toEqual({ destroyed: true });
+    expect(Object.isFrozen(firstDelta)).toBe(true);
+    expect(store.get(object.id)).toBe(firstDelta);
+    const revision = store.revision;
+    store.patch(object.id, { burning: true });
+    expect(store.get(object.id)).toEqual({ burning: true, destroyed: true });
+    expect(store.get(object.id)).not.toBe(firstDelta);
+    expect(store.revision).toBe(revision + 1);
     expect(new WorldGenerator("immutable").generateChunk(2, 3)).toEqual(chunk);
   });
 
@@ -245,6 +253,34 @@ describe("deterministic chunk generation", () => {
 });
 
 describe("mountain stream continuity", () => {
+  it("reuses its immutable window while the streaming signature is unchanged", () => {
+    const stream = new MountainStream(new WorldGenerator("stable-window"));
+    const firstSnapshot = stream.update({
+      worldX: 1,
+      worldY: 8,
+      velocityY: 20,
+      viewportWidthMeters: 192,
+    });
+    const firstChunks = stream.getActiveChunks();
+    const secondSnapshot = stream.update({
+      worldX: 4,
+      worldY: 31,
+      velocityY: 12,
+      viewportWidthMeters: 190,
+    });
+    expect(secondSnapshot).toBe(firstSnapshot);
+    expect(stream.getActiveChunks()).toBe(firstChunks);
+
+    const uphillSnapshot = stream.update({
+      worldX: 4,
+      worldY: 31,
+      velocityY: -1,
+      viewportWidthMeters: 190,
+    });
+    expect(uphillSnapshot).not.toBe(firstSnapshot);
+    expect(stream.getActiveChunks()).not.toBe(firstChunks);
+  });
+
   it("streams two rows ahead, retains one behind, and descends 2100m without gaps", () => {
     const generator = new WorldGenerator("long-descent");
     const stream = new MountainStream(generator);
