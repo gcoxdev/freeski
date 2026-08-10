@@ -103,5 +103,13 @@
     "The approved ultra-realistic concept sheets are not yet sliced into production atlases; Gate 5 continues to use temporary code-rendered presentation accepted by earlier gates.",
     "Vite reports its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the production build succeeds."
   ],
-  "executor_claimed_criteria": ["G5.1", "G5.2", "G5.3", "G5.4", "G5.5", "G5.6", "G5.7"]
+  "executor_claimed_criteria": [
+    "G5.1",
+    "G5.2",
+    "G5.3",
+    "G5.4",
+    "G5.5",
+    "G5.6",
+    "G5.7"
+  ]
 }
