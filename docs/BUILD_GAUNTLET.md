@@ -23,7 +23,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 2 — Deterministic mountain    |                          2 | PASS                | `0091cbe` |
 | Gate 3 — Collisions, air and Style |                          1 | PASS                | `9472d8c` |
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
-| Gate 5 — Living slope and Yeti     |                          1 | FAIL                | `e16fc2f` |
+| Gate 5 — Living slope and Yeti     |                          2 | PASS                | `9e23730` |
 | Gate 6 — Art, VFX, UI and audio    |                          — | NOT STARTED         | —         |
 | Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
 
@@ -114,3 +114,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: pristine install, formatting, typecheck, lint, 82 unit tests, production build, full and focused Chromium runs, exact four-boundary probes, unstaged default 2,000 m chase/Turbo/capture/reset playthrough, 768×600 layout/error audit and full-resolution artifact inspection
 - Required remediation: couple expert snowboarder jump/tumble transitions to deterministic ramp geometry and prove ramp-free travel does not trigger them; give established interaction/mode feedback reliable priority over ambient living-actor notices and demonstrate repeated green full browser suites.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-5/attempt-1/judge-verdict.json`
+
+### Gate 5 — attempt 2
+
+- Candidate revision: `9e23730469a5d901ec2cb533987b37e89e3ccd4a`
+- Evidence commit: `b1caaa06764fd95c44a0467fd4e1afd84df3bda0`
+- Judge isolation: new fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.995`
+- Criteria: G5.1–G5.7 all PASS
+- Independent checks: pristine install, formatting, typecheck, lint, 82 unit tests, production build, focused living/interaction Chromium tests, two independent 10/10 full browser suites, exact four-boundary probes, generated-ramp/ramp-free comparison, natural chair drop, unstaged default 2,000 m chase/Turbo/capture/reset playthrough, 768×600 layout/error audit and full-resolution artifact inspection
+- Repair verified: snowboarders jump and tumble only after deterministic ramp contact; equivalent ramp-free travel does not trigger; interaction/mode feedback reliably outranks ambient actor notices across repeated parallel suites.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-5/attempt-2/judge-verdict.json`

@@ -1,0 +1,147 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_5",
+  "attempt": 2,
+  "candidate_revision": "9e23730469a5d901ec2cb533987b37e89e3ccd4a",
+  "criteria": [
+    {
+      "id": "G5.1",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/livingSlope.ts implements deterministic beginner, snowboarder, dog, walking-tree, and two-direction looping chair controllers in a bounded 21-actor pool.",
+        "Independent default browser session at ?seed=judge-default-0 confirmed trainingMode=false, debug hidden, collisions enabled, all five actor kinds present, and chair-up-0 moving during a 1.4-second observation.",
+        "Independent default play naturally emitted chair-rider-dropped at 3.9833 seconds without the forced chair-drop scenario."
+      ],
+      "notes": "All required living-slope actors are present, active, rendered, and moving in ordinary gameplay."
+    },
+    {
+      "id": "G5.2",
+      "result": "PASS",
+      "evidence": [
+        "All 82 unit tests passed, including beginner fall/recovery, dog hit/recovery, rare chair-drop probability, chair-drop tumble, and paired ramp/ramp-free snowboarder behavior.",
+        "Independent browser module probe used actual WorldGenerator ramp freeski-world-v1:-62:-12 at (-494.0823,-90.5037): equivalent top-entry snowboarder travel emitted entered, jumped with terrainObjectId matching that ramp, tumbled, and landed; identical travel with no ramp emitted only entered.",
+        "src/render/scenes/AlpineScene.ts supplies active, unconsumed generated ramp geometry to LivingSlopeSimulation; the focused browser test also observed scenario-living-ramp coupling.",
+        "Independent default play naturally observed chair-rider-dropped; focused browser play verified beginner behavior, dog hit/recovery, yellow snow, and chair-drop snowboarder activation."
+      ],
+      "notes": "Attempt-1 remediation is complete: ordinary top-entry carving no longer jumps on a timer, actual deterministic ramp geometry triggers the jump/tumble sequence, the paired negative stays ramp-free, and chair-drop behavior remains intact."
+    },
+    {
+      "id": "G5.3",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/yeti.test.ts tests exact and 0.001-beyond values for top, bottom, left, and right boundaries.",
+        "Independent Chromium module probe observed exactActive=false and beyondActive=true for y=-125/-125.001, y=2000/2000.001, x=-1000/-1000.001, and x=1000/1000.001."
+      ],
+      "notes": "All four directional activation comparisons are strict at the specified thresholds."
+    },
+    {
+      "id": "G5.4",
+      "result": "PASS",
+      "evidence": [
+        "Independent four-boundary probe measured 25.7019 m safe activation distance and 1.1333 seconds of remaining reposition protection for every controller.",
+        "Independent default-session chase emitted yeti-activated, capture-started, pounced, grabbed, eaten, chewing, and reset-requested.",
+        "After capture, the browser returned with no active boundary, capturePhase=none, an incremented run number, and accepted second-run downhill input from 0.68 m to 5.20 m.",
+        "src/simulation/yeti.ts implements capped chase steering, distant-chaser repositioning, protection, contact, staged capture, recovery, and reset acknowledgment."
+      ],
+      "notes": "Safe entry, steering, contact, the complete capture presentation, automatic reset, and post-reset playability were demonstrated without a soft lock."
+    },
+    {
+      "id": "G5.5",
+      "result": "PASS",
+      "evidence": [
+        "In independent default-session play, Turbo increased bottom-chaser separation from 26.4181 m to 44.6737 m during an 850 ms evasion window.",
+        "The same chaser subsequently completed contact, capture, recovery, and reset after Turbo was disabled.",
+        "The deterministic unit test for a measured Turbo evasion window without impossible contact passed."
+      ],
+      "notes": "Turbo buys measurable temporary distance but does not grant immunity or guaranteed safety."
+    },
+    {
+      "id": "G5.6",
+      "result": "PASS",
+      "evidence": [
+        "Independent collision-enabled default session reached 1900.0233 m with foreshadow intensity 0.500175, breath mist 0.360126, warning layer 0.2901015, and five wind streaks while activeBoundaries remained empty.",
+        "The rendered 1280x720 foreshadow capture was inspected at original resolution; it showed restrained atmospheric effects and no explicit Yeti announcement.",
+        "Document text inspection at 1900 m found no YETI text, and unit tests passed for zero intensity through 1800 m, monotonic growth, and full intensity at 2000 m."
+      ],
+      "notes": "The 1800–2000 m warning is atmospheric and subtle without revealing the Yeti early."
+    },
+    {
+      "id": "G5.7",
+      "result": "PASS",
+      "evidence": [
+        "npm test passed all 14 files and 82 tests, including every exact/beyond boundary pair and deterministic ramp/ramp-free behavior.",
+        "Focused living-slope plus interaction browser run passed 2/2.",
+        "Two independent full npm run test:e2e executions each passed 10/10; the formerly timing-sensitive interactions test remained green in both complete parallel suites.",
+        "Independent non-training, collision-enabled browser diagnostic crossed 2000 m, showed the bottom chase, measured Turbo evasion, completed every capture phase, reset, and accepted second-run input.",
+        "At 768x600, the shell measured exactly 768x600 with no horizontal overflow; the mode card, pointer control, and world-grid control remained visible.",
+        "The independent diagnostic recorded no console errors, page errors, failed requests, or HTTP responses >=400."
+      ],
+      "notes": "Deterministic thresholds, stable repeated browser coverage, the complete >2000 m chase/capture/reset loop, minimum layout, and error-free second-run input are all demonstrated."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "git rev-parse HEAD; detached-state, status, tracked/staged diff, and base diff checks",
+      "result": "PASS; exact HEAD 9e23730469a5d901ec2cb533987b37e89e3ccd4a, detached, tracked-clean before and after judgment, and base diff limited to five declared remediation files."
+    },
+    {
+      "command_or_action": "Read authoritative README.md, docs/SKIFREE_RESEARCH_AND_DESIGN.md, assets/sprite-sheets/README.md, manifest.json, and docs/GAUNTLET_LOOP_PROMPT.md",
+      "result": "Completed; G5.1 through G5.7 and attempt-1 remediation requirements independently derived."
+    },
+    {
+      "command_or_action": "Inspect attempt-2 submission packet, attempt-1 verdict, all five declared artifacts, and declared screenshot at original resolution",
+      "result": "Completed; all paths existed, telemetry/logs were readable, and the 1280x720 boarder-ramp capture was visually inspected."
+    },
+    {
+      "command_or_action": "npm ci",
+      "result": "PASS; 164 packages installed."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "PASS; 14 files and 82 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "PASS; production build completed with only the existing large-chunk advisory."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- tests/e2e/livingSlope.spec.ts tests/e2e/interactions.spec.ts",
+      "result": "PASS; 2/2 focused browser tests."
+    },
+    {
+      "command_or_action": "npm run test:e2e (independent full run 1)",
+      "result": "PASS; 10/10 in 1.2 minutes."
+    },
+    {
+      "command_or_action": "npm run test:e2e (independent full run 2)",
+      "result": "PASS; 10/10 in 1.2 minutes."
+    },
+    {
+      "command_or_action": "Independent Chromium default-session and module diagnostic",
+      "result": "PASS; non-training/collision-enabled population, natural rare drop, four exact/beyond thresholds, protected placement, generated-ramp coupling and ramp-free negative, foreshadow, feedback arbitration, >2000 m chase/Turbo/capture/reset, second-run input, layout, and error channels all satisfied assertions."
+    },
+    {
+      "command_or_action": "Direct ambient-feedback arbitration probe",
+      "result": "PASS; FIRE LINE +1000 remained visible after a subsequent ambient dog-hit notice."
+    },
+    {
+      "command_or_action": "Original-resolution inspection of independent foreshadow and 768x600 post-reset captures",
+      "result": "PASS; subtle non-announcing foreshadow and complete minimum-viewport layout confirmed."
+    }
+  ],
+  "confidence": 0.995
+}
