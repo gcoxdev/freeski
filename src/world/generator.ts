@@ -1,4 +1,8 @@
-import { CLASSIC_EXCLUSIONS, pointInsideBounds } from "./classicMountain";
+import {
+  blocksTreeSlalomRoute,
+  CLASSIC_EXCLUSIONS,
+  pointInsideBounds,
+} from "./classicMountain";
 import { blocksGuaranteedCorridor, isBlockingType } from "./corridor";
 import { GENERATOR_VERSION } from "./generatorVersion";
 import { interactionFor } from "./interactionCatalog";
@@ -196,11 +200,12 @@ export class WorldGenerator {
     }
     if (
       isBlockingType(candidate.type) &&
-      blocksGuaranteedCorridor(
+      (blocksGuaranteedCorridor(
         this.worldSeed,
         candidate,
         candidate.footprintRadius,
-      )
+      ) ||
+        blocksTreeSlalomRoute(candidate, candidate.footprintRadius))
     ) {
       return false;
     }

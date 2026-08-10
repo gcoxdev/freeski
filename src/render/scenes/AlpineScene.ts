@@ -20,6 +20,19 @@ import {
   type InteractiveWorldObject,
 } from "../../simulation/slopeInteractions";
 import type { StyleEvent } from "../../simulation/style";
+import {
+  MountainModeSimulation,
+  type EventModeId,
+  type MarkerState,
+  type ModeEvent,
+} from "../../simulation/modes";
+import {
+  addRecord,
+  bucketForSeed,
+  emptyRecordBook,
+  recordFromResult,
+  type RecordBook,
+} from "../../simulation/recordBook";
 import type { ObjectDelta } from "../../world/chunkDeltas";
 import {
   CLASSIC_COURSES,
@@ -38,7 +51,9 @@ import { interactionFor } from "../../world/interactionCatalog";
 import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
 import { CHUNK_SIZE_METERS } from "../../world/types";
+import { LocalRecordStorage } from "../localRecordStorage";
 import type {
+  CourseCrossingTarget,
   DescentAuditReport,
   FreeSkiRuntime,
   GateThreeScenario,
@@ -72,6 +87,7 @@ export class AlpineScene extends Phaser.Scene {
   private readonly clock = new FixedStepClock(SIMULATION_STEP_SECONDS, 30);
   private readonly simulation = new PlayerSimulation();
   private readonly interactions = new SlopeInteractionSimulation("modern");
+  private readonly modes = new MountainModeSimulation();
   private background?: Phaser.GameObjects.Graphics;
   private skier?: Phaser.GameObjects.Container;
   private skierShadow?: Phaser.GameObjects.Ellipse;
@@ -84,11 +100,16 @@ export class AlpineScene extends Phaser.Scene {
   private readonly interactionEvents: InteractionEvent[] = [];
   private readonly feedbackEvents: FeedbackEvent[] = [];
   private readonly styleEvents: StyleEvent[] = [];
+  private readonly modeEvents: ModeEvent[] = [];
   private readonly samples: TelemetrySample[] = [];
   private scenario: GateThreeScenario = "none";
   private scenarioObjects: InteractiveWorldObject[] = [];
   private feedbackVisibleUntil = 0;
   private trainingMode = false;
+  private courseTestMode = false;
+  private recordBook: RecordBook = emptyRecordBook();
+  private recordStorage?: LocalRecordStorage;
+  private storageAvailable = true;
   private fixedSteps = 0;
   private renderFrames = 0;
   private droppedSeconds = 0;
@@ -122,6 +143,8 @@ export class AlpineScene extends Phaser.Scene {
       new URLSearchParams(window.location.search).get("pointer") === "1";
     this.trainingMode =
       new URLSearchParams(window.location.search).get("training") === "1";
+    this.courseTestMode =
+      new URLSearchParams(window.location.search).get("courseTest") === "1";
     this.debugVisible =
       new URLSearchParams(window.location.search).get("debug") === "1";
     this.setPointerSteering(pointerFromUrl);
@@ -138,6 +161,19 @@ export class AlpineScene extends Phaser.Scene {
     );
 
     const player = this.simulation.getSnapshot();
+    this.modes.syncPosition({
+      simulationSeconds: player.simulationSeconds,
+      style: this.interactions.getSnapshot().style,
+      worldX: player.worldX,
+      worldY: player.worldY,
+    });
+    try {
+      this.recordStorage = new LocalRecordStorage(window.localStorage);
+      this.recordBook = this.recordStorage.load();
+    } catch {
+      this.storageAvailable = false;
+      this.recordBook = emptyRecordBook();
+    }
     this.refreshWorldStream(player);
     const stream = this.stream.getSnapshot();
     this.runtime = {
@@ -157,6 +193,12 @@ export class AlpineScene extends Phaser.Scene {
         styleEvents: this.styleEvents,
       },
       lastInput: "none",
+      modes: {
+        events: this.modeEvents,
+        records: this.recordBook,
+        snapshot: this.modes.getSnapshot(),
+        storageAvailable: this.storageAvailable,
+      },
       player,
       ready: true,
       seed: this.worldSeed,
@@ -196,6 +238,8 @@ export class AlpineScene extends Phaser.Scene {
         this.runAutomatedDescent(distanceMeters),
       stageInteractionScenario: (scenario) =>
         this.stageInteractionScenario(scenario),
+      stageCourseCrossing: (mode, target, outcome = "correct") =>
+        this.stageCourseCrossing(mode, target, outcome),
       setVisible: (visible) => this.setDebugVisible(visible),
     };
 
@@ -223,6 +267,7 @@ export class AlpineScene extends Phaser.Scene {
         if (actions.resetPressed) {
           this.simulation.reset();
           this.interactions.reset();
+          this.modes.reset();
           this.scenario = "none";
           this.scenarioObjects = [];
         }
@@ -236,9 +281,17 @@ export class AlpineScene extends Phaser.Scene {
           this.getInteractiveObjects(),
           deltaSeconds,
         );
+        const player = this.simulation.getSnapshot();
+        this.modes.step({
+          simulationSeconds: player.simulationSeconds,
+          style: this.interactions.getSnapshot().style,
+          worldX: player.worldX,
+          worldY: player.worldY,
+        });
         this.fixedSteps += 1;
         this.capturePlayerEvents();
         this.captureInteractionEvents();
+        this.captureModeEvents();
         if (this.fixedSteps % 6 === 0) this.captureSample();
       },
     );
@@ -505,14 +558,39 @@ export class AlpineScene extends Phaser.Scene {
         width,
         height,
       );
+      const modeRun =
+        this.modes.getSnapshot().courses[course.id as EventModeId];
       for (const marker of course.markers) {
         const [x, y] = this.toScreen(marker.x, marker.y, player);
         if (x < -20 || x > width + 20 || y < -25 || y > height + 25) continue;
-        const color = marker.color === "red" ? COLORS.signal : COLORS.blueSuit;
+        const markerState =
+          modeRun?.markers[marker.index - 1]?.state ?? "pending";
+        const color =
+          markerState === "correct"
+            ? 0x3dbfa6
+            : markerState === "wrong-side" || markerState === "missed"
+              ? COLORS.stone
+              : marker.color === "red"
+                ? COLORS.signal
+                : COLORS.blueSuit;
         this.background.lineStyle(2, COLORS.ink, 0.38);
         this.background.lineBetween(x, y - 10, x, y + 9);
         this.background.fillStyle(color, 0.92);
         this.background.fillTriangle(x, y - 10, x + 10, y - 6, x, y - 2);
+        if (markerState !== "pending") {
+          this.background.lineStyle(
+            2,
+            markerState === "correct" ? 0x174f45 : COLORS.signal,
+            0.9,
+          );
+          if (markerState === "correct") {
+            this.background.lineBetween(x - 5, y + 2, x - 1, y + 6);
+            this.background.lineBetween(x - 1, y + 6, x + 6, y - 4);
+          } else {
+            this.background.lineBetween(x - 5, y - 4, x + 5, y + 6);
+            this.background.lineBetween(x + 5, y - 4, x - 5, y + 6);
+          }
+        }
       }
     }
   }
@@ -898,6 +976,12 @@ export class AlpineScene extends Phaser.Scene {
     const feedback = document.querySelector<HTMLElement>("#feedback-card");
     const pauseCard = document.querySelector<HTMLElement>("#pause-card");
     const status = document.querySelector<HTMLElement>("#system-label");
+    const modeName = document.querySelector<HTMLElement>("#mode-name");
+    const modeTime = document.querySelector<HTMLElement>("#mode-time");
+    const modeMarkers = document.querySelector<HTMLElement>("#mode-markers");
+    const modePenalty = document.querySelector<HTMLElement>("#mode-penalty");
+    const modeFinal = document.querySelector<HTMLElement>("#mode-final");
+    const modeRecord = document.querySelector<HTMLElement>("#mode-record");
     if (speed)
       speed.textContent = Math.round(
         player.speedMetersPerSecond * 3.6,
@@ -922,6 +1006,52 @@ export class AlpineScene extends Phaser.Scene {
         : "Alpine systems online";
     shell?.setAttribute("data-turbo", player.turbo.toString());
     shell?.setAttribute("data-paused", player.paused.toString());
+    const modeSnapshot = this.modes.getSnapshot();
+    const lastFinished = [...this.modeEvents]
+      .reverse()
+      .find((event) => event.type === "mode-finished")?.mode;
+    const displayMode = modeSnapshot.activeMode ?? lastFinished ?? null;
+    const displayRun = displayMode ? modeSnapshot.courses[displayMode] : null;
+    const displayName = displayMode
+      ? (CLASSIC_COURSES.find((course) => course.id === displayMode)?.name ??
+        displayMode)
+      : "OPEN SKIING";
+    if (modeName) modeName.textContent = displayName;
+    if (modeTime)
+      modeTime.textContent = displayRun
+        ? `TIME ${displayRun.elapsedSeconds.toFixed(1)}S`
+        : "CROSS A START GATE";
+    if (modeMarkers)
+      modeMarkers.textContent = displayRun?.markers.length
+        ? `${displayRun.markers.filter((marker) => marker.state === "correct").length}/${displayRun.markers.length} MARKERS`
+        : displayRun
+          ? `STYLE ${displayRun.styleEarned}`
+          : "3 COURSES OPEN";
+    if (modePenalty)
+      modePenalty.textContent = `PENALTY +${(displayRun?.penaltySeconds ?? 0).toFixed(1)}S`;
+    if (modeFinal)
+      modeFinal.textContent = displayRun?.result
+        ? displayRun.result.mode === "free-style"
+          ? `FINAL STYLE ${displayRun.result.score ?? 0}`
+          : `FINAL ${(displayRun.result.adjustedTimeSeconds ?? 0).toFixed(1)}S`
+        : displayRun?.lifecycle === "active"
+          ? "COURSE LIVE / LEAVE ANY TIME"
+          : "NO ACTIVE CLOCK";
+    if (modeRecord) {
+      const bucket = bucketForSeed(this.worldSeed);
+      const leader = displayMode
+        ? this.recordBook.buckets[bucket][displayMode][0]
+        : undefined;
+      const savedRecordCount = Object.values(
+        this.recordBook.buckets[bucket],
+      ).reduce((total, records) => total + records.length, 0);
+      modeRecord.textContent = leader
+        ? `${bucket.toUpperCase()} BEST ${leader.value.toFixed(leader.metric === "time" ? 1 : 0)}${leader.metric === "time" ? "S" : ""}`
+        : savedRecordCount > 0
+          ? `${bucket.toUpperCase()} / ${savedRecordCount} RECORDS SAVED`
+          : `${bucket.toUpperCase()} / NO RECORD`;
+    }
+    shell?.setAttribute("data-mode-state", displayRun?.lifecycle ?? "idle");
     this.locationLabel?.setText(
       `OPEN SLOPE / ${Math.floor(player.worldY).toString().padStart(4, "0")} M`,
     );
@@ -959,6 +1089,9 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.interactions.deltas = this.interactions.deltas.snapshot();
     this.runtime.interactions.scenario = this.scenario;
     this.runtime.interactions.snapshot = this.interactions.getSnapshot();
+    this.runtime.modes.snapshot = this.modes.getSnapshot();
+    this.runtime.modes.records = this.recordBook;
+    this.runtime.modes.storageAvailable = this.storageAvailable;
 
     const chunk = document.querySelector<HTMLElement>("#world-debug-chunk");
     const streamLabel = document.querySelector<HTMLElement>(
@@ -991,7 +1124,7 @@ export class AlpineScene extends Phaser.Scene {
 
   private getInteractiveObjects(): readonly InteractiveWorldObject[] {
     if (this.scenario !== "none") return this.scenarioObjects;
-    if (this.trainingMode) return [];
+    if (this.trainingMode || this.courseTestMode) return [];
     const objects: InteractiveWorldObject[] = [];
     for (const chunk of this.stream.getActiveChunks()) {
       for (const object of chunk.objects) objects.push(object);
@@ -1126,6 +1259,54 @@ export class AlpineScene extends Phaser.Scene {
     return true;
   }
 
+  private stageCourseCrossing(
+    mode: EventModeId,
+    target: CourseCrossingTarget,
+    outcome: Exclude<MarkerState, "pending">,
+  ): boolean {
+    const course = CLASSIC_COURSES.find((candidate) => candidate.id === mode);
+    if (!course) return false;
+    const snapshot = this.modes.getSnapshot();
+    let x: number;
+    let y: number;
+    if (target === "start") {
+      if (snapshot.courses[mode].lifecycle !== "idle") return false;
+      x = course.centerX;
+      y = course.startGate.y;
+    } else if (target === "finish") {
+      if (snapshot.activeMode !== mode) return false;
+      x = course.centerX;
+      y = course.finishGate.y;
+    } else {
+      if (snapshot.activeMode !== mode || !Number.isInteger(target))
+        return false;
+      const marker = course.markers[target - 1];
+      if (
+        !marker ||
+        snapshot.courses[mode].markers[target - 1]?.state !== "pending"
+      )
+        return false;
+      y = marker.y;
+      if (outcome === "missed") {
+        x = course.centerX + course.halfWidth + 3;
+      } else {
+        const expectedDirection = marker.color === "red" ? 1 : -1;
+        x = marker.x + expectedDirection * (outcome === "correct" ? 1.1 : -1.1);
+      }
+    }
+    this.scenario = "none";
+    this.scenarioObjects = [];
+    this.simulation.reposition(x, y - 0.7, 0, 6);
+    const player = this.simulation.getSnapshot();
+    this.modes.syncPosition({
+      simulationSeconds: player.simulationSeconds,
+      style: this.interactions.getSnapshot().style,
+      worldX: player.worldX,
+      worldY: player.worldY,
+    });
+    return true;
+  }
+
   private setDebugVisible(visible: boolean): void {
     this.debugVisible = visible;
     const panel = document.querySelector<HTMLElement>("#world-debug");
@@ -1254,6 +1435,56 @@ export class AlpineScene extends Phaser.Scene {
       const audio = document.querySelector<HTMLElement>("#audio-cue");
       if (audio) audio.textContent = `AUDIO CUE ${latestAudio.cue}`;
     }
+  }
+
+  private captureModeEvents(): void {
+    const events = this.modes.drainEvents();
+    if (events.length === 0) return;
+    this.modeEvents.push(...events);
+    if (this.modeEvents.length > MAX_TELEMETRY_EVENTS) {
+      this.modeEvents.splice(0, this.modeEvents.length - MAX_TELEMETRY_EVENTS);
+    }
+    for (const event of events) {
+      if (event.type !== "mode-finished") continue;
+      const result = this.modes.getSnapshot().courses[event.mode].result;
+      if (!result) continue;
+      const record = recordFromResult(
+        result,
+        this.worldSeed,
+        Date.now(),
+        `${this.worldSeed}:${this.simulation.getSnapshot().runNumber}:${event.mode}:${this.fixedSteps}`,
+      );
+      this.recordBook = addRecord(this.recordBook, record);
+      if (this.recordStorage && !this.recordStorage.save(this.recordBook))
+        this.storageAvailable = false;
+    }
+
+    const latest = events.at(-1)!;
+    const feedback = document.querySelector<HTMLElement>("#feedback-card");
+    const label = document.querySelector<HTMLElement>("#feedback-label");
+    const audio = document.querySelector<HTMLElement>("#audio-cue");
+    const run = this.modes.getSnapshot().courses[latest.mode];
+    const text =
+      latest.type === "mode-started"
+        ? `${latest.mode.replaceAll("-", " ").toUpperCase()} START`
+        : latest.type === "mode-finished"
+          ? latest.mode === "free-style"
+            ? `FINAL STYLE ${run.result?.score ?? 0}`
+            : `FINAL ${(run.result?.adjustedTimeSeconds ?? 0).toFixed(1)}S`
+          : latest.type === "marker-correct"
+            ? `MARKER ${latest.markerIndex} CLEAN`
+            : latest.type === "marker-wrong-side"
+              ? `MARKER ${latest.markerIndex} WRONG +5S`
+              : `MARKER ${latest.markerIndex} MISSED +5S`;
+    if (feedback) {
+      feedback.hidden = false;
+      feedback.dataset.cue = latest.type;
+    }
+    if (label) label.textContent = text;
+    if (audio) audio.textContent = `AUDIO CUE ${latest.type}`;
+    this.feedbackVisibleUntil =
+      this.simulation.getSnapshot().simulationSeconds +
+      FEEDBACK_VISIBLE_SECONDS;
   }
 
   private captureSample(): void {

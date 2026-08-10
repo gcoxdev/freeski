@@ -22,6 +22,12 @@ npm run dev
 
 Open the local URL printed by Vite and ski immediately.
 
+Cross one of the three start gates on the mountain to enter Slalom, Free Style,
+or Tree Slalom. There is no mode-selection menu: gates, markers, penalties, and
+finish lines are part of the skiable world, and open skiing remains available
+between them. The browser keeps a local top ten for every event, with separate
+leaderboards for the classic mountain and generated seeds.
+
 | Action              | Keyboard                                           |
 | ------------------- | -------------------------------------------------- |
 | Carve left/right    | Left/right arrows or A/D; hold to deepen the carve |

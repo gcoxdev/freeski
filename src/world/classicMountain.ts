@@ -76,6 +76,50 @@ export const CLASSIC_COURSES: readonly ClassicCourse[] = Object.freeze([
   }),
 ]);
 
+const TREE_SLALOM = CLASSIC_COURSES.find(
+  (course) => course.id === "tree-slalom",
+)!;
+
+export const TREE_SLALOM_ROUTE_WIDTH_METERS = 3.2;
+
+/** Authored weaving centerline: always takes the researched correct marker side. */
+export const TREE_SLALOM_ROUTE = Object.freeze([
+  Object.freeze({ x: TREE_SLALOM.centerX, y: TREE_SLALOM.startGate.y }),
+  ...TREE_SLALOM.markers.map((marker) =>
+    Object.freeze({
+      x: marker.x + (marker.color === "red" ? 1.25 : -1.25),
+      y: marker.y,
+    }),
+  ),
+  Object.freeze({ x: TREE_SLALOM.centerX, y: TREE_SLALOM.finishGate.y }),
+]);
+
+export function treeSlalomRouteCenterX(y: number): number {
+  if (y <= TREE_SLALOM_ROUTE[0]!.y) return TREE_SLALOM_ROUTE[0]!.x;
+  const last = TREE_SLALOM_ROUTE.at(-1)!;
+  if (y >= last.y) return last.x;
+  for (let index = 1; index < TREE_SLALOM_ROUTE.length; index += 1) {
+    const right = TREE_SLALOM_ROUTE[index]!;
+    if (y > right.y) continue;
+    const left = TREE_SLALOM_ROUTE[index - 1]!;
+    const ratio = (y - left.y) / (right.y - left.y);
+    return left.x + (right.x - left.x) * ratio;
+  }
+  return last.x;
+}
+
+export function blocksTreeSlalomRoute(
+  point: WorldPoint,
+  footprintRadius: number,
+): boolean {
+  if (point.y < TREE_SLALOM.startGate.y || point.y > TREE_SLALOM.finishGate.y)
+    return false;
+  return (
+    Math.abs(point.x - treeSlalomRouteCenterX(point.y)) <
+    TREE_SLALOM_ROUTE_WIDTH_METERS / 2 + footprintRadius
+  );
+}
+
 export const CLASSIC_LIFT = Object.freeze({
   chairs: Object.freeze([
     Object.freeze({ direction: "uphill" as const, laneX: -7, phaseY: 0 }),

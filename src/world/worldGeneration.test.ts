@@ -7,7 +7,11 @@ import {
   CLASSIC_COURSES,
   CLASSIC_LIFT,
   CLASSIC_YETI_TRIGGERS,
+  blocksTreeSlalomRoute,
   classicOverlaySignature,
+  treeSlalomRouteCenterX,
+  TREE_SLALOM_ROUTE,
+  TREE_SLALOM_ROUTE_WIDTH_METERS,
 } from "./classicMountain";
 import { ChunkDeltaStore } from "./chunkDeltas";
 import {
@@ -186,6 +190,30 @@ describe("deterministic chunk generation", () => {
       expect(landingBlockers).toEqual([]);
     }
     expect(CORRIDOR_WIDTH_METERS).toBe(PLAYER_FOOTPRINT_WIDTH_METERS * 2.5);
+  });
+
+  it("keeps a dense deterministic Tree Slalom population around a passable authored route", () => {
+    const generator = new WorldGenerator("tree-route-proof");
+    const objects = collectObjects(generator, 0, 0, 0, 16).filter(
+      (object) => object.zone === "tree-slalom",
+    );
+    const trees = objects.filter((object) => object.type === "tree");
+    expect(trees.length).toBeGreaterThan(35);
+    expect(
+      objects.filter(
+        (object) =>
+          isBlockingType(object.type) &&
+          blocksTreeSlalomRoute(object, object.footprintRadius),
+      ),
+    ).toEqual([]);
+    expect(TREE_SLALOM_ROUTE).toHaveLength(41);
+    expect(TREE_SLALOM_ROUTE_WIDTH_METERS).toBeGreaterThanOrEqual(
+      PLAYER_FOOTPRINT_WIDTH_METERS,
+    );
+    for (const marker of CLASSIC_COURSES[2]!.markers) {
+      const center = treeSlalomRouteCenterX(marker.y);
+      expect(center).toBe(marker.x + (marker.color === "red" ? 1.25 : -1.25));
+    }
   });
 
   it("freezes generated truth while keeping runtime deltas separate", () => {

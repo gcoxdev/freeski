@@ -258,6 +258,72 @@ body {
   letter-spacing: 0.1em;
 }
 
+.mode-card {
+  position: absolute;
+  z-index: 2;
+  top: 72px;
+  left: 18px;
+  display: grid;
+  width: min(278px, calc(100% - 36px));
+  gap: 5px;
+  padding: 12px 14px 11px;
+  border-left: 3px solid #3dbfa6;
+  color: #f7f9f5;
+  background: rgb(16 41 51 / 84%);
+  box-shadow: 0 12px 34px rgb(16 41 51 / 18%);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.mode-card small,
+.mode-card span {
+  font:
+    700 9px/1.25 "Courier New",
+    monospace;
+  letter-spacing: 0.08em;
+}
+
+.mode-card small {
+  color: #74d3c5;
+  letter-spacing: 0.15em;
+}
+
+.mode-card strong {
+  font-family: Copperplate, "Copperplate Gothic Light", serif;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+}
+
+.mode-card__metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 10px;
+  padding-top: 6px;
+  border-top: 1px solid rgb(255 255 255 / 16%);
+  color: #c6d9da;
+}
+
+.mode-card__metrics span:last-child {
+  grid-column: 1 / -1;
+  color: #ff9a7c;
+}
+
+.mode-card__final {
+  color: #f5c844;
+}
+
+#mode-record {
+  color: #90aaad;
+}
+
+[data-mode-state="finished"] .mode-card {
+  border-left-color: #f5c844;
+}
+
+[data-mode-state="active"] .mode-card {
+  border-left-color: #e84d2a;
+}
+
 .world-debug {
   position: absolute;
   z-index: 3;

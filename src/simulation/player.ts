@@ -54,6 +54,7 @@ export type PlayerEventType =
   | "jumped"
   | "landed-clean"
   | "paused"
+  | "repositioned"
   | "recovered"
   | "recovery-started"
   | "reset"
@@ -231,6 +232,29 @@ export class PlayerSimulation {
       this.state.turbo ? "turbo-on" : "turbo-off",
       this.state.turbo ? "on" : "off",
     );
+  }
+
+  reposition(
+    worldX: number,
+    worldY: number,
+    velocityX: number = 0,
+    velocityY: number = PLAYER_TUNING.initialDownhillSpeed,
+  ): void {
+    if (![worldX, worldY, velocityX, velocityY].every(Number.isFinite))
+      throw new RangeError("reposition values must be finite");
+    this.state.worldX = worldX;
+    this.state.worldY = worldY;
+    this.state.velocityX = velocityX;
+    this.state.velocityY = velocityY;
+    this.state.motion = "grounded";
+    this.state.airHeight = 0;
+    this.state.airVelocity = 0;
+    this.state.airPitch = 0;
+    this.state.airSpin = 0;
+    this.state.airTilt = 0;
+    this.state.lastLanding = "none";
+    this.state.recoveryGraceSeconds = 0;
+    this.emit("repositioned", `${worldX.toFixed(2)},${worldY.toFixed(2)}`);
   }
 
   launch(source: string, verticalVelocity: number): boolean {

@@ -6,6 +6,13 @@ import type {
   InteractionSnapshot,
 } from "../simulation/slopeInteractions";
 import type { StyleEvent } from "../simulation/style";
+import type {
+  EventModeId,
+  MarkerState,
+  ModeEvent,
+  ModeSnapshot,
+} from "../simulation/modes";
+import type { RecordBook } from "../simulation/recordBook";
 import type { ObjectDelta } from "../world/chunkDeltas";
 
 export type GateThreeScenario =
@@ -15,6 +22,8 @@ export type GateThreeScenario =
   | "mushroom"
   | "none"
   | "ramp-trick";
+
+export type CourseCrossingTarget = "finish" | "start" | number;
 
 export interface DescentAuditReport {
   corridorBlockers: number;
@@ -56,6 +65,12 @@ export interface FreeSkiRuntime {
     snapshot: InteractionSnapshot;
     styleEvents: StyleEvent[];
   };
+  modes: {
+    events: ModeEvent[];
+    records: RecordBook;
+    snapshot: ModeSnapshot;
+    storageAvailable: boolean;
+  };
   player: PlayerSnapshot;
   ready: boolean;
   seed: string;
@@ -94,6 +109,11 @@ declare global {
     __FREE_SKI_DEBUG__?: {
       runAutomatedDescent: (distanceMeters?: number) => DescentAuditReport;
       stageInteractionScenario: (scenario: GateThreeScenario) => boolean;
+      stageCourseCrossing: (
+        mode: EventModeId,
+        target: CourseCrossingTarget,
+        outcome?: Exclude<MarkerState, "pending">,
+      ) => boolean;
       setVisible: (visible: boolean) => void;
     };
   }
