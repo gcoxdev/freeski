@@ -1,0 +1,10 @@
+Gate 4 executor direct inspection
+
+- slalom-wrong-side.png, 1280x720: Slalom is live in the world with no blocking menu. The compact event card reports PENALTY +5.0S and the feedback card reports MARKER 1 WRONG +5S. Course gates, trees, hazards, skier, top status, and bottom controls are simultaneously visible.
+- slalom-penalty.png, 1280x720: the complete Slalom marker sequence reports 23/24 correct and retains the five-second penalty before the physical finish crossing.
+- tree-slalom-finish.png, 1280x720: Tree Slalom reports 39/39, +0.0S, final time, and classic best while the dense tree course remains visible.
+- free-style-finish.png, 1280x720: Free Style reports final Style 215 and classic best after a live ramp/spin/landing sequence.
+- records-reloaded-768x600.png: after a browser reload, the minimum supported viewport keeps the event card and controls readable without overlap and explicitly reports CLASSIC / 3 RECORDS SAVED.
+- mode-playthrough-telemetry.json: beforeReload and reloaded record books are identical, storageAvailable is true, classic has one result in every event, seeded buckets are empty, and the run includes exactly three mode-started and three mode-finished events.
+- Playwright captured browser console errors, uncaught page errors, and failed network requests during the three-mode/reload playthrough; every collected list was empty.
+- No material visual defect was observed in direct review of all five screenshots. Final audio playback and production sprite-atlas slicing remain later-gate work.

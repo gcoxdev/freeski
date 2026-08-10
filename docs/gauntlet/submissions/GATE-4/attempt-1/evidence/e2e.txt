@@ -1,0 +1,16 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test
+
+Running 9 tests using 2 workers
+
+  ✓  2 [chromium] › tests/e2e/baseline.spec.ts:20:1 › loads an interactive Phaser baseline without console errors (13.5s)
+  ✓  1 [chromium] › tests/e2e/baseline.spec.ts:60:1 › remains playable at the minimum supported viewport (13.7s)
+  ✓  4 [chromium] › tests/e2e/baseline.spec.ts:293:1 › keeps pointer steering opt-in and click-to-jump functional (8.2s)
+  ✓  3 [chromium] › tests/e2e/baseline.spec.ts:74:1 › plays the full fixed-step skiing control sequence (20.6s)
+  ✓  5 [chromium] › tests/e2e/interactions.spec.ts:46:1 › demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequences (18.6s)
+  ✓  7 [chromium] › tests/e2e/modes.spec.ts:198:1 › open skiing can ignore start gates and an active run survives leaving its lane (17.3s)
+  ✓  6 [chromium] › tests/e2e/modes.spec.ts:74:1 › crosses real gates to finish all modes and reloads classic records (40.5s)
+  ✓  8 [chromium] › tests/e2e/world.spec.ts:4:1 › streams and renders a deterministic classic mountain (20.9s)
+  ✓  9 [chromium] › tests/e2e/world.spec.ts:105:1 › audits a 2100m fixed-step descent without missing chunks or blockers (4.8s)
+
+  9 passed (1.6m)

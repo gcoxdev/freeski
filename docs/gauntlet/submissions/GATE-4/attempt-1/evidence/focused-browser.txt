@@ -1,0 +1,9 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test tests/e2e/modes.spec.ts
+
+Running 2 tests using 2 workers
+
+  ✓  2 [chromium] › tests/e2e/modes.spec.ts:198:1 › open skiing can ignore start gates and an active run survives leaving its lane (22.0s)
+  ✓  1 [chromium] › tests/e2e/modes.spec.ts:74:1 › crosses real gates to finish all modes and reloads classic records (41.5s)
+
+  2 passed (51.0s)

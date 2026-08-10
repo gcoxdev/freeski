@@ -1,0 +1,20 @@
+npm notice run freeski@0.1.0 build
+npm notice run tsc -b && vite build
+vite v8.2.1 building client environment for production...
+transforming...✓ 28 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     4.25 kB │ gzip:   1.57 kB
+dist/assets/index-rIq9P4j6.css      6.11 kB │ gzip:   2.05 kB
+dist/assets/index-CKukFJFT.js   1,262.67 kB │ gzip: 338.20 kB │ map: 10,037.64 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.11s
+[PLUGIN_TIMINGS] Your build spent 50% of 7.1s inside plugin hooks (3.5s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - vite:css-post renderChunk (44%, 3.1s, 1 call)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.

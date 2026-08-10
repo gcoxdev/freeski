@@ -1,0 +1,100 @@
+{
+  "gate": "GATE_4",
+  "attempt": 1,
+  "candidate_revision": "f98d0ca6534b865a12f45f0f6ae4ad26f94b65ff",
+  "base_revision": "aa2016bd73b04500fcbe612ad41afbdb217360e1",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE4_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-4/attempt-1/evidence FREESKI_GATE4_TELEMETRY=docs/gauntlet/submissions/GATE-4/attempt-1/evidence/mode-playthrough-telemetry.json npm run test:e2e",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/e2e.txt"
+    },
+    {
+      "command": "FREESKI_GATE4_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-4/attempt-1/evidence FREESKI_GATE4_TELEMETRY=docs/gauntlet/submissions/GATE-4/attempt-1/evidence/mode-playthrough-telemetry.json npm run test:e2e -- tests/e2e/modes.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/focused-browser.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/direct-inspection.txt",
+      "demonstrates": ["G4.1", "G4.2", "G4.3", "G4.4", "G4.5", "G4.6", "G4.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/mode-playthrough-telemetry.json",
+      "demonstrates": ["G4.1", "G4.2", "G4.3", "G4.4", "G4.5", "G4.6", "G4.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/slalom-wrong-side.png",
+      "demonstrates": ["G4.1", "G4.2", "G4.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/slalom-penalty.png",
+      "demonstrates": ["G4.2", "G4.5", "G4.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/tree-slalom-finish.png",
+      "demonstrates": ["G4.3", "G4.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/free-style-finish.png",
+      "demonstrates": ["G4.4", "G4.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-4/attempt-1/evidence/records-reloaded-768x600.png",
+      "demonstrates": ["G4.6", "G4.7"]
+    }
+  ],
+  "known_limitations": [
+    "Gate 4 emits named audio feedback cues, but final original audio assets and playback/mute behavior are intentionally deferred to Gate 6.",
+    "The approved ultra-realistic concept sheets are not yet sliced into production atlases; Gate 4 continues to use the temporary code-rendered presentation accepted by earlier gates.",
+    "Vite reports its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the production build succeeds."
+  ],
+  "executor_claimed_criteria": [
+    "G4.1",
+    "G4.2",
+    "G4.3",
+    "G4.4",
+    "G4.5",
+    "G4.6",
+    "G4.7"
+  ]
+}
