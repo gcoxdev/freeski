@@ -1,0 +1,12 @@
+command: npm run assets:build
+exit_code: 0
+run_count: 2 consecutive final builds
+
+npm notice run freeski@0.1.0 assets:build
+npm notice run python3 scripts/build_runtime_atlas.py
+{"atlas": "1024x2048", "extrudedFrames": 112, "extrusionMismatchPixels": 0, "frames": 112, "geometryMismatches": 0, "magentaPixelRatio": 1.65e-06, "nonEmptyPaddingBands": 448, "paddingOverlaps": 0, "paddingPixels": 4, "transparentCorners": true}
+
+Both consecutive builds produced these identical SHA-256 values:
+45c4307c6618e41ae7823bdcf0330b5c4b2117848f25b5a9f29f33dcbbb6be42  public/assets/production/freeski-atlas.png
+2a7cef82ff81da7f222490a9c753672601a87b8e9e9413aacaef260bcbb27cd5  public/assets/production/freeski-atlas.json
+e3d2a107c6318cca8fb1a478dc0ce10c080d29ecdd87725639cbc436947ced4e  public/assets/production/freeski-atlas.meta.json

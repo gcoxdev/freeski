@@ -1,0 +1,11 @@
+command: FREESKI_GATE6_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-6/attempt-2/evidence FREESKI_GATE6_TELEMETRY=docs/gauntlet/submissions/GATE-6/attempt-2/evidence/presentation-telemetry.json npm run test:e2e -- tests/e2e/baseline.spec.ts tests/e2e/presentation.spec.ts --workers=1
+exit_code: 0
+
+Running 5 tests using 1 worker
+baseline: interactive load PASS (15.8s)
+baseline: minimum viewport PASS (5.2s)
+baseline: full fixed-step controls PASS (19.1s)
+baseline: pointer opt-in PASS (6.2s)
+presentation: atlas/audio/pool/HUD/VFX PASS (23.6s)
+
+5 passed (1.5m)

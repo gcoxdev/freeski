@@ -1,0 +1,17 @@
+command: npm run test:e2e -- --workers=1
+exit_code: 0
+
+Running 11 tests using 1 worker
+baseline interactive load PASS
+minimum viewport PASS
+full fixed-step control sequence PASS
+pointer steering PASS
+interaction sequences PASS
+living slope/Yeti PASS
+all course modes/records PASS
+open skiing/lane exit PASS
+Gate 6 instrumented presentation PASS
+deterministic world render PASS
+2,100 m world audit PASS
+
+11 passed (3.3m)

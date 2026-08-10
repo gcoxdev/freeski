@@ -1,0 +1,135 @@
+{
+  "gate": "GATE_6",
+  "attempt": 2,
+  "candidate_revision": "d1edaff774dfea4913f85b93b44fe708eb3d9394",
+  "base_revision": "0b8933e5b8b1966ea29e626e982de47bf39fd840",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm run assets:build (run twice consecutively)",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/asset-build.txt"
+    },
+    {
+      "command": "npm run assets:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/asset-check.txt"
+    },
+    {
+      "command": "git diff --exit-code HEAD -- assets/sprite-sheets/01-player-skier.png assets/sprite-sheets/02-hill-population.png assets/sprite-sheets/03-yeti.png assets/sprite-sheets/04-terrain.png assets/sprite-sheets/05-course-props.png assets/sprite-sheets/06-vfx.png assets/sprite-sheets/source-chroma",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/source-integrity.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/lint.txt"
+    },
+    {
+      "command": "npx vitest run src/render/atlas/productionAtlas.test.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/pixel-unit-tests.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE6_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-6/attempt-2/evidence FREESKI_GATE6_TELEMETRY=docs/gauntlet/submissions/GATE-6/attempt-2/evidence/presentation-telemetry.json npm run test:e2e -- tests/e2e/baseline.spec.ts tests/e2e/presentation.spec.ts --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/focused-browser.txt"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exit_code": 1,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/parallel-e2e-initial.txt"
+    },
+    {
+      "command": "npm run test:e2e -- tests/e2e/interactions.spec.ts --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/interaction-isolated.txt"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/e2e-sequential.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/atlas-pixel-audit.json",
+      "demonstrates": ["G6.1", "G6.2", "G6.7"]
+    },
+    {
+      "type": "report",
+      "path": "public/assets/production/freeski-atlas.meta.json",
+      "demonstrates": ["G6.1", "G6.2"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/source-integrity.txt",
+      "demonstrates": ["G6.2"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/presentation-telemetry.json",
+      "demonstrates": ["G6.3", "G6.5", "G6.6", "G6.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/bright-snow-desktop.png",
+      "demonstrates": ["G6.3", "G6.4", "G6.5", "G6.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/dark-snow-desktop.png",
+      "demonstrates": ["G6.3", "G6.4", "G6.5", "G6.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/bright-snow-768x600.png",
+      "demonstrates": ["G6.3", "G6.4", "G6.5", "G6.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/dark-snow-768x600.png",
+      "demonstrates": ["G6.3", "G6.4", "G6.5", "G6.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-6/attempt-2/evidence/visual-inspection.md",
+      "demonstrates": ["G6.3", "G6.4", "G6.5", "G6.6", "G6.7"]
+    }
+  ],
+  "known_limitations": [
+    "Vite retains its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the production build succeeds.",
+    "Procedural Web Audio output remains dependent on browser and output-device support; the game intentionally constructs no AudioContext before a user gesture.",
+    "The first two-worker full browser run missed an unchanged mushroom interaction within 15 seconds under workstation contention (10/11 passed). The exact interaction passed immediately alone, and the unchanged complete suite then passed 11/11 with one worker; no assertion or timeout was weakened."
+  ],
+  "executor_claimed_criteria": [
+    "G6.1",
+    "G6.2",
+    "G6.3",
+    "G6.4",
+    "G6.5",
+    "G6.6",
+    "G6.7"
+  ]
+}

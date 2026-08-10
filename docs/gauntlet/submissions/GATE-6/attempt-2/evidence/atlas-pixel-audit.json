@@ -1,0 +1,34 @@
+{
+  "pipelineVersion": "freeski-atlas-v2",
+  "atlas": {
+    "width": 1024,
+    "height": 2048,
+    "frames": 112,
+    "paddingPixels": 4,
+    "pngBytes": 2149038,
+    "pngSha256": "45c4307c6618e41ae7823bdcf0330b5c4b2117848f25b5a9f29f33dcbbb6be42",
+    "phaserJsonBytes": 46134,
+    "phaserJsonSha256": "2a7cef82ff81da7f222490a9c753672601a87b8e9e9413aacaef260bcbb27cd5",
+    "metadataBytes": 129348,
+    "metadataSha256": "e3d2a107c6318cca8fb1a478dc0ce10c080d29ecdd87725639cbc436947ced4e"
+  },
+  "pixelAudit": {
+    "extrudedFrames": 112,
+    "nonEmptyPaddingBands": 448,
+    "extrusionMismatchPixels": 0,
+    "paddingOverlaps": 0,
+    "geometryMismatches": 0,
+    "magentaPixelRatio": 0.00000165,
+    "transparentCorners": true
+  },
+  "geometryContract": {
+    "packedFrameMatchesSpriteSourceSize": true,
+    "runtimeTrimContainedByRuntimeSource": true,
+    "phaserAndProvenanceCoordinatesMatch": true
+  },
+  "reproducibility": {
+    "consecutiveBuilds": 2,
+    "byteIdenticalOutputs": true,
+    "approvedSourcesPreserved": true
+  }
+}

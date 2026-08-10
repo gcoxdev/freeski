@@ -1,0 +1,9 @@
+command: npm run test:e2e
+exit_code: 1
+
+Running 11 tests using 2 workers
+10 tests passed. The existing interactions test timed out after 15 seconds waiting for `mushroom-created` at tests/e2e/interactions.spec.ts:103 while the workstation was under concurrent build/browser load. All Gate 6 presentation, audio, pool, layout and visual assertions passed in this run. No source, timeout or assertion was changed afterward.
+
+Follow-up evidence:
+- The unchanged interaction test passed immediately in isolation.
+- The unchanged complete 11-test suite passed sequentially.

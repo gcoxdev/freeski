@@ -1,0 +1,16 @@
+command: git diff --exit-code HEAD -- assets/sprite-sheets/01-player-skier.png assets/sprite-sheets/02-hill-population.png assets/sprite-sheets/03-yeti.png assets/sprite-sheets/04-terrain.png assets/sprite-sheets/05-course-props.png assets/sprite-sheets/06-vfx.png assets/sprite-sheets/source-chroma
+exit_code: 0
+
+Approved source SHA-256 values after both rebuilds:
+323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc  assets/sprite-sheets/01-player-skier.png
+acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9  assets/sprite-sheets/02-hill-population.png
+4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f  assets/sprite-sheets/03-yeti.png
+27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65  assets/sprite-sheets/04-terrain.png
+2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8  assets/sprite-sheets/05-course-props.png
+3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad  assets/sprite-sheets/06-vfx.png
+76a86b7bb2daed34601c2851c7a097e51001858e5ec93f73d10e014d1e5c4d67  assets/sprite-sheets/source-chroma/01-player-skier-chroma.png
+ead3af02a029532da36f7101c2eaa32719783f5ad7b00fe075c0b2f20453f3c8  assets/sprite-sheets/source-chroma/02-hill-population-chroma.png
+6347a7288533493e1860e5e610fb639a08c5478839178720d4c49dc5c619d9c8  assets/sprite-sheets/source-chroma/03-yeti-chroma.png
+209213b727619ed4b31a66283cb566eabd94fde730e707ddc573791c8998152a  assets/sprite-sheets/source-chroma/04-terrain-chroma.png
+1bd9d69901ee9dee264a4af8367a5eead41e97d9a61e9bc0a0a65ca128f41476  assets/sprite-sheets/source-chroma/05-course-props-chroma.png
+a7ae35fa4c6e76f06d51a0d8bbcdd79a3e2ea5a566692c61c94208acb9cb0f4a  assets/sprite-sheets/source-chroma/06-vfx-chroma.png

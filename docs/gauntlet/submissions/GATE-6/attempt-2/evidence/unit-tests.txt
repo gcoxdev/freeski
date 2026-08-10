@@ -1,0 +1,9 @@
+command: npm test
+exit_code: 0
+
+npm notice run freeski@0.1.0 test
+npm notice run vitest run
+
+Test Files  16 passed (16)
+Tests       89 passed (89)
+Duration    9.44s

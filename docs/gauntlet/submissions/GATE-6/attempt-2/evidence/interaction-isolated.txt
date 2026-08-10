@@ -1,0 +1,7 @@
+command: npm run test:e2e -- tests/e2e/interactions.spec.ts --workers=1
+exit_code: 0
+
+Running 1 test using 1 worker
+interactions: ramp trick, crash recovery, mushroom and burning-tree sequences PASS (34.6s)
+
+1 passed (45.6s)

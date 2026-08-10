@@ -1,0 +1,169 @@
+{
+  "art": {
+    "atlasFrameCount": 112,
+    "atlasLoaded": true,
+    "capacityFallbacks": 0,
+    "fallbackDraws": 0,
+    "frameFallbacks": 0,
+    "missingFrameFallbacks": 0,
+    "peakPooledSprites": 321,
+    "playerRenderedHeight": 55.87301587301587,
+    "pooledSprites": 321,
+    "spriteCapacity": 512,
+    "statusLabelDepth": 90
+  },
+  "audio": {
+    "activeAmbientLayers": 3,
+    "availableCues": 26,
+    "cueCount": 16,
+    "gestureRequired": false,
+    "lastCue": "beginner-fall",
+    "muted": false,
+    "unlocked": true
+  },
+  "audioContextAudit": {
+    "constructed": 1,
+    "initialStates": ["running"]
+  },
+  "hud": {
+    "form": "GROUNDED / DOWNHILL",
+    "seed": "gate-six-presentation"
+  },
+  "player": {
+    "airHeight": 0,
+    "airPitch": 0,
+    "airSpin": 0,
+    "airTilt": 0,
+    "crashCount": 0,
+    "heading": "downhill",
+    "jumpCount": 1,
+    "lastLanding": "clean",
+    "motion": "grounded",
+    "paused": false,
+    "recoveryGraceSeconds": 0,
+    "runNumber": 1,
+    "simulationSeconds": 8.31666666666666,
+    "speedMetersPerSecond": 19,
+    "turbo": false,
+    "velocityX": 0,
+    "velocityY": 19,
+    "worldX": 0,
+    "worldY": 1945.306666666639
+  },
+  "vfx": {
+    "activeEffects": 9,
+    "activeTracks": 28,
+    "emitted": 113,
+    "maximumEffects": 56,
+    "maximumTracks": 48
+  },
+  "yeti": {
+    "events": [],
+    "snapshot": {
+      "activeBoundaries": [],
+      "capturePhase": "none",
+      "capturedBy": null,
+      "controllers": [
+        {
+          "active": false,
+          "boundary": "top",
+          "id": "yeti-top",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "bottom",
+          "id": "yeti-bottom",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "left",
+          "id": "yeti-left",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "right",
+          "id": "yeti-right",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        }
+      ],
+      "foreshadow": {
+        "breathMist": 0.5879158695286283,
+        "intensity": 0.8165498187897615,
+        "warningLayer": 0.4735988948980617,
+        "windStreaks": 7
+      },
+      "lastEvent": "none",
+      "playerRemoved": false,
+      "resetRequested": false,
+      "turboEvasionSeconds": 0
+    }
+  },
+  "audioContextLifecycle": {
+    "initialCold": 0,
+    "initialGesture": 1,
+    "reloadCold": 0,
+    "reloadGesture": 1
+  },
+  "minimumViewport": {
+    "form": {
+      "clientHeight": 19,
+      "clientWidth": 64,
+      "scrollHeight": 19,
+      "scrollWidth": 64
+    },
+    "seed": {
+      "ariaLabel": "Active world seed: gate-six-presentation",
+      "clientHeight": 9,
+      "clientWidth": 130,
+      "scrollHeight": 9,
+      "scrollWidth": 130,
+      "text": "gate-six-presentation",
+      "title": "Active world seed: gate-six-presentation"
+    },
+    "turbo": {
+      "clientWidth": 56,
+      "scrollWidth": 56,
+      "text": "TURBO OFF"
+    }
+  },
+  "stressPresentation": {
+    "atlasFrameCount": 112,
+    "atlasLoaded": true,
+    "capacityFallbacks": 0,
+    "fallbackDraws": 0,
+    "frameFallbacks": 0,
+    "missingFrameFallbacks": 0,
+    "peakPooledSprites": 274,
+    "playerRenderedHeight": 55.87301587301587,
+    "pooledSprites": 273,
+    "spriteCapacity": 512,
+    "statusLabelDepth": 90
+  }
+}

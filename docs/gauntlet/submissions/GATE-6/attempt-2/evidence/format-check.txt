@@ -1,0 +1,7 @@
+command: npm run format:check
+exit_code: 0
+
+npm notice run freeski@0.1.0 format:check
+npm notice run prettier --check .
+Checking formatting...
+All matched files use Prettier code style!

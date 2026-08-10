@@ -1,0 +1,8 @@
+command: npx vitest run src/render/atlas/productionAtlas.test.ts
+exit_code: 0
+
+Test Files  1 passed (1)
+Tests       4 passed (4)
+Duration    5.52s
+
+The in-process PNG decoder independently checks every content edge against all four repeated padding texels, rejects an empty side band, rejects overlap among padding-expanded rectangles, and checks Phaser/runtime trim geometry.
