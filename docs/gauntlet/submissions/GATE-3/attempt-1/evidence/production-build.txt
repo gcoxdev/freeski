@@ -1,0 +1,15 @@
+$ npm run build
+
+> freeski@0.1.0 build
+> tsc -b && vite build
+
+vite v8.2.1 building client environment for production...
+25 modules transformed.
+dist/index.html                     3.69 kB | gzip:   1.39 kB
+dist/assets/index-BVnQG21L.css      5.15 kB | gzip:   1.83 kB
+dist/assets/index-D0nPk8G0.js   1,250.32 kB | gzip: 334.68 kB | map: 9,996.28 kB
+
+Advisory: the Phaser-containing JavaScript chunk exceeds Vite's 500 kB warning threshold.
+Build completed in 2.47s.
+
+Exit code: 0

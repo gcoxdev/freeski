@@ -1,0 +1,18 @@
+$ FREESKI_GATE3_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-3/attempt-1/evidence npm run test:e2e
+
+> freeski@0.1.0 test:e2e
+> playwright test
+
+Running 7 tests using 2 workers
+
+PASS baseline: minimum supported viewport
+PASS baseline: interactive Phaser scene, no console errors
+PASS baseline: pointer steering and click-to-jump
+PASS baseline: full fixed-step skiing control sequence
+PASS Gate 3: ramp trick, crash/recovery, mushroom and burning-tree sequences
+PASS Gate 2: 2,100 m descent audit, no gaps or corridor blockers
+PASS Gate 2: deterministic classic mountain streaming/rendering
+
+7 passed (44.2s)
+
+Exit code: 0

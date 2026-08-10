@@ -1,0 +1,9 @@
+$ FREESKI_GATE3_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-3/attempt-1/evidence FREESKI_GATE3_TELEMETRY=docs/gauntlet/submissions/GATE-3/attempt-1/evidence/playthrough-telemetry.json npx playwright test tests/e2e/interactions.spec.ts --project=chromium
+
+Running 1 test using 1 worker
+
+PASS demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequences
+
+1 passed (19.7s)
+
+Exit code: 0

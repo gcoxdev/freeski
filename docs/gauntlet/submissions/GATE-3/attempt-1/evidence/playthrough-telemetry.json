@@ -1,0 +1,1578 @@
+{
+  "camera": {
+    "playerScreenRatio": 0.35,
+    "playerScreenX": 639,
+    "playerScreenY": 211.39999999999998
+  },
+  "engine": "phaser-3",
+  "generatorVersion": "freeski-world-v1",
+  "interactions": {
+    "deltas": {
+      "scenario-dead-tree": {
+        "burning": false,
+        "burned": true
+      }
+    },
+    "feedbackEvents": [
+      {
+        "atSeconds": 0.35,
+        "cue": "ramp-glint",
+        "id": "feedback-1",
+        "kind": "visual",
+        "label": "RAMP LINE",
+        "objectId": "scenario-ramp"
+      },
+      {
+        "atSeconds": 0.35,
+        "cue": "ramp-launch",
+        "id": "feedback-2",
+        "kind": "audio",
+        "label": "RAMP LINE",
+        "objectId": "scenario-ramp"
+      },
+      {
+        "atSeconds": 1.3833333333333333,
+        "cue": "trick-sparkle",
+        "id": "feedback-4",
+        "kind": "visual",
+        "label": "SPIN RIGHT 360",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 1.3833333333333333,
+        "cue": "trick-tone",
+        "id": "feedback-5",
+        "kind": "audio",
+        "label": "SPIN RIGHT 360",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 1.7999999999999985,
+        "cue": "landing-plume",
+        "id": "feedback-7",
+        "kind": "visual",
+        "label": "STUCK LANDING",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 1.7999999999999985,
+        "cue": "landing-tone",
+        "id": "feedback-8",
+        "kind": "audio",
+        "label": "STUCK LANDING",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 0.41666666666666663,
+        "cue": "impact-burst",
+        "id": "feedback-1",
+        "kind": "visual",
+        "label": "TREE CRASH",
+        "objectId": "scenario-crash-tree"
+      },
+      {
+        "atSeconds": 0.41666666666666663,
+        "cue": "obstacle-crash",
+        "id": "feedback-2",
+        "kind": "audio",
+        "label": "TREE CRASH",
+        "objectId": "scenario-crash-tree"
+      },
+      {
+        "atSeconds": 1.3166666666666669,
+        "cue": "secret-bloom",
+        "id": "feedback-1",
+        "kind": "visual",
+        "label": "MUSHROOM FOUND",
+        "objectId": "scenario-stump"
+      },
+      {
+        "atSeconds": 1.3166666666666669,
+        "cue": "secret-chime",
+        "id": "feedback-2",
+        "kind": "audio",
+        "label": "MUSHROOM FOUND",
+        "objectId": "scenario-stump"
+      },
+      {
+        "atSeconds": 1.5333333333333328,
+        "cue": "secret-bloom",
+        "id": "feedback-4",
+        "kind": "visual",
+        "label": "MUSHROOM +100",
+        "objectId": "scenario-stump"
+      },
+      {
+        "atSeconds": 1.5333333333333328,
+        "cue": "secret-chime",
+        "id": "feedback-5",
+        "kind": "audio",
+        "label": "MUSHROOM +100",
+        "objectId": "scenario-stump"
+      },
+      {
+        "atSeconds": 0.6333333333333336,
+        "cue": "flame-start",
+        "id": "feedback-1",
+        "kind": "visual",
+        "label": "DEAD TREE LIT",
+        "objectId": "scenario-dead-tree"
+      },
+      {
+        "atSeconds": 0.6333333333333336,
+        "cue": "fire-whoosh",
+        "id": "feedback-2",
+        "kind": "audio",
+        "label": "DEAD TREE LIT",
+        "objectId": "scenario-dead-tree"
+      },
+      {
+        "atSeconds": 1.0666666666666678,
+        "cue": "landing-plume",
+        "id": "feedback-4",
+        "kind": "visual",
+        "label": "STUCK LANDING",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 1.0666666666666678,
+        "cue": "landing-tone",
+        "id": "feedback-5",
+        "kind": "audio",
+        "label": "STUCK LANDING",
+        "objectId": "player"
+      },
+      {
+        "atSeconds": 1.4166666666666665,
+        "cue": "ramp-glint",
+        "id": "feedback-7",
+        "kind": "visual",
+        "label": "RAMP LINE",
+        "objectId": "scenario-fire-ramp"
+      },
+      {
+        "atSeconds": 1.4166666666666665,
+        "cue": "ramp-launch",
+        "id": "feedback-8",
+        "kind": "audio",
+        "label": "RAMP LINE",
+        "objectId": "scenario-fire-ramp"
+      },
+      {
+        "atSeconds": 2.066666666666664,
+        "cue": "ember-burst",
+        "id": "feedback-10",
+        "kind": "visual",
+        "label": "FIRE LINE +1000",
+        "objectId": "scenario-dead-tree"
+      },
+      {
+        "atSeconds": 2.066666666666664,
+        "cue": "secret-chime",
+        "id": "feedback-11",
+        "kind": "audio",
+        "label": "FIRE LINE +1000",
+        "objectId": "scenario-dead-tree"
+      }
+    ],
+    "interactionEvents": [
+      {
+        "airHeight": 0,
+        "atSeconds": 0.35,
+        "clearanceHeight": 0.2,
+        "id": "interaction-0",
+        "objectId": "scenario-ramp",
+        "type": "ramp-launch"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.3833333333333333,
+        "clearanceHeight": 0,
+        "id": "interaction-3",
+        "objectId": "player",
+        "type": "trick-completed"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.7999999999999985,
+        "clearanceHeight": 0,
+        "id": "interaction-6",
+        "objectId": "player",
+        "type": "landed-clean"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 0.41666666666666663,
+        "clearanceHeight": 2.35,
+        "id": "interaction-0",
+        "objectId": "scenario-crash-tree",
+        "type": "crash"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.3166666666666669,
+        "clearanceHeight": 0.68,
+        "id": "interaction-0",
+        "objectId": "scenario-stump",
+        "type": "mushroom-created"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.5333333333333328,
+        "clearanceHeight": 0.68,
+        "id": "interaction-3",
+        "objectId": "scenario-stump",
+        "type": "mushroom-jumped"
+      },
+      {
+        "airHeight": 1.3008333333333313,
+        "atSeconds": 0.6333333333333336,
+        "clearanceHeight": 2.35,
+        "id": "interaction-0",
+        "objectId": "scenario-dead-tree",
+        "type": "dead-tree-ignited"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.0666666666666678,
+        "clearanceHeight": 0,
+        "id": "interaction-3",
+        "objectId": "player",
+        "type": "landed-clean"
+      },
+      {
+        "airHeight": 0,
+        "atSeconds": 1.4166666666666665,
+        "clearanceHeight": 0.2,
+        "id": "interaction-6",
+        "objectId": "scenario-fire-ramp",
+        "type": "ramp-launch"
+      },
+      {
+        "airHeight": 2.6866666666666617,
+        "atSeconds": 2.066666666666664,
+        "clearanceHeight": 2.35,
+        "id": "interaction-9",
+        "objectId": "scenario-dead-tree",
+        "type": "burning-tree-cleared"
+      }
+    ],
+    "scenario": "burning-clear",
+    "snapshot": {
+      "activeTrick": "airborne",
+      "collisionChecks": 222,
+      "deltaCount": 1,
+      "footprintHits": 78,
+      "lastEvent": "none",
+      "preset": "modern",
+      "style": 1065
+    },
+    "styleEvents": [
+      {
+        "atSeconds": 0.35,
+        "id": "ramp:scenario-ramp:1",
+        "points": 25,
+        "total": 25,
+        "type": "ramp-takeoff"
+      },
+      {
+        "atSeconds": 1.3833333333333333,
+        "id": "trick:1:spin:1",
+        "points": 150,
+        "total": 175,
+        "type": "spin-right-360"
+      },
+      {
+        "atSeconds": 1.7999999999999985,
+        "id": "landing:1",
+        "points": 40,
+        "total": 215,
+        "type": "clean-landing"
+      },
+      {
+        "atSeconds": 0.41666666666666663,
+        "id": "crash:scenario-crash-tree:1",
+        "points": -100,
+        "total": 0,
+        "type": "obstacle-crash"
+      },
+      {
+        "atSeconds": 1.5333333333333328,
+        "id": "mushroom:scenario-stump",
+        "points": 100,
+        "total": 100,
+        "type": "mushroom-jump"
+      },
+      {
+        "atSeconds": 1.0666666666666678,
+        "id": "landing:1",
+        "points": 40,
+        "total": 40,
+        "type": "clean-landing"
+      },
+      {
+        "atSeconds": 1.4166666666666665,
+        "id": "ramp:scenario-fire-ramp:2",
+        "points": 25,
+        "total": 65,
+        "type": "ramp-takeoff"
+      },
+      {
+        "atSeconds": 2.066666666666664,
+        "id": "burn-clear:scenario-dead-tree",
+        "points": 1000,
+        "total": 1065,
+        "type": "burning-tree-clear"
+      }
+    ]
+  },
+  "lastInput": "Space",
+  "player": {
+    "airHeight": 2.313333333333325,
+    "airPitch": 0,
+    "airSpin": 0,
+    "airTilt": 0,
+    "crashCount": 0,
+    "heading": "downhill",
+    "jumpCount": 2,
+    "lastLanding": "clean",
+    "motion": "airborne",
+    "paused": false,
+    "recoveryGraceSeconds": 0,
+    "runNumber": 5,
+    "simulationSeconds": 2.416666666666663,
+    "speedMetersPerSecond": 11.899999999999993,
+    "turbo": false,
+    "velocityX": 0,
+    "velocityY": 11.899999999999993,
+    "worldX": 0,
+    "worldY": 19.67583333333331
+  },
+  "ready": true,
+  "seed": "gate-three-playthrough",
+  "seedHash": 3508033149,
+  "settings": {
+    "debugVisible": true,
+    "pointerSteeringEnabled": false,
+    "trainingMode": false
+  },
+  "telemetry": {
+    "droppedSeconds": 0,
+    "fixedSteps": 502,
+    "inputEvents": [
+      {
+        "action": "trick-right",
+        "code": "KeyE",
+        "phase": "down",
+        "wallTimeMs": 5157.199999809265
+      },
+      {
+        "action": "trick-right",
+        "code": "KeyE",
+        "phase": "up",
+        "wallTimeMs": 7217.599999904633
+      },
+      {
+        "action": "uphill",
+        "code": "KeyW",
+        "phase": "down",
+        "wallTimeMs": 10012.699999809265
+      },
+      {
+        "action": "uphill",
+        "code": "KeyW",
+        "phase": "up",
+        "wallTimeMs": 11261.399999856949
+      },
+      {
+        "action": "jump",
+        "code": "Space",
+        "phase": "down",
+        "wallTimeMs": 12276.799999952316
+      },
+      {
+        "action": "jump",
+        "code": "Space",
+        "phase": "up",
+        "wallTimeMs": 12277.799999952316
+      }
+    ],
+    "playerEvents": [
+      {
+        "atSeconds": 0,
+        "detail": "run-2",
+        "type": "reset"
+      },
+      {
+        "atSeconds": 0.35,
+        "detail": "ramp-1",
+        "type": "jumped"
+      },
+      {
+        "atSeconds": 1.7999999999999985,
+        "detail": "downhill",
+        "type": "landed-clean"
+      },
+      {
+        "atSeconds": 0,
+        "detail": "run-3",
+        "type": "reset"
+      },
+      {
+        "atSeconds": 0.41666666666666663,
+        "detail": "tree:scenario-crash-tree",
+        "type": "crashed"
+      },
+      {
+        "atSeconds": 1.100000000000001,
+        "detail": "crash-1",
+        "type": "recovery-started"
+      },
+      {
+        "atSeconds": 1.5333333333333328,
+        "detail": "crash-1",
+        "type": "recovered"
+      },
+      {
+        "atSeconds": 0,
+        "detail": "run-4",
+        "type": "reset"
+      },
+      {
+        "atSeconds": 0.13333333333333333,
+        "detail": "traverse-left",
+        "type": "heading-changed"
+      },
+      {
+        "atSeconds": 0.39999999999999997,
+        "detail": "uphill-left",
+        "type": "heading-changed"
+      },
+      {
+        "atSeconds": 1.3833333333333333,
+        "detail": "downhill",
+        "type": "heading-changed"
+      },
+      {
+        "atSeconds": 1.5333333333333328,
+        "detail": "mushroom-1",
+        "type": "jumped"
+      },
+      {
+        "atSeconds": 0,
+        "detail": "run-5",
+        "type": "reset"
+      },
+      {
+        "atSeconds": 0.06666666666666667,
+        "detail": "manual-1",
+        "type": "jumped"
+      },
+      {
+        "atSeconds": 1.0666666666666678,
+        "detail": "downhill",
+        "type": "landed-clean"
+      },
+      {
+        "atSeconds": 1.4166666666666665,
+        "detail": "ramp-2",
+        "type": "jumped"
+      }
+    ],
+    "renderFrames": 314,
+    "samples": [
+      {
+        "airHeight": 0,
+        "fixedStep": 6,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.09999999999999999,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 5.599999999999999,
+        "worldX": 0,
+        "worldY": 0.4724999999999999
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 12,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.06666666666666667,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.8999999999999995,
+        "worldX": 0,
+        "worldY": 0.29166666666666663
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 18,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.16666666666666666,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 6.999999999999997,
+        "worldX": 0,
+        "worldY": 0.9041666666666665
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 24,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.26666666666666666,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 9.099999999999996,
+        "worldX": 0,
+        "worldY": 1.726666666666666
+      },
+      {
+        "airHeight": 0.12377777777777776,
+        "fixedStep": 30,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.36666666666666664,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 2.7533333333333316
+      },
+      {
+        "airHeight": 0.8057777777777775,
+        "fixedStep": 36,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.4666666666666666,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 3.8383333333333307
+      },
+      {
+        "airHeight": 1.3837777777777769,
+        "fixedStep": 42,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.5666666666666668,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 4.92333333333333
+      },
+      {
+        "airHeight": 1.8577777777777762,
+        "fixedStep": 48,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.6666666666666671,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 6.008333333333329
+      },
+      {
+        "airHeight": 2.227777777777775,
+        "fixedStep": 54,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.7666666666666674,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 7.093333333333328
+      },
+      {
+        "airHeight": 2.4937777777777743,
+        "fixedStep": 60,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.8666666666666677,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 8.178333333333327
+      },
+      {
+        "airHeight": 2.6557777777777734,
+        "fixedStep": 66,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.966666666666668,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 9.263333333333332
+      },
+      {
+        "airHeight": 2.7137777777777723,
+        "fixedStep": 72,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.0666666666666678,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 10.348333333333336
+      },
+      {
+        "airHeight": 2.667777777777771,
+        "fixedStep": 78,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.1666666666666674,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 11.43333333333334
+      },
+      {
+        "airHeight": 2.5177777777777703,
+        "fixedStep": 84,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.266666666666667,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 12.518333333333345
+      },
+      {
+        "airHeight": 2.2637777777777695,
+        "fixedStep": 90,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.3666666666666667,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 13.60333333333335
+      },
+      {
+        "airHeight": 1.9057777777777687,
+        "fixedStep": 96,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.4666666666666663,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 14.688333333333354
+      },
+      {
+        "airHeight": 1.4437777777777676,
+        "fixedStep": 102,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.566666666666666,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 15.773333333333358
+      },
+      {
+        "airHeight": 0.8777777777777662,
+        "fixedStep": 108,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.6666666666666656,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 16.858333333333356
+      },
+      {
+        "airHeight": 0.20777777777776468,
+        "fixedStep": 114,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.7666666666666653,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.849999999999994,
+        "worldX": 0,
+        "worldY": 17.94333333333335
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 120,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.866666666666665,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 12.249999999999993,
+        "worldX": 0,
+        "worldY": 19.08666666666668
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 126,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.08333333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 5.249999999999999,
+        "worldX": 0,
+        "worldY": 0.3791666666666666
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 132,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.18333333333333332,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 7.349999999999997,
+        "worldX": 0,
+        "worldY": 1.0266666666666664
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 138,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.2833333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 9.449999999999996,
+        "worldX": 0,
+        "worldY": 1.8841666666666659
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 144,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.3833333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.549999999999994,
+        "worldX": 0,
+        "worldY": 2.951666666666665
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 150,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.4833333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 3.2333333333333307,
+        "worldX": 0,
+        "worldY": 3.6113888888888868
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 156,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.5833333333333335,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0.7333333333333307,
+        "worldX": 0,
+        "worldY": 3.7888888888888865
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 162,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.6833333333333338,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 168,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.7833333333333341,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 174,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.8833333333333344,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 180,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 0.9833333333333347,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 186,
+        "heading": "downhill",
+        "motion": "crashed",
+        "paused": false,
+        "simulationSeconds": 1.0833333333333344,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 192,
+        "heading": "downhill",
+        "motion": "recovering",
+        "paused": false,
+        "simulationSeconds": 1.183333333333334,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 198,
+        "heading": "downhill",
+        "motion": "recovering",
+        "paused": false,
+        "simulationSeconds": 1.2833333333333337,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 204,
+        "heading": "downhill",
+        "motion": "recovering",
+        "paused": false,
+        "simulationSeconds": 1.3833333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 210,
+        "heading": "downhill",
+        "motion": "recovering",
+        "paused": false,
+        "simulationSeconds": 1.483333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 0,
+        "worldX": 0,
+        "worldY": 3.7941666666666642
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 216,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.5833333333333326,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 4.004166666666664
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 222,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.6833333333333322,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 6.649999999999998,
+        "worldX": 0,
+        "worldY": 4.581666666666664
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 228,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.03333333333333333,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.2,
+        "worldX": 0,
+        "worldY": 0.13416666666666666
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 234,
+        "heading": "traverse-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.13333333333333333,
+        "turbo": false,
+        "velocityX": -0.5666666666666667,
+        "velocityY": 5.599999999999999,
+        "worldX": -0.009444444444444445,
+        "worldY": 0.6649999999999998
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 240,
+        "heading": "traverse-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.2333333333333333,
+        "turbo": false,
+        "velocityX": -3.966666666666666,
+        "velocityY": 3.5,
+        "worldX": -0.26444444444444437,
+        "worldY": 1.1024999999999998
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 246,
+        "heading": "traverse-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.3333333333333333,
+        "turbo": false,
+        "velocityX": -7.3666666666666645,
+        "velocityY": 3.5,
+        "worldX": -0.8594444444444441,
+        "worldY": 1.4525
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 252,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.4333333333333333,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": 2.4499999999999997,
+        "worldX": -1.6927777777777773,
+        "worldY": 1.7674999999999998
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 258,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.5333333333333333,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": 0.3499999999999994,
+        "worldX": -2.492777777777777,
+        "worldY": 1.89
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 264,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.6333333333333336,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -1.7500000000000004,
+        "worldX": -3.292777777777777,
+        "worldY": 1.8024999999999998
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 270,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.733333333333334,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -3.850000000000001,
+        "worldX": -4.092777777777777,
+        "worldY": 1.505
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 276,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.8333333333333343,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -5.949999999999999,
+        "worldX": -4.89277777777778,
+        "worldY": 0.9975
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 282,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.9333333333333346,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -6.5,
+        "worldX": -5.692777777777782,
+        "worldY": 0.3508333333333332
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 288,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.0333333333333345,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -6.5,
+        "worldX": -6.492777777777785,
+        "worldY": -0.2991666666666668
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 294,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.1333333333333342,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -6.5,
+        "worldX": -7.292777777777787,
+        "worldY": -0.9491666666666669
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 300,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.2333333333333338,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -6.5,
+        "worldX": -8.092777777777789,
+        "worldY": -1.5991666666666673
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 306,
+        "heading": "uphill-left",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.3333333333333335,
+        "turbo": false,
+        "velocityX": -8,
+        "velocityY": -6.5,
+        "worldX": -8.892777777777786,
+        "worldY": -2.2491666666666674
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 312,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.4333333333333331,
+        "turbo": false,
+        "velocityX": -5.733333333333334,
+        "velocityY": -5.100000000000001,
+        "worldX": -9.598333333333342,
+        "worldY": -2.840833333333334
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 318,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.5333333333333328,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -9.973333333333342,
+        "worldY": -3.2283333333333335
+      },
+      {
+        "airHeight": 0.5293333333333332,
+        "fixedStep": 324,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.6333333333333324,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -10.20666666666668,
+        "worldY": -3.5283333333333324
+      },
+      {
+        "airHeight": 0.9546666666666661,
+        "fixedStep": 330,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.733333333333332,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -10.440000000000017,
+        "worldY": -3.8283333333333314
+      },
+      {
+        "airHeight": 1.2759999999999991,
+        "fixedStep": 336,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.8333333333333317,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -10.673333333333355,
+        "worldY": -4.12833333333333
+      },
+      {
+        "airHeight": 1.493333333333332,
+        "fixedStep": 342,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.9333333333333313,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -10.906666666666693,
+        "worldY": -4.428333333333329
+      },
+      {
+        "airHeight": 1.606666666666665,
+        "fixedStep": 348,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.033333333333331,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -11.14000000000003,
+        "worldY": -4.728333333333328
+      },
+      {
+        "airHeight": 1.6159999999999979,
+        "fixedStep": 354,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.1333333333333306,
+        "turbo": false,
+        "velocityX": -2.3333333333333357,
+        "velocityY": -3.000000000000002,
+        "worldX": -11.373333333333369,
+        "worldY": -5.028333333333327
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 360,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 0.05,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 0.21
+      },
+      {
+        "airHeight": 0.47433333333333316,
+        "fixedStep": 366,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.15,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 0.6649999999999999
+      },
+      {
+        "airHeight": 0.8446666666666662,
+        "fixedStep": 372,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.24999999999999997,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 1.1199999999999999
+      },
+      {
+        "airHeight": 1.110999999999999,
+        "fixedStep": 378,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.35,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 1.5750000000000004
+      },
+      {
+        "airHeight": 1.273333333333332,
+        "fixedStep": 384,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.44999999999999996,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 2.0300000000000007
+      },
+      {
+        "airHeight": 1.331666666666665,
+        "fixedStep": 390,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.55,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 2.485
+      },
+      {
+        "airHeight": 1.2859999999999978,
+        "fixedStep": 396,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.6500000000000004,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 2.939999999999999
+      },
+      {
+        "airHeight": 1.136333333333331,
+        "fixedStep": 402,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.7500000000000007,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 3.3949999999999982
+      },
+      {
+        "airHeight": 0.8826666666666637,
+        "fixedStep": 408,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.850000000000001,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 3.8499999999999974
+      },
+      {
+        "airHeight": 0.5249999999999967,
+        "fixedStep": 414,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 0.9500000000000013,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 4.304999999999999
+      },
+      {
+        "airHeight": 0.06333333333332954,
+        "fixedStep": 420,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.0500000000000012,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 4.55,
+        "worldX": 0,
+        "worldY": 4.760000000000001
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 426,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.1500000000000008,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 6.299999999999998,
+        "worldX": 0,
+        "worldY": 5.302500000000002
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 432,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.2500000000000004,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 8.399999999999997,
+        "worldX": 0,
+        "worldY": 6.055
+      },
+      {
+        "airHeight": 0,
+        "fixedStep": 438,
+        "heading": "downhill",
+        "motion": "grounded",
+        "paused": false,
+        "simulationSeconds": 1.35,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 10.499999999999995,
+        "worldX": 0,
+        "worldY": 7.017499999999998
+      },
+      {
+        "airHeight": 0.24466666666666664,
+        "fixedStep": 444,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.4499999999999997,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 8.172499999999998
+      },
+      {
+        "airHeight": 0.909333333333333,
+        "fixedStep": 450,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.5499999999999994,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 9.362499999999992
+      },
+      {
+        "airHeight": 1.469999999999999,
+        "fixedStep": 456,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.649999999999999,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 10.552499999999986
+      },
+      {
+        "airHeight": 1.926666666666665,
+        "fixedStep": 462,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.7499999999999987,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 11.74249999999998
+      },
+      {
+        "airHeight": 2.2793333333333305,
+        "fixedStep": 468,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.8499999999999983,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 12.932499999999974
+      },
+      {
+        "airHeight": 2.5279999999999965,
+        "fixedStep": 474,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 1.949999999999998,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 14.122499999999969
+      },
+      {
+        "airHeight": 2.672666666666662,
+        "fixedStep": 480,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.0499999999999976,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 15.312499999999963
+      },
+      {
+        "airHeight": 2.7133333333333276,
+        "fixedStep": 486,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.1499999999999972,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 16.502499999999962
+      },
+      {
+        "airHeight": 2.6499999999999932,
+        "fixedStep": 492,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.249999999999997,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 17.692499999999967
+      },
+      {
+        "airHeight": 2.4826666666666592,
+        "fixedStep": 498,
+        "heading": "downhill",
+        "motion": "airborne",
+        "paused": false,
+        "simulationSeconds": 2.3499999999999965,
+        "turbo": false,
+        "velocityX": 0,
+        "velocityY": 11.899999999999993,
+        "worldX": 0,
+        "worldY": 18.882499999999972
+      }
+    ],
+    "worldTransitions": 4
+  },
+  "world": {
+    "activeChunks": 28,
+    "aheadRows": [1, 2],
+    "cachedChunks": 46,
+    "chunkSizeMeters": 64,
+    "corridorWidthMeters": 4.5,
+    "currentChunk": "0,0",
+    "generatedSignature": "a6516683",
+    "missingRequiredChunks": 0,
+    "overlaySignature": "e683bebf",
+    "visibleObjects": 89
+  }
+}

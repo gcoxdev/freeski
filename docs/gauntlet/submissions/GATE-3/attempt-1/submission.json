@@ -1,0 +1,95 @@
+{
+  "gate": "GATE_3",
+  "attempt": 1,
+  "candidate_revision": "9472d8caff965509e77f7833e2b8566b5b7d80fd",
+  "base_revision": "c101485facc92f73f2c50b948efe834c87ecbc3a",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE3_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-3/attempt-1/evidence npm run test:e2e",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/e2e.txt"
+    },
+    {
+      "command": "FREESKI_GATE3_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-3/attempt-1/evidence FREESKI_GATE3_TELEMETRY=docs/gauntlet/submissions/GATE-3/attempt-1/evidence/playthrough-telemetry.json npx playwright test tests/e2e/interactions.spec.ts --project=chromium",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/focused-browser.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/playthrough-telemetry.json",
+      "demonstrates": ["G3.2", "G3.3", "G3.4", "G3.5", "G3.6", "G3.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/ramp-trick.png",
+      "demonstrates": ["G3.1", "G3.2", "G3.3", "G3.5", "G3.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/crash-impact.png",
+      "demonstrates": ["G3.1", "G3.2", "G3.5", "G3.6", "G3.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/mushroom-secret.png",
+      "demonstrates": ["G3.4", "G3.5", "G3.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/burning-tree-ignited.png",
+      "demonstrates": ["G3.4", "G3.5", "G3.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-3/attempt-1/evidence/burning-tree-cleared.png",
+      "demonstrates": ["G3.1", "G3.3", "G3.4", "G3.5", "G3.7"]
+    }
+  ],
+  "known_limitations": [
+    "Gate 3 emits named audio feedback cues and browser telemetry, but final original audio assets and playback/mute behavior are intentionally deferred to Gate 6.",
+    "The approved ultra-realistic concept sheets are not yet sliced into production atlases; Gate 3 continues to use the temporary code-rendered presentation accepted by earlier gates.",
+    "Vite reports its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the build succeeds."
+  ],
+  "executor_claimed_criteria": [
+    "G3.1",
+    "G3.2",
+    "G3.3",
+    "G3.4",
+    "G3.5",
+    "G3.6",
+    "G3.7"
+  ]
+}
