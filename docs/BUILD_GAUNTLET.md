@@ -22,7 +22,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 1 — Skiing vertical slice     |                          1 | PASS                | `1d923ed` |
 | Gate 2 — Deterministic mountain    |                          2 | PASS                | `0091cbe` |
 | Gate 3 — Collisions, air and Style |                          1 | PASS                | `9472d8c` |
-| Gate 4 — Event modes and records   |                          — | NOT STARTED         | —         |
+| Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
 | Gate 5 — Living slope and Yeti     |                          — | NOT STARTED         | —         |
 | Gate 6 — Art, VFX, UI and audio    |                          — | NOT STARTED         | —         |
 | Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
@@ -90,3 +90,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: pristine install, formatting, typecheck, lint, 53 unit tests, production build, 7 Chromium E2E tests, default collision-enabled descent, natural lift collision, staged trick/crash/mushroom/burning-tree sequences and desktop/minimum-viewport visual inspection
 - Non-blocking notes: named audio cues are emitted but final original audio playback/assets remain Gate 6 scope; the disclosed Phaser chunk-size advisory remains.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-3/attempt-1/judge-verdict.json`
+
+### Gate 4 — attempt 1
+
+- Candidate revision: `f98d0ca6534b865a12f45f0f6ae4ad26f94b65ff`
+- Evidence commit: `991bec969d22cdebf6767b0e4cad9cee480fae94`
+- Judge isolation: fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.995`
+- Criteria: G4.1–G4.7 all PASS
+- Independent checks: pristine install, formatting, typecheck, lint, 66 unit tests, production build, 9 Chromium E2E tests, direct physical completion of all modes, open/backtrack behavior, persistence/bucket/malformed-storage checks and desktop/minimum-viewport inspection
+- Non-blocking note: final audio assets and production sprite-atlas presentation remain later-gate scope; the Phaser chunk advisory remains disclosed.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-4/attempt-1/judge-verdict.json`

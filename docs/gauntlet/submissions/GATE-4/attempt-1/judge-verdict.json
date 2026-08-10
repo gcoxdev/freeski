@@ -1,0 +1,148 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_4",
+  "attempt": 1,
+  "candidate_revision": "f98d0ca6534b865a12f45f0f6ae4ad26f94b65ff",
+  "criteria": [
+    {
+      "id": "G4.1",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/modes.ts:118-135,145-165,209-223 starts an idle mode only after an interpolated downhill crossing inside the declarative start-gate bounds.",
+        "src/render/scenes/AlpineScene.ts:1262-1307 shows the fixture only repositions the player below a crossing and synchronizes position; it never assigns lifecycle or activeMode.",
+        "Independent Chromium keyboard play moved from open terrain through the physical Slalom gate and observed mode-started at simulation time 3.05 seconds.",
+        "Independent DOM inspection found no dialog, menu, select, or mode button; the compact mode card uses pointer-events:none."
+      ],
+      "notes": "Modes are optional in-world structures and require physical downhill gate crossings."
+    },
+    {
+      "id": "G4.2",
+      "result": "PASS",
+      "evidence": [
+        "src/world/classicMountain.ts:46-56 declares Slalom length 540, start/finish coordinates, and 24 alternating markers from y=60 through y=520 at 20 m spacing.",
+        "src/simulation/modes.ts:226-298 resolves correct, wrong-side, and missed crossings once, adds five seconds per penalty, and finishes with raw plus penalty time.",
+        "src/render/scenes/AlpineScene.ts:561-594 renders green/check correct markers and gray/red-X missed or wrong-side markers; lines 1006-1050 render live penalty and adjusted final time.",
+        "Executor telemetry independently inspected: 24 markers, exactly one wrong-side marker, +5 seconds, raw 5.10 seconds, adjusted 10.10 seconds.",
+        "Independent Chromium reproduction observed one wrong-side and one missed state, +10 seconds total, 22 correct markers, and adjusted final equal to raw plus penalties.",
+        "External slalom-wrong-side.png and slalom-penalty.png and fresh /tmp/freeski-g4-judge-slalom.png were visually inspected."
+      ],
+      "notes": "Exact geometry, alternating marker outcomes, five-second penalties, visual feedback, and adjusted final timing are demonstrated."
+    },
+    {
+      "id": "G4.3",
+      "result": "PASS",
+      "evidence": [
+        "src/world/classicMountain.ts:67-95 declares Tree Slalom length 1040, 39 alternating markers from y=65 through y=1015 at 25 m spacing, and a weaving correct-side route.",
+        "src/world/classicMountain.ts:97-121 and src/world/generator.ts:192-210 exclude blocking footprints from the authored Tree Slalom route.",
+        "src/world/spawnProfiles.ts:38-41,45-50 gives Tree Slalom a 63/64 tree profile and elevated 0.78 spawn chance.",
+        "src/world/worldGeneration.test.ts:195-217 verifies more than 35 lane trees for the proof seed, no route blocker, a 41-point route, sufficient route width, and correct-side marker centers.",
+        "Independent Chromium reproduction crossed all 39 markers correctly and finished with a 4.12-second final and no penalty.",
+        "External tree-slalom-finish.png and fresh /tmp/freeski-g4-judge-tree.png visibly show the dense tree field, course lane, 39/39 status, finish gate, and final metric."
+      ],
+      "notes": "The exact long-course geometry, dense deterministic tree population, validated passable route, penalties, and final time are present."
+    },
+    {
+      "id": "G4.4",
+      "result": "PASS",
+      "evidence": [
+        "src/world/classicMountain.ts:57-66 declares the Free Style start, finish, and 1040 m length.",
+        "src/world/spawnProfiles.ts:30-37 weights bumps at 30, moguls at 10, and ramps at 20, materially emphasizing score-producing terrain.",
+        "src/simulation/modes.ts:159-165,278-294 tracks Style earned during the active run and emits a score-only result.",
+        "Independent Chromium reproduction observed live STYLE feedback, a completed ramp/spin/clean-landing sequence, and FINAL STYLE 215.",
+        "External free-style-finish.png was visually inspected and shows FINAL STYLE 215 in both feedback and mode HUD."
+      ],
+      "notes": "Free Style is a 1040 m score-focused course with live and final Style reporting."
+    },
+    {
+      "id": "G4.5",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/modes.ts:118-120,231-259 resolves markers only on downhill crossings and ignores already resolved markers, making backtracking idempotent.",
+        "src/simulation/modes.test.ts:55-86 verifies ignored gates, leaving a lane, backtracking, and no duplicated marker event or penalty.",
+        "Independent normal Chromium skiing with procedural interactions enabled crossed y=50 at x=18.08 and remained OPEN SKIING with activeMode null.",
+        "Independent Chromium backtracked uphill across an already resolved Slalom marker and crossed downhill again without changing its state or penalty.",
+        "Full E2E test tests/e2e/modes.spec.ts:198-230 passed the open-skiing and active-lane-leaving scenario."
+      ],
+      "notes": "Open skiing, lane departure, and backtracking do not corrupt or duplicate event state."
+    },
+    {
+      "id": "G4.6",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/recordBook.ts:4-43 defines versioned top-ten classic/seeded buckets per mode.",
+        "src/simulation/recordBook.ts:45-77 records seed, generator version, mode, metric, penalty and value, with time ascending, Style descending, and deterministic tie ordering.",
+        "src/simulation/recordBook.ts:79-151 validates entries, caps each leaderboard at ten, and safely parses malformed or incompatible storage.",
+        "src/render/localRecordStorage.ts:8-35 is an isolated localStorage adapter with unavailable-storage recovery; validation and ordering remain pure simulation logic.",
+        "src/simulation/recordBook.test.ts passed separation, stable ordering, cap, field validation, versioned round-trip and malformed recovery tests.",
+        "Independent Chromium reproduction persisted three classic records across reload, then added a seeded Slalom record without altering classic records; inspected records contained seed, generatorVersion, mode and metric.",
+        "Independent malformed JSON injection recovered to a valid empty record book without console, page, or network error."
+      ],
+      "notes": "Validated local top-ten storage is capped, stable, resilient, and clearly separates classic fixed-seed records from generated-seed records."
+    },
+    {
+      "id": "G4.7",
+      "result": "PASS",
+      "evidence": [
+        "Independent npm run test:e2e completed 9/9 tests, including all-three-mode completion, intentional marker penalty, final metrics, persistence reload, open skiing, and Gates 1-3 regressions.",
+        "tests/e2e/modes.spec.ts:74-196 physically crosses staged world lines for all three modes, applies one wrong-side penalty, verifies final values, reloads, and compares the complete record book.",
+        "Independent direct Chromium reproduction completed Slalom, Tree Slalom, and Free Style through physical crossings, observed penalty/final metrics, reloaded records, verified seeded separation and malformed recovery, and reported zero console errors, page errors, or failed requests.",
+        "At 768x600, measured mode-card bounds were 19..297 x 72..199.25; pointer and world-grid controls also remained fully within the viewport.",
+        "All seven declared artifacts exist; both reports and all five screenshots were independently inspected at original resolution."
+      ],
+      "notes": "Automated and independently reproduced browser playthroughs cover every mode, penalty, final metric, reload persistence, responsive presentation, and runtime error channel."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "git rev-parse HEAD; git status --short; git diff/check aa2016bd73b04500fcbe612ad41afbdb217360e1..f98d0ca6534b865a12f45f0f6ae4ad26f94b65ff",
+      "result": "Exact candidate f98d0ca6534b865a12f45f0f6ae4ad26f94b65ff confirmed; candidate tracked tree remained clean; diff check passed."
+    },
+    {
+      "command_or_action": "npm ci",
+      "result": "PASS; 164 packages installed from the frozen lockfile."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "PASS; all files match Prettier formatting."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "PASS; 12 test files and 66 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "PASS; production output built successfully. Existing advisory reports a Phaser-containing chunk over 500 kB."
+    },
+    {
+      "command_or_action": "npm run test:e2e",
+      "result": "PASS; 9 Chromium tests passed in 1.3 minutes, including Gates 1-3 regression scenarios and the 2100 m descent."
+    },
+    {
+      "command_or_action": "Independent source and architecture inspection",
+      "result": "PASS; pure mode/record logic is separated from Phaser/browser adapters, localStorage is isolated, and courses/routes are declarative world data."
+    },
+    {
+      "command_or_action": "Independent direct Chromium desktop playthrough using an ephemeral profile",
+      "result": "PASS; normal open skiing, keyboard-only physical start, three completed modes, correct/wrong/missed markers, penalties, backtracking, final time/Style, reload persistence, bucket separation and malformed recovery verified."
+    },
+    {
+      "command_or_action": "Independent Chromium 768x600 layout and runtime-error inspection",
+      "result": "PASS; required HUD and controls remained visible and in viewport; console, uncaught page error and failed-request collections were empty."
+    },
+    {
+      "command_or_action": "Independent evidence review",
+      "result": "PASS; submission schema, telemetry, two reports, and five unique PNG artifacts were present and internally consistent; all screenshots were opened at original resolution."
+    }
+  ],
+  "confidence": 0.995
+}
