@@ -24,7 +24,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 3 — Collisions, air and Style |                          1 | PASS                | `9472d8c` |
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
 | Gate 5 — Living slope and Yeti     |                          2 | PASS                | `9e23730` |
-| Gate 6 — Art, VFX, UI and audio    |                          1 | FAIL                | `23348f9` |
+| Gate 6 — Art, VFX, UI and audio    |                          2 | FAIL                | `d1edaff` |
 | Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
 
 No gate is accepted by this baseline entry. Only a fresh judge verdict recorded below may change a gate to PASS.
@@ -138,3 +138,16 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: deterministic asset rebuild/source hashes, direct 112-frame pixel/metadata audit, pristine install, formatting, typecheck, lint, 87 unit tests, production build, 11 Chromium tests, instrumented desktop/768×600 play, audio lifecycle/mute persistence, atlas/VFX/runtime/error inspection
 - Required remediation: implement real 4 px content-edge extrusion and scale-consistent Phaser metadata with pixel tests; make the complete seed readable; suppress every pre-gesture AudioContext including Phaser's; prevent normal/worst-case sprite-pool fallbacks with explicit telemetry/tests; correct silhouette sizing and UI depth/layout at 768×600.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-6/attempt-1/judge-verdict.json`
+
+### Gate 6 — attempt 2
+
+- Candidate revision: `d1edaff774dfea4913f85b93b44fe708eb3d9394`
+- Evidence commit: `9c69e5087e636172fe859a215bb1e82bff5314e8`
+- Judge isolation: new fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **FAIL**
+- Confidence: `0.99`
+- Criteria: G6.1–G6.6 PASS; G6.7 FAIL
+- Independent checks: two deterministic asset rebuilds, independent 112-frame/448-side/448-corner pixel and provenance audit, pristine install, formatting, typecheck, lint, 89 unit tests, production build, focused 5/5 Chromium run, full sequential 11/11 Chromium run, cold/reload AudioContext instrumentation, procedural-audio/resource inspection, pool stress, multi-state player sizing and original-resolution bright/dark desktop/minimum-viewport inspection
+- Repair verified: real 4 px extrusion and scale-consistent metadata, source preservation, complete seed, 0→1 audio lifecycle across reload, zero fallbacks at 301/512 stress, protected status/HUD, and clean production visuals all passed.
+- Required remediation: keep production-atlas player content at least 48 px tall at 768×600 across grounded, airborne, crash and recovery states; the judge measured airborne at 46.04–47.32 px, crash at 32.48 px and recovery at 26.80 px.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-6/attempt-2/judge-verdict.json`

@@ -1,0 +1,149 @@
+{
+  "verdict": "FAIL",
+  "gate": "GATE_6",
+  "attempt": 2,
+  "candidate_revision": "d1edaff774dfea4913f85b93b44fe708eb3d9394",
+  "criteria": [
+    {
+      "id": "G6.1",
+      "result": "PASS",
+      "evidence": [
+        "Two fresh consecutive `npm run assets:build` executions and `npm run assets:check` produced byte-identical 1024x2048 atlas outputs with 112 frames.",
+        "Independent Pillow audit covered all 112 frame interiors, all 448 side bands and 448 corner blocks: zero extrusion mismatches, zero empty side bands, and zero padded-rectangle overlaps.",
+        "Independent metadata/provenance audit found zero geometry, provenance, or trim failures: Phaser frame/spriteSourceSize/sourceSize, runtime trim/source metadata, pivots, source hashes, fractional-grid cells, footprints, and clearances were consistent.",
+        "The atlas contained one isolated low-alpha magenta-classified interior pixel in `player/uphill-left`, no classified perimeter fringe, and zero magenta-classified pixels in judge-captured bright/dark rendered screenshots."
+      ],
+      "notes": "Slicing, bounded family normalization, matte cleanup, trim geometry, gameplay metadata, and genuine four-pixel content-edge extrusion satisfy the criterion."
+    },
+    {
+      "id": "G6.2",
+      "result": "PASS",
+      "evidence": [
+        "SHA-256 hashes for all six approved concept sheets and all six source-chroma originals were unchanged across the base revision, candidate revision, two rebuilds, asset validation, and final audit.",
+        "The three production artifacts rebuilt byte-identically; source images and derived production files remain in separate tracked locations.",
+        "Final tracked worktree and index remained clean; all untracked files were confined to the attempt-2 submission packet tree."
+      ],
+      "notes": "The production pipeline is deterministic and non-destructive."
+    },
+    {
+      "id": "G6.3",
+      "result": "PASS",
+      "evidence": [
+        "`AlpineVfx.ts` integrates bounded tracks/effects for powder, directional carve fans, landing/crash bursts, ice impacts, breath mist, ramp glints, trick sparkles, flame embers, speed streaks, and crash decals; player, actors, and terrain use scalable atlas shadows.",
+        "Runtime inspection observed active VFX and tracks within the declared 56-effect and 48-track bounds during integrated scenarios.",
+        "Production mappings cover the required player, population, Yeti, terrain, course, lift, and VFX frames."
+      ],
+      "notes": "The required VFX bank is production-atlas-backed, gameplay-integrated, and bounded."
+    },
+    {
+      "id": "G6.4",
+      "result": "PASS",
+      "evidence": [
+        "Primary HUD text is DOM/code-rendered in `index.html` and `AlpineScene.updateHud`.",
+        "Course mode labels are Phaser text rendered over `course/blank-wood-sign`; localized mode copy is not dependent on baked mode-sign text.",
+        "Judge-captured desktop and 768x600 views showed readable code-rendered HUD and course/status copy."
+      ],
+      "notes": "Primary HUD and practical course-sign copy use code-rendered text."
+    },
+    {
+      "id": "G6.5",
+      "result": "PASS",
+      "evidence": [
+        "At 768x600, time, distance, speed, Style, Turbo, mode, seed, and pause presentation were visible and the footer remained compact.",
+        "With `judge-gate-six-presentation`, the complete seed occupied 130x19 CSS pixels with equal client/scroll dimensions and was also directly exposed through title and ARIA text.",
+        "Independent geometry inspection found no intersections among the masthead, mode card, feedback card, pause card, or footer at 768x600."
+      ],
+      "notes": "The required HUD information is compact, readable, and unclipped at desktop and minimum viewport."
+    },
+    {
+      "id": "G6.6",
+      "result": "PASS",
+      "evidence": [
+        "`AlpineAudio.ts` defines 26 original procedural cues plus three continuous glide/wind/carve noise layers covering movement, jumps, landings, crashes, gates, NPCs, lift, secrets, UI, and Yeti events.",
+        "Independent runtime instrumentation observed oscillator/noise-buffer synthesis, with zero media-element sources and zero decoded audio resources.",
+        "Repository and runtime-resource audits found no shipped audio files, external audio URLs, Phaser audio loads, or copied sound dependency."
+      ],
+      "notes": "The complete sound bank is procedurally authored and broadly integrated without external audio."
+    },
+    {
+      "id": "G6.7",
+      "result": "FAIL",
+      "evidence": [
+        "Independent cold-load instrumentation observed 0 game-owned AudioContexts before input and exactly 1 after the first gesture; after reload it again observed 0 then exactly 1. Mute persisted as `freeski.audio.muted.v1=true`.",
+        "Independent staged 1440x900 stress peaked at 301 of 512 pooled sprites with cumulative/per-frame/capacity/missing-frame fallbacks all zero; VFX remained within bounds.",
+        "Judge-captured bright/dark desktop and 768x600 screenshots showed no magenta fringe, texture boxes, primitive fallbacks, or UI intersections. Status labels reported protected depth 90, and browser console/page/request/HTTP-error collections were empty.",
+        "A focused 768x600 multi-state audit disproved the required 48px minimum rendered-player threshold: ordinary manual-jump samples reported `playerRenderedHeight` from 46.04px to 47.32px, crash reported 32.48px, and recovery reported 26.80px. All were production-atlas states with zero fallbacks."
+      ],
+      "notes": "Autoplay, mute persistence, bounded presentation, visual artifacts, status depth, and browser diagnostics pass, but normal airborne/crash/recovery silhouettes still fall below the explicit 48px minimum."
+    }
+  ],
+  "failures": [
+    {
+      "severity": "P2",
+      "criterion_id": "G6.7",
+      "summary": "Production player content falls below 48px during ordinary airborne, crash, and recovery states at 768x600.",
+      "reproduction": [
+        "Launch the candidate at a 768x600 viewport with `?seed=judge-player-scale&debug=1`.",
+        "Trigger a manual jump and sample `window.__FREE_SKI__.art.playerRenderedHeight`; observe 46.04–47.32px while airborne.",
+        "Stage `window.__FREE_SKI_DEBUG__.stageInteractionScenario('crash-recovery')` and sample the same field; observe 32.48px while crashed and 26.80px while recovering, with `fallbackDraws === 0`."
+      ],
+      "required_fix": "Keep the production-atlas player’s rendered content at least 48px across grounded, airborne, crash, and recovery presentation at 768x600, and verify the threshold across representative player states rather than only one grounded snapshot."
+    }
+  ],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Verify detached HEAD, exact base/HEAD, tracked/index cleanliness, changed-file list, packet schema, nonempty references, and untracked scope",
+      "result": "PASS; detached HEAD exactly d1edaff774dfea4913f85b93b44fe708eb3d9394, base 0b8933e5b8b1966ea29e626e982de47bf39fd840, tracked/index clean, and 21 untracked files all confined to the attempt-2 packet tree."
+    },
+    {
+      "command_or_action": "Read README, complete design brief, gauntlet prompt, sprite README/manifest/prompts, and committed attempt-1 verdict",
+      "result": "Completed independently; every prior public remediation was retested."
+    },
+    {
+      "command_or_action": "`npm ci`",
+      "result": "PASS; 164 packages installed from lockfile."
+    },
+    {
+      "command_or_action": "Two fresh `npm run assets:build` runs plus `npm run assets:check`",
+      "result": "PASS; 112 frames, byte-identical outputs, 448 nonempty bands, zero validator-reported extrusion/geometry/overlap errors."
+    },
+    {
+      "command_or_action": "Independent `/tmp/gate6_atlas_audit.py` pixel/provenance audit",
+      "result": "112 frames, 448 side bands, 448 corners, zero mismatches, zero empty bands, zero overlaps, and zero geometry/provenance failures."
+    },
+    {
+      "command_or_action": "Source and generated-artifact SHA-256 comparisons before/after rebuild and against base diff",
+      "result": "PASS; all 12 approved/source-chroma images preserved byte-for-byte and all generated artifacts deterministic."
+    },
+    {
+      "command_or_action": "`npm run format:check`; `npm run typecheck`; `npm run lint`; `npm test`; `npm run build`",
+      "result": "PASS; 16 files/89 unit tests passed and production build succeeded with only the existing large-chunk advisory."
+    },
+    {
+      "command_or_action": "Focused Playwright baseline and presentation tests, sequential against isolated candidate server",
+      "result": "PASS; 5/5 tests passed."
+    },
+    {
+      "command_or_action": "Full sequential Playwright E2E suite against isolated candidate server",
+      "result": "PASS; 11/11 tests passed in 2.0 minutes, including the unchanged interaction that timed out in the executor's initial two-worker run."
+    },
+    {
+      "command_or_action": "Independent Chromium audio/resource/HUD/pool/error diagnostic",
+      "result": "Cold/reload AudioContext lifecycle 0→1 twice; mute persisted; procedural nodes only; pool peak 301/512 with zero fallbacks; full long seed unclipped; no console/page/request/HTTP errors."
+    },
+    {
+      "command_or_action": "Independent 768x600 player-state size audit",
+      "result": "Grounded 55.87px, manual-airborne 46.04–47.32px, crashed 32.48px, recovering 26.80px; zero atlas fallbacks."
+    },
+    {
+      "command_or_action": "Original-resolution inspection of all supplied and judge-captured bright/dark desktop and 768x600 screenshots",
+      "result": "No visible magenta fringe, transparent boxes, primitive fallback art, terrain-obscured status, or UI intersections; undersized non-grounded player states were confirmed by runtime measurement."
+    },
+    {
+      "command_or_action": "Final git cleanliness and hash check",
+      "result": "Tracked worktree/index clean; source and generated hashes unchanged after all rebuilding and testing."
+    }
+  ],
+  "confidence": 0.99
+}
