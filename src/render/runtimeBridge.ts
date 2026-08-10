@@ -73,7 +73,10 @@ export interface FreeSkiRuntime {
     frameFallbacks: number;
     missingFrameFallbacks: number;
     peakPooledSprites: number;
+    playerFrame: string;
+    playerMinimumRenderedHeight: number;
     playerRenderedHeight: number;
+    playerTargetRenderedHeight: number;
     pooledSprites: number;
     spriteCapacity: number;
     statusLabelDepth: number;

@@ -65,6 +65,10 @@ import { hashSeed } from "../../world/seed";
 import { CHUNK_SIZE_METERS } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
 import {
+  PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
+  playerPresentationScale,
+} from "../playerPresentation";
+import {
   AtlasSpritePool,
   PRODUCTION_ATLAS_DATA,
   PRODUCTION_ATLAS_IMAGE,
@@ -259,7 +263,10 @@ export class AlpineScene extends Phaser.Scene {
         frameFallbacks: 0,
         missingFrameFallbacks: 0,
         peakPooledSprites: 0,
+        playerFrame: "player/downhill",
+        playerMinimumRenderedHeight: PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
         playerRenderedHeight: 0,
+        playerTargetRenderedHeight: 0,
         pooledSprites: 0,
         spriteCapacity: this.spritePool.capacity,
         statusLabelDepth: 90,
@@ -1611,7 +1618,8 @@ export class AlpineScene extends Phaser.Scene {
     const skier = this.skier ?? this.fallbackSkier!;
     skier.setPosition(anchorX, anchorY - airOffset);
     if (this.skier) {
-      this.skier.setTexture(PRODUCTION_ATLAS_KEY, this.playerFrame(player));
+      const frameName = this.playerFrame(player);
+      this.skier.setTexture(PRODUCTION_ATLAS_KEY, frameName);
       this.skier.setOrigin(0.5, player.motion === "airborne" ? 0.62 : 0.94);
     }
     skier.setRotation(
@@ -1628,23 +1636,18 @@ export class AlpineScene extends Phaser.Scene {
               ? player.airTilt * 0.45 + player.airSpin
               : 0),
     );
-    const skierScale =
-      player.motion === "recovering"
-        ? 0.88
-        : 1 + Math.min(player.airHeight * 0.022, 0.14);
     if (this.skier) {
       const frame = this.skier.frame;
-      const displayHeight =
-        (player.motion === "airborne"
-          ? 72
-          : player.motion === "crashed"
-            ? 54
-            : 64) * skierScale;
-      this.skier.setDisplaySize(
-        displayHeight * (frame.realWidth / Math.max(1, frame.realHeight)),
-        displayHeight,
+      const presentation = playerPresentationScale(
+        String(frame.name),
+        frame.height,
       );
+      this.skier.setScale(presentation.uniformScale);
     } else {
+      const skierScale =
+        player.motion === "recovering"
+          ? 0.88
+          : 1 + Math.min(player.airHeight * 0.022, 0.14);
       skier.setScale(
         skierScale,
         skierScale *
@@ -1804,9 +1807,18 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.art.missingFrameFallbacks =
       this.spritePool.missingFrameFallbacks;
     this.runtime.art.peakPooledSprites = this.spritePool.peakActiveCount;
+    const playerFrame = this.skier ? String(this.skier.frame.name) : "fallback";
+    const playerPresentation = this.skier
+      ? playerPresentationScale(playerFrame, this.skier.frame.height)
+      : undefined;
+    this.runtime.art.playerFrame = playerFrame;
+    this.runtime.art.playerMinimumRenderedHeight =
+      PLAYER_MIN_RENDERED_CONTENT_HEIGHT;
     this.runtime.art.playerRenderedHeight = this.skier
       ? this.skier.frame.height * Math.abs(this.skier.scaleY)
       : 0;
+    this.runtime.art.playerTargetRenderedHeight =
+      playerPresentation?.targetContentHeight ?? 0;
     this.runtime.art.pooledSprites = this.spritePool.activeCount;
     this.runtime.art.statusLabelDepth = Math.min(
       this.locationLabel?.depth ?? 0,

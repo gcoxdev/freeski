@@ -63,6 +63,67 @@ async function audioContextCount(page: Page): Promise<number> {
   );
 }
 
+interface PlayerScaleSample {
+  readonly canvasCssScale: number;
+  readonly cssRenderedHeight: number;
+  readonly fallbackDraws: number;
+  readonly frame: string;
+  readonly frameFallbacks: number;
+  readonly label: string;
+  readonly minimumRenderedHeight: number;
+  readonly missingFrameFallbacks: number;
+  readonly motion: string;
+  readonly renderedHeight: number;
+  readonly targetRenderedHeight: number;
+}
+
+async function playerScaleSample(
+  page: Page,
+  label: string,
+): Promise<PlayerScaleSample> {
+  return page.evaluate((sampleLabel) => {
+    const runtime = window.__FREE_SKI__;
+    const canvas = document.querySelector<HTMLCanvasElement>(
+      "#game-canvas canvas",
+    );
+    if (!runtime || !canvas)
+      throw new Error("FreeSki presentation is not ready");
+    const canvasCssScale =
+      canvas.getBoundingClientRect().height / Math.max(1, canvas.height);
+    return {
+      canvasCssScale,
+      cssRenderedHeight: runtime.art.playerRenderedHeight * canvasCssScale,
+      fallbackDraws: runtime.art.fallbackDraws,
+      frame: runtime.art.playerFrame,
+      frameFallbacks: runtime.art.frameFallbacks,
+      label: sampleLabel,
+      minimumRenderedHeight: runtime.art.playerMinimumRenderedHeight,
+      missingFrameFallbacks: runtime.art.missingFrameFallbacks,
+      motion: runtime.player.motion,
+      renderedHeight: runtime.art.playerRenderedHeight,
+      targetRenderedHeight: runtime.art.playerTargetRenderedHeight,
+    };
+  }, label);
+}
+
+function expectReadablePlayer(sample: PlayerScaleSample): void {
+  expect(sample.frame, sample.label).toMatch(/^player\//);
+  expect(sample.canvasCssScale, sample.label).toBeCloseTo(1, 5);
+  expect(sample.renderedHeight, sample.label).toBeCloseTo(
+    sample.targetRenderedHeight,
+    5,
+  );
+  expect(sample.renderedHeight, sample.label).toBeGreaterThanOrEqual(
+    sample.minimumRenderedHeight,
+  );
+  expect(sample.cssRenderedHeight, sample.label).toBeGreaterThanOrEqual(
+    sample.minimumRenderedHeight,
+  );
+  expect(sample.fallbackDraws, sample.label).toBe(0);
+  expect(sample.frameFallbacks, sample.label).toBe(0);
+  expect(sample.missingFrameFallbacks, sample.label).toBe(0);
+}
+
 test("loads production art, bounded VFX, compact HUD, and gesture-gated persistent audio", async ({
   page,
 }) => {
@@ -340,4 +401,79 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   expect(pageErrors).toEqual([]);
   expect(failedRequests).toEqual([]);
   expect(errorResponses).toEqual([]);
+});
+
+test("keeps every representative player state readable at 768x600", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  const consoleErrors: string[] = [];
+  const pageErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") consoleErrors.push(message.text());
+  });
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  await page.setViewportSize({ width: 768, height: 600 });
+  await page.goto("/?seed=gate-six-player-scale&debug=1");
+  await expect(page.locator("#game-shell")).toHaveAttribute(
+    "data-game-ready",
+    "true",
+  );
+  await page.evaluate(() => window.__FREE_SKI_DEBUG__?.setVisible(false));
+
+  const samples: PlayerScaleSample[] = [];
+  await page.waitForFunction(
+    () =>
+      window.__FREE_SKI__?.player.motion === "grounded" &&
+      window.__FREE_SKI__?.art.playerFrame === "player/downhill",
+  );
+  samples.push(await playerScaleSample(page, "grounded"));
+  await screenshot(page, "player-grounded-768x600.png");
+
+  await page.keyboard.press("Space");
+  await page.waitForFunction(
+    () =>
+      window.__FREE_SKI__?.player.motion === "airborne" &&
+      (window.__FREE_SKI__?.player.airHeight ?? 0) > 0.35,
+  );
+  samples.push(await playerScaleSample(page, "manual-airborne"));
+  await screenshot(page, "player-airborne-768x600.png");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.motion === "grounded",
+  );
+
+  const staged = await page.evaluate(() =>
+    window.__FREE_SKI_DEBUG__?.stageInteractionScenario("crash-recovery"),
+  );
+  expect(staged).toBe(true);
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.motion === "crashed",
+  );
+  samples.push(await playerScaleSample(page, "crashed"));
+  await screenshot(page, "player-crashed-768x600.png");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.motion === "recovering",
+  );
+  samples.push(await playerScaleSample(page, "recovering"));
+  await screenshot(page, "player-recovering-768x600.png");
+
+  for (const sample of samples) expectReadablePlayer(sample);
+  expect(samples.map((sample) => sample.motion)).toEqual([
+    "grounded",
+    "airborne",
+    "crashed",
+    "recovering",
+  ]);
+  expect(samples.map((sample) => sample.frame)).toEqual([
+    "player/downhill",
+    "player/air-neutral",
+    "player/wipeout",
+    "player/landing-crouch",
+  ]);
+  const matrixPath = process.env.FREESKI_GATE6_PLAYER_MATRIX;
+  if (matrixPath)
+    writeFileSync(matrixPath, `${JSON.stringify(samples, null, 2)}\n`);
+  expect(consoleErrors).toEqual([]);
+  expect(pageErrors).toEqual([]);
 });
