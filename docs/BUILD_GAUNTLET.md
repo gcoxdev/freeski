@@ -25,7 +25,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
 | Gate 5 — Living slope and Yeti     |                          2 | PASS                | `9e23730` |
 | Gate 6 — Art, VFX, UI and audio    |                          3 | PASS                | `dcdbf9a` |
-| Gate 7 — Release candidate         |                          1 | FAIL                | `421aab1` |
+| Gate 7 — Release candidate         |                          2 | PASS                | `ad5562e` |
 
 No gate is accepted by this baseline entry. Only a fresh judge verdict recorded below may change a gate to PASS.
 
@@ -176,3 +176,17 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Verified behavior: the fresh 20-minute soak passed all three modes, 2,100.253 m streaming/Yeti/reset, bounded heap/pools/cache/replay/audio, lifecycle recovery, post-soak input and zero error/fallback requirements.
 - Required remediation: make the dedicated production performance profile pass every unchanged threshold consistently. With a valid 60.00 FPS host calibration, the judge measured 56.52 FPS average, 23.34 ms p95, 6.50% long frames and 34.99 ms p99 against the required `≤34 ms`; because that mandatory matrix is red, G7.8 also fails.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-7/attempt-1/judge-verdict.json`
+
+### Gate 7 — attempt 2
+
+- Candidate revision: `ad5562e2ba43f17e636814ee8e2801e29536d5cb`
+- Evidence commit: `38842cb1b4babdcb7238753f0195c2db48cde247`
+- Judge isolation: new fresh context with no inherited turns, detached candidate worktree, read-only source authority
+- Independent verdict: **PASS**
+- Confidence: `0.99`
+- Criteria: G7.1–G7.8 all PASS; no failures or blockers
+- Independent checks: exact revision/scope and unchanged-policy audits, locked install, formatting, typecheck, lint, 107 unit tests, 112-frame atlas and clean-room audits, production build, complete 16/16 functional Chromium suite, five valid calibrated production-performance samples, 5/5 release matrix, 2/2 presentation matrix, desktop/minimum/touch/accessibility visual inspection, and a fresh exact-duration soak
+- Performance repair verified: four dedicated samples plus the production-matrix sample all calibrated at 60.00 FPS and held 60.00 game FPS, 16.67 ms p95, 16.68 ms p99, zero rolling long frames, bounded pools, and zero fallback/error/debt failures under policy byte-identical to attempt 1.
+- Soak verified: fresh measurement ran `1,200,019 ms` with 40 samples, all three modes, 2,100.253 m/33 rows, bottom Yeti/reset, resize/visibility/focus recovery, bounded heap/pools/cache/replay/audio, responsive post-soak input, and zero errors, missing chunks, blockers, or fallbacks.
+- Non-blocking notes: the performance profile remains a disclosed Chromium/Canvas2D proxy rather than physical integrated-GPU certification; Chromium is the independently certified browser; Phaser's production chunk-size advisory remains; replay export has no playback UI; and the clean-room audit is engineering evidence, not a legal opinion.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-7/attempt-2/judge-verdict.json`

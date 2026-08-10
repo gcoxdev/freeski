@@ -1,0 +1,161 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_7",
+  "attempt": 2,
+  "candidate_revision": "ad5562e2ba43f17e636814ee8e2801e29536d5cb",
+  "criteria": [
+    {
+      "id": "G7.1",
+      "result": "PASS",
+      "evidence": [
+        "Source inspection of src/input/actions.ts, src/input/browserInput.ts, src/input/browserInput.test.ts, and src/render/scenes/AlpineScene.ts confirmed one injectable 14-action abstraction for keyboard, standard gamepad, and touch, with held/edge aggregation and analog dead-zone handling.",
+        "npm test passed 107 tests across 21 files, including action mapping and aggregation coverage.",
+        "npm run test:e2e -- --workers=1 passed 16 applicable tests with 2 policy skips, including keyboard, gamepad, touch, pointer, interaction, mode, and player-state scenarios.",
+        "Independent 768x600 production inspection found all 14 touch actions labelled, at least 48x48 CSS pixels, horizontally contained, and clear of the footer."
+      ],
+      "notes": "All supported input devices feed the common ActionFrame.player path without device-specific simulation changes."
+    },
+    {
+      "id": "G7.2",
+      "result": "PASS",
+      "evidence": [
+        "Source inspection of settings persistence, accessibility controls, impact presentation, VFX, audio, Yeti presentation, and reduced-motion CSS confirmed persisted reduced motion, screen shake, impact flash, volume, and Gentle Yeti controls.",
+        "Production release tests passed accessibility persistence and verified reduced-motion and Gentle Yeti behavior.",
+        "Independent production inspection confirmed a labelled modal dialog with all five settings, initial close-button focus, visible focus styling, contained Tab navigation, and no clipping at 768x600.",
+        "Independent bright/dark and player-state captures showed readable presentation without missing-frame, capacity, or fallback rendering."
+      ],
+      "notes": "Settings materially reduce motion, shake, flash, and Yeti presentation while leaving the core simulation intact."
+    },
+    {
+      "id": "G7.3",
+      "result": "PASS",
+      "evidence": [
+        "Source and unit-test inspection confirmed AutomaticPauseController tracks overlapping blur, visibility, and settings reasons without overriding an explicit player pause, and releases input plus resets the fixed-step clock on lifecycle transitions.",
+        "Production release lifecycle tests passed pause, focus, visibility, resize, and settings persistence scenarios.",
+        "The fresh soak exercised 7 resizes plus repeated blur/focus and hidden/visible cycles; final state was visible, focused, autoPaused false, with no remaining pause reasons.",
+        "Post-soak input moved worldX from 0 to 0.009444444444444445 and was reported responsive."
+      ],
+      "notes": "Lifecycle transitions recover cleanly without stuck input, accidental resume, or accumulated fixed-step debt."
+    },
+    {
+      "id": "G7.4",
+      "result": "PASS",
+      "evidence": [
+        "Four fresh dedicated production performance runs and one fresh production-matrix run produced five valid calibrated samples; no run was discarded.",
+        "Every sample calibrated at 60.00 FPS and measured 600/600 game frames at 60.00 average FPS, p95 16.67 ms, p99 16.68 ms, maximum 16.68 ms, rolling long-frame ratio 0, and droppedSeconds 0.",
+        "Every sample remained bounded at 21/22 actors, 80/512 pooled sprites, 4/56 VFX effects, and 15/48 VFX tracks, with zero missing world chunks, art fallbacks, console errors, or page errors.",
+        "The disclosed browser profile is a 768x600 Canvas2D Chromium stress proxy and explicitly does not claim physical-GPU certification; the performance policy is byte-identical to the prior candidate."
+      ],
+      "notes": "All valid performance samples passed the unchanged policy, including calibration, sustained frame-time, bounded-resource, and error assertions."
+    },
+    {
+      "id": "G7.5",
+      "result": "PASS",
+      "evidence": [
+        "Source inspection of ReplayRecorder confirmed format freeski-replay-v1, seed and generator metadata, normalized fixed-step action frames, a 7200-frame capacity, and explicit dropped-frame accounting.",
+        "Unit tests replayed recorded action frames through PlayerSimulation and produced identical deterministic results.",
+        "Production release tests passed the live replay-schema check.",
+        "The 20-minute soak ended with exactly 7200 retained frames, 64940 dropped frames, firstFixedStep 64941, lastFixedStep 72140, seed gate-seven-soak, generator freeski-world-v1, and digest 07dc2bd9."
+      ],
+      "notes": "Replay export is bounded, versioned, seeded, complete about truncation, and deterministically consumable."
+    },
+    {
+      "id": "G7.6",
+      "result": "PASS",
+      "evidence": [
+        "npm run test:e2e -- --workers=1 passed all 16 applicable functional scenarios, including baseline play, minimum viewport, all controls, interactions and secrets, living slope and Yeti, all modes and records, player states, deterministic world generation, bottom-Yeti reset, and a 2100-meter descent.",
+        "The production release matrix passed 5/5 tests covering presentation, all input families, accessibility and lifecycle persistence, performance, and the 2100-meter bottom-Yeti/reset flow.",
+        "Independent presentation tests passed 2/2 and captured bright/dark desktop and 768x600 views plus grounded, airborne, crashed, and recovering states.",
+        "Visual inspection found coherent hierarchy, readable sprites, stable anchors, no opaque sprite boxes or chroma fringe, no missing-frame fallback, and no HUD or footer collision."
+      ],
+      "notes": "The integrated release flow remains playable, visually legible, deterministic, and stable across modes, states, viewport sizes, and long descent."
+    },
+    {
+      "id": "G7.7",
+      "result": "PASS",
+      "evidence": [
+        "npm run audit:clean-room -- --output /tmp/gate7-attempt2-judge-clean-room.json passed across 78 files with zero findings and all provenance declarations present.",
+        "Independent tracked-file, extension, identifier, and source scans found no original SkiFree executable, bitmap, source-code, Windows-resource, or named-author artifacts in the shipping scope.",
+        "The sprite concepts, chroma sources, atlas PNG, atlas JSON, and atlas metadata hashes matched the previously accepted Gate 6 artifacts, and the candidate has no asset changes from the clean-room art baseline.",
+        "npm run assets:check passed 112 frames with required padding and extrusion, transparent corners, zero geometry or overlap mismatch, and a magenta ratio of 0.00000165."
+      ],
+      "notes": "The defined static and process clean-room scope passes. This is engineering evidence rather than a legal opinion or an exhaustive comparison against every historical binary corpus."
+    },
+    {
+      "id": "G7.8",
+      "result": "PASS",
+      "evidence": [
+        "The latest authoritative prerequisite verdicts are PASS with empty failures and blockers: Gate 0 attempt 1, Gate 1 attempt 1, Gate 2 attempt 2, Gate 3 attempt 1, Gate 4 attempt 1, Gate 5 attempt 2, and Gate 6 attempt 3.",
+        "README inspection confirmed setup, controls, accessibility, replay, test, performance-proxy, clean-room, and release limitations documentation.",
+        "Fresh qualification passed format, lint, 107 unit tests, typecheck, production build, asset validation, clean-room audit, functional E2E, production release E2E, presentation E2E, five valid performance samples, and the exact-duration soak.",
+        "No target-gate P0 or P1 defect, console error, page error, request failure, missing chunk, resource overflow, or rendering fallback was found."
+      ],
+      "notes": "All prerequisite gates remain accepted and every current release qualification independently rerun by this judge is green."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Verified detached candidate identity, ancestry, tree, status, and diff scope.",
+      "result": "HEAD ad5562e2ba43f17e636814ee8e2801e29536d5cb; parent 456412cf7efbd2ca2bcf0c7e51c7bdd2dc3a5705; tree 174b93c3ee20514214e39a18301de6a810535a7c; only the supplied packet is untracked; tracked and cached worktrees are clean; diff-check passed."
+    },
+    {
+      "command_or_action": "Read authoritative gauntlet protocol, build-gate criteria, research/design brief, README, prerequisite verdicts, candidate source, tests, and untrusted submission packet.",
+      "result": "Gate requirements, prerequisite state, candidate scope, and executor claims were independently reconciled."
+    },
+    {
+      "command_or_action": "Applied the graphify codebase-analysis skill routing check.",
+      "result": "No graphify-out graph existed; graph generation would have mutated the frozen candidate, so the judge used direct read-only source and call-site inspection."
+    },
+    {
+      "command_or_action": "npm ci",
+      "result": "PASS; locked dependency installation completed with 164 packages."
+    },
+    {
+      "command_or_action": "npm run format:check; npm run lint; npm test; npm run typecheck; npm run build",
+      "result": "PASS; 21 test files and 107 unit tests passed. Production build completed with only the disclosed bundle-size advisory."
+    },
+    {
+      "command_or_action": "npm run assets:check; npm run audit:clean-room -- --output /tmp/gate7-attempt2-judge-clean-room.json",
+      "result": "PASS; 112 atlas frames validated and the 78-file clean-room audit reported zero findings."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --workers=1",
+      "result": "PASS in 2.7 minutes; 16 applicable tests passed and 2 opt-in policy tests were skipped."
+    },
+    {
+      "command_or_action": "Four sequential FREESKI_GATE7_PERFORMANCE=/tmp/gate7-attempt2-judge-performance-0N.json npm run test:e2e:production -- tests/e2e/performance.spec.ts runs",
+      "result": "PASS; four of four valid calibrated samples met every unchanged performance threshold, with no discarded or failing valid run."
+    },
+    {
+      "command_or_action": "FREESKI_GATE7_PERFORMANCE=/tmp/gate7-attempt2-judge-production-matrix.json npm run test:e2e:production -- tests/e2e/performance.spec.ts tests/e2e/release.spec.ts",
+      "result": "PASS; 5/5 tests passed and the additional calibrated performance sample met all thresholds."
+    },
+    {
+      "command_or_action": "Initial npm run test:soak -- --evidence /tmp/gate7-attempt2-judge-soak.json under the default network sandbox",
+      "result": "INFRASTRUCTURE_INVALID; the preview server could not bind before Playwright began, so no measurement, report, or product assertion was produced. The soak was restarted from zero after localhost execution was authorized."
+    },
+    {
+      "command_or_action": "npm run test:soak -- --evidence /tmp/gate7-attempt2-judge-soak.json",
+      "result": "PASS; fresh authoritative measurement ran exactly 1200019 ms with 40 samples, reached 2100.2526 meters, had zero blockers, missing chunks, request failures, console errors, or page errors, remained bounded, and passed post-soak input."
+    },
+    {
+      "command_or_action": "FREESKI_GATE6_EVIDENCE_DIR=/tmp/gate7-attempt2-judge-visuals FREESKI_GATE6_TELEMETRY=/tmp/gate7-attempt2-judge-presentation.json FREESKI_GATE6_PLAYER_MATRIX=/tmp/gate7-attempt2-judge-player-matrix.json npm run test:e2e -- tests/e2e/presentation.spec.ts --workers=1",
+      "result": "PASS; 2/2 presentation tests passed, all four player states rendered at or above 48 pixels, stress rendering stayed within 202/512 sprites, and fallback counters remained zero."
+    },
+    {
+      "command_or_action": "Independent production Playwright inspection of touch controls and accessibility semantics at 768x600, followed by direct screenshot inspection using the current Web Interface Guidelines.",
+      "result": "PASS; all 14 touch actions were labelled and at least 48x48, the modal was correctly named and described with contained keyboard focus, and no clipping, overflow, overlap, HTTP failure, console error, page error, or request failure occurred."
+    },
+    {
+      "command_or_action": "Independent source-integrity, asset-hash, performance-policy, and prerequisite-verdict comparison.",
+      "result": "PASS; original-resource indicators were absent, accepted art hashes were unchanged, performance and soak policies were unchanged, and all seven prerequisite verdicts remained PASS."
+    },
+    {
+      "command_or_action": "Final candidate integrity and targeted host-process audit.",
+      "result": "PASS; revision, parent, tree, diff, and status remained unchanged, and no preview or Playwright process tied to the detached candidate remained running."
+    }
+  ],
+  "confidence": 0.99
+}
