@@ -1,0 +1,165 @@
+{
+  "verdict": "PASS",
+  "gate": "GATE_3",
+  "attempt": 1,
+  "candidate_revision": "9472d8caff965509e77f7833e2b8566b5b7d80fd",
+  "criteria": [
+    {
+      "id": "G3.1",
+      "result": "PASS",
+      "evidence": [
+        "src/world/interactionCatalog.ts:6 defines immutable footprint, clearanceHeight and presentation-only spriteBounds metadata for all generated object kinds plus lift tower and chairlift.",
+        "src/world/generator.ts:161 attaches catalog interaction metadata to generated immutable objects.",
+        "src/simulation/slopeInteractions.ts:174 computes collisions solely from circular gameplay footprints; spriteBounds is never consulted.",
+        "src/world/interactionCatalog.test.ts:23 verifies complete immutable metadata for all 12 generated/lift kinds and independence from sprite dimensions.",
+        "Fresh 768x600 debug screenshot /tmp/freeski-g3-judge-debug-768.png visibly showed small footprint circles and clearance stems independent of rendered silhouettes."
+      ],
+      "notes": "Every generated and lift object has explicit gameplay geometry separate from presentation bounds, and collision resolution uses only that geometry."
+    },
+    {
+      "id": "G3.2",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/slopeInteractions.ts:244 implements small/large bump hops; :268 ramp launches; :289 mogul slowdown versus diagonal cutting; :355 airborne clearance; :406 blocking crashes.",
+        "src/simulation/player.ts:397 applies aerial control and rotations, while :438 wraps completed rotations and accepts landings within the 0.48-radian landing cone.",
+        "src/simulation/slopeInteractions.test.ts:59-194 covers both bump sizes, mogul slow/cut, ramp launch, grounded rock/stump/tree/lift/beginner crashes, airborne rock/stump/tree/lift clears, and recovery.",
+        "Fresh unstaged keyboard play naturally collided with lift-tower:1 at approximately (-7.01, 62.40), producing a crash with clearanceHeight 2.6 and paired feedback.",
+        "Fresh unstaged default descent naturally launched from three generated ramps and recorded three ramp-takeoff events and two clean landings by approximately 400 m."
+      ],
+      "notes": "Terrain launches, speed effects, blocking collisions, air clearance and forgiving landings work in pure simulation and normal collision-enabled gameplay."
+    },
+    {
+      "id": "G3.3",
+      "result": "PASS",
+      "evidence": [
+        "src/input/actions.ts:27 maps Q/E to spin-left/right and Z/X to back/front flip.",
+        "src/simulation/player.ts:409 accumulates independent spin and pitch rotations.",
+        "src/simulation/slopeInteractions.ts:492 names completed rotations as spin-left-360, spin-right-360, back-flip or front-flip.",
+        "src/simulation/style.ts:18 retains classic tuning anchors; :30 defines modern once-per-event awards; :61 defaults to modern and :72 deduplicates event identities.",
+        "src/simulation/style.test.ts:8 verifies modern default deduplication, classic anchors and reset behavior.",
+        "Fresh staged browser play completed SPIN RIGHT 360 exactly once, landed cleanly and produced 25 + 150 + 40 Style for ramp, trick and landing."
+      ],
+      "notes": "Named spins/flips and the approved modern event-based default are implemented with retained classic anchors."
+    },
+    {
+      "id": "G3.4",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/slopeInteractions.ts:199 implements mushroom consumption/jump; :216 dog knock/yellow snow; :314 dead-tree ignition and burning clear; :377 reverse stump transformation; :394 walking-tree awakening/lateral delta.",
+        "src/simulation/slopeInteractions.test.ts:236-316 independently covers stump-to-mushroom-to-jump, dead-tree ignition/clear, dog/yellow-snow penalty and walking-tree awakening.",
+        "Fresh staged browser telemetry showed scenario-stump transition to form=mushroom then consumed=true with +100 Style.",
+        "Fresh staged browser telemetry showed scenario-dead-tree transition from burning=true to burned=true/burning=false with +1000 Style.",
+        "Submitted mushroom-secret.png, burning-tree-ignited.png and burning-tree-cleared.png were independently inspected and matched the telemetry."
+      ],
+      "notes": "All required secrets are named, stateful, tested and represented through mutable deltas rather than generated-content mutation."
+    },
+    {
+      "id": "G3.5",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/slopeInteractions.ts:533 emits interaction telemetry and :575 always creates paired visual and audio feedback events.",
+        "src/render/scenes/AlpineScene.ts:806 renders recent visual feedback, while :1220 exposes visual labels and audio cue telemetry to the browser UI.",
+        "Fresh normal gameplay recorded paired ramp-glint/ramp-launch and landing-plume/landing-tone cues.",
+        "Fresh staged play recorded paired cues for the 360 trick, tree crash, mushroom creation/jump, fire ignition and burning-tree clear.",
+        "All direct browser checks reported zero console errors, page errors, failed requests or HTTP responses of 400 or higher."
+      ],
+      "notes": "Gate-appropriate visual effects and named audio events are paired for interactions; final audio assets remain correctly deferred to Gate 6."
+    },
+    {
+      "id": "G3.6",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/player.ts:93 sets recovery grace to 0.32 seconds.",
+        "src/simulation/player.ts:248 rejects crashes while crashed, recovering or grace-protected.",
+        "src/simulation/player.ts:478 starts the 320 ms grace window after recovery.",
+        "src/simulation/slopeInteractions.test.ts:179 confirms a second obstacle cannot chain-crash during grace and can crash after 0.34 seconds.",
+        "Fresh browser crash/recovery telemetry sampled the recovered player grounded with one crash and 0.2867 seconds of grace remaining."
+      ],
+      "notes": "Recovery includes the required 320 ms collision-invulnerability/input-grace window and a deterministic chain-crash regression test."
+    },
+    {
+      "id": "G3.7",
+      "result": "PASS",
+      "evidence": [
+        "Independent npm test completed 53/53 tests across 9 files, including the collision outcome, trick, scoring, secret, immutability and geometry suites.",
+        "Independent npm run test:e2e -- --project=chromium completed 7/7 tests, including ramp trick, crash/recovery, mushroom, burning tree, earlier Gate 1 controls, Gate 2 streaming and the 2100 m audit.",
+        "Fresh independent staged browser play reproduced ramp 360/clean landing, crash/recovery, mushroom creation/jump and burning-tree ignition/clear.",
+        "Fresh default gameplay used trainingMode=false and scenario=none, naturally exercised generated ramps and a classic lift-tower crash.",
+        "src/simulation/slopeInteractions.test.ts:156 proves a 100x100 sprite with a non-overlapping 0.1 m footprint does not collide.",
+        "Source search found no rectangle, sprite-bounds or Phaser collision dependency in slope collision resolution.",
+        "src/world/worldGeneration.test.ts:191 verifies frozen generated truth and separate ChunkDeltaStore mutation; :204 verifies simulation/world contain no browser, Phaser or ambient Math.random dependency.",
+        "Submitted screenshots ramp-trick.png, crash-impact.png, mushroom-secret.png, burning-tree-ignited.png and burning-tree-cleared.png plus two fresh screenshots were independently inspected."
+      ],
+      "notes": "Coverage, browser demonstrations, default-route behavior, regression checks and source inspection collectively satisfy the complete Gate 3 acceptance requirement."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "git rev-parse HEAD; git status --short; compare c101485facc92f73f2c50b948efe834c87ecbc3a..9472d8caff965509e77f7833e2b8566b5b7d80fd",
+      "result": "Exact candidate revision confirmed; frozen worktree remained clean; diff check reported no whitespace errors."
+    },
+    {
+      "command_or_action": "Read docs/GAUNTLET_LOOP_PROMPT.md, README.md, docs/SKIFREE_RESEARCH_AND_DESIGN.md, assets/sprite-sheets/README.md and manifest.json completely",
+      "result": "Authoritative collision, air, trick, scoring, secret, recovery, architecture and evidence requirements established."
+    },
+    {
+      "command_or_action": "Validate external submission.json and sibling evidence",
+      "result": "Revision/base matched; all declared reports, raw outputs and five 1280x720 screenshots existed and were readable."
+    },
+    {
+      "command_or_action": "npm ci",
+      "result": "Exit 0; 164 packages installed in the frozen /tmp candidate."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "Exit 0; all matched files use Prettier formatting."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "Exit 0."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "Exit 0; 9 test files and 53 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "Exit 0; Vite production build completed. Only the disclosed Phaser chunk-size advisory appeared."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- --project=chromium",
+      "result": "Exit 0; all 7 Chromium tests passed in 45.3 seconds, including 768x600, Gate 1 controls, Gate 3 sequences and 2100 m world audit."
+    },
+    {
+      "command_or_action": "Direct Chromium default-route desktop play at 1280x800 with no training/debug scenario",
+      "result": "trainingMode=false and scenario=none; three natural generated-ramp launches, two clean landings, 25 footprint hits, modern Style 155, and no console/page/network/HTTP errors."
+    },
+    {
+      "command_or_action": "Direct Chromium unstaged keyboard route into the classic lift",
+      "result": "Natural collision with lift-tower:1 produced one crash, a 2.6 m clearance record, impact-burst visual cue and obstacle-crash audio cue."
+    },
+    {
+      "command_or_action": "Direct Chromium at 768x600 with debug overlay",
+      "result": "Exact 768x600 layout with no overflow; canvas and HUD remained visible; footprint/clearance overlay aligned with ground contacts rather than sprite rectangles; no browser/network errors."
+    },
+    {
+      "command_or_action": "Fresh direct Chromium staged ramp, crash, mushroom and burning-tree playthrough",
+      "result": "All four required sequences reproduced with expected player states, immutable-content deltas, Style awards, paired feedback and zero console/page/request/HTTP errors."
+    },
+    {
+      "command_or_action": "Inspect all submitted screenshots and fresh /tmp screenshots at original resolution",
+      "result": "All seven images were coherent and matched their telemetry; debug geometry was visibly independent from rendered object extents."
+    },
+    {
+      "command_or_action": "Search training-mode usage and pure-module dependencies",
+      "result": "training=1 appears only in two legacy deterministic control/pointer E2E routes and is false by default; collision-enabled default play was independently verified. Simulation/world contain no Phaser, browser globals or ambient Math.random."
+    }
+  ],
+  "confidence": 0.995
+}
