@@ -81,6 +81,7 @@ import { CHUNK_SIZE_METERS, type WorldChunk } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
 import {
   PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
+  playerAtlasFrame,
   playerPresentationScale,
 } from "../playerPresentation";
 import {
@@ -112,7 +113,6 @@ const EMPTY_INTERACTIVE_OBJECTS: readonly InteractiveWorldObject[] =
 
 const COLORS = {
   blueSuit: 0x1d5b85,
-  glacier: 0xdbe9e9,
   glacierShadow: 0xc3dadc,
   ink: 0x102933,
   powder: 0xf7f9f5,
@@ -289,7 +289,7 @@ export class AlpineScene extends Phaser.Scene {
     );
 
     const search = new URLSearchParams(window.location.search);
-    const pointerFromUrl = search.get("pointer") === "1";
+    const pointerFromUrl = search.get("pointer") !== "0";
     const touchFromUrl = search.get("touch") === "1";
     const coarsePointer =
       window.matchMedia("(pointer: coarse)").matches &&
@@ -739,28 +739,10 @@ export class AlpineScene extends Phaser.Scene {
     const height = this.scale.height;
     const anchorY = height * PLAYER_SCREEN_RATIO;
     this.background.clear();
-    this.background.fillStyle(COLORS.glacier);
-    this.background.fillRect(0, 0, width, height);
-
     this.background.fillStyle(COLORS.powder);
-    this.background.fillTriangle(0, 0, width * 0.72, 0, 0, height);
-    this.background.fillTriangle(
-      width * 0.13,
-      height,
-      width,
-      height * 0.08,
-      width,
-      height,
-    );
-    this.background.fillStyle(COLORS.glacierShadow, 0.28);
-    this.background.fillTriangle(
-      width * 0.76,
-      0,
-      width,
-      0,
-      width,
-      height * 0.22,
-    );
+    this.background.fillRect(0, 0, width, height);
+    this.background.fillStyle(COLORS.glacierShadow, 0.08);
+    this.background.fillRect(0, 0, width, Math.min(72, height * 0.1));
 
     const contourSpacing = 76;
     const verticalOffset = -(
@@ -1188,7 +1170,6 @@ export class AlpineScene extends Phaser.Scene {
     this.drawLivingSlope(player, width, height);
     this.drawYetis(player, width, height);
     this.drawYetiBoundary(player, width, height);
-    this.drawInteractionFeedback(player);
     if (this.debugVisible) {
       this.drawWorldDiagnostics(player, width, height);
       this.drawCollisionFootprints(player, width, height);
@@ -1609,13 +1590,13 @@ export class AlpineScene extends Phaser.Scene {
       Partial<Record<InteractiveWorldObject["type"], number>>
     > = {
       beginner: 48,
-      "bump-large": 22,
-      "bump-small": 14,
+      "bump-large": 40,
+      "bump-small": 28,
       chairlift: 46,
       dog: 30,
       "lift-tower": 84,
-      mogul: 28,
-      ramp: 38,
+      mogul: 52,
+      ramp: 58,
       rock: 31,
       stump: 27,
       tree: Math.max(56, object.interaction.spriteBounds.height * 8.5),
@@ -1731,47 +1712,6 @@ export class AlpineScene extends Phaser.Scene {
     }
   }
 
-  private drawInteractionFeedback(player: PlayerSnapshot): void {
-    if (!this.background) return;
-    const recent = this.feedbackEvents.filter(
-      (event) =>
-        event.kind === "visual" &&
-        player.simulationSeconds - event.atSeconds <= FEEDBACK_VISIBLE_SECONDS,
-    );
-    for (const [index, event] of recent.entries()) {
-      const object = this.getInteractiveObjects().find(
-        (candidate) => candidate.id === event.objectId,
-      );
-      const delta = object
-        ? this.interactions.deltas.get(object.id)
-        : undefined;
-      const [x, y] = object
-        ? this.toScreen(object.x + (delta?.offsetX ?? 0), object.y, player)
-        : [this.scale.width * 0.5, this.scale.height * PLAYER_SCREEN_RATIO];
-      const age = Math.max(0, player.simulationSeconds - event.atSeconds);
-      const progress = age / FEEDBACK_VISIBLE_SECONDS;
-      const color =
-        event.cue.includes("flame") || event.cue.includes("ember")
-          ? COLORS.signal
-          : event.cue.includes("secret") || event.cue.includes("yellow")
-            ? COLORS.skiYellow
-            : 0x3dbfa6;
-      this.background.lineStyle(3, color, Math.max(0, 0.85 - progress));
-      this.background.strokeCircle(x, y - 5, 12 + progress * 34 + index * 3);
-      for (let ray = 0; ray < 6; ray += 1) {
-        const angle = (ray / 6) * Math.PI * 2;
-        const inner = 8 + progress * 12;
-        const outer = inner + 8;
-        this.background.lineBetween(
-          x + Math.cos(angle) * inner,
-          y - 5 + Math.sin(angle) * inner,
-          x + Math.cos(angle) * outer,
-          y - 5 + Math.sin(angle) * outer,
-        );
-      }
-    }
-  }
-
   private toScreen(
     worldX: number,
     worldY: number,
@@ -1812,7 +1752,7 @@ export class AlpineScene extends Phaser.Scene {
     if (skier.x !== anchorX || skier.y !== anchorY - airOffset)
       skier.setPosition(anchorX, anchorY - airOffset);
     if (this.skier) {
-      const frameName = this.playerFrame(player);
+      const frameName = playerAtlasFrame(player);
       if (this.skier.frame.name !== frameName)
         this.skier.setTexture(PRODUCTION_ATLAS_KEY, frameName);
       const originY = player.motion === "airborne" ? 0.62 : 0.94;
@@ -1825,7 +1765,8 @@ export class AlpineScene extends Phaser.Scene {
           : velocityAngle + Math.PI * 0.55
         : this.skier
           ? player.motion === "airborne"
-            ? player.airTilt * 0.18
+            ? Math.atan2(Math.sin(player.airSpin), Math.cos(player.airSpin)) +
+              player.airTilt * 0.12
             : 0
           : velocityAngle +
             (player.motion === "airborne"
@@ -1853,29 +1794,6 @@ export class AlpineScene extends Phaser.Scene {
     }
     const alpha = player.motion === "recovering" ? 0.62 : 1;
     if (skier.alpha !== alpha) skier.setAlpha(alpha);
-  }
-
-  private playerFrame(player: Readonly<PlayerSnapshot>): string {
-    if (player.motion === "crashed") return "player/wipeout";
-    if (player.motion === "recovering") return "player/landing-crouch";
-    if (player.motion === "airborne") {
-      if (Math.abs(player.airPitch) > 0.42) {
-        const phase =
-          (Math.floor(Math.abs(player.airPitch) / (Math.PI / 2)) % 3) + 1;
-        return `player/${player.airPitch < 0 ? "back" : "front"}-flip-${phase}`;
-      }
-      if (Math.abs(player.airSpin) > 0.42)
-        return player.airSpin < 0 ? "player/spin-left" : "player/spin-right";
-      return "player/air-neutral";
-    }
-    if (player.heading === "brake")
-      return player.velocityX < 0
-        ? "player/hockey-stop-left"
-        : "player/hockey-stop-right";
-    if (player.heading === "traverse-left") return "player/carve-left-3";
-    if (player.heading === "traverse-right") return "player/carve-right-3";
-    if (player.heading === "tuck") return "player/tuck";
-    return `player/${player.heading}`;
   }
 
   private updateHud(player: PlayerSnapshot): void {
@@ -2362,7 +2280,10 @@ export class AlpineScene extends Phaser.Scene {
       if (outcome === "missed") {
         x = course.centerX + course.halfWidth + 3;
       } else {
-        const expectedDirection = marker.color === "red" ? 1 : -1;
+        const expectedDirection =
+          snapshot.courses[mode].markers[target - 1]?.expectedSide === "left"
+            ? -1
+            : 1;
         x = marker.x + expectedDirection * (outcome === "correct" ? 1.1 : -1.1);
       }
     }

@@ -2,15 +2,7 @@ import { CLASSIC_COURSES } from "./classicMountain";
 import type { GeneratedObjectType, WorldZone } from "./types";
 
 type WeightedObject = Readonly<{
-  type:
-    | "beginner"
-    | "bump"
-    | "dog"
-    | "mogul"
-    | "ramp"
-    | "rock-stump"
-    | "tree"
-    | "walking-tree";
+  type: "bump" | "mogul" | "ramp" | "rock-stump" | "tree";
   weight: number;
 }>;
 
@@ -18,17 +10,13 @@ export const SPAWN_PROFILES: Readonly<
   Record<WorldZone, readonly WeightedObject[]>
 > = Object.freeze({
   open: Object.freeze([
-    Object.freeze({ type: "walking-tree" as const, weight: 5 }),
     Object.freeze({ type: "tree" as const, weight: 45 }),
     Object.freeze({ type: "bump" as const, weight: 20 }),
     Object.freeze({ type: "mogul" as const, weight: 5 }),
     Object.freeze({ type: "rock-stump" as const, weight: 20 }),
     Object.freeze({ type: "ramp" as const, weight: 2 }),
-    Object.freeze({ type: "beginner" as const, weight: 2 }),
-    Object.freeze({ type: "dog" as const, weight: 1 }),
   ]),
   "free-style": Object.freeze([
-    Object.freeze({ type: "walking-tree" as const, weight: 2 }),
     Object.freeze({ type: "tree" as const, weight: 18 }),
     Object.freeze({ type: "bump" as const, weight: 30 }),
     Object.freeze({ type: "mogul" as const, weight: 10 }),
@@ -36,18 +24,17 @@ export const SPAWN_PROFILES: Readonly<
     Object.freeze({ type: "ramp" as const, weight: 20 }),
   ]),
   "tree-slalom": Object.freeze([
-    Object.freeze({ type: "tree" as const, weight: 63 }),
-    Object.freeze({ type: "dog" as const, weight: 1 }),
+    Object.freeze({ type: "tree" as const, weight: 1 }),
   ]),
   slalom: Object.freeze([Object.freeze({ type: "mogul" as const, weight: 1 })]),
 });
 
 export const ZONE_SPAWN_CHANCE: Readonly<Record<WorldZone, number>> =
   Object.freeze({
-    open: 0.54,
-    "free-style": 0.64,
-    "tree-slalom": 0.78,
-    slalom: 0.1,
+    open: 0.14,
+    "free-style": 0.25,
+    "tree-slalom": 0.32,
+    slalom: 0.04,
   });
 
 export function zoneAt(x: number, y: number): WorldZone {

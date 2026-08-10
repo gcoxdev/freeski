@@ -71,6 +71,68 @@ async function screenshot(page: Page, name: string): Promise<void> {
     await page.screenshot({ path: join(directory, name), fullPage: true });
 }
 
+async function loadNaturalCourse(page: Page): Promise<void> {
+  await page.goto("/?seed=classic-1991&training=1&pointer=0");
+  await expect(page.locator("#game-shell")).toHaveAttribute(
+    "data-game-ready",
+    "true",
+  );
+}
+
+test("starts every course and scores Slalom through normal player controls", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+
+  await loadNaturalCourse(page);
+  await page.keyboard.down("a");
+  await page.waitForFunction(
+    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -29,
+  );
+  await page.keyboard.up("a");
+  await page.keyboard.down("s");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.modes.snapshot.activeMode === "slalom",
+  );
+  await page.keyboard.up("s");
+  await page.keyboard.down("a");
+  await page.waitForFunction(
+    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -32,
+  );
+  await page.keyboard.up("a");
+  await page.keyboard.down("s");
+  await page.waitForFunction(
+    () =>
+      window.__FREE_SKI__?.modes.snapshot.courses.slalom.markers[0]?.state !==
+      "pending",
+  );
+  await page.keyboard.up("s");
+  expect(
+    await page.evaluate(
+      () => window.__FREE_SKI__!.modes.snapshot.courses.slalom.markers[0],
+    ),
+  ).toMatchObject({ expectedSide: "left", state: "correct" });
+
+  await loadNaturalCourse(page);
+  await page.keyboard.down("d");
+  await page.waitForFunction(
+    () => (window.__FREE_SKI__?.player.worldX ?? 0) > 25,
+  );
+  await page.keyboard.up("d");
+  await page.keyboard.down("s");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.modes.snapshot.activeMode === "tree-slalom",
+  );
+  await page.keyboard.up("s");
+
+  await loadNaturalCourse(page);
+  await page.keyboard.down("s");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.modes.snapshot.activeMode === "free-style",
+  );
+  await page.keyboard.up("s");
+});
+
 test("crosses real gates to finish all modes and reloads classic records", async ({
   page,
 }) => {

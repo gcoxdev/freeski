@@ -9,6 +9,7 @@ import {
   CLASSIC_YETI_TRIGGERS,
   blocksTreeSlalomRoute,
   classicOverlaySignature,
+  correctMarkerPassingX,
   treeSlalomRouteCenterX,
   TREE_SLALOM_ROUTE,
   TREE_SLALOM_ROUTE_WIDTH_METERS,
@@ -23,7 +24,7 @@ import {
 import { WorldGenerator } from "./generator";
 import { MountainStream } from "./mountainStream";
 import type { SeededRandom } from "./seed";
-import { SPAWN_PROFILES } from "./spawnProfiles";
+import { SPAWN_PROFILES, ZONE_SPAWN_CHANCE } from "./spawnProfiles";
 import type { GeneratedObject } from "./types";
 
 function collectObjects(
@@ -81,17 +82,30 @@ describe("classic mountain declarative overlays", () => {
     ]);
   });
 
-  it("keeps the researched zone weight tables exact", () => {
+  it("keeps terrain varied while leaving NPCs to the moving actor system", () => {
     expect(SPAWN_PROFILES.open.map((entry) => entry.weight)).toEqual([
-      5, 45, 20, 5, 20, 2, 2, 1,
+      45, 20, 5, 20, 2,
     ]);
     expect(SPAWN_PROFILES["free-style"].map((entry) => entry.weight)).toEqual([
-      2, 18, 30, 10, 20, 20,
+      18, 30, 10, 20, 20,
     ]);
-    expect(SPAWN_PROFILES["tree-slalom"].map((entry) => entry.weight)).toEqual([
-      63, 1,
+    expect(SPAWN_PROFILES["tree-slalom"]).toEqual([
+      { type: "tree", weight: 1 },
     ]);
     expect(SPAWN_PROFILES.slalom).toEqual([{ type: "mogul", weight: 1 }]);
+    expect(ZONE_SPAWN_CHANCE).toEqual({
+      "free-style": 0.25,
+      "tree-slalom": 0.32,
+      open: 0.14,
+      slalom: 0.04,
+    });
+    expect(
+      Object.values(SPAWN_PROFILES)
+        .flat()
+        .some((entry) =>
+          ["beginner", "dog", "walking-tree"].includes(entry.type),
+        ),
+    ).toBe(false);
   });
 });
 
@@ -192,13 +206,14 @@ describe("deterministic chunk generation", () => {
     expect(CORRIDOR_WIDTH_METERS).toBe(PLAYER_FOOTPRINT_WIDTH_METERS * 2.5);
   });
 
-  it("keeps a dense deterministic Tree Slalom population around a passable authored route", () => {
+  it("keeps a readable Tree Slalom population around a passable authored route", () => {
     const generator = new WorldGenerator("tree-route-proof");
     const objects = collectObjects(generator, 0, 0, 0, 16).filter(
       (object) => object.zone === "tree-slalom",
     );
     const trees = objects.filter((object) => object.type === "tree");
-    expect(trees.length).toBeGreaterThan(35);
+    expect(trees.length).toBeGreaterThanOrEqual(14);
+    expect(trees.length).toBeLessThanOrEqual(30);
     expect(
       objects.filter(
         (object) =>
@@ -212,7 +227,7 @@ describe("deterministic chunk generation", () => {
     );
     for (const marker of CLASSIC_COURSES[2]!.markers) {
       const center = treeSlalomRouteCenterX(marker.y);
-      expect(center).toBe(marker.x + (marker.color === "red" ? 1.25 : -1.25));
+      expect(center).toBe(correctMarkerPassingX(marker));
     }
   });
 

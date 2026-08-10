@@ -524,19 +524,20 @@ export class LivingSlopeSimulation {
         this.changeState(value, "knocked");
         this.emit("dog-hit", value);
       } else if (Math.abs(value.worldX - player.worldX) > 28) {
+        value.direction = value.worldX > player.worldX ? -1 : 1;
         this.changeState(
           value,
-          value.worldX > player.worldX ? "running-left" : "running-right",
+          value.direction < 0 ? "running-left" : "running-right",
         );
       }
     } else if (value.state === "knocked") {
       if (value.stateSeconds >= 0.65) this.changeState(value, "recovering");
     } else if (value.state === "recovering" && value.stateSeconds >= 0.72) {
+      value.direction = value.direction < 0 ? 1 : -1;
       this.changeState(
         value,
         value.direction < 0 ? "running-left" : "running-right",
       );
-      value.direction = value.direction < 0 ? 1 : -1;
       this.emit("dog-recovered", value);
     }
     value.worldX += value.velocityX * deltaSeconds;

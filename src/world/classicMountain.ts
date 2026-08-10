@@ -24,6 +24,21 @@ export interface ClassicCourse {
   readonly startGate: CourseGate;
 }
 
+export function markerExpectedSide(
+  marker: Pick<CourseMarker, "color">,
+): "left" | "right" {
+  return marker.color === "red" ? "left" : "right";
+}
+
+export function correctMarkerPassingX(
+  marker: Pick<CourseMarker, "color" | "x">,
+  offsetMeters = 1.25,
+): number {
+  return (
+    marker.x + (markerExpectedSide(marker) === "left" ? -1 : 1) * offsetMeters
+  );
+}
+
 function alternatingMarkers(
   count: number,
   firstY: number,
@@ -87,7 +102,7 @@ export const TREE_SLALOM_ROUTE = Object.freeze([
   Object.freeze({ x: TREE_SLALOM.centerX, y: TREE_SLALOM.startGate.y }),
   ...TREE_SLALOM.markers.map((marker) =>
     Object.freeze({
-      x: marker.x + (marker.color === "red" ? 1.25 : -1.25),
+      x: correctMarkerPassingX(marker),
       y: marker.y,
     }),
   ),

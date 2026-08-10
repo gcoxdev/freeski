@@ -1,5 +1,6 @@
 import {
   CLASSIC_COURSES,
+  markerExpectedSide,
   type ClassicCourse,
   type CourseMarker,
 } from "../world/classicMountain";
@@ -88,10 +89,6 @@ function isEventMode(course: ClassicCourse): course is ClassicCourse & {
   readonly id: EventModeId;
 } {
   return course.id !== "open";
-}
-
-function markerExpectedSide(marker: CourseMarker): "left" | "right" {
-  return marker.color === "red" ? "right" : "left";
 }
 
 function newRun(

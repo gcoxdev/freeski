@@ -91,12 +91,15 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
 
   const initial = await runtimeSnapshot(page);
   expect(initial.camera.playerScreenRatio).toBeCloseTo(0.35, 8);
-  expect(initial.settings.pointerSteeringEnabled).toBe(false);
+  expect(initial.settings.pointerSteeringEnabled).toBe(true);
   expect(initial.settings.trainingMode).toBe(true);
 
   await page.keyboard.down("a");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.heading === "carve-left-3",
+  );
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-3",
   );
   const afterLeft = await runtimeSnapshot(page);
   expect(afterLeft.player.heading).toBe("carve-left-3");
@@ -116,6 +119,9 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     () => window.__FREE_SKI__?.player.heading === "carve-right-3",
   );
   await page.waitForFunction(
+    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-2",
+  );
+  await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.velocityX ?? -1) > 0,
   );
   const rightwardStart = (await runtimeSnapshot(page)).player.worldX;
@@ -129,6 +135,9 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   await page.keyboard.down("w");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.heading === "uphill-right",
+  );
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.art.playerFrame === "player/hockey-stop-right",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.velocityY ?? 1) < 0,
@@ -152,6 +161,9 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   await page.keyboard.down("s");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.heading === "tuck",
+  );
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.art.playerFrame === "player/uphill-right",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.speedMetersPerSecond ?? 0) > 18,
@@ -290,10 +302,10 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     writeFileSync(telemetryPath, `${JSON.stringify(finalRuntime, null, 2)}\n`);
 });
 
-test("keeps pointer steering opt-in and click-to-jump functional", async ({
+test("keeps default pointer steering, opt-out, and click-to-jump functional", async ({
   page,
 }) => {
-  await page.goto("/?pointer=1&training=1");
+  await page.goto("/?training=1");
   await expect(page.locator("#pointer-toggle")).toHaveAttribute(
     "aria-pressed",
     "true",
@@ -321,5 +333,11 @@ test("keeps pointer steering opt-in and click-to-jump functional", async ({
   );
   expect((await runtimeSnapshot(page)).settings.pointerSteeringEnabled).toBe(
     false,
+  );
+
+  await page.goto("/?pointer=0&training=1");
+  await expect(page.locator("#pointer-toggle")).toHaveAttribute(
+    "aria-pressed",
+    "false",
   );
 });

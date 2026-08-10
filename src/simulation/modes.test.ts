@@ -69,7 +69,7 @@ describe("MountainModeSimulation diegetic lifecycle", () => {
     const simulation = new MountainModeSimulation();
     start(simulation, "slalom");
     const firstMarker = CLASSIC_COURSES[0]!.markers[0]!;
-    cross(simulation, firstMarker.x + 1, firstMarker.y, 2);
+    cross(simulation, firstMarker.x - 1, firstMarker.y, 2);
     const afterMarker = simulation.getSnapshot().courses.slalom;
     expect(afterMarker.markers[0]?.state).toBe("correct");
     simulation.syncPosition(position(100, 100, 3));
@@ -94,8 +94,8 @@ describe("timed marker events", () => {
     expect(course.lengthMeters).toBe(540);
     expect(course.markers).toHaveLength(24);
     const [red, blue, third] = course.markers;
-    cross(simulation, red!.x + 1, red!.y, 2);
-    cross(simulation, blue!.x + 1, blue!.y, 3);
+    cross(simulation, red!.x - 1, red!.y, 2);
+    cross(simulation, blue!.x - 1, blue!.y, 3);
     cross(simulation, course.centerX + course.halfWidth + 4, third!.y, 4);
     const run = simulation.getSnapshot().courses.slalom;
     expect(run.markers.slice(0, 3).map((marker) => marker.state)).toEqual([
@@ -117,8 +117,8 @@ describe("timed marker events", () => {
     const course = CLASSIC_COURSES.find((item) => item.id === "slalom")!;
     start(simulation, "slalom", 10);
     course.markers.forEach((marker, index) => {
-      const correctX = marker.x + (marker.color === "red" ? 1 : -1);
-      const x = index === 0 ? marker.x - 1 : correctX;
+      const correctX = marker.x + (marker.color === "red" ? -1 : 1);
+      const x = index === 0 ? marker.x + 1 : correctX;
       cross(simulation, x, marker.y, 11 + index);
     });
     cross(simulation, course.centerX, course.finishGate.y, 50);
@@ -145,7 +145,7 @@ describe("timed marker events", () => {
     course.markers.forEach((marker, index) =>
       cross(
         simulation,
-        marker.x + (marker.color === "red" ? 1 : -1),
+        marker.x + (marker.color === "red" ? -1 : 1),
         marker.y,
         2 + index,
       ),

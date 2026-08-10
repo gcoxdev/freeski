@@ -49,7 +49,7 @@ All gameplay devices feed the same engine-independent action layer. Keyboard bin
 | World debug         | G                        | Back                           |
 | Mute/unmute         | M or **SOUND**           | UI control                     |
 
-Optional pointer steering and click-to-jump are disabled by default. Enable them with **POINTER OFF** below the game or add `?pointer=1` to the URL. Gameplay shortcuts are ignored while a form control or editable element has focus.
+Pointer steering and click-to-jump are enabled by default. Disable them with **POINTER ON** below the game or add `?pointer=0` to the URL. Gameplay shortcuts are ignored while a form control or editable element has focus.
 
 ## Gameplay
 
@@ -60,6 +60,8 @@ The three ski-through events share the open mountain:
 - **Slalom:** 24 gates, five-second missed/wrong-side penalties, adjusted-time result.
 - **Tree Slalom:** 39 markers threaded through a wooded lane, with the same time/penalty rules.
 - **Free Style:** ramps and airborne trick input produce a style score before the finish.
+
+Ski through a labelled start gate to enter an event. Red arrow markers are passed on the left and blue arrow markers on the right; the HUD confirms clean, wrong-side, and missed crossings immediately.
 
 Results are stored locally as top-ten tables. The authored classic mountain and arbitrary generated seeds have separate record buckets. Leaving an event lane does not soft-lock or forcibly end open skiing.
 
@@ -73,7 +75,7 @@ Use `?seed=<text>` for a repeatable generated mountain. `classic-1991` selects t
 
 | Parameter      | Effect                                                      |
 | -------------- | ----------------------------------------------------------- |
-| `pointer=1`    | Enables pointer steering                                    |
+| `pointer=0`    | Disables default pointer steering                           |
 | `touch=1`      | Forces touch controls visible                               |
 | `debug=1`      | Opens the world diagnostics panel                           |
 | `training=1`   | Suppresses ordinary terrain collisions for controlled tests |

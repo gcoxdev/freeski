@@ -200,7 +200,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     statusLabelDepth: 90,
   });
   expect(activePresentation.art.playerRenderedHeight).toBeGreaterThanOrEqual(
-    48,
+    activePresentation.art.playerMinimumRenderedHeight,
   );
 
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -209,7 +209,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     window.__FREE_SKI_DEBUG__?.stageLivingScenario("chair-drop");
   });
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 196,
+    () => (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 72,
   );
   const stressPresentation = await page.evaluate(
     () => window.__FREE_SKI__!.art,
@@ -352,9 +352,13 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     missingFrameFallbacks: 0,
     statusLabelDepth: 90,
   });
-  expect(
-    await page.evaluate(() => window.__FREE_SKI__!.art.playerRenderedHeight),
-  ).toBeGreaterThanOrEqual(48);
+  const minimumPlayerPresentation = await page.evaluate(() => ({
+    minimum: window.__FREE_SKI__!.art.playerMinimumRenderedHeight,
+    rendered: window.__FREE_SKI__!.art.playerRenderedHeight,
+  }));
+  expect(minimumPlayerPresentation.rendered).toBeGreaterThanOrEqual(
+    minimumPlayerPresentation.minimum,
+  );
   await screenshot(page, "dark-snow-768x600.png");
 
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -467,7 +471,7 @@ test("keeps every representative player state readable at 768x600", async ({
   ]);
   expect(samples.map((sample) => sample.frame)).toEqual([
     "player/downhill",
-    "player/air-neutral",
+    "player/tuck",
     "player/wipeout",
     "player/landing-crouch",
   ]);

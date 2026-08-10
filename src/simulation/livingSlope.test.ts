@@ -125,10 +125,21 @@ describe("LivingSlopeSimulation", () => {
       simulation.getSnapshot().actors.find((value) => value.id === "dog-0")
         ?.state,
     ).toBe("knocked");
-    runFor(simulation, 1.5);
+    runFor(simulation, 1.5, { worldX: 100, worldY: 0 });
     expect(simulation.drainEvents().map((event) => event.type)).toContain(
       "dog-recovered",
     );
+    const recovered = simulation
+      .getSnapshot()
+      .actors.find((value) => value.id === "dog-0")!;
+    expect(recovered.state).toBe(
+      recovered.direction < 0 ? "running-left" : "running-right",
+    );
+    runFor(simulation, STEP, { worldX: 100, worldY: 0 });
+    const running = simulation
+      .getSnapshot()
+      .actors.find((value) => value.id === "dog-0")!;
+    expect(Math.sign(running.velocityX)).toBe(running.direction);
   });
 
   it("wakes a walking tree by proximity and moves it laterally before idling", () => {
