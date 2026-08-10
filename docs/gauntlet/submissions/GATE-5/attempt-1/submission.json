@@ -1,0 +1,107 @@
+{
+  "gate": "GATE_5",
+  "attempt": 1,
+  "candidate_revision": "e16fc2f965247cb73b20c74b00d96393fb401aac",
+  "base_revision": "fa7801b8d34a5ec970ea558a36c39c68576ad758",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/format-check.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE5_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-5/attempt-1/evidence FREESKI_GATE5_TELEMETRY=docs/gauntlet/submissions/GATE-5/attempt-1/evidence/living-yeti-telemetry.json npm run test:e2e -- tests/e2e/livingSlope.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/focused-browser.txt"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/e2e.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/living-yeti-telemetry.json",
+      "demonstrates": ["G5.1", "G5.2", "G5.3", "G5.4", "G5.5", "G5.6", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/living-population.png",
+      "demonstrates": ["G5.1", "G5.2", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/dog-hit-yellow-snow.png",
+      "demonstrates": ["G5.2", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/dog-chair-drop.png",
+      "demonstrates": ["G5.1", "G5.2", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/foreshadow-1900m.png",
+      "demonstrates": ["G5.6", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/bottom-chase.png",
+      "demonstrates": ["G5.3", "G5.4", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/turbo-evasion.png",
+      "demonstrates": ["G5.5", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/capture-pounce.png",
+      "demonstrates": ["G5.4", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/capture-chew.png",
+      "demonstrates": ["G5.4", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-1/evidence/post-capture-recovery-768x600.png",
+      "demonstrates": ["G5.4", "G5.7"]
+    }
+  ],
+  "known_limitations": [
+    "Gate 5 emits named interaction and Yeti audio cues, but original audio assets, playback and mute behavior are intentionally deferred to Gate 6.",
+    "The approved ultra-realistic concept sheets are not yet sliced into production atlases; Gate 5 continues to use temporary code-rendered presentation accepted by earlier gates.",
+    "Vite reports its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the production build succeeds."
+  ],
+  "executor_claimed_criteria": ["G5.1", "G5.2", "G5.3", "G5.4", "G5.5", "G5.6", "G5.7"]
+}
