@@ -21,6 +21,16 @@ import {
 } from "../../simulation/slopeInteractions";
 import type { StyleEvent } from "../../simulation/style";
 import {
+  LivingSlopeSimulation,
+  type LivingActorEvent,
+  type LivingActorSnapshot,
+} from "../../simulation/livingSlope";
+import {
+  YetiSimulation,
+  type YetiControllerSnapshot,
+  type YetiEvent,
+} from "../../simulation/yeti";
+import {
   MountainModeSimulation,
   type EventModeId,
   type MarkerState,
@@ -56,6 +66,7 @@ import type {
   CourseCrossingTarget,
   DescentAuditReport,
   FreeSkiRuntime,
+  GateFiveScenario,
   GateThreeScenario,
   TelemetrySample,
 } from "../runtimeBridge";
@@ -88,6 +99,8 @@ export class AlpineScene extends Phaser.Scene {
   private readonly simulation = new PlayerSimulation();
   private readonly interactions = new SlopeInteractionSimulation("modern");
   private readonly modes = new MountainModeSimulation();
+  private readonly livingSlope: LivingSlopeSimulation;
+  private readonly yeti = new YetiSimulation();
   private background?: Phaser.GameObjects.Graphics;
   private skier?: Phaser.GameObjects.Container;
   private skierShadow?: Phaser.GameObjects.Ellipse;
@@ -101,10 +114,18 @@ export class AlpineScene extends Phaser.Scene {
   private readonly feedbackEvents: FeedbackEvent[] = [];
   private readonly styleEvents: StyleEvent[] = [];
   private readonly modeEvents: ModeEvent[] = [];
+  private readonly livingEvents: LivingActorEvent[] = [];
+  private readonly yetiEvents: YetiEvent[] = [];
   private readonly samples: TelemetrySample[] = [];
   private scenario: GateThreeScenario = "none";
+  private livingScenario: GateFiveScenario = "none";
   private scenarioObjects: InteractiveWorldObject[] = [];
+  private readonly yellowSnowLocations = new Map<
+    string,
+    Readonly<{ x: number; y: number }>
+  >();
   private feedbackVisibleUntil = 0;
+  private feedbackPriorityUntil = 0;
   private trainingMode = false;
   private courseTestMode = false;
   private recordBook: RecordBook = emptyRecordBook();
@@ -123,6 +144,7 @@ export class AlpineScene extends Phaser.Scene {
     this.worldSeed = seed;
     this.generator = new WorldGenerator(seed);
     this.stream = new MountainStream(this.generator);
+    this.livingSlope = new LivingSlopeSimulation(seed);
   }
 
   create(): void {
@@ -193,6 +215,11 @@ export class AlpineScene extends Phaser.Scene {
         styleEvents: this.styleEvents,
       },
       lastInput: "none",
+      livingSlope: {
+        events: this.livingEvents,
+        scenario: this.livingScenario,
+        snapshot: this.livingSlope.getSnapshot(),
+      },
       modes: {
         events: this.modeEvents,
         records: this.recordBook,
@@ -231,6 +258,10 @@ export class AlpineScene extends Phaser.Scene {
         overlaySignature: hashSeed(classicOverlaySignature()).toString(16),
         visibleObjects: 0,
       },
+      yeti: {
+        events: this.yetiEvents,
+        snapshot: this.yeti.getSnapshot(player.worldY),
+      },
     };
     window.__FREE_SKI__ = this.runtime;
     window.__FREE_SKI_DEBUG__ = {
@@ -240,6 +271,7 @@ export class AlpineScene extends Phaser.Scene {
         this.stageInteractionScenario(scenario),
       stageCourseCrossing: (mode, target, outcome = "correct") =>
         this.stageCourseCrossing(mode, target, outcome),
+      stageLivingScenario: (scenario) => this.stageLivingScenario(scenario),
       setVisible: (visible) => this.setDebugVisible(visible),
     };
 
@@ -268,30 +300,52 @@ export class AlpineScene extends Phaser.Scene {
           this.simulation.reset();
           this.interactions.reset();
           this.modes.reset();
+          this.livingSlope.reset(this.worldSeed);
+          this.yeti.reset();
           this.scenario = "none";
+          this.livingScenario = "none";
           this.scenarioObjects = [];
+          this.yellowSnowLocations.clear();
         }
         if (actions.pausePressed) this.simulation.togglePause();
         if (actions.turboPressed) this.simulation.toggleTurbo();
         if (actions.debugPressed) this.setDebugVisible(!this.debugVisible);
-        this.simulation.step(actions.player, deltaSeconds);
-        this.interactions.step(
-          this.simulation,
-          actions.player,
-          this.getInteractiveObjects(),
-          deltaSeconds,
+        const captureBeforeStep = this.yeti.getSnapshot(
+          this.simulation.getSnapshot().worldY,
         );
+        const playerInput = captureBeforeStep.capturedBy
+          ? NEUTRAL_PLAYER_INPUT
+          : actions.player;
+        this.simulation.step(playerInput, deltaSeconds);
+        if (captureBeforeStep.playerRemoved)
+          this.simulation.applySpeedMultiplier(0);
+        if (!captureBeforeStep.capturedBy) {
+          this.interactions.step(
+            this.simulation,
+            actions.player,
+            this.getInteractiveObjects(),
+            deltaSeconds,
+          );
+        }
         const player = this.simulation.getSnapshot();
-        this.modes.step({
-          simulationSeconds: player.simulationSeconds,
-          style: this.interactions.getSnapshot().style,
-          worldX: player.worldX,
-          worldY: player.worldY,
-        });
+        if (!captureBeforeStep.capturedBy) {
+          this.modes.step({
+            simulationSeconds: player.simulationSeconds,
+            style: this.interactions.getSnapshot().style,
+            worldX: player.worldX,
+            worldY: player.worldY,
+          });
+        }
+        this.livingSlope.step(player, deltaSeconds);
+        this.yeti.step(player, deltaSeconds);
         this.fixedSteps += 1;
         this.capturePlayerEvents();
         this.captureInteractionEvents();
         this.captureModeEvents();
+        this.captureLivingEvents();
+        this.captureYetiEvents();
+        if (this.yeti.getSnapshot(player.worldY).resetRequested)
+          this.resetAfterYetiCapture();
         if (this.fixedSteps % 6 === 0) this.captureSample();
       },
     );
@@ -420,6 +474,7 @@ export class AlpineScene extends Phaser.Scene {
     }
 
     this.drawGroomerTracks(player, anchorY, height);
+    this.drawForeshadow(player, width, height);
     this.drawWorld(player, width, height);
     this.background.fillStyle(COLORS.signal, 0.9);
     this.background.fillRect(width - 15, height * 0.12, 3, height * 0.76);
@@ -447,6 +502,206 @@ export class AlpineScene extends Phaser.Scene {
       ];
       this.background.strokePoints(points, false, false);
     }
+  }
+
+  private drawForeshadow(
+    player: PlayerSnapshot,
+    width: number,
+    height: number,
+  ): void {
+    if (!this.background) return;
+    const foreshadow = this.yeti.getSnapshot(player.worldY).foreshadow;
+    if (foreshadow.intensity <= 0) return;
+    this.background.fillStyle(0x5f7d89, foreshadow.intensity * 0.09);
+    this.background.fillRect(0, 0, width, height);
+    this.background.lineStyle(
+      1,
+      COLORS.white,
+      0.18 + foreshadow.intensity * 0.3,
+    );
+    const phase = Math.floor(player.worldY * 2.5);
+    for (let index = 0; index < foreshadow.windStreaks; index += 1) {
+      const x = ((phase * 17 + index * 149) % (width + 160)) - 80;
+      const y = (phase * 7 + index * 83) % Math.max(1, height);
+      const length = 30 + index * 5;
+      this.background.lineBetween(x, y, x + length, y - 9);
+    }
+    if (foreshadow.breathMist > 0.1) {
+      const anchorY = height * PLAYER_SCREEN_RATIO;
+      this.background.fillStyle(COLORS.white, foreshadow.breathMist * 0.16);
+      this.background.fillEllipse(width * 0.5 + 17, anchorY - 18, 26, 9);
+    }
+  }
+
+  private drawLivingSlope(
+    player: PlayerSnapshot,
+    width: number,
+    height: number,
+  ): void {
+    if (!this.background) return;
+    for (const location of this.yellowSnowLocations.values()) {
+      const [x, y] = this.toScreen(location.x, location.y, player);
+      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
+      this.background.fillStyle(0xd8bd3d, 0.48);
+      this.background.fillEllipse(x, y + 4, 17, 6);
+    }
+    for (const actor of this.livingSlope.getSnapshot().actors) {
+      if (!actor.active) continue;
+      const [x, y] = this.toScreen(actor.worldX, actor.worldY, player);
+      if (x < -40 || x > width + 40 || y < -45 || y > height + 45) continue;
+      this.visibleObjects += 1;
+      this.drawLivingActor(actor, x, y);
+    }
+  }
+
+  private drawLivingActor(
+    actor: Readonly<LivingActorSnapshot>,
+    x: number,
+    y: number,
+  ): void {
+    if (!this.background) return;
+    this.background.fillStyle(COLORS.ink, 0.15);
+    this.background.fillEllipse(
+      x + 2,
+      y + 7,
+      actor.kind === "chairlift" ? 18 : 14,
+      5,
+    );
+    if (actor.kind === "chairlift") {
+      this.background.lineStyle(1, COLORS.ink, 0.58);
+      this.background.lineBetween(x, y - 9, x, y + 2);
+      this.background.lineStyle(2, COLORS.blueSuit, 0.86);
+      this.background.lineBetween(x - 7, y + 2, x + 7, y + 2);
+      this.background.lineBetween(x - 7, y + 2, x - 7, y + 7);
+      for (let rider = 0; rider < actor.riderCount; rider += 1) {
+        this.background.fillStyle(
+          rider === 0 ? COLORS.signal : COLORS.skiYellow,
+          0.95,
+        );
+        this.background.fillCircle(x - 3 + rider * 7, y, 3);
+      }
+      return;
+    }
+    if (actor.kind === "beginner") {
+      const fallen = actor.state.startsWith("fallen");
+      this.background.lineStyle(2, COLORS.skiYellow, 0.9);
+      if (fallen) {
+        this.background.lineBetween(x - 12, y + 5, x + 12, y - 3);
+        this.background.fillStyle(COLORS.signal, 0.95);
+        this.background.fillRoundedRect(x - 7, y - 3, 15, 7, 3);
+        this.background.fillCircle(x + 10, y - 1, 4);
+      } else {
+        this.background.lineBetween(x - 6, y - 5, x - 7, y + 13);
+        this.background.lineBetween(x + 6, y - 5, x + 7, y + 13);
+        this.background.fillStyle(COLORS.signal, 0.95);
+        this.background.fillRoundedRect(x - 6, y - 8, 12, 16, 4);
+        this.background.fillStyle(0xf3c6a2, 1);
+        this.background.fillCircle(x, y - 12, 4);
+      }
+      return;
+    }
+    if (actor.kind === "snowboarder") {
+      const tumble = actor.state.startsWith("tumbling");
+      const jump = actor.state === "jumping";
+      this.background.lineStyle(3, COLORS.signal, 0.95);
+      this.background.lineBetween(x - 12, y + 8, x + 12, y + (tumble ? -4 : 6));
+      this.background.fillStyle(0x263f4c, 0.98);
+      if (tumble) this.background.fillEllipse(x, y - 2, 18, 9);
+      else
+        this.background.fillRoundedRect(x - 6, y - (jump ? 15 : 10), 12, 17, 4);
+      this.background.fillStyle(COLORS.skiYellow, 0.95);
+      this.background.fillCircle(x + (tumble ? 8 : 0), y - (jump ? 18 : 12), 4);
+      return;
+    }
+    if (actor.kind === "dog") {
+      if (actor.state === "knocked") {
+        this.background.fillStyle(0x6e7777, 0.95);
+        this.background.fillEllipse(x, y + 1, 17, 7);
+      } else {
+        this.background.fillStyle(0x7c8584, 0.96);
+        this.background.fillRoundedRect(x - 8, y - 4, 15, 8, 3);
+        this.background.fillCircle(
+          x + (actor.direction < 0 ? -9 : 9),
+          y - 5,
+          4,
+        );
+        this.background.lineStyle(2, COLORS.ink, 0.7);
+        this.background.lineBetween(x - 5, y + 3, x - 7, y + 9);
+        this.background.lineBetween(x + 5, y + 3, x + 7, y + 9);
+      }
+      return;
+    }
+    this.background.fillStyle(0x5d3c2d, 0.95);
+    this.background.fillRect(x - 3, y - 3, 6, 15);
+    this.background.lineStyle(3, 0x5d3c2d, 0.9);
+    const stride = actor.state.startsWith("walking")
+      ? Math.sin(actor.stateSeconds * 14) * 5
+      : 2;
+    this.background.lineBetween(x - 1, y + 9, x - 7 - stride, y + 15);
+    this.background.lineBetween(x + 1, y + 9, x + 7 + stride, y + 15);
+    this.background.fillStyle(COLORS.spruce, 0.96);
+    this.background.fillTriangle(x, y - 20, x - 13, y + 4, x + 13, y + 4);
+  }
+
+  private drawYetis(
+    player: PlayerSnapshot,
+    width: number,
+    height: number,
+  ): void {
+    if (!this.background) return;
+    for (const controller of this.yeti.getSnapshot(player.worldY).controllers) {
+      if (!controller.active) continue;
+      const [x, y] = this.toScreen(
+        controller.worldX,
+        controller.worldY,
+        player,
+      );
+      if (x < -70 || x > width + 70 || y < -80 || y > height + 80) continue;
+      this.visibleObjects += 1;
+      this.drawYeti(controller, x, y);
+    }
+  }
+
+  private drawYeti(
+    controller: Readonly<YetiControllerSnapshot>,
+    x: number,
+    y: number,
+  ): void {
+    if (!this.background) return;
+    const pouncing =
+      controller.state === "pounce" || controller.state === "grab";
+    const chewing = controller.state === "eat" || controller.state === "chew";
+    const pulse = Math.sin(controller.stateSeconds * 16) * 2;
+    this.background.fillStyle(COLORS.ink, 0.22);
+    this.background.fillEllipse(x + 3, y + 16, 34 + pulse, 10);
+    this.background.lineStyle(3, 0x58717a, 0.9);
+    this.background.strokeEllipse(
+      x,
+      y,
+      pouncing ? 38 : 31,
+      chewing ? 34 + pulse : 40,
+    );
+    this.background.fillStyle(0xdce7e4, 0.98);
+    this.background.fillEllipse(
+      x,
+      y,
+      pouncing ? 38 : 31,
+      chewing ? 34 + pulse : 40,
+    );
+    this.background.fillCircle(x, y - 16, 13);
+    this.background.fillTriangle(x - 10, y - 22, x - 5, y - 32, x, y - 22);
+    this.background.fillTriangle(x + 10, y - 22, x + 5, y - 32, x, y - 22);
+    this.background.lineStyle(10, 0x58717a, 0.72);
+    this.background.lineBetween(x - 12, y - 2, x - 23, y + (pouncing ? -8 : 7));
+    this.background.lineBetween(x + 12, y - 2, x + 23, y + (pouncing ? -8 : 7));
+    this.background.lineStyle(6, 0xdce7e4, 0.98);
+    this.background.lineBetween(x - 12, y - 2, x - 23, y + (pouncing ? -8 : 7));
+    this.background.lineBetween(x + 12, y - 2, x + 23, y + (pouncing ? -8 : 7));
+    this.background.fillStyle(COLORS.ink, 0.95);
+    this.background.fillCircle(x - 5, y - 18, 2);
+    this.background.fillCircle(x + 5, y - 18, 2);
+    this.background.fillStyle(chewing ? COLORS.signal : 0x58717a, 0.96);
+    this.background.fillEllipse(x, y - 10, chewing ? 12 : 8, chewing ? 7 : 4);
   }
 
   private drawWorld(
@@ -497,6 +752,8 @@ export class AlpineScene extends Phaser.Scene {
       this.visibleObjects += 1;
       this.drawInteractiveObject(object, screenX, screenY, delta);
     }
+    this.drawLivingSlope(player, width, height);
+    this.drawYetis(player, width, height);
     this.drawYetiBoundary(player, width, height);
     this.drawInteractionFeedback(player);
     if (this.debugVisible) {
@@ -651,18 +908,6 @@ export class AlpineScene extends Phaser.Scene {
       this.background.lineBetween(x - 12, y - 12, x + 12, y - 12);
       this.background.lineStyle(2, COLORS.signal, 0.75);
       this.background.lineBetween(x - 9, y + 14, x + 9, y + 14);
-    }
-    for (const chair of CLASSIC_LIFT.chairs) {
-      for (let y = -64 + chair.phaseY; y <= 1_472; y += 128) {
-        const [x, screenY] = this.toScreen(chair.laneX, y, player);
-        if (x < -20 || x > width + 20 || screenY < -20 || screenY > height + 20)
-          continue;
-        this.background.lineStyle(1, COLORS.ink, 0.5);
-        this.background.lineBetween(x, screenY - 8, x, screenY + 2);
-        this.background.lineStyle(2, COLORS.blueSuit, 0.8);
-        this.background.lineBetween(x - 5, screenY + 2, x + 5, screenY + 2);
-        this.background.lineBetween(x - 5, screenY + 2, x - 5, screenY + 7);
-      }
     }
   }
 
@@ -936,6 +1181,10 @@ export class AlpineScene extends Phaser.Scene {
 
   private updateSkier(player: PlayerSnapshot): void {
     if (!this.skier || !this.skierShadow) return;
+    const playerRemoved = this.yeti.getSnapshot(player.worldY).playerRemoved;
+    this.skier.setVisible(!playerRemoved);
+    this.skierShadow.setVisible(!playerRemoved);
+    if (playerRemoved) return;
     const anchorX = this.scale.width * 0.5;
     const anchorY = this.scale.height * PLAYER_SCREEN_RATIO;
     const velocityAngle =
@@ -1004,8 +1253,18 @@ export class AlpineScene extends Phaser.Scene {
       status.textContent = player.paused
         ? "Run suspended"
         : "Alpine systems online";
+    const yetiSnapshot = this.yeti.getSnapshot(player.worldY);
     shell?.setAttribute("data-turbo", player.turbo.toString());
     shell?.setAttribute("data-paused", player.paused.toString());
+    shell?.setAttribute(
+      "data-foreshadow",
+      yetiSnapshot.foreshadow.intensity.toFixed(2),
+    );
+    shell?.setAttribute(
+      "data-foreshadowing",
+      (yetiSnapshot.foreshadow.intensity > 0).toString(),
+    );
+    shell?.setAttribute("data-capture-phase", yetiSnapshot.capturePhase);
     const modeSnapshot = this.modes.getSnapshot();
     const lastFinished = [...this.modeEvents]
       .reverse()
@@ -1092,12 +1351,19 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.modes.snapshot = this.modes.getSnapshot();
     this.runtime.modes.records = this.recordBook;
     this.runtime.modes.storageAvailable = this.storageAvailable;
+    this.runtime.livingSlope.scenario = this.livingScenario;
+    this.runtime.livingSlope.snapshot = this.livingSlope.getSnapshot();
+    this.runtime.yeti.snapshot = this.yeti.getSnapshot(player.worldY);
 
     const chunk = document.querySelector<HTMLElement>("#world-debug-chunk");
     const streamLabel = document.querySelector<HTMLElement>(
       "#world-debug-stream",
     );
     const ahead = document.querySelector<HTMLElement>("#world-debug-ahead");
+    const living = document.querySelector<HTMLElement>("#world-debug-living");
+    const boundary = document.querySelector<HTMLElement>(
+      "#world-debug-boundary",
+    );
     if (chunk)
       chunk.textContent = `CHUNK ${stream.currentX},${stream.currentY}`;
     if (streamLabel) {
@@ -1105,6 +1371,16 @@ export class AlpineScene extends Phaser.Scene {
     }
     if (ahead) {
       ahead.textContent = `AHEAD ${stream.aheadRows.join("/")} · CORRIDOR ${CORRIDOR_WIDTH_METERS.toFixed(1)}M`;
+    }
+    if (living) {
+      const snapshot = this.livingSlope.getSnapshot();
+      living.textContent = `POPULATION ${snapshot.actorCount} · WORK ${snapshot.workUnitsLastStep}`;
+    }
+    if (boundary) {
+      const snapshot = this.yeti.getSnapshot(player.worldY);
+      boundary.textContent = snapshot.activeBoundaries.length
+        ? `BOUNDARY ${snapshot.activeBoundaries.join("/").toUpperCase()} · PHASE ${snapshot.capturePhase.toUpperCase()}`
+        : "BOUNDARY CLEAR · PHASE NONE";
     }
   }
 
@@ -1307,6 +1583,103 @@ export class AlpineScene extends Phaser.Scene {
     return true;
   }
 
+  private stageLivingScenario(scenario: GateFiveScenario): boolean {
+    const valid: readonly GateFiveScenario[] = [
+      "none",
+      "population",
+      "dog-contact",
+      "chair-drop",
+      "foreshadow",
+      "yeti-bottom",
+      "yeti-contact",
+    ];
+    if (!valid.includes(scenario)) return false;
+    if (scenario === "none") {
+      this.livingScenario = "none";
+      return true;
+    }
+    const player = this.simulation.getSnapshot();
+    const yeti = this.yeti.getSnapshot(player.worldY);
+    if (
+      (scenario === "foreshadow" || scenario === "yeti-bottom") &&
+      (yeti.activeBoundaries.length > 0 || yeti.capturedBy)
+    )
+      return false;
+
+    if (scenario === "population") {
+      this.simulation.reposition(14, 0, 0, 3.5);
+      const staged = this.simulation.getSnapshot();
+      this.livingSlope.repositionActor(
+        "beginner-0",
+        staged.worldX - 10,
+        staged.worldY + 7,
+      );
+      this.livingSlope.repositionActor(
+        "snowboarder-top",
+        staged.worldX + 11,
+        staged.worldY - 10,
+      );
+      this.livingSlope.repositionActor(
+        "dog-0",
+        staged.worldX + 15,
+        staged.worldY + 16,
+      );
+      this.livingSlope.repositionActor(
+        "walking-tree-0",
+        staged.worldX + 8,
+        staged.worldY + 10,
+      );
+      this.livingSlope.repositionActor("chair-up-0", -7, staged.worldY + 3);
+      this.livingSlope.repositionActor("chair-down-0", -9, staged.worldY + 24);
+      this.syncModesToPlayer();
+    } else if (scenario === "dog-contact") {
+      this.livingSlope.repositionActor(
+        "dog-0",
+        player.worldX + 1.05,
+        player.worldY,
+      );
+    } else if (scenario === "chair-drop") {
+      for (let index = 0; index < 8; index += 1) {
+        this.livingSlope.repositionActor(
+          `chair-down-${index}`,
+          -9,
+          player.worldY + 8 + index * 3,
+        );
+      }
+      this.livingSlope.requestChairDrop();
+    } else if (scenario === "foreshadow") {
+      this.simulation.reposition(0, 1_798.5, 0, 22);
+      this.syncModesToPlayer();
+    } else if (scenario === "yeti-bottom") {
+      this.simulation.reposition(0, 1_999.35, 0, 8);
+      this.syncModesToPlayer();
+    } else {
+      const chaser = yeti.controllers.find(
+        (controller) =>
+          controller.boundary === "bottom" &&
+          controller.active &&
+          controller.state === "chasing" &&
+          controller.protectionSeconds <= 0,
+      );
+      if (!chaser) return false;
+      this.simulation.reposition(chaser.worldX, chaser.worldY, 0, 0);
+      this.syncModesToPlayer();
+    }
+    this.livingScenario = scenario;
+    if (this.runtime) this.runtime.livingSlope.scenario = scenario;
+    return true;
+  }
+
+  private syncModesToPlayer(): void {
+    const player = this.simulation.getSnapshot();
+    this.modes.syncPosition({
+      simulationSeconds: player.simulationSeconds,
+      style: this.interactions.getSnapshot().style,
+      worldX: player.worldX,
+      worldY: player.worldY,
+    });
+  }
+
   private setDebugVisible(visible: boolean): void {
     this.debugVisible = visible;
     const panel = document.querySelector<HTMLElement>("#world-debug");
@@ -1485,6 +1858,103 @@ export class AlpineScene extends Phaser.Scene {
     this.feedbackVisibleUntil =
       this.simulation.getSnapshot().simulationSeconds +
       FEEDBACK_VISIBLE_SECONDS;
+  }
+
+  private captureLivingEvents(): void {
+    const events = this.livingSlope.drainEvents();
+    if (events.length === 0) return;
+    this.livingEvents.push(...events);
+    if (this.livingEvents.length > MAX_TELEMETRY_EVENTS)
+      this.livingEvents.splice(
+        0,
+        this.livingEvents.length - MAX_TELEMETRY_EVENTS,
+      );
+    for (const event of events) {
+      if (event.type === "dog-hit") {
+        this.interactions.deltas.patch(event.actorId, {
+          npcState: "knocked",
+          yellowSnow: true,
+        });
+        this.yellowSnowLocations.set(
+          event.actorId,
+          Object.freeze({ x: event.worldX, y: event.worldY }),
+        );
+      } else if (event.type === "dog-recovered") {
+        this.interactions.deltas.patch(event.actorId, { npcState: "active" });
+      }
+    }
+    const latest = events.at(-1)!;
+    const labels: Readonly<Record<LivingActorEvent["type"], string>> = {
+      "beginner-fell": "BEGINNER DOWN",
+      "beginner-recovered": "BEGINNER BACK UP",
+      "chair-looped": "LIFT LOOP",
+      "chair-rider-dropped": "RIDER DROPPED IN",
+      "dog-hit": "WOOF / YELLOW SNOW",
+      "dog-recovered": "DOG BACK ON PAWS",
+      "snowboarder-entered": "FAST RIDER ABOVE",
+      "snowboarder-jumped": "BOARDER AIR",
+      "snowboarder-landed": "BOARDER RECOVERED",
+      "snowboarder-tumbled": "BOARDER TUMBLE",
+      "walking-tree-moved": "TREE SETTLED",
+      "walking-tree-woke": "BRANCHES MOVING",
+    };
+    if (
+      this.simulation.getSnapshot().simulationSeconds >=
+      this.feedbackPriorityUntil
+    )
+      this.showSystemFeedback(labels[latest.type], latest.type);
+  }
+
+  private captureYetiEvents(): void {
+    const events = this.yeti.drainEvents();
+    if (events.length === 0) return;
+    this.yetiEvents.push(...events);
+    if (this.yetiEvents.length > MAX_TELEMETRY_EVENTS)
+      this.yetiEvents.splice(0, this.yetiEvents.length - MAX_TELEMETRY_EVENTS);
+    const latest = events.at(-1)!;
+    const labels: Readonly<Record<YetiEvent["type"], string>> = {
+      "capture-started": "SHADOW CLOSING",
+      chewing: "SNOW GOES QUIET",
+      eaten: "WHITEOUT",
+      grabbed: "PULLED FROM LINE",
+      pounced: "IMPACT",
+      "reset-requested": "RESCUE TRACK FOUND",
+      "turbo-evasion": "WIND GAP / HOLD LINE",
+      "yeti-activated": "THE SNOW MOVED",
+      "yeti-repositioned": "TRACKS AT THE EDGE",
+    };
+    this.feedbackPriorityUntil =
+      this.simulation.getSnapshot().simulationSeconds + 1.35;
+    this.showSystemFeedback(labels[latest.type], latest.type);
+  }
+
+  private showSystemFeedback(labelText: string, cue: string): void {
+    const feedback = document.querySelector<HTMLElement>("#feedback-card");
+    const label = document.querySelector<HTMLElement>("#feedback-label");
+    const audio = document.querySelector<HTMLElement>("#audio-cue");
+    if (feedback) {
+      feedback.hidden = false;
+      feedback.dataset.cue = cue;
+    }
+    if (label) label.textContent = labelText;
+    if (audio) audio.textContent = `AUDIO CUE ${cue}`;
+    this.feedbackVisibleUntil =
+      this.simulation.getSnapshot().simulationSeconds +
+      FEEDBACK_VISIBLE_SECONDS;
+  }
+
+  private resetAfterYetiCapture(): void {
+    this.simulation.reset();
+    this.interactions.reset();
+    this.modes.reset();
+    this.livingSlope.reset(this.worldSeed);
+    this.yeti.acknowledgeReset();
+    this.scenario = "none";
+    this.livingScenario = "none";
+    this.scenarioObjects = [];
+    this.yellowSnowLocations.clear();
+    this.feedbackPriorityUntil = 1.35;
+    this.feedbackVisibleUntil = FEEDBACK_VISIBLE_SECONDS;
   }
 
   private captureSample(): void {

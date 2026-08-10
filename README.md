@@ -28,6 +28,12 @@ finish lines are part of the skiable world, and open skiing remains available
 between them. The browser keeps a local top ten for every event, with separate
 leaderboards for the classic mountain and generated seeds.
 
+The slope is live around the courses: beginners fall and recover, fast
+snowboarders enter from above or the lift, dogs and walking trees react to the
+player, and occupied chairs loop continuously. The weather begins to turn
+after 1,800 m; what happens beyond the formal mountain is intentionally left as
+a surprise, and Turbo may buy some breathing room.
+
 | Action              | Keyboard                                           |
 | ------------------- | -------------------------------------------------- |
 | Carve left/right    | Left/right arrows or A/D; hold to deepen the carve |

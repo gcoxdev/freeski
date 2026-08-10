@@ -13,6 +13,11 @@ import type {
   ModeSnapshot,
 } from "../simulation/modes";
 import type { RecordBook } from "../simulation/recordBook";
+import type {
+  LivingActorEvent,
+  LivingSlopeSnapshot,
+} from "../simulation/livingSlope";
+import type { YetiEvent, YetiSnapshot } from "../simulation/yeti";
 import type { ObjectDelta } from "../world/chunkDeltas";
 
 export type GateThreeScenario =
@@ -24,6 +29,15 @@ export type GateThreeScenario =
   | "ramp-trick";
 
 export type CourseCrossingTarget = "finish" | "start" | number;
+
+export type GateFiveScenario =
+  | "chair-drop"
+  | "dog-contact"
+  | "foreshadow"
+  | "none"
+  | "population"
+  | "yeti-bottom"
+  | "yeti-contact";
 
 export interface DescentAuditReport {
   corridorBlockers: number;
@@ -71,6 +85,11 @@ export interface FreeSkiRuntime {
     snapshot: ModeSnapshot;
     storageAvailable: boolean;
   };
+  livingSlope: {
+    events: LivingActorEvent[];
+    scenario: GateFiveScenario;
+    snapshot: LivingSlopeSnapshot;
+  };
   player: PlayerSnapshot;
   ready: boolean;
   seed: string;
@@ -101,6 +120,10 @@ export interface FreeSkiRuntime {
     overlaySignature: string;
     visibleObjects: number;
   };
+  yeti: {
+    events: YetiEvent[];
+    snapshot: YetiSnapshot;
+  };
 }
 
 declare global {
@@ -114,6 +137,7 @@ declare global {
         target: CourseCrossingTarget,
         outcome?: Exclude<MarkerState, "pending">,
       ) => boolean;
+      stageLivingScenario: (scenario: GateFiveScenario) => boolean;
       setVisible: (visible: boolean) => void;
     };
   }
