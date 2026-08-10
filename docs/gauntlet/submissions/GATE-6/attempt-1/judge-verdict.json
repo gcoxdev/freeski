@@ -1,0 +1,186 @@
+{
+  "verdict": "FAIL",
+  "gate": "GATE_6",
+  "attempt": 1,
+  "candidate_revision": "23348f9779e3b6ac57424a3f8bb7f5d973617f5f",
+  "criteria": [
+    {
+      "id": "G6.1",
+      "result": "FAIL",
+      "evidence": [
+        "Fresh `npm run assets:build` and `npm run assets:check` reported 112 frames and deterministic output.",
+        "Independent Pillow inspection of `freeski-atlas.png` found all 112 frame outer perimeters and every declared 4px padding band fully transparent. `normalize_families()` adds a transparent border before `paste_extruded()` repeats it, so no content-edge texels are extruded.",
+        "All 112 Phaser entries retain pre-resize `spriteSourceSize` dimensions while packed frames are resized to 0.55 scale plus a border; for example `beginner/carve-left` is packed 152x123 but declares 273x220.",
+        "Metadata contains source hashes, cell/trim bounds, normalization values, pivots, footprints, and clearances for all 112 cells."
+      ],
+      "notes": "Slicing, family normalization, matte cleanup, geometry fields, and packing exist, but genuine extrusion and internally consistent trim metadata are mandatory and are not satisfied."
+    },
+    {
+      "id": "G6.2",
+      "result": "PASS",
+      "evidence": [
+        "SHA-256 hashes for all six approved sheets and all six source-chroma originals were identical before and after rebuilding.",
+        "Generated PNG, Phaser JSON, and provenance/geometry metadata rebuilt byte-identically.",
+        "Detached candidate remained clean after rebuilding; sources and generated metadata are separately retained."
+      ],
+      "notes": "The pipeline is non-destructive and reproducible."
+    },
+    {
+      "id": "G6.3",
+      "result": "PASS",
+      "evidence": [
+        "`AlpineVfx.ts` implements bounded shadows, powder, directional carve fans, tracks, landing/crash bursts, ice impacts, breath mist, ramp glints, trick sparkles, flame embers, and crash decals.",
+        "Independent runtime play observed active effects/tracks and bounded telemetry; the full browser suite exercised ramp tricks, crashes, secrets, living actors, and Yeti sequences.",
+        "Source inspection confirmed production-atlas mappings for player states, population, Yeti, terrain, course gates/markers, lift, and all required VFX."
+      ],
+      "notes": "Required VFX families are scalable, pooled, and gameplay-integrated, although G6.7 records atlas-pool saturation affecting actor presentation."
+    },
+    {
+      "id": "G6.4",
+      "result": "PASS",
+      "evidence": [
+        "HUD copy is DOM/code-rendered in `index.html` and `AlpineScene.updateHud`.",
+        "`AlpineScene.createLabels` creates Phaser text for course labels and overlays it on `course/blank-wood-sign`, keeping primary mode-sign copy practical to localize.",
+        "Direct screenshots showed readable DOM HUD typography and code-rendered course labels."
+      ],
+      "notes": "Primary HUD and practical course-sign copy are not baked into the production art."
+    },
+    {
+      "id": "G6.5",
+      "result": "FAIL",
+      "evidence": [
+        "Time, distance, speed, Style, Turbo, mode, and pause states were present and visible at 1280x720 and 768x600.",
+        "Independent DOM measurements found the seed clipped at both sizes: at 1280 its client width was 145px versus 178px content width; at 768 it was 64px versus 178px.",
+        "At 768x600 the required seed displayed only `judge-ga…`; form text was also clipped. Candidate CSS deliberately applies overflow ellipsis."
+      ],
+      "notes": "The HUD is compact and panels do not geometrically collide, but the required seed is not fully readable."
+    },
+    {
+      "id": "G6.6",
+      "result": "PASS",
+      "evidence": [
+        "`AlpineAudio.ts` procedurally synthesizes three glide/wind/carve ambient layers and 26 oscillator/noise cues covering movement, jumps, landings, crashes, gates, NPCs, lift, secrets, UI, and Yeti.",
+        "Runtime instrumentation observed oscillators and noise-buffer sources only when procedural cues/ambience ran.",
+        "Resource and source scans found no audio files, external audio URLs, `load.audio`, or copied sound dependency."
+      ],
+      "notes": "The sound bank is original procedural Web Audio with broad event wiring."
+    },
+    {
+      "id": "G6.7",
+      "result": "FAIL",
+      "evidence": [
+        "AudioContext instrumentation found one context already created on cold load before any user gesture; the first gesture increased the count from 1 to 2. Candidate telemetry reported `unlocked=false` but did not expose Phaser's pre-gesture context.",
+        "Mute worked, persisted as `freeski.audio.muted.v1=true`, reloaded muted/locked, and unmuted on a later pointer gesture.",
+        "Independent play reached `pooledSprites=196` with capacity 196. `AtlasSpritePool.draw` then returns null, and the population screenshot visibly showed a primitive gray vector dog among production sprites through the normal fallback path.",
+        "The scaled-frame/trim inconsistency made the player and actors render substantially smaller than their requested display sizes at 768x600. The full seed was clipped, and canvas status text could be obscured by higher-depth terrain.",
+        "Pixel audit found only five isolated magenta-classified edge pixels across the atlas and no visible rectangular texture boxes or halo in inspected bright/dark screenshots.",
+        "Independent runtime monitoring reported no console errors, page errors, failed requests, or HTTP error responses."
+      ],
+      "notes": "Mute and error handling work, but pre-gesture audio creation, normal-path fallback art, undersized silhouettes, and clipped/obscured UI violate the mandatory presentation/autoplay requirements."
+    }
+  ],
+  "failures": [
+    {
+      "severity": "P1",
+      "criterion_id": "G6.1",
+      "summary": "Declared 4px atlas padding is transparent pseudo-padding, and resized frames use inconsistent Phaser trim metadata.",
+      "reproduction": [
+        "Run `npm run assets:build`.",
+        "For every atlas frame, inspect the four pixels outside each frame rectangle: all 112 padding bands have alpha zero because a transparent border was added before extrusion.",
+        "Compare any packed `frame.w/h` with `spriteSourceSize.w/h`; all 112 entries mismatch after the 0.55 resize."
+      ],
+      "required_fix": "Extrude four pixels from actual content-edge texels and emit Phaser trim/source metadata in the same coordinate scale as the packed frames; add pixel-level tests that reject empty pseudo-extrusion and inconsistent trim geometry."
+    },
+    {
+      "severity": "P2",
+      "criterion_id": "G6.5",
+      "summary": "The required seed value is ellipsized and unreadable, including at 768x600.",
+      "reproduction": [
+        "Load with `?seed=judge-gate-six-presentation`.",
+        "Inspect `#seed-label` at 1280x720 and 768x600.",
+        "Observe `scrollWidth > clientWidth` and only a truncated prefix in the rendered HUD."
+      ],
+      "required_fix": "Keep the HUD compact while making the complete active seed reliably readable or directly revealable at every supported viewport."
+    },
+    {
+      "severity": "P1",
+      "criterion_id": "G6.7",
+      "summary": "Phaser creates an AudioContext before the first user gesture.",
+      "reproduction": [
+        "Install an AudioContext constructor counter with an initialization script before navigation.",
+        "Cold-load the game without keyboard or pointer input.",
+        "Observe one constructed context while candidate audio telemetry still says locked; after the first gesture the count becomes two."
+      ],
+      "required_fix": "Prevent every game-owned AudioContext from being constructed before a user gesture, including Phaser's unused sound manager, while retaining first-gesture procedural audio startup."
+    },
+    {
+      "severity": "P1",
+      "criterion_id": "G6.7",
+      "summary": "The production sprite pool saturates and primitive fallback actors appear during normal integrated presentation.",
+      "reproduction": [
+        "Load a seeded game and stage the living population, then ski briefly.",
+        "Observe `art.pooledSprites=196` and `spriteCapacity=196`.",
+        "Inspect the rendered population: a primitive gray vector dog appears among atlas actors because `AtlasSpritePool.draw` returns null at capacity and `drawLivingActor` takes its fallback branch."
+      ],
+      "required_fix": "Ensure representative and worst-case scenes remain entirely on the approved production-art path through sufficient pooling, culling, prioritization, or batching; expose and test a zero-fallback counter."
+    },
+    {
+      "severity": "P2",
+      "criterion_id": "G6.7",
+      "summary": "Scaled trim metadata produces undersized silhouettes and presentation UI remains clipped or obscurable at 768x600.",
+      "reproduction": [
+        "Load at 768x600 and inspect the player/actors and bottom HUD.",
+        "Observe the player rendered much smaller than its requested display height, the seed reduced to a short ellipsis, and top-right canvas status text susceptible to overlap by higher-depth trees."
+      ],
+      "required_fix": "Correct frame metadata/scaling and UI depth/layout so silhouettes remain clearly readable and all required HUD/status information stays unobscured at the minimum viewport."
+    }
+  ],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Confirm detached worktree revision, status, base revision, exact diff stat, and changed-file list",
+      "result": "Clean detached HEAD exactly 23348f9779e3b6ac57424a3f8bb7f5d973617f5f against c73021340c4ee871a5b43b31cab92f071032547d; 18 candidate files."
+    },
+    {
+      "command_or_action": "Read authoritative README, design brief, sprite-sheet README/manifest/prompts, and gauntlet prompt; separately inspect submission packet and every declared artifact",
+      "result": "Requirements and untrusted claims separated; both declared screenshots inspected at original resolution and all reports read."
+    },
+    {
+      "command_or_action": "`npm ci`",
+      "result": "PASS; 164 packages installed."
+    },
+    {
+      "command_or_action": "Hash approved sheets, source-chroma originals, and generated artifacts before and after `npm run assets:build`",
+      "result": "PASS; all source and output hashes unchanged; rebuild deterministic and clean."
+    },
+    {
+      "command_or_action": "`npm run assets:build` and `npm run assets:check`",
+      "result": "Both exited 0 and reported 112 frames, but independent pixel audit disproved genuine extrusion."
+    },
+    {
+      "command_or_action": "Independent Pillow audit of all 112 cells, atlas pixels, padding, trim data, normalization, provenance, geometry, and magenta edges",
+      "result": "112/112 cells present; all 112 padding bands transparent; all 112 scaled trim records inconsistent; five isolated magenta-classified edge pixels; no padded-rectangle overlaps."
+    },
+    {
+      "command_or_action": "Inspect all six approved sheets and production atlas at original resolution",
+      "result": "Completed; atlas contains every family and frame, with runtime-scale/trim presentation defects noted."
+    },
+    {
+      "command_or_action": "`npm run format:check`; `npm run typecheck`; `npm run lint`; `npm test`; `npm run build`",
+      "result": "PASS; 16 test files/87 tests passed; production build succeeded with only the existing large-chunk advisory."
+    },
+    {
+      "command_or_action": "`npm run test:e2e`",
+      "result": "PASS; 11 Chromium tests passed in 2.0 minutes."
+    },
+    {
+      "command_or_action": "Independent Playwright direct play at 1280x720 and 768x600 with AudioContext/node instrumentation, HUD geometry, bright/foreshadow scenes, population, pause, mute/reload/unmute, and error monitoring",
+      "result": "Found pre-gesture AudioContext, atlas-pool saturation/fallback actor, clipped seed/form, and undersized sprites; mute persistence passed; console/page/network/HTTP error arrays empty."
+    },
+    {
+      "command_or_action": "Audit audio implementation and runtime resource list for external/copied assets",
+      "result": "Procedural oscillator/noise implementation only; no external audio resource dependency found."
+    }
+  ],
+  "confidence": 0.99
+}
