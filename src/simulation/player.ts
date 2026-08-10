@@ -20,12 +20,16 @@ export interface PlayerInputFrame {
   brake: boolean;
   jumpPressed: boolean;
   steer: number;
+  trickFlip: number;
+  trickSpin: number;
   tuck: boolean;
   uphill: boolean;
 }
 
 export interface PlayerSnapshot {
   airHeight: number;
+  airPitch: number;
+  airSpin: number;
   airTilt: number;
   crashCount: number;
   heading: PlayerHeading;
@@ -33,6 +37,7 @@ export interface PlayerSnapshot {
   lastLanding: LandingResult;
   motion: PlayerMotion;
   paused: boolean;
+  recoveryGraceSeconds: number;
   runNumber: number;
   simulationSeconds: number;
   speedMetersPerSecond: number;
@@ -66,6 +71,8 @@ export const NEUTRAL_PLAYER_INPUT: Readonly<PlayerInputFrame> = Object.freeze({
   brake: false,
   jumpPressed: false,
   steer: 0,
+  trickFlip: 0,
+  trickSpin: 0,
   tuck: false,
   uphill: false,
 });
@@ -74,6 +81,7 @@ export const PLAYER_TUNING = Object.freeze({
   airControlAcceleration: 7,
   airGravity: 10.4,
   airTiltRate: 3.35,
+  airTrickRotationRate: 6.45,
   cleanLandingTilt: 0.48,
   crashDuration: 0.68,
   crashFriction: 25,
@@ -82,12 +90,15 @@ export const PLAYER_TUNING = Object.freeze({
   lateralAcceleration: 34,
   longitudinalAcceleration: 21,
   recoveryDuration: 0.42,
+  recoveryGraceSeconds: 0.32,
   steerLevelOneSeconds: 0.12,
   steerLevelTwoSeconds: 0.3,
   turboAccelerationMultiplier: 1.3,
   turboSpeedMultiplier: 1.72,
   uphillTransitionSeconds: 0.28,
 });
+
+const FULL_TRICK_ROTATION = Math.PI * 2;
 
 interface MutablePlayerState extends Omit<
   PlayerSnapshot,
@@ -109,6 +120,8 @@ interface TargetVelocity {
 function initialState(runNumber: number): MutablePlayerState {
   return {
     airHeight: 0,
+    airPitch: 0,
+    airSpin: 0,
     airTilt: 0,
     airVelocity: 0,
     crashCount: 0,
@@ -119,6 +132,7 @@ function initialState(runNumber: number): MutablePlayerState {
     lastSteerDirection: -1,
     motion: "grounded",
     paused: false,
+    recoveryGraceSeconds: 0,
     recoveryRemaining: 0,
     runNumber,
     simulationSeconds: 0,
@@ -169,6 +183,8 @@ export class PlayerSimulation {
   getSnapshot(): PlayerSnapshot {
     return {
       airHeight: this.state.airHeight,
+      airPitch: this.state.airPitch,
+      airSpin: this.state.airSpin,
       airTilt: this.state.airTilt,
       crashCount: this.state.crashCount,
       heading: this.state.heading,
@@ -176,6 +192,7 @@ export class PlayerSimulation {
       lastLanding: this.state.lastLanding,
       motion: this.state.motion,
       paused: this.state.paused,
+      recoveryGraceSeconds: this.state.recoveryGraceSeconds,
       runNumber: this.state.runNumber,
       simulationSeconds: this.state.simulationSeconds,
       speedMetersPerSecond: Math.hypot(
@@ -216,6 +233,44 @@ export class PlayerSimulation {
     );
   }
 
+  launch(source: string, verticalVelocity: number): boolean {
+    if (
+      this.state.motion !== "grounded" ||
+      !Number.isFinite(verticalVelocity) ||
+      verticalVelocity <= 0
+    ) {
+      return false;
+    }
+    this.beginJump(verticalVelocity, source);
+    return true;
+  }
+
+  tryCrash(reason: string): boolean {
+    if (
+      this.state.motion === "crashed" ||
+      this.state.motion === "recovering" ||
+      this.state.recoveryGraceSeconds > 0
+    ) {
+      return false;
+    }
+    this.state.motion = "crashed";
+    this.state.lastLanding = "crash";
+    this.state.crashCount += 1;
+    this.state.crashRemaining = PLAYER_TUNING.crashDuration;
+    this.state.velocityX *= 0.5;
+    this.state.velocityY *= 0.4;
+    this.emit("crashed", reason);
+    return true;
+  }
+
+  applySpeedMultiplier(multiplier: number): void {
+    if (!Number.isFinite(multiplier) || multiplier < 0 || multiplier > 1) {
+      throw new RangeError("multiplier must be between zero and one");
+    }
+    this.state.velocityX *= multiplier;
+    this.state.velocityY *= multiplier;
+  }
+
   step(input: Readonly<PlayerInputFrame>, deltaSeconds: number): void {
     if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0) {
       throw new RangeError("deltaSeconds must be finite and positive");
@@ -223,6 +278,10 @@ export class PlayerSimulation {
     if (this.state.paused) return;
 
     this.state.simulationSeconds += deltaSeconds;
+    this.state.recoveryGraceSeconds = Math.max(
+      0,
+      this.state.recoveryGraceSeconds - deltaSeconds,
+    );
     if (this.state.motion === "crashed") {
       this.stepCrash(deltaSeconds);
       return;
@@ -238,7 +297,7 @@ export class PlayerSimulation {
 
     this.updateHeading(input, deltaSeconds);
     if (input.jumpPressed) {
-      this.beginJump();
+      this.beginJump(PLAYER_TUNING.jumpVelocity, "manual");
       this.stepAir(input, deltaSeconds);
       return;
     }
@@ -324,13 +383,15 @@ export class PlayerSimulation {
     this.integrateWorld(deltaSeconds);
   }
 
-  private beginJump(): void {
+  private beginJump(verticalVelocity: number, source: string): void {
     this.state.motion = "airborne";
     this.state.airHeight = 0;
+    this.state.airPitch = 0;
+    this.state.airSpin = 0;
     this.state.airTilt = 0;
-    this.state.airVelocity = PLAYER_TUNING.jumpVelocity;
+    this.state.airVelocity = verticalVelocity;
     this.state.jumpCount += 1;
-    this.emit("jumped", `jump-${this.state.jumpCount}`);
+    this.emit("jumped", `${source}-${this.state.jumpCount}`);
   }
 
   private stepAir(
@@ -345,6 +406,26 @@ export class PlayerSimulation {
         this.state.airTilt + steer * PLAYER_TUNING.airTiltRate * deltaSeconds,
       ),
     );
+    this.state.airSpin = Math.max(
+      -FULL_TRICK_ROTATION,
+      Math.min(
+        FULL_TRICK_ROTATION,
+        this.state.airSpin +
+          clampSteer(input.trickSpin) *
+            PLAYER_TUNING.airTrickRotationRate *
+            deltaSeconds,
+      ),
+    );
+    this.state.airPitch = Math.max(
+      -FULL_TRICK_ROTATION,
+      Math.min(
+        FULL_TRICK_ROTATION,
+        this.state.airPitch +
+          clampSteer(input.trickFlip) *
+            PLAYER_TUNING.airTrickRotationRate *
+            deltaSeconds,
+      ),
+    );
     this.state.velocityX +=
       steer * PLAYER_TUNING.airControlAcceleration * deltaSeconds;
     this.state.airVelocity -= PLAYER_TUNING.airGravity * deltaSeconds;
@@ -354,7 +435,13 @@ export class PlayerSimulation {
     if (this.state.airHeight > 0 || this.state.airVelocity >= 0) return;
     this.state.airHeight = 0;
     this.state.airVelocity = 0;
-    if (Math.abs(this.state.airTilt) <= PLAYER_TUNING.cleanLandingTilt) {
+    const landingSpin = wrappedRotation(this.state.airSpin);
+    const landingPitch = wrappedRotation(this.state.airPitch);
+    if (
+      Math.abs(this.state.airTilt) <= PLAYER_TUNING.cleanLandingTilt &&
+      Math.abs(landingSpin) <= PLAYER_TUNING.cleanLandingTilt &&
+      Math.abs(landingPitch) <= PLAYER_TUNING.cleanLandingTilt
+    ) {
       this.state.airTilt = 0;
       this.state.motion = "grounded";
       this.state.lastLanding = "clean";
@@ -362,13 +449,9 @@ export class PlayerSimulation {
       return;
     }
 
-    this.state.motion = "crashed";
-    this.state.lastLanding = "crash";
-    this.state.crashCount += 1;
-    this.state.crashRemaining = PLAYER_TUNING.crashDuration;
-    this.state.velocityX *= 0.5;
-    this.state.velocityY *= 0.4;
-    this.emit("crashed", `tilt-${this.state.airTilt.toFixed(2)}`);
+    this.tryCrash(
+      `landing-${this.state.airTilt.toFixed(2)}-${landingSpin.toFixed(2)}-${landingPitch.toFixed(2)}`,
+    );
   }
 
   private stepCrash(deltaSeconds: number): void {
@@ -397,7 +480,10 @@ export class PlayerSimulation {
     if (this.state.recoveryRemaining > 0) return;
     this.state.motion = "grounded";
     this.state.heading = "downhill";
+    this.state.airPitch = 0;
+    this.state.airSpin = 0;
     this.state.airTilt = 0;
+    this.state.recoveryGraceSeconds = PLAYER_TUNING.recoveryGraceSeconds;
     this.state.velocityY = PLAYER_TUNING.initialDownhillSpeed;
     this.emit("recovered", `crash-${this.state.crashCount}`);
   }
@@ -410,4 +496,8 @@ export class PlayerSimulation {
   private emit(type: PlayerEventType, detail: string): void {
     this.events.push({ atSeconds: this.state.simulationSeconds, detail, type });
   }
+}
+
+function wrappedRotation(angle: number): number {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
 }

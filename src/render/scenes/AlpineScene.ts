@@ -14,6 +14,14 @@ import {
   type PlayerSnapshot,
 } from "../../simulation/player";
 import {
+  SlopeInteractionSimulation,
+  type FeedbackEvent,
+  type InteractionEvent,
+  type InteractiveWorldObject,
+} from "../../simulation/slopeInteractions";
+import type { StyleEvent } from "../../simulation/style";
+import type { ObjectDelta } from "../../world/chunkDeltas";
+import {
   CLASSIC_COURSES,
   CLASSIC_LIFT,
   classicOverlaySignature,
@@ -26,12 +34,14 @@ import {
 } from "../../world/corridor";
 import { WorldGenerator } from "../../world/generator";
 import { GENERATOR_VERSION } from "../../world/generatorVersion";
+import { interactionFor } from "../../world/interactionCatalog";
 import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
-import { CHUNK_SIZE_METERS, type GeneratedObject } from "../../world/types";
+import { CHUNK_SIZE_METERS } from "../../world/types";
 import type {
   DescentAuditReport,
   FreeSkiRuntime,
+  GateThreeScenario,
   TelemetrySample,
 } from "../runtimeBridge";
 
@@ -39,6 +49,7 @@ const PLAYER_SCREEN_RATIO = 0.35;
 const PIXELS_PER_METER = 7.5;
 const MAX_TELEMETRY_EVENTS = 240;
 const MAX_TELEMETRY_SAMPLES = 600;
+const FEEDBACK_VISIBLE_SECONDS = 1.15;
 
 const COLORS = {
   blueSuit: 0x1d5b85,
@@ -60,6 +71,7 @@ export class AlpineScene extends Phaser.Scene {
   private readonly stream: MountainStream;
   private readonly clock = new FixedStepClock(SIMULATION_STEP_SECONDS, 30);
   private readonly simulation = new PlayerSimulation();
+  private readonly interactions = new SlopeInteractionSimulation("modern");
   private background?: Phaser.GameObjects.Graphics;
   private skier?: Phaser.GameObjects.Container;
   private skierShadow?: Phaser.GameObjects.Ellipse;
@@ -69,7 +81,14 @@ export class AlpineScene extends Phaser.Scene {
   private runtime?: FreeSkiRuntime;
   private readonly inputEvents: InputTelemetryEvent[] = [];
   private readonly playerEvents: PlayerEvent[] = [];
+  private readonly interactionEvents: InteractionEvent[] = [];
+  private readonly feedbackEvents: FeedbackEvent[] = [];
+  private readonly styleEvents: StyleEvent[] = [];
   private readonly samples: TelemetrySample[] = [];
+  private scenario: GateThreeScenario = "none";
+  private scenarioObjects: InteractiveWorldObject[] = [];
+  private feedbackVisibleUntil = 0;
+  private trainingMode = false;
   private fixedSteps = 0;
   private renderFrames = 0;
   private droppedSeconds = 0;
@@ -101,6 +120,8 @@ export class AlpineScene extends Phaser.Scene {
 
     const pointerFromUrl =
       new URLSearchParams(window.location.search).get("pointer") === "1";
+    this.trainingMode =
+      new URLSearchParams(window.location.search).get("training") === "1";
     this.debugVisible =
       new URLSearchParams(window.location.search).get("debug") === "1";
     this.setPointerSteering(pointerFromUrl);
@@ -127,6 +148,14 @@ export class AlpineScene extends Phaser.Scene {
       },
       engine: "phaser-3",
       generatorVersion: GENERATOR_VERSION,
+      interactions: {
+        deltas: this.interactions.deltas.snapshot(),
+        feedbackEvents: this.feedbackEvents,
+        interactionEvents: this.interactionEvents,
+        scenario: this.scenario,
+        snapshot: this.interactions.getSnapshot(),
+        styleEvents: this.styleEvents,
+      },
       lastInput: "none",
       player,
       ready: true,
@@ -135,6 +164,7 @@ export class AlpineScene extends Phaser.Scene {
       settings: {
         debugVisible: this.debugVisible,
         pointerSteeringEnabled: pointerFromUrl,
+        trainingMode: this.trainingMode,
       },
       telemetry: {
         droppedSeconds: 0,
@@ -164,6 +194,8 @@ export class AlpineScene extends Phaser.Scene {
     window.__FREE_SKI_DEBUG__ = {
       runAutomatedDescent: (distanceMeters = 2_100) =>
         this.runAutomatedDescent(distanceMeters),
+      stageInteractionScenario: (scenario) =>
+        this.stageInteractionScenario(scenario),
       setVisible: (visible) => this.setDebugVisible(visible),
     };
 
@@ -188,13 +220,25 @@ export class AlpineScene extends Phaser.Scene {
         const actions = this.inputAdapter?.sample();
         if (!actions) return;
 
-        if (actions.resetPressed) this.simulation.reset();
+        if (actions.resetPressed) {
+          this.simulation.reset();
+          this.interactions.reset();
+          this.scenario = "none";
+          this.scenarioObjects = [];
+        }
         if (actions.pausePressed) this.simulation.togglePause();
         if (actions.turboPressed) this.simulation.toggleTurbo();
         if (actions.debugPressed) this.setDebugVisible(!this.debugVisible);
         this.simulation.step(actions.player, deltaSeconds);
+        this.interactions.step(
+          this.simulation,
+          actions.player,
+          this.getInteractiveObjects(),
+          deltaSeconds,
+        );
         this.fixedSteps += 1;
         this.capturePlayerEvents();
+        this.captureInteractionEvents();
         if (this.fixedSteps % 6 === 0) this.captureSample();
       },
     );
@@ -363,7 +407,13 @@ export class AlpineScene extends Phaser.Scene {
     this.visibleObjects = 0;
     for (const chunk of this.stream.getActiveChunks()) {
       for (const object of chunk.objects) {
-        const [screenX, screenY] = this.toScreen(object.x, object.y, player);
+        const delta = this.interactions.deltas.get(object.id);
+        if (delta?.consumed || delta?.destroyed) continue;
+        const [screenX, screenY] = this.toScreen(
+          object.x + (delta?.offsetX ?? 0),
+          object.y,
+          player,
+        );
         if (
           screenX < -28 ||
           screenX > width + 28 ||
@@ -373,11 +423,33 @@ export class AlpineScene extends Phaser.Scene {
           continue;
         }
         this.visibleObjects += 1;
-        this.drawGeneratedObject(object, screenX, screenY);
+        this.drawInteractiveObject(object, screenX, screenY, delta);
       }
     }
+    for (const object of this.scenarioObjects) {
+      const delta = this.interactions.deltas.get(object.id);
+      if (delta?.consumed || delta?.destroyed) continue;
+      const [screenX, screenY] = this.toScreen(
+        object.x + (delta?.offsetX ?? 0),
+        object.y,
+        player,
+      );
+      if (
+        screenX < -50 ||
+        screenX > width + 50 ||
+        screenY < -50 ||
+        screenY > height + 50
+      )
+        continue;
+      this.visibleObjects += 1;
+      this.drawInteractiveObject(object, screenX, screenY, delta);
+    }
     this.drawYetiBoundary(player, width, height);
-    if (this.debugVisible) this.drawWorldDiagnostics(player, width, height);
+    this.drawInteractionFeedback(player);
+    if (this.debugVisible) {
+      this.drawWorldDiagnostics(player, width, height);
+      this.drawCollisionFootprints(player, width, height);
+    }
   }
 
   private drawClassicCourses(
@@ -516,30 +588,66 @@ export class AlpineScene extends Phaser.Scene {
     }
   }
 
-  private drawGeneratedObject(
-    object: GeneratedObject,
+  private drawInteractiveObject(
+    object: Pick<
+      InteractiveWorldObject,
+      "id" | "interaction" | "type" | "variant" | "x" | "y"
+    >,
     x: number,
     y: number,
+    delta?: Readonly<ObjectDelta>,
   ): void {
     if (!this.background) return;
-    const scale = Math.max(0.75, object.footprintRadius * 0.75);
+    const scale = Math.max(0.75, object.interaction.footprint.radius * 0.75);
+    if (delta?.form === "mushroom") {
+      this.background.fillStyle(0xf7f0d8, 1);
+      this.background.fillRect(x - 2, y, 4, 7);
+      this.background.fillStyle(COLORS.signal, 0.96);
+      this.background.fillEllipse(x, y - 1, 16, 9);
+      this.background.fillStyle(COLORS.powder, 0.92);
+      this.background.fillCircle(x - 4, y - 2, 1.5);
+      this.background.fillCircle(x + 3, y, 1.5);
+      return;
+    }
     if (object.type === "tree" || object.type === "walking-tree") {
       this.background.fillStyle(COLORS.ink, 0.2);
       this.background.fillEllipse(x + 2, y + 8, 14 * scale, 5 * scale);
       this.background.fillStyle(0x5d3c2d, 0.9);
       this.background.fillRect(x - 2, y, 4, 10 * scale);
       this.background.fillStyle(
-        object.type === "walking-tree" ? COLORS.blueSuit : COLORS.spruce,
+        delta?.burned
+          ? COLORS.stone
+          : object.variant === "dead-tree"
+            ? 0x765443
+            : object.type === "walking-tree"
+              ? COLORS.blueSuit
+              : COLORS.spruce,
         0.95,
       );
-      this.background.fillTriangle(
-        x,
-        y - 13 * scale,
-        x - 9 * scale,
-        y + 4,
-        x + 9 * scale,
-        y + 4,
-      );
+      if (object.variant === "dead-tree") {
+        this.background.lineStyle(
+          3,
+          delta?.burned ? COLORS.stone : 0x765443,
+          1,
+        );
+        this.background.lineBetween(x, y + 3, x - 8, y - 11 * scale);
+        this.background.lineBetween(x, y - 3, x + 8, y - 13 * scale);
+      } else {
+        this.background.fillTriangle(
+          x,
+          y - 13 * scale,
+          x - 9 * scale,
+          y + 4,
+          x + 9 * scale,
+          y + 4,
+        );
+      }
+      if (delta?.burning) {
+        this.background.fillStyle(0xf5c844, 0.96);
+        this.background.fillTriangle(x - 6, y + 4, x, y - 13, x + 6, y + 4);
+        this.background.fillStyle(COLORS.signal, 0.92);
+        this.background.fillTriangle(x - 4, y + 4, x + 2, y - 8, x + 5, y + 4);
+      }
       return;
     }
     if (object.type === "rock" || object.type === "stump") {
@@ -564,6 +672,20 @@ export class AlpineScene extends Phaser.Scene {
       this.background.lineBetween(x - 11, y + 7, x + 10, y - 7);
       return;
     }
+    if (object.type === "lift-tower") {
+      this.background.lineStyle(4, COLORS.ink, 0.78);
+      this.background.lineBetween(x, y - 18, x, y + 14);
+      this.background.lineBetween(x - 14, y - 15, x + 14, y - 15);
+      this.background.lineStyle(2, COLORS.signal, 0.85);
+      this.background.lineBetween(x - 10, y + 13, x + 10, y + 13);
+      return;
+    }
+    if (object.type === "chairlift") {
+      this.background.lineStyle(2, COLORS.ink, 0.72);
+      this.background.lineBetween(x, y - 10, x, y + 2);
+      this.background.lineBetween(x - 7, y + 2, x + 7, y + 2);
+      return;
+    }
     if (
       object.type === "bump-small" ||
       object.type === "bump-large" ||
@@ -576,7 +698,11 @@ export class AlpineScene extends Phaser.Scene {
       return;
     }
     this.background.fillStyle(
-      object.type === "dog" ? 0xb96d35 : COLORS.signal,
+      object.type === "dog"
+        ? delta?.yellowSnow
+          ? 0xd9b73d
+          : 0xb96d35
+        : COLORS.signal,
       0.9,
     );
     this.background.fillCircle(x, y, object.type === "dog" ? 4 : 5);
@@ -638,6 +764,86 @@ export class AlpineScene extends Phaser.Scene {
     this.background.strokePoints(rightEdge, false, false);
   }
 
+  private drawCollisionFootprints(
+    player: PlayerSnapshot,
+    width: number,
+    height: number,
+  ): void {
+    if (!this.background) return;
+    for (const object of this.getInteractiveObjects()) {
+      const delta = this.interactions.deltas.get(object.id);
+      if (delta?.consumed || delta?.destroyed) continue;
+      const footprint = object.interaction.footprint;
+      const [x, y] = this.toScreen(
+        object.x + (delta?.offsetX ?? 0) + footprint.offsetX,
+        object.y + footprint.offsetY,
+        player,
+      );
+      const radius = footprint.radius * PIXELS_PER_METER;
+      if (
+        x + radius < 0 ||
+        x - radius > width ||
+        y + radius < 0 ||
+        y - radius > height
+      )
+        continue;
+      this.background.lineStyle(
+        2,
+        object.interaction.blocksGroundedPlayer ? COLORS.signal : 0x3dbfa6,
+        0.82,
+      );
+      this.background.strokeCircle(x, y, radius);
+      this.background.lineStyle(1, COLORS.ink, 0.45);
+      this.background.lineBetween(
+        x,
+        y,
+        x,
+        y - object.interaction.clearanceHeight * PIXELS_PER_METER,
+      );
+    }
+  }
+
+  private drawInteractionFeedback(player: PlayerSnapshot): void {
+    if (!this.background) return;
+    const recent = this.feedbackEvents.filter(
+      (event) =>
+        event.kind === "visual" &&
+        player.simulationSeconds - event.atSeconds <= FEEDBACK_VISIBLE_SECONDS,
+    );
+    for (const [index, event] of recent.entries()) {
+      const object = this.getInteractiveObjects().find(
+        (candidate) => candidate.id === event.objectId,
+      );
+      const delta = object
+        ? this.interactions.deltas.get(object.id)
+        : undefined;
+      const [x, y] = object
+        ? this.toScreen(object.x + (delta?.offsetX ?? 0), object.y, player)
+        : [this.scale.width * 0.5, this.scale.height * PLAYER_SCREEN_RATIO];
+      const age = Math.max(0, player.simulationSeconds - event.atSeconds);
+      const progress = age / FEEDBACK_VISIBLE_SECONDS;
+      const color =
+        event.cue.includes("flame") || event.cue.includes("ember")
+          ? COLORS.signal
+          : event.cue.includes("secret") || event.cue.includes("yellow")
+            ? COLORS.skiYellow
+            : 0x3dbfa6;
+      this.background.lineStyle(3, color, Math.max(0, 0.85 - progress));
+      this.background.strokeCircle(x, y - 5, 12 + progress * 34 + index * 3);
+      for (let ray = 0; ray < 6; ray += 1) {
+        const angle = (ray / 6) * Math.PI * 2;
+        const inner = 8 + progress * 12;
+        const outer = inner + 8;
+        this.background.lineBetween(
+          x + Math.cos(angle) * inner,
+          y - 5 + Math.sin(angle) * inner,
+          x + Math.cos(angle) * outer,
+          y - 5 + Math.sin(angle) * outer,
+        );
+      }
+    }
+  }
+
   private toScreen(
     worldX: number,
     worldY: number,
@@ -665,12 +871,18 @@ export class AlpineScene extends Phaser.Scene {
       player.motion === "crashed"
         ? velocityAngle + Math.PI * 0.55
         : velocityAngle +
-            (player.motion === "airborne" ? player.airTilt * 0.45 : 0),
+            (player.motion === "airborne"
+              ? player.airTilt * 0.45 + player.airSpin
+              : 0),
     );
-    this.skier.setScale(
+    const skierScale =
       player.motion === "recovering"
         ? 0.88
-        : 1 + Math.min(player.airHeight * 0.022, 0.14),
+        : 1 + Math.min(player.airHeight * 0.022, 0.14);
+    this.skier.setScale(
+      skierScale,
+      skierScale *
+        (player.motion === "airborne" ? Math.cos(player.airPitch) : 1),
     );
     this.skier.setAlpha(player.motion === "recovering" ? 0.62 : 1);
   }
@@ -681,6 +893,9 @@ export class AlpineScene extends Phaser.Scene {
     const distance = document.querySelector<HTMLElement>("#distance-label");
     const motion = document.querySelector<HTMLElement>("#motion-label");
     const turbo = document.querySelector<HTMLElement>("#turbo-indicator");
+    const style = document.querySelector<HTMLElement>("#style-label");
+    const trick = document.querySelector<HTMLElement>("#trick-label");
+    const feedback = document.querySelector<HTMLElement>("#feedback-card");
     const pauseCard = document.querySelector<HTMLElement>("#pause-card");
     const status = document.querySelector<HTMLElement>("#system-label");
     if (speed)
@@ -691,6 +906,15 @@ export class AlpineScene extends Phaser.Scene {
     if (motion)
       motion.textContent = `${player.motion} / ${player.heading}`.toUpperCase();
     if (turbo) turbo.textContent = player.turbo ? "TURBO ON" : "TURBO OFF";
+    const interaction = this.interactions.getSnapshot();
+    if (style) style.textContent = interaction.style.toString();
+    if (trick)
+      trick.textContent =
+        interaction.activeTrick === "none"
+          ? "LINE READY"
+          : interaction.activeTrick.replaceAll("-", " ").toUpperCase();
+    if (feedback && player.simulationSeconds > this.feedbackVisibleUntil)
+      feedback.hidden = true;
     if (pauseCard) pauseCard.hidden = !player.paused;
     if (status)
       status.textContent = player.paused
@@ -732,6 +956,9 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.world.missingRequiredChunks =
       stream.missingRequiredKeys.length;
     this.runtime.world.visibleObjects = this.visibleObjects;
+    this.runtime.interactions.deltas = this.interactions.deltas.snapshot();
+    this.runtime.interactions.scenario = this.scenario;
+    this.runtime.interactions.snapshot = this.interactions.getSnapshot();
 
     const chunk = document.querySelector<HTMLElement>("#world-debug-chunk");
     const streamLabel = document.querySelector<HTMLElement>(
@@ -760,6 +987,143 @@ export class AlpineScene extends Phaser.Scene {
       this.previousChunk = currentChunk;
       this.worldTransitions += 1;
     }
+  }
+
+  private getInteractiveObjects(): readonly InteractiveWorldObject[] {
+    if (this.scenario !== "none") return this.scenarioObjects;
+    if (this.trainingMode) return [];
+    const objects: InteractiveWorldObject[] = [];
+    for (const chunk of this.stream.getActiveChunks()) {
+      for (const object of chunk.objects) objects.push(object);
+    }
+    CLASSIC_LIFT.towers.forEach((tower, index) => {
+      objects.push({
+        id: `lift-tower:${index}`,
+        interaction: CLASSIC_LIFT.towerInteraction,
+        type: "lift-tower",
+        x: tower.x,
+        y: tower.y,
+      });
+    });
+    for (const chair of CLASSIC_LIFT.chairs) {
+      for (let y = -64 + chair.phaseY; y <= 1_472; y += 128) {
+        objects.push({
+          id: `chairlift:${chair.laneX}:${y}`,
+          interaction: CLASSIC_LIFT.chairInteraction,
+          type: "chairlift",
+          x: chair.laneX,
+          y,
+        });
+      }
+    }
+    return objects;
+  }
+
+  private stageInteractionScenario(scenario: GateThreeScenario): boolean {
+    const valid: readonly GateThreeScenario[] = [
+      "none",
+      "ramp-trick",
+      "crash-recovery",
+      "mushroom",
+      "burning-ignite",
+      "burning-clear",
+    ];
+    if (!valid.includes(scenario)) return false;
+    if (scenario === "none") {
+      this.scenario = "none";
+      this.scenarioObjects = [];
+      return true;
+    }
+
+    const preserveBurning =
+      scenario === "burning-clear" &&
+      this.interactions.deltas.get("scenario-dead-tree")?.burning === true;
+    const preserveMushroom =
+      scenario === "mushroom" &&
+      this.interactions.deltas.get("scenario-stump")?.form === "mushroom";
+    if (scenario === "burning-clear" && !preserveBurning) return false;
+    if (!preserveBurning && !preserveMushroom) {
+      this.simulation.reset();
+      this.interactions.reset();
+      this.clock.reset();
+    }
+    const player = this.simulation.getSnapshot();
+    const createObject = (
+      type: InteractiveWorldObject["type"],
+      id: string,
+      x: number,
+      y: number,
+      variant?: InteractiveWorldObject["variant"],
+    ): InteractiveWorldObject => ({
+      id,
+      interaction: interactionFor(type),
+      type,
+      ...(variant ? { variant } : {}),
+      x,
+      y,
+    });
+
+    if (scenario === "ramp-trick") {
+      this.scenarioObjects = [
+        createObject("ramp", "scenario-ramp", player.worldX, player.worldY + 5),
+      ];
+    } else if (scenario === "crash-recovery") {
+      this.scenarioObjects = [
+        createObject(
+          "tree",
+          "scenario-crash-tree",
+          player.worldX,
+          player.worldY + 6,
+          "evergreen",
+        ),
+      ];
+    } else if (scenario === "mushroom") {
+      if (preserveMushroom) {
+        this.interactions.step(
+          this.simulation,
+          NEUTRAL_PLAYER_INPUT,
+          [],
+          SIMULATION_STEP_SECONDS,
+        );
+      }
+      this.scenarioObjects = [
+        createObject(
+          "stump",
+          "scenario-stump",
+          preserveMushroom ? player.worldX : player.worldX - 9.8,
+          preserveMushroom ? player.worldY - 0.15 : player.worldY - 3.5,
+        ),
+      ];
+    } else if (scenario === "burning-ignite") {
+      this.scenarioObjects = [
+        createObject(
+          "tree",
+          "scenario-dead-tree",
+          player.worldX,
+          player.worldY + 5.5,
+          "dead-tree",
+        ),
+      ];
+    } else {
+      this.scenarioObjects = [
+        createObject(
+          "ramp",
+          "scenario-fire-ramp",
+          player.worldX,
+          player.worldY + 5,
+        ),
+        createObject(
+          "tree",
+          "scenario-dead-tree",
+          player.worldX,
+          player.worldY + 13,
+          "dead-tree",
+        ),
+      ];
+    }
+    this.scenario = scenario;
+    if (this.runtime) this.runtime.interactions.scenario = scenario;
+    return true;
   }
 
   private setDebugVisible(visible: boolean): void {
@@ -850,6 +1214,45 @@ export class AlpineScene extends Phaser.Scene {
         0,
         this.playerEvents.length - MAX_TELEMETRY_EVENTS,
       );
+    }
+  }
+
+  private captureInteractionEvents(): void {
+    const interactionEvents = this.interactions.drainEvents();
+    const feedbackEvents = this.interactions.drainFeedback();
+    const styleEvents = this.interactions.drainStyleEvents();
+    this.interactionEvents.push(...interactionEvents);
+    this.feedbackEvents.push(...feedbackEvents);
+    this.styleEvents.push(...styleEvents);
+    for (const events of [
+      this.interactionEvents,
+      this.feedbackEvents,
+      this.styleEvents,
+    ]) {
+      if (events.length > MAX_TELEMETRY_EVENTS)
+        events.splice(0, events.length - MAX_TELEMETRY_EVENTS);
+    }
+
+    const latestVisual = [...feedbackEvents]
+      .reverse()
+      .find((event) => event.kind === "visual");
+    const latestAudio = [...feedbackEvents]
+      .reverse()
+      .find((event) => event.kind === "audio");
+    if (latestVisual) {
+      this.feedbackVisibleUntil =
+        latestVisual.atSeconds + FEEDBACK_VISIBLE_SECONDS;
+      const feedback = document.querySelector<HTMLElement>("#feedback-card");
+      const label = document.querySelector<HTMLElement>("#feedback-label");
+      if (feedback) {
+        feedback.hidden = false;
+        feedback.dataset.cue = latestVisual.cue;
+      }
+      if (label) label.textContent = latestVisual.label;
+    }
+    if (latestAudio) {
+      const audio = document.querySelector<HTMLElement>("#audio-cue");
+      if (audio) audio.textContent = `AUDIO CUE ${latestAudio.cue}`;
     }
   }
 

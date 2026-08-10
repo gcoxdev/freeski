@@ -1,7 +1,12 @@
 export interface ObjectDelta {
+  burned?: boolean;
+  burning?: boolean;
   consumed?: boolean;
   destroyed?: boolean;
-  npcState?: "active" | "fled" | "finished";
+  form?: "mushroom";
+  npcState?: "active" | "awake" | "fled" | "finished" | "knocked";
+  offsetX?: number;
+  yellowSnow?: boolean;
 }
 
 export class ChunkDeltaStore {
@@ -18,5 +23,16 @@ export class ChunkDeltaStore {
 
   clear(): void {
     this.deltas.clear();
+  }
+
+  snapshot(): Readonly<Record<string, Readonly<ObjectDelta>>> {
+    return Object.freeze(
+      Object.fromEntries(
+        [...this.deltas.entries()].map(([id, delta]) => [
+          id,
+          Object.freeze({ ...delta }),
+        ]),
+      ),
+    );
   }
 }

@@ -80,7 +80,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   });
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
-  await page.goto("/?seed=gate-one-playthrough");
+  await page.goto("/?seed=gate-one-playthrough&training=1");
   await expect(page.locator("#game-shell")).toHaveAttribute(
     "data-game-ready",
     "true",
@@ -92,6 +92,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   const initial = await runtimeSnapshot(page);
   expect(initial.camera.playerScreenRatio).toBeCloseTo(0.35, 8);
   expect(initial.settings.pointerSteeringEnabled).toBe(false);
+  expect(initial.settings.trainingMode).toBe(true);
 
   await page.keyboard.down("a");
   await page.waitForFunction(
@@ -292,7 +293,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
 test("keeps pointer steering opt-in and click-to-jump functional", async ({
   page,
 }) => {
-  await page.goto("/?pointer=1");
+  await page.goto("/?pointer=1&training=1");
   await expect(page.locator("#pointer-toggle")).toHaveAttribute(
     "aria-pressed",
     "true",

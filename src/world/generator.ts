@@ -1,6 +1,7 @@
 import { CLASSIC_EXCLUSIONS, pointInsideBounds } from "./classicMountain";
 import { blocksGuaranteedCorridor, isBlockingType } from "./corridor";
 import { GENERATOR_VERSION } from "./generatorVersion";
+import { interactionFor } from "./interactionCatalog";
 import { chooseObjectType, ZONE_SPAWN_CHANCE, zoneAt } from "./spawnProfiles";
 import {
   createSeededRandom,
@@ -11,27 +12,12 @@ import {
 import {
   CHUNK_SIZE_METERS,
   type GeneratedObject,
-  type GeneratedObjectType,
   type WorldBounds,
   type WorldChunk,
 } from "./types";
 
 const CELL_SIZE_METERS = 8;
 const CANDIDATE_MARGIN_METERS = 24;
-
-const FOOTPRINT_RADIUS: Readonly<Record<GeneratedObjectType, number>> =
-  Object.freeze({
-    beginner: 1.25,
-    "bump-large": 1.5,
-    "bump-small": 0.8,
-    dog: 0.75,
-    mogul: 1.1,
-    ramp: 2,
-    rock: 1.35,
-    stump: 1,
-    tree: 2.2,
-    "walking-tree": 2.2,
-  });
 
 interface Candidate extends GeneratedObject {
   readonly cellX: number;
@@ -102,8 +88,10 @@ export class WorldGenerator {
         Object.freeze({
           footprintRadius: candidate.footprintRadius,
           id: candidate.id,
+          interaction: candidate.interaction,
           priority: candidate.priority,
           type: candidate.type,
+          ...(candidate.variant ? { variant: candidate.variant } : {}),
           x: candidate.x,
           y: candidate.y,
           zone: candidate.zone,
@@ -170,16 +158,25 @@ export class WorldGenerator {
     const y = cellY * CELL_SIZE_METERS + 1 + random.next() * 6;
     const zone = zoneAt(x, y);
     const type = chooseObjectType(zone, random.next(), random.next());
+    const interaction = interactionFor(type);
+    const priority = random.next();
     const candidate: Candidate = Object.freeze({
       cellX,
       cellY,
-      footprintRadius: FOOTPRINT_RADIUS[type],
+      footprintRadius: interaction.footprint.radius,
       id: `${GENERATOR_VERSION}:${cellX}:${cellY}`,
-      priority: random.next(),
+      interaction,
+      priority,
       spawned:
         random.next() <
         Math.min(0.92, ZONE_SPAWN_CHANCE[zone] * difficultyMultiplier(y)),
       type,
+      ...(type === "tree"
+        ? {
+            variant:
+              priority < 0.12 ? ("dead-tree" as const) : ("evergreen" as const),
+          }
+        : {}),
       x,
       y,
       zone,

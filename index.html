@@ -40,6 +40,11 @@
         <span id="world-debug-ahead">AHEAD — · CORRIDOR 4.5M</span>
       </aside>
 
+      <aside id="feedback-card" class="feedback-card" hidden aria-live="polite">
+        <small id="audio-cue">FEEDBACK READY</small>
+        <strong id="feedback-label">LINE READY</strong>
+      </aside>
+
       <footer class="instrument-strip" aria-label="Run information">
         <div class="metric metric--speed">
           <small>SPEED</small
@@ -52,6 +57,10 @@
         <div class="metric">
           <small>FORM</small><span id="motion-label">DOWNHILL</span>
         </div>
+        <div class="metric metric--style">
+          <small>STYLE</small><span><strong id="style-label">0</strong></span>
+          <span id="trick-label">LINE READY</span>
+        </div>
         <div class="metric">
           <small>WORLD / <span id="generator-label">—</span></small>
           <span id="seed-label">classic-1991</span>
@@ -60,7 +69,7 @@
           <small
             ><span id="turbo-indicator">TURBO OFF</span> · SHIFT/B BRAKE</small
           >
-          <span>ARROWS/WASD · SPACE JUMP · F TURBO · ESC PAUSE · R RESET</span>
+          <span>ARROWS/WASD · SPACE JUMP · Q/E SPIN · Z/X FLIP · F TURBO</span>
         </div>
         <button
           id="pointer-toggle"

@@ -8,6 +8,10 @@ export type GameAction =
   | "reset"
   | "steer-left"
   | "steer-right"
+  | "trick-back"
+  | "trick-front"
+  | "trick-left"
+  | "trick-right"
   | "tuck"
   | "turbo"
   | "uphill";
@@ -29,6 +33,10 @@ export const KEY_BINDINGS: Readonly<Record<GameAction, readonly string[]>> =
     reset: ["KeyR", "F2"],
     "steer-left": ["ArrowLeft", "KeyA"],
     "steer-right": ["ArrowRight", "KeyD"],
+    "trick-back": ["KeyZ"],
+    "trick-front": ["KeyX"],
+    "trick-left": ["KeyQ"],
+    "trick-right": ["KeyE"],
     tuck: ["ArrowDown", "KeyS"],
     turbo: ["KeyF"],
     uphill: ["ArrowUp", "KeyW"],

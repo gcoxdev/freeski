@@ -1,4 +1,5 @@
 import { WORLD_BOUNDARIES_METERS } from "./boundaries";
+import { interactionFor } from "./interactionCatalog";
 import type { WorldBounds, WorldPoint, WorldZone } from "./types";
 
 export interface CourseMarker extends WorldPoint {
@@ -81,6 +82,8 @@ export const CLASSIC_LIFT = Object.freeze({
     Object.freeze({ direction: "downhill" as const, laneX: -9, phaseY: 64 }),
   ]),
   loopLengthMeters: 1_536,
+  chairInteraction: interactionFor("chairlift"),
+  towerInteraction: interactionFor("lift-tower"),
   towerX: -8,
   towers: Object.freeze(
     Array.from({ length: 13 }, (_, index) =>

@@ -26,11 +26,35 @@ export type GeneratedObjectType =
   | "tree"
   | "walking-tree";
 
+export type GeneratedObjectVariant = "dead-tree" | "evergreen";
+
+export interface GroundFootprint {
+  readonly offsetX: number;
+  readonly offsetY: number;
+  readonly radius: number;
+  readonly shape: "circle";
+}
+
+export interface SpriteBoundsMeters {
+  readonly height: number;
+  readonly pivotY: number;
+  readonly width: number;
+}
+
+export interface InteractionMetadata {
+  readonly blocksGroundedPlayer: boolean;
+  readonly clearanceHeight: number;
+  readonly footprint: GroundFootprint;
+  readonly spriteBounds: SpriteBoundsMeters;
+}
+
 export interface GeneratedObject extends WorldPoint {
   readonly footprintRadius: number;
   readonly id: string;
+  readonly interaction: InteractionMetadata;
   readonly priority: number;
   readonly type: GeneratedObjectType;
+  readonly variant?: GeneratedObjectVariant;
   readonly zone: WorldZone;
 }
 

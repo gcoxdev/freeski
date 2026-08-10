@@ -29,11 +29,15 @@ Open the local URL printed by Vite and ski immediately.
 | Point downhill/tuck | Down arrow or S                                    |
 | Brake               | Shift or B                                         |
 | Jump                | Space                                              |
+| Spin left/right     | Q/E while airborne                                 |
+| Back/front flip     | Z/X while airborne                                 |
 | Turbo               | F                                                  |
 | Pause               | Escape or F3                                       |
 | Reset run           | R or F2                                            |
 
 Optional pointer steering and click-to-jump are disabled by default. Enable them with the **POINTER OFF** control below the game or add `?pointer=1` to the URL.
+
+Terrain interactions use small ground footprints and independent air-clearance heights rather than visible sprite rectangles. Press **G** to inspect those footprints, chunk bounds, and the guaranteed corridor during development.
 
 Project checks are available as separate CI-friendly scripts:
 

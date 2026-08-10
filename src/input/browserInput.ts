@@ -64,6 +64,12 @@ export class BrowserInputAdapter {
         brake: this.held.has("brake"),
         jumpPressed: this.consume("jump"),
         steer,
+        trickFlip:
+          (this.held.has("trick-front") ? 1 : 0) -
+          (this.held.has("trick-back") ? 1 : 0),
+        trickSpin:
+          (this.held.has("trick-right") ? 1 : 0) -
+          (this.held.has("trick-left") ? 1 : 0),
         tuck:
           this.held.has("tuck") || (this.pointerEnabled && this.pointerTuck),
         uphill:

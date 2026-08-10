@@ -1,5 +1,20 @@
 import type { InputTelemetryEvent } from "../input/browserInput";
 import type { PlayerEvent, PlayerSnapshot } from "../simulation/player";
+import type {
+  FeedbackEvent,
+  InteractionEvent,
+  InteractionSnapshot,
+} from "../simulation/slopeInteractions";
+import type { StyleEvent } from "../simulation/style";
+import type { ObjectDelta } from "../world/chunkDeltas";
+
+export type GateThreeScenario =
+  | "burning-clear"
+  | "burning-ignite"
+  | "crash-recovery"
+  | "mushroom"
+  | "none"
+  | "ramp-trick";
 
 export interface DescentAuditReport {
   corridorBlockers: number;
@@ -33,6 +48,14 @@ export interface FreeSkiRuntime {
   engine: "phaser-3";
   generatorVersion: string;
   lastInput: string;
+  interactions: {
+    deltas: Readonly<Record<string, Readonly<ObjectDelta>>>;
+    feedbackEvents: FeedbackEvent[];
+    interactionEvents: InteractionEvent[];
+    scenario: GateThreeScenario;
+    snapshot: InteractionSnapshot;
+    styleEvents: StyleEvent[];
+  };
   player: PlayerSnapshot;
   ready: boolean;
   seed: string;
@@ -40,6 +63,7 @@ export interface FreeSkiRuntime {
   settings: {
     debugVisible: boolean;
     pointerSteeringEnabled: boolean;
+    trainingMode: boolean;
   };
   telemetry: {
     droppedSeconds: number;
@@ -69,6 +93,7 @@ declare global {
     __FREE_SKI__?: FreeSkiRuntime;
     __FREE_SKI_DEBUG__?: {
       runAutomatedDescent: (distanceMeters?: number) => DescentAuditReport;
+      stageInteractionScenario: (scenario: GateThreeScenario) => boolean;
       setVisible: (visible: boolean) => void;
     };
   }
