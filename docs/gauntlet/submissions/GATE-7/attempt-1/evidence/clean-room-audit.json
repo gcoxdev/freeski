@@ -1,0 +1,410 @@
+{
+  "audit": "freeski-clean-room-shipping-audit-v1",
+  "filesAudited": 78,
+  "findings": [],
+  "inventory": [
+    {
+      "bytes": 745567,
+      "file": "assets/sprite-sheets/01-player-skier.png",
+      "sha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc"
+    },
+    {
+      "bytes": 957049,
+      "file": "assets/sprite-sheets/02-hill-population.png",
+      "sha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9"
+    },
+    {
+      "bytes": 1440028,
+      "file": "assets/sprite-sheets/03-yeti.png",
+      "sha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f"
+    },
+    {
+      "bytes": 905319,
+      "file": "assets/sprite-sheets/04-terrain.png",
+      "sha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65"
+    },
+    {
+      "bytes": 1046847,
+      "file": "assets/sprite-sheets/05-course-props.png",
+      "sha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8"
+    },
+    {
+      "bytes": 780766,
+      "file": "assets/sprite-sheets/06-vfx.png",
+      "sha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad"
+    },
+    {
+      "bytes": 2911,
+      "file": "assets/sprite-sheets/PROMPTS.md",
+      "sha256": "9ddd449063b36e4ce0de511dadd0592dc77be6e00bf8ae64c778f52d001d7ee0"
+    },
+    {
+      "bytes": 2467,
+      "file": "assets/sprite-sheets/README.md",
+      "sha256": "794ece3bc8de2ecad1b1a67dda6ab37f24a724b818e0ca611063c7cd12328868"
+    },
+    {
+      "bytes": 4900,
+      "file": "assets/sprite-sheets/manifest.json",
+      "sha256": "5211102c821cdc36ee5a7464eab16f50666f600a9798173d97513663164e055e"
+    },
+    {
+      "bytes": 2347801,
+      "file": "assets/sprite-sheets/review-contact-sheet.png",
+      "sha256": "c793f3311c326c8d0d1b217131bf85b39ce999ef92ef7b4ff8c8911859fcc69d"
+    },
+    {
+      "bytes": 1732870,
+      "file": "assets/sprite-sheets/source-chroma/01-player-skier-chroma.png",
+      "sha256": "76a86b7bb2daed34601c2851c7a097e51001858e5ec93f73d10e014d1e5c4d67"
+    },
+    {
+      "bytes": 1896086,
+      "file": "assets/sprite-sheets/source-chroma/02-hill-population-chroma.png",
+      "sha256": "ead3af02a029532da36f7101c2eaa32719783f5ad7b00fe075c0b2f20453f3c8"
+    },
+    {
+      "bytes": 2047071,
+      "file": "assets/sprite-sheets/source-chroma/03-yeti-chroma.png",
+      "sha256": "6347a7288533493e1860e5e610fb639a08c5478839178720d4c49dc5c619d9c8"
+    },
+    {
+      "bytes": 1881545,
+      "file": "assets/sprite-sheets/source-chroma/04-terrain-chroma.png",
+      "sha256": "209213b727619ed4b31a66283cb566eabd94fde730e707ddc573791c8998152a"
+    },
+    {
+      "bytes": 1687997,
+      "file": "assets/sprite-sheets/source-chroma/05-course-props-chroma.png",
+      "sha256": "1bd9d69901ee9dee264a4af8367a5eead41e97d9a61e9bc0a0a65ca128f41476"
+    },
+    {
+      "bytes": 1596050,
+      "file": "assets/sprite-sheets/source-chroma/06-vfx-chroma.png",
+      "sha256": "a7ae35fa4c6e76f06d51a0d8bbcdd79a3e2ea5a566692c61c94208acb9cb0f4a"
+    },
+    {
+      "bytes": 11559,
+      "file": "index.html",
+      "sha256": "d420f4dd5406eeb16ed83e4c6e3df109c1ba312d072ea3b2528de77ba9b6d6ea"
+    },
+    {
+      "bytes": 46134,
+      "file": "public/assets/production/freeski-atlas.json",
+      "sha256": "2a7cef82ff81da7f222490a9c753672601a87b8e9e9413aacaef260bcbb27cd5"
+    },
+    {
+      "bytes": 129348,
+      "file": "public/assets/production/freeski-atlas.meta.json",
+      "sha256": "e3d2a107c6318cca8fb1a478dc0ce10c080d29ecdd87725639cbc436947ced4e"
+    },
+    {
+      "bytes": 2149038,
+      "file": "public/assets/production/freeski-atlas.png",
+      "sha256": "45c4307c6618e41ae7823bdcf0330b5c4b2117848f25b5a9f29f33dcbbb6be42"
+    },
+    {
+      "bytes": 2448,
+      "file": "src/accessibility/settings.test.ts",
+      "sha256": "bcc29b203ece831b47ffc90f7d762dc7d355cf11d50ac192a4f76d06b6d1fed9"
+    },
+    {
+      "bytes": 2953,
+      "file": "src/accessibility/settings.ts",
+      "sha256": "ebb307b198e016a3cb3fb7ed0ce3ff7addfbe819e3bb3d95a7b8253ff227e397"
+    },
+    {
+      "bytes": 1879,
+      "file": "src/audio/AlpineAudio.test.ts",
+      "sha256": "8b2278513bc05b7f3fb4bdd0e14f97fae1b79dc1121b068dacd2ffd26781c354"
+    },
+    {
+      "bytes": 11678,
+      "file": "src/audio/AlpineAudio.ts",
+      "sha256": "16c6859dce265d7e83719cf91d3a147f5eb6c5d76b85855babe01dfe5e12d39e"
+    },
+    {
+      "bytes": 2624,
+      "file": "src/input/actions.test.ts",
+      "sha256": "b070daccae54481ee864ca3617175310aa8690a63118fbc79cba8e3b45532778"
+    },
+    {
+      "bytes": 5451,
+      "file": "src/input/actions.ts",
+      "sha256": "2e5d20a73ba6cfce5c3da4b0a1232945cb253ffbb6c8237aa909646eb7f9b032"
+    },
+    {
+      "bytes": 11610,
+      "file": "src/input/browserInput.ts",
+      "sha256": "fe5c8afddc99c051d3424d6a5a21688df2eb1cd87d62470cef11ab5895750847"
+    },
+    {
+      "bytes": 1298,
+      "file": "src/lifecycle/automaticPause.test.ts",
+      "sha256": "a623f70170c4a2900774b4ba022d2328ff4473c1e21dc11c2daa00be79fc1b33"
+    },
+    {
+      "bytes": 1309,
+      "file": "src/lifecycle/automaticPause.ts",
+      "sha256": "79622fb376e3ecbec3058e184e78aa142b2207cfa72b8ff79e573123a768d204"
+    },
+    {
+      "bytes": 683,
+      "file": "src/main.ts",
+      "sha256": "bfd1f4d83e0dbff40308aca6f816d334ea225cb56b69b988d3482cb141e0257f"
+    },
+    {
+      "bytes": 1185,
+      "file": "src/performance/frameMonitor.test.ts",
+      "sha256": "e59ee9dd2423e16c526f312c7a64f1b7897147fd3a74e05af20442bef13649b4"
+    },
+    {
+      "bytes": 3063,
+      "file": "src/performance/frameMonitor.ts",
+      "sha256": "e7082b7ceb393cf0157cf7c15d10015ac0c315d5b1bbb34640f2e0625ae64262"
+    },
+    {
+      "bytes": 5496,
+      "file": "src/render/accessibilityControls.ts",
+      "sha256": "71f4dfd4bb94be213250c0641456583d330a6dc5ec97ef1a2631f599c0cb2594"
+    },
+    {
+      "bytes": 4265,
+      "file": "src/render/atlas/AtlasSpritePool.ts",
+      "sha256": "c8b2de545f9814b5557e553a43f97187d223361a2821588a889e088c42cafcf4"
+    },
+    {
+      "bytes": 8576,
+      "file": "src/render/atlas/productionAtlas.test.ts",
+      "sha256": "21964d034e3a63476789ef9654c5709f086ad25b87d26615716afec61b1e30ce"
+    },
+    {
+      "bytes": 548,
+      "file": "src/render/createGame.ts",
+      "sha256": "55cc6cb45b760c899ca78721907ee796f18b9dbb6d44b272f9c1deaad80b5b1f"
+    },
+    {
+      "bytes": 1160,
+      "file": "src/render/localRecordStorage.test.ts",
+      "sha256": "a2df16fb7a3939542c08d7b909c3a7f84cfff69f8356766b3ceba40809e02f9c"
+    },
+    {
+      "bytes": 834,
+      "file": "src/render/localRecordStorage.ts",
+      "sha256": "7ad9383c88288714eec45d45d3d930ebde4d97a8928a5baba564f6d14488a6d2"
+    },
+    {
+      "bytes": 2468,
+      "file": "src/render/playerPresentation.test.ts",
+      "sha256": "7e27ad348eba20f7fb9332aca575a585bf69107f255594930c0315243ea74e67"
+    },
+    {
+      "bytes": 2723,
+      "file": "src/render/playerPresentation.ts",
+      "sha256": "11473062184fdd3b824e112b2e0d7d8c07b8f3e8d06fa0873aa247032cec38d1"
+    },
+    {
+      "bytes": 5683,
+      "file": "src/render/runtimeBridge.ts",
+      "sha256": "028647458367d45b2c4a2d5db43c68b2122fc59bf586688f70567cfc83f140f7"
+    },
+    {
+      "bytes": 108672,
+      "file": "src/render/scenes/AlpineScene.ts",
+      "sha256": "8a81320a18b2784f877fc31f5c54d050c278d703462565051f9a32d52c034cb8"
+    },
+    {
+      "bytes": 7531,
+      "file": "src/render/vfx/AlpineVfx.ts",
+      "sha256": "da8f5c90d6b92219ce37a54e5c37c563e8995fbf57a7c8d507a9eb70edd11f1f"
+    },
+    {
+      "bytes": 2597,
+      "file": "src/replay/replay.test.ts",
+      "sha256": "5708da5f9277971b05dae87a33972eee6a7ac257f42d6a63b1c3bbf522157dab"
+    },
+    {
+      "bytes": 4101,
+      "file": "src/replay/replay.ts",
+      "sha256": "cc94db2610581a9563f9f88471f456c51c3b4a82c02bb9cb6ea0ae80a65892f7"
+    },
+    {
+      "bytes": 756,
+      "file": "src/simulation/fixedStep.test.ts",
+      "sha256": "55a0d20e64b612a1b91e729da1122158ba4eba0f57bd701fe3f49e455b6f39c6"
+    },
+    {
+      "bytes": 1821,
+      "file": "src/simulation/fixedStep.ts",
+      "sha256": "59cd456cd8b32880a8197e23e2cc921ab8791fde3aefcbb84615d42eff6804ff"
+    },
+    {
+      "bytes": 6437,
+      "file": "src/simulation/livingSlope.test.ts",
+      "sha256": "7777294136e589a249314c1fb855eea53731e83940796a0274214bcb1c916e38"
+    },
+    {
+      "bytes": 18984,
+      "file": "src/simulation/livingSlope.ts",
+      "sha256": "1f2267ffd01aaec5d61617786fb83f6b40718fbd55f13729f0e5a1d2d44bd243"
+    },
+    {
+      "bytes": 6981,
+      "file": "src/simulation/modes.test.ts",
+      "sha256": "eb60d4ac655a346475a65b83a9fcc50bbc050b0867475e4c160262d4f387fb52"
+    },
+    {
+      "bytes": 10229,
+      "file": "src/simulation/modes.ts",
+      "sha256": "f9b53aa728854374281e7530f8b11f06390e7ffc0cca2a8f95c705874b02dd7b"
+    },
+    {
+      "bytes": 4532,
+      "file": "src/simulation/player.test.ts",
+      "sha256": "0a0eee8a4aa3b05eb89d63e8053c463bce3a9ef557cc52fb85938b8556b608c8"
+    },
+    {
+      "bytes": 15181,
+      "file": "src/simulation/player.ts",
+      "sha256": "59a01b3a485a696f2c97a2854a199e83cc7cffd8ee892cdd77ff2a661f922613"
+    },
+    {
+      "bytes": 3727,
+      "file": "src/simulation/recordBook.test.ts",
+      "sha256": "21e457c538fc6e9e7a8c93e71106ccd7a7d7eaf46a3bba2aaa259046d43734ff"
+    },
+    {
+      "bytes": 4756,
+      "file": "src/simulation/recordBook.ts",
+      "sha256": "1c9f3ec404ec18b0029fc653c720a5bc4a411f0021affc5bf1096d7beb2a740e"
+    },
+    {
+      "bytes": 12097,
+      "file": "src/simulation/slopeInteractions.test.ts",
+      "sha256": "98f81caa8c33847de46f9016121d71ba343b28bb4e1096df747e86fef0978335"
+    },
+    {
+      "bytes": 15833,
+      "file": "src/simulation/slopeInteractions.ts",
+      "sha256": "9cece082626a1e6e9c7debca1a0286aeb36765afaf0802e0bb6c9821cf15db06"
+    },
+    {
+      "bytes": 1842,
+      "file": "src/simulation/style.test.ts",
+      "sha256": "c9208c4a45b267e8a9bad629302b9c50f49e9857747c311052ea5d86cd65d15f"
+    },
+    {
+      "bytes": 3013,
+      "file": "src/simulation/style.ts",
+      "sha256": "879f458af2b8313a0ccff0df2ab8434259a31493f642a97e3ba387cc9e84bb81"
+    },
+    {
+      "bytes": 7155,
+      "file": "src/simulation/yeti.test.ts",
+      "sha256": "909bcd769c98fcdb3d387ec5d4cb5054972eddd59bca7126bb3ca5ca2272c83e"
+    },
+    {
+      "bytes": 13993,
+      "file": "src/simulation/yeti.ts",
+      "sha256": "a39b258d0d8feec26de5fd5152ab4dd5f22a713ef20cc30180964bc36d0e73a2"
+    },
+    {
+      "bytes": 16391,
+      "file": "src/styles.css",
+      "sha256": "faefa217bed530a9ca7419b444404392c79c6ed8ee3a8c6c23c090eaf3aa9d9c"
+    },
+    {
+      "bytes": 38,
+      "file": "src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "bytes": 611,
+      "file": "src/world/boundaries.test.ts",
+      "sha256": "1d5258835078856f1bdb2f6ec5d5953b58868792b41c43643e52d67fe8021daf"
+    },
+    {
+      "bytes": 672,
+      "file": "src/world/boundaries.ts",
+      "sha256": "e8c6c81ad9bd13594857a4c4343821d29d4805d991630b7efb08147e9559546a"
+    },
+    {
+      "bytes": 958,
+      "file": "src/world/chunkDeltas.ts",
+      "sha256": "db1c05fd0b3da0800b923d0affcba20dbb793c40fca5a01675246efd42a91871"
+    },
+    {
+      "bytes": 5880,
+      "file": "src/world/classicMountain.ts",
+      "sha256": "c1ebfde580811fbc133b9d80fe5ab0fef574def731dccf04bfd629ba54f569fd"
+    },
+    {
+      "bytes": 986,
+      "file": "src/world/corridor.ts",
+      "sha256": "48f7654d8f71ad6df9c9fcc5233cfca3922ef5c8d9603a913af6336fbd4d9919"
+    },
+    {
+      "bytes": 7072,
+      "file": "src/world/generator.ts",
+      "sha256": "bf4128fa8a7823c426d60d9b58bacf6c9c1a1f56c69df77ceeb0dc69435a1a16"
+    },
+    {
+      "bytes": 136,
+      "file": "src/world/generatorVersion.ts",
+      "sha256": "72ec1dffa5fd752b3f79d8e057b5b036041fb9b4794cbce8699668b6dee12775"
+    },
+    {
+      "bytes": 1694,
+      "file": "src/world/interactionCatalog.test.ts",
+      "sha256": "5e3e9e7a7de3031ce21b1a8c65ae53c37743bba90bc5d9f2efe3224eb287610f"
+    },
+    {
+      "bytes": 1656,
+      "file": "src/world/interactionCatalog.ts",
+      "sha256": "4f4c2a7b44b499d2858489f00ad1682a5227f71ad436060c9d85dd97d80b555d"
+    },
+    {
+      "bytes": 3277,
+      "file": "src/world/mountainStream.ts",
+      "sha256": "841dacfc6d0f4a68a9789575913c8acc0826373702564ad08b781afd6ee7ec37"
+    },
+    {
+      "bytes": 813,
+      "file": "src/world/seed.test.ts",
+      "sha256": "9be9b514331c315a3d65356686245374ce292e70d41f6631a80a93f8c0847c6c"
+    },
+    {
+      "bytes": 1492,
+      "file": "src/world/seed.ts",
+      "sha256": "03c92feeac7e050a5a9e9752b30009ad5198fbbfda7f3616da298c738444062a"
+    },
+    {
+      "bytes": 2721,
+      "file": "src/world/spawnProfiles.ts",
+      "sha256": "f11bd657c8fd109ffd608765d32eb135c3d3a19cbdc7670c4d8689e38adff94b"
+    },
+    {
+      "bytes": 1631,
+      "file": "src/world/types.ts",
+      "sha256": "ce0c0059259541b73f2108d02ebcbf29675a4413eee63817fc43db1b58255c7c"
+    },
+    {
+      "bytes": 10311,
+      "file": "src/world/worldGeneration.test.ts",
+      "sha256": "80a725a38379956966344bca02c266b08e6b4e494f2f25d528c8c8595542783c"
+    }
+  ],
+  "limitations": [
+    "This static audit detects suspect filenames, binary formats, text markers, and broken local provenance; it is not a legal opinion.",
+    "No authoritative hash corpus of every historical SkiFree release was available, so the audit cannot prove absence by exhaustive hash comparison.",
+    "Behavioral similarity and independent authorship require process evidence and human review in addition to automated scanning."
+  ],
+  "passed": true,
+  "provenanceChecks": {
+    "atlasHasSourceManifestHash": true,
+    "atlasIdentifiesSourceManifest": true,
+    "conceptGenerationDeclaresNoReferenceImagery": true,
+    "proceduralAudioShipsNoRecordedAudio": true
+  },
+  "scope": ["assets/sprite-sheets", "public/assets", "src", "index.html"]
+}

@@ -1,0 +1,12 @@
+Latest independent verdict for each prerequisite gate
+=====================================================
+
+GATE-0 attempt-1 PASS  docs/gauntlet/submissions/GATE-0/attempt-1/judge-verdict.json
+GATE-1 attempt-1 PASS  docs/gauntlet/submissions/GATE-1/attempt-1/judge-verdict.json
+GATE-2 attempt-2 PASS  docs/gauntlet/submissions/GATE-2/attempt-2/judge-verdict.json
+GATE-3 attempt-1 PASS  docs/gauntlet/submissions/GATE-3/attempt-1/judge-verdict.json
+GATE-4 attempt-1 PASS  docs/gauntlet/submissions/GATE-4/attempt-1/judge-verdict.json
+GATE-5 attempt-2 PASS  docs/gauntlet/submissions/GATE-5/attempt-2/judge-verdict.json
+GATE-6 attempt-3 PASS  docs/gauntlet/submissions/GATE-6/attempt-3/judge-verdict.json
+
+Gate 7 has no executor-authored verdict. The orchestrator froze candidate 421aab1b522523ec44ffe379f415ed498b85f1ac for a fresh context-clean read-only judge.

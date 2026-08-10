@@ -1,0 +1,107 @@
+{
+  "art": {
+    "atlasFrameCount": 112,
+    "atlasLoaded": true,
+    "capacityFallbacks": 0,
+    "fallbackDraws": 0,
+    "frameFallbacks": 0,
+    "missingFrameFallbacks": 0,
+    "peakPooledSprites": 94,
+    "playerFrame": "player/downhill",
+    "playerMinimumRenderedHeight": 48,
+    "playerRenderedHeight": 55.99999999999999,
+    "playerTargetRenderedHeight": 56,
+    "pooledSprites": 80,
+    "spriteCapacity": 512,
+    "statusLabelDepth": 90
+  },
+  "bounds": {
+    "actorCapacity": 22,
+    "actorCount": 21,
+    "pooledSprites": 80,
+    "spriteCapacity": 512,
+    "vfxEffects": 4,
+    "vfxEffectsCapacity": 56,
+    "vfxTracks": 15,
+    "vfxTracksCapacity": 48
+  },
+  "droppedSeconds": 0,
+  "engine": "phaser-3",
+  "frame": {
+    "averageFps": 58.83,
+    "ignoredLifecycleGaps": 0,
+    "lastFrameMs": 16.67,
+    "longFrameCount": 17,
+    "maximumFrameMs": 26.68,
+    "p95FrameMs": 18.34,
+    "p99FrameMs": 25,
+    "rollingLongFrameCount": 17,
+    "rollingLongFrameRatio": 0.0283,
+    "sampleCapacity": 600,
+    "sampleCount": 600,
+    "targetFps": 60,
+    "totalFrames": 754
+  },
+  "livingSlope": {
+    "actorCount": 21,
+    "bounded": true,
+    "workUnitsLastStep": 21
+  },
+  "renderer": "canvas-2d",
+  "replay": {
+    "capacity": 7200,
+    "count": 735,
+    "digest": "83e98af0",
+    "droppedFrames": 0,
+    "firstFixedStep": 1,
+    "format": "freeski-replay-v1",
+    "generatorVersion": "freeski-world-v1",
+    "lastFixedStep": 735,
+    "seed": "gate-seven-performance"
+  },
+  "viewport": {
+    "height": 600,
+    "width": 768
+  },
+  "world": {
+    "activeChunks": 20,
+    "aheadRows": [5, 6],
+    "cachedChunks": 30,
+    "chunkSizeMeters": 64,
+    "corridorWidthMeters": 4.5,
+    "currentChunk": "0,4",
+    "generatedSignature": "59f689a7",
+    "missingRequiredChunks": 0,
+    "overlaySignature": "e683bebf",
+    "visibleObjects": 53
+  },
+  "browserProfile": {
+    "claim": "Repeatable WebGL/Canvas browser stress proxy for integrated-GPU-class play; not a physical-GPU certification.",
+    "cpuThrottlingRate": 1,
+    "productionLaunchFlags": [
+      "disable-background-timer-throttling",
+      "disable-renderer-backgrounding",
+      "enable-gpu-rasterization",
+      "enable-zero-copy",
+      "ignore-gpu-blocklist"
+    ],
+    "renderer": "canvas-2d",
+    "viewport": {
+      "height": 600,
+      "width": 768
+    }
+  },
+  "consoleErrors": [],
+  "emptyRafCeiling": {
+    "averageFps": 59.8,
+    "longFrameRatio": 0.0033,
+    "p95FrameMs": 16.8,
+    "p99FrameMs": 16.8
+  },
+  "heap": {
+    "finalBytes": 9312740,
+    "growthBytes": 2048052,
+    "initialBytes": 7264688
+  },
+  "pageErrors": []
+}

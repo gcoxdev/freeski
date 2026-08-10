@@ -1,0 +1,184 @@
+{
+  "gate": "GATE_7",
+  "attempt": 1,
+  "candidate_revision": "421aab1b522523ec44ffe379f415ed498b85f1ac",
+  "base_revision": "0ec443a78dc251765bb7676ad273ee91197182e1",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run assets:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run test:e2e -- tests/e2e/livingSlope.spec.ts --repeat-each=2 --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "FREESKI_GATE7_PERFORMANCE=docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-report.json npm run test:e2e:production -- tests/e2e/performance.spec.ts tests/e2e/release.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-release-pass.json"
+    },
+    {
+      "command": "npm run test:e2e -- tests/e2e/release.spec.ts -g \"skip link\" --workers=1",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    },
+    {
+      "command": "FREESKI_GATE7_PERFORMANCE=docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-report.json npm run test:e2e:production -- tests/e2e/performance.spec.ts tests/e2e/release.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-report.json"
+    },
+    {
+      "command": "npm run test:soak -- --evidence docs/gauntlet/submissions/GATE-7/attempt-1/evidence/soak-report.json",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/soak-report.json"
+    },
+    {
+      "command": "npm run audit:clean-room -- --output docs/gauntlet/submissions/GATE-7/attempt-1/evidence/clean-room-audit.json",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/clean-room-audit.json"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-release-pass.json",
+      "demonstrates": ["G7.4", "G7.5"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-report.json",
+      "demonstrates": ["G7.4"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/performance-variance.md",
+      "demonstrates": ["G7.4"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/soak-report.json",
+      "demonstrates": ["G7.3", "G7.5", "G7.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/clean-room-audit.json",
+      "demonstrates": ["G7.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/source-integrity.txt",
+      "demonstrates": ["G7.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/gate-history.txt",
+      "demonstrates": ["G7.8"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/verification-summary.md",
+      "demonstrates": [
+        "G7.1",
+        "G7.2",
+        "G7.3",
+        "G7.4",
+        "G7.5",
+        "G7.6",
+        "G7.7",
+        "G7.8"
+      ]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/release-desktop-1440x900.png",
+      "demonstrates": ["G7.1", "G7.4", "G7.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/accessibility-768x600.png",
+      "demonstrates": ["G7.2", "G7.3", "G7.6"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/touch-768x600.png",
+      "demonstrates": ["G7.1", "G7.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-7/attempt-1/evidence/visual-inspection.md",
+      "demonstrates": ["G7.1", "G7.2", "G7.3", "G7.4", "G7.6"]
+    },
+    {
+      "type": "report",
+      "path": "docs/WEB_UI_AUDIT.md",
+      "demonstrates": ["G7.1", "G7.2", "G7.3"]
+    },
+    {
+      "type": "report",
+      "path": "docs/CLEAN_ROOM_AUDIT.md",
+      "demonstrates": ["G7.7"]
+    },
+    {
+      "type": "report",
+      "path": "README.md",
+      "demonstrates": ["G7.8"]
+    }
+  ],
+  "known_limitations": [
+    "The performance profile is a repeatable production Chromium/Canvas2D stress proxy with disclosed launch flags and a 768x600 viewport; it is not a physical integrated-GPU certification.",
+    "The current production bundle includes Phaser in a 1.33 MB minified JavaScript chunk, so Vite emits its non-blocking 500 kB chunk-size advisory.",
+    "Automated release evidence in this environment covers Chromium. Firefox and WebKit remain documented targets but were not independently certified in this packet.",
+    "Replay output is intentionally bounded to the latest 7,200 deterministic fixed-step input frames; it is a debug/export format, not a replay-playback UI.",
+    "The clean-room scan is static process evidence, not a legal opinion or an exhaustive comparison against a canonical hash corpus of every historical SkiFree release.",
+    "An initial soak invocation exposed a telemetry-timing defect in its exact-zero reset assertion before the measurement loop began. The assertion was replaced with run-number and bounded near-origin recovery checks, independently exercised in a focused production test, and the complete 20-minute soak was restarted from zero and passed.",
+    "Post-correction performance initially showed one invalid host ceiling and two long-frame-ratio failures under load 13.49 on 4 CPUs; an orchestrator retry was also invalidated by its host ceiling while the game ran 59.24 FPS / 2.00%, and a later matrix missed p99 by 0.99 ms. After cooldown, the unchanged complete matrix passed at a 59.80 FPS ceiling, 58.83 game FPS, 2.83% long frames, and 25.00 ms p99. No threshold was relaxed; all variance is disclosed."
+  ],
+  "executor_claimed_criteria": [
+    "G7.1",
+    "G7.2",
+    "G7.3",
+    "G7.4",
+    "G7.5",
+    "G7.6",
+    "G7.7",
+    "G7.8"
+  ]
+}
