@@ -1,0 +1,172 @@
+{
+  "verdict": "FAIL",
+  "gate": "GATE_7",
+  "attempt": 1,
+  "candidate_revision": "421aab1b522523ec44ffe379f415ed498b85f1ac",
+  "criteria": [
+    {
+      "id": "G7.1",
+      "result": "PASS",
+      "evidence": [
+        "`src/input/actions.ts` defines one engine-independent 14-action controller with injectable keyboard and standard-gamepad binding maps, aggregate held-source semantics, analog steering, and one-shot edges; `src/input/browserInput.ts` maps keyboard, standard gamepad, pointer, and touch into it.",
+        "`npm test` passed 106/106 tests, including remapped keyboard input, explicit gamepad mappings, simultaneous sources, edge behavior, and analog precedence.",
+        "The production release matrix passed keyboard/gamepad/touch equivalence; independent 768x600 inspection found all 14 labeled touch actions visible with targets at least 48px high.",
+        "The Gate 7 diff does not change `src/simulation`; `AlpineScene` passes the common `ActionFrame.player` shape into the existing simulation."
+      ],
+      "notes": "Gamepad mappings work through a remapping-ready common layer, and touch adds no simulation-specific API."
+    },
+    {
+      "id": "G7.2",
+      "result": "PASS",
+      "evidence": [
+        "`src/accessibility/settings.ts`, `src/render/accessibilityControls.ts`, `AlpineScene.applyAccessibilitySettings`, `presentImpact`, `captureYetiEvents`, `AlpineVfx`, and `AlpineAudio.setVolume` implement persisted reduced-motion, shake, flash, volume, and gentle-Yeti controls.",
+        "Unit tests passed first-run reduced-motion defaults, sanitization/clamping, persistence, and denied-storage recovery.",
+        "The production release accessibility case passed persistence, 35% volume, VFX reduction, disabled/enabled flash and shake behavior, gentle-Yeti state, and a 0-to-1 gesture-gated AudioContext lifecycle.",
+        "Independent 768x600 inspection found a labeled modal with all five controls, correct initial focus, readable labels, and no clipping."
+      ],
+      "notes": "Every required setting is exposed, persisted, and applied to presentation/audio without weakening deterministic simulation."
+    },
+    {
+      "id": "G7.3",
+      "result": "PASS",
+      "evidence": [
+        "`AutomaticPauseController` independently tracks blur, hidden, and settings reasons, preserves player-requested pause, releases input, and resets the fixed-step clock.",
+        "Lifecycle unit tests and the production release case passed blur/visibility suspension, held-input release, clean resume, 768x600 resize recovery, and persistence reload.",
+        "The fresh soak finished visible, unpaused, with no automatic-pause reasons after 7 resizes plus repeated hidden/visible and blur/focus cycles; post-soak input remained responsive."
+      ],
+      "notes": "Focus loss pauses promptly, overlapping reasons recover correctly, and resize/visibility transitions do not introduce simulation jumps or stuck input."
+    },
+    {
+      "id": "G7.4",
+      "result": "FAIL",
+      "evidence": [
+        "Fresh command `FREESKI_GATE7_PERFORMANCE=/tmp/gate7-judge-performance.json npm run test:e2e:production -- tests/e2e/performance.spec.ts tests/e2e/release.spec.ts --workers=1` used the disclosed 768x600 production Chromium Canvas2D proxy and unchanged thresholds.",
+        "The host calibration was valid at 60.00 FPS, but the dedicated no-poll game window failed: 56.52 FPS average, 23.34ms p95, 34.99ms p99 against the unchanged <=34ms limit, 6.50% long frames, and 38.33ms maximum. The test exited 1.",
+        "Actor 21/22, sprite 79/512, VFX 3/56 and tracks 15/48 stayed bounded; work units equaled actor count, missing chunks/fallbacks/errors were zero, and no fixed-step time was dropped.",
+        "The packet itself discloses other valid-calibration long-frame and p99 failures before later passes. The fresh valid p99 failure independently reproduces that variance and cannot be averaged away.",
+        "The packet soak's final rolling window was 50.69 FPS/28.5% long frames under its heavier polling/lifecycle/reset workload; the fresh soak ended at 60 FPS. Neither soak result substitutes for the dedicated profile."
+      ],
+      "notes": "A valid host-calibrated sample missed a mandatory unchanged threshold, so the claimed stable target is not demonstrated despite bounded work and retained passing samples."
+    },
+    {
+      "id": "G7.5",
+      "result": "PASS",
+      "evidence": [
+        "`src/replay/replay.ts` exports `freeski-replay-v1` data with seed, generator version, normalized fixed-step action frames, 7,200-frame capacity, and dropped-frame accounting.",
+        "Replay unit tests passed deterministic export/digest behavior, identical simulation outcomes from identical frames, normalization, eviction, and first/last-step accounting.",
+        "The production release input case passed replay schema and live seed/version/frame export.",
+        "The fresh soak ended at 7,200/7,200 retained frames with 64,942 dropped, first step 64,943, last step 72,142, seed `gate-seven-soak`, generator `freeski-world-v1`, and digest `5e25d285`."
+      ],
+      "notes": "Replay/debug output is deterministic, self-identifying, bounded, and honest about eviction."
+    },
+    {
+      "id": "G7.6",
+      "result": "PASS",
+      "evidence": [
+        "Fresh install and qualification passed formatting, typecheck, lint, 21 files/106 unit tests, 112-frame asset checks, production build, and clean-room audit.",
+        "The complete sequential Chromium suite passed 16/16 functional tests in 4.4 minutes, with only the separately executable performance and soak cases skipped by design. It covered all three modes, records, living/Yeti behavior, 2,100m streaming, presentation, release input/accessibility/lifecycle, resize, and bottom-Yeti reset.",
+        "All four production release cases passed alongside the separately adjudicated performance failure.",
+        "The mandatory fresh `npm run test:soak -- --evidence /tmp/gate7-judge-soak.json` passed in 20.1 minutes: measurement elapsed 1,200,055ms with 40 samples. Setup assertions completed all three modes, a 2,100.253m/33-row descent with zero blockers/missing chunks, bottom-Yeti activation, and reset.",
+        "Fresh soak heap span was 33,827,388 bytes and growth 25,599,984 bytes; maxima were actors 21/22, sprites 149/512, VFX 11/56, tracks 16/48, cache 42/64, replay 7,200, and exactly one AudioContext. Console/page/request/fallback failures were zero, lifecycle recovered cleanly, and post-soak input was responsive."
+      ],
+      "notes": "The full release-behavior and real wall-clock soak contract passed independently. Two earlier soak launches were externally reaped before measurement and one sandboxed launch could not bind the preview port; they were rejected as invalid infrastructure attempts and replaced by the complete run."
+    },
+    {
+      "id": "G7.7",
+      "result": "PASS",
+      "evidence": [
+        "Fresh `npm run audit:clean-room` audited 78 shipping/art/source files, reported `passed: true`, zero findings, and all provenance checks true.",
+        "Independent tracked-file and shipped-`dist` scans found no historical executable/resource/audio formats, C headers/source, original executable markers, author/vendor markers, or embedded original-resource names.",
+        "The Gate 7 diff changes no concept or production art. All six concept-sheet and six source-chroma SHA-256 hashes matched the submitted/Gate 6 values; atlas PNG/JSON/metadata hashes remained `45c4307…`, `2a7cef8…`, and `e3d2a10…`.",
+        "Manual source inspection found an original TypeScript/Phaser implementation and procedural Web Audio; the build ships only generated JS/CSS/map, index, and the documented production atlas."
+      ],
+      "notes": "No original SkiFree resource or copied source was found in the audited shipping scope. The stated limitations remain honest: no exhaustive historical hash corpus exists, and this static/process audit is not a legal opinion or absolute proof of authorship."
+    },
+    {
+      "id": "G7.8",
+      "result": "FAIL",
+      "evidence": [
+        "Latest independent verdict artifacts and `docs/BUILD_GAUNTLET.md` agree that Gates 0, 1, 2 attempt 2, 3, 4, 5 attempt 2, and 6 attempt 3 are current PASS with empty failure arrays.",
+        "README contains Node/install, development and production run instructions, keyboard/gamepad/touch controls, browser/device caveats, accessibility, replay/debug, normal verification, production matrix, soak, and clean-room instructions.",
+        "Fresh format, type, lint, unit, assets, build, full functional E2E, release behavior, clean-room, and soak checks were green.",
+        "The current production release+performance matrix is not all green because the valid-calibration G7.4 p99 check failed at 34.99ms versus <=34ms."
+      ],
+      "notes": "Prior-gate history and documentation are complete, and no P0/P1 was found, but the conjunction fails because a current mandatory check is red."
+    }
+  ],
+  "failures": [
+    {
+      "severity": "P2",
+      "criterion_id": "G7.4",
+      "summary": "The dedicated production performance profile misses its unchanged p99 threshold on a valid 60 FPS host calibration, reproducing the disclosed valid-sample variance.",
+      "reproduction": [
+        "At candidate `421aab1b522523ec44ffe379f415ed498b85f1ac`, run `npm ci` and `npm run build`.",
+        "Run `FREESKI_GATE7_PERFORMANCE=/tmp/gate7-performance.json npm run test:e2e:production -- tests/e2e/performance.spec.ts tests/e2e/release.spec.ts --workers=1`.",
+        "Observe valid empty-rAF calibration at 60.00 FPS and game p99 34.99ms; the unchanged assertion requires p99 <=34ms and the matrix exits 1."
+      ],
+      "required_fix": "Make the disclosed dedicated profile satisfy every unchanged throughput, percentile, long-frame, bound, fallback, and error threshold consistently across fresh valid-calibration runs; valid failing samples must remain part of the stability assessment."
+    },
+    {
+      "severity": "P2",
+      "criterion_id": "G7.8",
+      "summary": "All current checks are not green because the independently rerun production performance matrix failed.",
+      "reproduction": [
+        "Run the current production release+performance matrix at the frozen candidate.",
+        "Observe four release cases pass and the dedicated performance case fail its p99 assertion."
+      ],
+      "required_fix": "After resolving G7.4 stability, rerun the complete current qualification matrix and provide a fully green result while preserving all prior independent passes and README coverage."
+    }
+  ],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "Read authoritative gauntlet prompt, research/design brief, README, build log, clean-room/UI audits, sprite documentation, prior verdicts, product diff/source/tests, and the complete Gate 7 packet",
+      "result": "Completed independently; executor/orchestrator claims were treated only as untrusted evidence."
+    },
+    {
+      "command_or_action": "Verify detached revision, parent/base/merge-base, packet references, and untracked scope",
+      "result": "PASS; HEAD exactly `421aab1b522523ec44ffe379f415ed498b85f1ac`, parent and merge-base exactly `0ec443a78dc251765bb7676ad273ee91197182e1`, every packet reference exists, and untracked files are confined to the declared packet."
+    },
+    {
+      "command_or_action": "Supplemental Graphify AST extraction/query in `/tmp`",
+      "result": "Mapped 785 code nodes/1,751 edges and corroborated the input/lifecycle/replay adapter boundaries; direct source inspection remained authoritative."
+    },
+    {
+      "command_or_action": "`npm ci`",
+      "result": "PASS; 164 packages installed from the lockfile."
+    },
+    {
+      "command_or_action": "`npm run format:check`; `npm run typecheck`; `npm run lint`; `npm test`; `npm run assets:check`; `npm run build`; `npm run audit:clean-room`",
+      "result": "PASS; formatting/types/lint clean, 106 tests passed, atlas reported 112 frames with zero geometry/extrusion/overlap mismatch, production build succeeded with only the disclosed chunk advisory, and clean-room audit found zero findings."
+    },
+    {
+      "command_or_action": "`npm run test:e2e -- --workers=1`",
+      "result": "PASS; 16 functional tests passed in 4.4 minutes, with dedicated performance and fixed soak skipped by design."
+    },
+    {
+      "command_or_action": "Independent production visual and semantic inspection at 1440x900 and 768x600, including accessibility and forced touch",
+      "result": "PASS; coherent/unclipped visuals, complete HUD, 14 labeled >=48px touch targets, one h1 with h1-to-h2 hierarchy, first-focus skip link, focus transfer to the playable region, labeled modal focus, zero fallbacks, and zero console/page/request/HTTP errors."
+    },
+    {
+      "command_or_action": "Fresh production release+performance matrix with report at `/tmp/gate7-judge-performance.json`",
+      "result": "FAIL; 4 release cases passed, but valid 60.00 FPS host calibration produced game p99 34.99ms against <=34ms. Average, relative throughput, p95, long-frame ratio, bounds, fallbacks, world integrity, and errors otherwise passed."
+    },
+    {
+      "command_or_action": "Premeasurement soak infrastructure attempts",
+      "result": "INVALID and discarded; two approved wrappers were externally SIGTERM-reaped before completing measurement, and one sandboxed invocation could not bind the preview port. No product assertion failed, orphan previews were stopped, and none was used as soak evidence."
+    },
+    {
+      "command_or_action": "`npm run test:soak -- --evidence /tmp/gate7-judge-soak.json` in a detached approved session",
+      "result": "PASS; one test passed in 20.1 minutes, fixed measurement elapsed 1,200,055ms with 40 samples and all setup, bounds, heap, error, lifecycle, replay, audio-context, world, and post-input checks satisfied."
+    },
+    {
+      "command_or_action": "Independent shipped-file/art/source hash audit",
+      "result": "PASS; no suspect historical formats/markers or copied C source found, Gate 7 changes no art, all 12 retained source-art hashes match, generated atlas hashes match, and `dist` contains only the expected build products."
+    },
+    {
+      "command_or_action": "Final revision, build hashes, process, index, tracked-tree, and untracked-scope verification",
+      "result": "PASS; revision unchanged, JS/CSS/atlas hashes match submitted values, no test/preview processes remain, index/tracked tree are clean, and only the declared Gate 7 packet remains untracked."
+    }
+  ],
+  "confidence": 0.99
+}

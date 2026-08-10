@@ -25,7 +25,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
 | Gate 5 — Living slope and Yeti     |                          2 | PASS                | `9e23730` |
 | Gate 6 — Art, VFX, UI and audio    |                          3 | PASS                | `dcdbf9a` |
-| Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
+| Gate 7 — Release candidate         |                          1 | FAIL                | `421aab1` |
 
 No gate is accepted by this baseline entry. Only a fresh judge verdict recorded below may change a gate to PASS.
 
@@ -163,3 +163,16 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: two deterministic atlas rebuilds, independent full atlas/provenance and 24-player-frame alpha/scale audits, pristine install, formatting, typecheck, lint, 92 unit tests, production build, focused 6/6 and complete sequential 12/12 Chromium suites, judge-authored 768/1440/1920 runtime diagnostic and original-resolution inspection of all supplied and judge-captured states
 - Repair verified: every production player frame renders with uniform aspect-preserving content height between 52 and 56 px; independent grounded, airborne, crash and recovery samples measured 56/54/52/52 px at 768×600 with stable anchors and zero fallbacks. All prior atlas, source, HUD, audio, pool, VFX, depth and browser-error repairs remain green.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-6/attempt-3/judge-verdict.json`
+
+### Gate 7 — attempt 1
+
+- Candidate revision: `421aab1b522523ec44ffe379f415ed498b85f1ac`
+- Evidence commit: `7b67cd22d4a6866bf094e85152afcfef4078a664`
+- Judge isolation: fresh context with no inherited turns, detached candidate worktree, read-only source authority
+- Independent verdict: **FAIL**
+- Confidence: `0.99`
+- Criteria: G7.1–G7.3 and G7.5–G7.7 PASS; G7.4 and G7.8 FAIL
+- Independent checks: pristine install, formatting, typecheck, lint, 106 unit tests, atlas/build/clean-room/source-hash audits, complete 16/16 functional Chromium suite, production release/device/accessibility/lifecycle checks, desktop/minimum/touch semantic and visual inspection, dedicated performance profile and a fresh 1,200,055 ms/40-sample soak
+- Verified behavior: the fresh 20-minute soak passed all three modes, 2,100.253 m streaming/Yeti/reset, bounded heap/pools/cache/replay/audio, lifecycle recovery, post-soak input and zero error/fallback requirements.
+- Required remediation: make the dedicated production performance profile pass every unchanged threshold consistently. With a valid 60.00 FPS host calibration, the judge measured 56.52 FPS average, 23.34 ms p95, 6.50% long frames and 34.99 ms p99 against the required `≤34 ms`; because that mandatory matrix is red, G7.8 also fails.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-7/attempt-1/judge-verdict.json`
