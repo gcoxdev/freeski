@@ -1,0 +1,170 @@
+{
+  "verdict": "FAIL",
+  "gate": "GATE_5",
+  "attempt": 1,
+  "candidate_revision": "e16fc2f965247cb73b20c74b00d96393fb401aac",
+  "criteria": [
+    {
+      "id": "G5.1",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/livingSlope.ts implements bounded deterministic beginner, snowboarder, dog, walking-tree, and two-direction chairlift controllers.",
+        "Independent default-game run at ?seed=judge-default-0 confirmed trainingMode=false/debug hidden, all five actor kinds present, chair-up-0 moved from y=1471.87 to y=1467.23, and beginner/snowboarder/chair events occurred.",
+        "Independent unit suite passed all 82 tests, including living-population, walking-tree wake/movement, and chair-loop tests."
+      ],
+      "notes": "The required living population and looping chair behavior are implemented and rendered."
+    },
+    {
+      "id": "G5.2",
+      "result": "FAIL",
+      "evidence": [
+        "Independent default-game run naturally emitted beginner-fell, beginner-recovered, snowboarder-jumped/tumbled/landed, and chair-rider-dropped; the selected deterministic seed produced an unforced rare drop.",
+        "Dog contact and recovery are covered by deterministic tests and the inspected dog-hit/recovery browser artifacts.",
+        "src/simulation/livingSlope.ts:351-415 advances the snowboarder from carve to jump after 0.72 seconds and then through timed tumble phases; it accepts no ramp/object data.",
+        "src/render/scenes/AlpineScene.ts:323-340 passes terrain objects only to player interactions and calls livingSlope.step with only the player snapshot and delta time. No snowboarder-to-ramp integration exists.",
+        "Repository-wide ramp audit found ramp handling only in player interaction/scenario code, with no ramp reference in livingSlope.ts or its snowboarder test."
+      ],
+      "notes": "Falls, tumbles, dog recovery, and rare chair drops work, but the mandatory snowboarder ramp behavior is simulated as an unconditional timer loop rather than interaction with ramps."
+    },
+    {
+      "id": "G5.3",
+      "result": "PASS",
+      "evidence": [
+        "src/simulation/yeti.test.ts:44-85 deterministically tests exact and 0.001-beyond values for all four boundaries.",
+        "Independent Chromium module probe observed exactActive=false and beyondActive=true for top -125/-125.001, bottom 2000/2000.001, left -1000/-1000.001, and right 1000/1000.001."
+      ],
+      "notes": "All activation comparisons are strict and directional at the exact specified thresholds."
+    },
+    {
+      "id": "G5.4",
+      "result": "PASS",
+      "evidence": [
+        "Independent Chromium probe activated and repositioned the bottom controller at 25.7099 m with 1.15 seconds of protection.",
+        "Independent unstaged default play observed chase contact and every capture phase: windup, pounce, grab, eat, chew, and recovery.",
+        "The same default play emitted reset-requested, returned to run 2 with no active boundary/controller, and accepted downhill input to advance beyond 10 m.",
+        "Inspected capture-pounce.png, capture-chew.png, and post-capture-recovery-768x600.png at original resolution."
+      ],
+      "notes": "Steering, protected near-viewport placement, capture presentation, automatic reset, and second-run playability were demonstrated without a soft lock."
+    },
+    {
+      "id": "G5.5",
+      "result": "PASS",
+      "evidence": [
+        "In independent unstaged default play, Turbo increased bottom-Yeti separation from 25.70 m to 63.89 m during the evasion window.",
+        "After Turbo was disabled and the player braked, the same chaser made contact and completed capture/reset.",
+        "Unit test 'opens a measured Turbo evasion window without making contact impossible' passed."
+      ],
+      "notes": "Turbo provides temporary breathing room but does not confer immunity."
+    },
+    {
+      "id": "G5.6",
+      "result": "PASS",
+      "evidence": [
+        "Independent default play observed no active Yeti and no 'YETI' body text at 1900–1912 m while foreshadow intensity was approximately 0.58 with five wind streaks and breath mist.",
+        "Independent original-resolution inspection of the default 1900 m screenshot showed restrained tint, wind, and mist rather than an explicit announcement.",
+        "Foreshadow unit tests passed for 1800-off, monotonic 1800–2000 ramp, and full intensity at 2000."
+      ],
+      "notes": "The presentation is subtle and avoids explicitly naming the Yeti."
+    },
+    {
+      "id": "G5.7",
+      "result": "FAIL",
+      "evidence": [
+        "All 82 unit tests passed, including exact boundary coverage.",
+        "Independent unstaged, collision-enabled browser play reached 2000.19 m, visibly rendered the bottom chase, demonstrated Turbo separation, completed all capture phases, reset to run 2, and remained playable at 768x600 with no console, page, request, or layout errors.",
+        "Independent full 'npm run test:e2e' run produced 9 passes and 1 failure: interactions.spec expected 'FIRE LINE +1000' but autonomous Gate-5 feedback replaced it with 'BOARDER TUMBLE/RECOVERED'.",
+        "The failing interaction spec passed when rerun alone, demonstrating a timing-dependent feedback race rather than a consistently green full browser suite.",
+        "tests/e2e/livingSlope.spec.ts:32 uses training=1, courseTest=1, debug=1 and staged scenarios; independent default play was therefore required and performed."
+      ],
+      "notes": "The target playthrough succeeds, but the candidate does not provide a stable green full browser suite because autonomous living-slope feedback can overwrite established interaction feedback."
+    }
+  ],
+  "failures": [
+    {
+      "severity": "P1",
+      "criterion_id": "G5.2",
+      "summary": "Expert snowboarders jump and tumble on a fixed timer instead of responding to mountain ramps.",
+      "reproduction": [
+        "Inspect src/simulation/livingSlope.ts:351-415: every carve transitions to jumping after 0.72 seconds without any ramp input or proximity check.",
+        "Inspect src/render/scenes/AlpineScene.ts:323-340: world interaction objects are supplied to the player interaction simulation only; livingSlope.step receives only player state and delta time.",
+        "Run or observe the default game: snowboarder-jumped repeats periodically irrespective of ramp placement."
+      ],
+      "required_fix": "Make snowboarder jump/tumble behavior respond to actual deterministic ramp geometry while retaining top-entry and chair-drop behavior, and add a test proving a ramp encounter triggers the sequence while equivalent ramp-free travel does not."
+    },
+    {
+      "severity": "P2",
+      "criterion_id": "G5.7",
+      "summary": "Autonomous living-slope feedback creates a timing race that makes the full browser suite fail intermittently.",
+      "reproduction": [
+        "Run npm run test:e2e from the frozen candidate.",
+        "Observe interactions.spec sometimes fail after the burning-tree interaction because #feedback-label contains BOARDER TUMBLE or BOARDER RECOVERED instead of FIRE LINE +1000.",
+        "Rerun npm run test:e2e -- tests/e2e/interactions.spec.ts in isolation; it can pass, confirming timing sensitivity."
+      ],
+      "required_fix": "Give interaction/mode feedback reliable priority over ambient living-actor notices, then demonstrate repeated green full browser-suite runs."
+    }
+  ],
+  "blockers": [],
+  "checks_run": [
+    {
+      "command_or_action": "git rev-parse HEAD; git status --short; tracked and staged diff checks",
+      "result": "HEAD exactly e16fc2f965247cb73b20c74b00d96393fb401aac; tracked candidate remained clean before and after judgment."
+    },
+    {
+      "command_or_action": "Read authoritative README, research/design brief, sprite-sheet README/manifest, gauntlet prompt, and base-to-candidate diff",
+      "result": "Completed; candidate changes are limited to Gate-5 implementation, presentation, and tests."
+    },
+    {
+      "command_or_action": "Inspect submission.json, every declared log/report, and all nine declared screenshots at original resolution",
+      "result": "All artifacts existed and were inspected; executor browser evidence used staged training/course-test/debug scenarios."
+    },
+    {
+      "command_or_action": "npm ci",
+      "result": "PASS; 164 packages installed."
+    },
+    {
+      "command_or_action": "npm run format:check",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm run typecheck",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm run lint",
+      "result": "PASS."
+    },
+    {
+      "command_or_action": "npm test",
+      "result": "PASS; 14 files and 82 tests passed."
+    },
+    {
+      "command_or_action": "npm run build",
+      "result": "PASS; production bundle built, with only the existing large-chunk advisory."
+    },
+    {
+      "command_or_action": "npm run test:e2e",
+      "result": "FAIL; 9 passed and interactions.spec failed because living-actor feedback overwrote the burning-tree result."
+    },
+    {
+      "command_or_action": "npm run test:e2e -- tests/e2e/interactions.spec.ts",
+      "result": "PASS in isolation; 1 test passed, confirming the full-suite failure is timing-sensitive."
+    },
+    {
+      "command_or_action": "Independent Chromium exact-boundary and reposition probe",
+      "result": "PASS for all four exact/beyond threshold pairs; activation and reposition distance 25.7099 m with protection enabled."
+    },
+    {
+      "command_or_action": "Independent unstaged default collision-enabled playthrough at ?seed=judge-default-0",
+      "result": "Reached 2000.19 m; natural chair drop observed; chase and Turbo evasion observed; all capture phases completed; run reset to 2 and remained playable."
+    },
+    {
+      "command_or_action": "Independent 768x600 layout and browser error audit",
+      "result": "Game shell exactly fit 768x600; mode card and controls remained visible; debug stayed hidden; console errors, page errors, and failed requests were empty."
+    },
+    {
+      "command_or_action": "Repository-wide snowboarder/ramp coupling audit",
+      "result": "No ramp input or geometry reaches LivingSlopeSimulation; snowboarder jump/tumble transitions are exclusively time-driven."
+    }
+  ],
+  "confidence": 0.99
+}

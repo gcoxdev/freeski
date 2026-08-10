@@ -23,7 +23,7 @@ This is the append-only public record for independently judged build gates. Prod
 | Gate 2 — Deterministic mountain    |                          2 | PASS                | `0091cbe` |
 | Gate 3 — Collisions, air and Style |                          1 | PASS                | `9472d8c` |
 | Gate 4 — Event modes and records   |                          1 | PASS                | `f98d0ca` |
-| Gate 5 — Living slope and Yeti     |                          — | NOT STARTED         | —         |
+| Gate 5 — Living slope and Yeti     |                          1 | FAIL                | `e16fc2f` |
 | Gate 6 — Art, VFX, UI and audio    |                          — | NOT STARTED         | —         |
 | Gate 7 — Release candidate         |                          — | NOT STARTED         | —         |
 
@@ -102,3 +102,15 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Independent checks: pristine install, formatting, typecheck, lint, 66 unit tests, production build, 9 Chromium E2E tests, direct physical completion of all modes, open/backtrack behavior, persistence/bucket/malformed-storage checks and desktop/minimum-viewport inspection
 - Non-blocking note: final audio assets and production sprite-atlas presentation remain later-gate scope; the Phaser chunk advisory remains disclosed.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-4/attempt-1/judge-verdict.json`
+
+### Gate 5 — attempt 1
+
+- Candidate revision: `e16fc2f965247cb73b20c74b00d96393fb401aac`
+- Evidence commit: `c014b734e56c8177250f572e22c5e73b5bde9575`
+- Judge isolation: fresh context, detached candidate worktree, read-only source authority
+- Independent verdict: **FAIL**
+- Confidence: `0.99`
+- Criteria: G5.1 and G5.3–G5.6 PASS; G5.2 and G5.7 FAIL
+- Independent checks: pristine install, formatting, typecheck, lint, 82 unit tests, production build, full and focused Chromium runs, exact four-boundary probes, unstaged default 2,000 m chase/Turbo/capture/reset playthrough, 768×600 layout/error audit and full-resolution artifact inspection
+- Required remediation: couple expert snowboarder jump/tumble transitions to deterministic ramp geometry and prove ramp-free travel does not trigger them; give established interaction/mode feedback reliable priority over ambient living-actor notices and demonstrate repeated green full browser suites.
+- Verdict artifact: `docs/gauntlet/submissions/GATE-5/attempt-1/judge-verdict.json`
