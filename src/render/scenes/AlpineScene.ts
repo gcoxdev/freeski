@@ -254,8 +254,15 @@ export class AlpineScene extends Phaser.Scene {
         atlasFrameCount: this.textures.get(PRODUCTION_ATLAS_KEY).getFrameNames()
           .length,
         atlasLoaded: this.textures.exists(PRODUCTION_ATLAS_KEY),
+        capacityFallbacks: 0,
+        fallbackDraws: 0,
+        frameFallbacks: 0,
+        missingFrameFallbacks: 0,
+        peakPooledSprites: 0,
+        playerRenderedHeight: 0,
         pooledSprites: 0,
         spriteCapacity: this.spritePool.capacity,
+        statusLabelDepth: 90,
       },
       audio: this.audio.getSnapshot(),
       camera: {
@@ -475,7 +482,7 @@ export class AlpineScene extends Phaser.Scene {
       fontStyle: "bold",
       letterSpacing: 2,
     });
-    this.locationLabel.setAlpha(0.78);
+    this.locationLabel.setAlpha(0.78).setDepth(90);
 
     this.add
       .text(28, 45, "FIXED-STEP DESCENT RANGE", {
@@ -484,7 +491,8 @@ export class AlpineScene extends Phaser.Scene {
         fontSize: "9px",
         letterSpacing: 1.5,
       })
-      .setAlpha(0.9);
+      .setAlpha(0.9)
+      .setDepth(90);
 
     this.runLabel = this.add
       .text(0, 25, "RUN 01\nDOWNHILL", {
@@ -495,7 +503,8 @@ export class AlpineScene extends Phaser.Scene {
         fontStyle: "bold",
         lineSpacing: 4,
       })
-      .setOrigin(1, 0);
+      .setOrigin(1, 0)
+      .setDepth(90);
     for (const course of CLASSIC_COURSES) {
       const label = this.add
         .text(0, 0, course.name, {
@@ -1789,7 +1798,20 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.telemetry.renderFrames = this.renderFrames;
     this.runtime.telemetry.worldTransitions = this.worldTransitions;
     this.runtime.art.atlasLoaded = this.textures.exists(PRODUCTION_ATLAS_KEY);
+    this.runtime.art.capacityFallbacks = this.spritePool.capacityFallbacks;
+    this.runtime.art.fallbackDraws = this.spritePool.fallbackDraws;
+    this.runtime.art.frameFallbacks = this.spritePool.frameFallbacks;
+    this.runtime.art.missingFrameFallbacks =
+      this.spritePool.missingFrameFallbacks;
+    this.runtime.art.peakPooledSprites = this.spritePool.peakActiveCount;
+    this.runtime.art.playerRenderedHeight = this.skier
+      ? this.skier.frame.height * Math.abs(this.skier.scaleY)
+      : 0;
     this.runtime.art.pooledSprites = this.spritePool.activeCount;
+    this.runtime.art.statusLabelDepth = Math.min(
+      this.locationLabel?.depth ?? 0,
+      this.runLabel?.depth ?? 0,
+    );
     this.runtime.audio = this.audio.getSnapshot();
     this.runtime.vfx = this.vfx.getSnapshot();
     this.runtime.world.activeChunks = stream.activeKeys.length;

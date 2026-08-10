@@ -1,5 +1,5 @@
 {
-  "pipelineVersion": "freeski-atlas-v1",
+  "pipelineVersion": "freeski-atlas-v2",
   "sourceManifest": "assets/sprite-sheets/manifest.json",
   "sourceManifestSha256": "5211102c821cdc36ee5a7464eab16f50666f600a9798173d97513663164e055e",
   "approvedSourcesPreserved": true,
@@ -10,7 +10,7 @@
     "width": 1024,
     "height": 2048,
     "extrudedPaddingPixels": 4,
-    "sha256": "729b543d1fc710607b6ff60a8234c605314c009d37a7b4877d11339668fa9048"
+    "sha256": "45c4307c6618e41ae7823bdcf0330b5c4b2117848f25b5a9f29f33dcbbb6be42"
   },
   "frames": {
     "beginner/carve-left": {
@@ -25,15 +25,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 36,
-        "width": 273,
-        "height": 220
+        "y": 37,
+        "width": 272,
+        "height": 219
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 20,
+        "width": 150,
+        "height": 120
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 105,
-        "y": 1101,
-        "w": 152,
-        "h": 123
+        "x": 102,
+        "y": 1071,
+        "w": 150,
+        "h": 120
       },
       "padding": 4,
       "normalizationFamily": "beginner",
@@ -42,8 +52,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 76.0,
-        "pixelY": 115.62
+        "pixelX": 84.5,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -64,26 +74,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 28,
-        "y": 41,
-        "width": 279,
-        "height": 215
+        "x": 29,
+        "y": 42,
+        "width": 278,
+        "height": 214
+      },
+      "runtimeTrimBounds": {
+        "x": 16,
+        "y": 23,
+        "width": 150,
+        "height": 115
+      },
+      "runtimeSourceSize": {
+        "width": 166,
+        "height": 138
       },
       "atlasFrame": {
-        "x": 252,
-        "y": 1233,
-        "w": 152,
-        "h": 118
+        "x": 127,
+        "y": 1200,
+        "w": 150,
+        "h": 115
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 0.978495,
+      "normalizationScale": 0.978417,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 76.0,
-        "pixelY": 110.92
+        "pixelX": 83.0,
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
@@ -104,26 +124,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 82,
-        "y": 13,
-        "width": 162,
-        "height": 243
+        "x": 83,
+        "y": 14,
+        "width": 160,
+        "height": 242
+      },
+      "runtimeTrimBounds": {
+        "x": 51,
+        "y": 9,
+        "width": 99,
+        "height": 150
+      },
+      "runtimeSourceSize": {
+        "width": 190,
+        "height": 159
       },
       "atlasFrame": {
-        "x": 334,
-        "y": 191,
-        "w": 102,
-        "h": 152
+        "x": 197,
+        "y": 189,
+        "w": 99,
+        "h": 150
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 1.123457,
+      "normalizationScale": 1.123967,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 51.0,
-        "pixelY": 142.88
+        "pixelX": 95.0,
+        "pixelY": 149.46
       },
       "footprint": {
         "shape": "circle",
@@ -145,25 +175,35 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 71,
-        "width": 293,
-        "height": 185
+        "y": 72,
+        "width": 292,
+        "height": 184
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 37,
+        "width": 150,
+        "height": 94
+      },
+      "runtimeSourceSize": {
+        "width": 158,
+        "height": 131
       },
       "atlasFrame": {
-        "x": 432,
-        "y": 1479,
-        "w": 152,
-        "h": 97
+        "x": 321,
+        "y": 1439,
+        "w": 150,
+        "h": 94
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 0.931741,
+      "normalizationScale": 0.931507,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 76.0,
-        "pixelY": 91.18
+        "pixelX": 79.0,
+        "pixelY": 123.14
       },
       "footprint": {
         "shape": "circle",
@@ -184,26 +224,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 8,
-        "y": 162,
-        "width": 260,
-        "height": 94
+        "x": 9,
+        "y": 163,
+        "width": 258,
+        "height": 93
+      },
+      "runtimeTrimBounds": {
+        "x": 5,
+        "y": 95,
+        "width": 150,
+        "height": 54
+      },
+      "runtimeSourceSize": {
+        "width": 179,
+        "height": 149
       },
       "atlasFrame": {
-        "x": 809,
-        "y": 1785,
-        "w": 152,
-        "h": 56
+        "x": 626,
+        "y": 1730,
+        "w": 150,
+        "h": 54
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 1.05,
+      "normalizationScale": 1.054264,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 76.0,
-        "pixelY": 52.64
+        "pixelX": 89.5,
+        "pixelY": 140.06
       },
       "footprint": {
         "shape": "circle",
@@ -224,26 +274,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 48,
+        "x": 49,
         "y": 0,
-        "width": 201,
-        "height": 164
+        "width": 199,
+        "height": 163
+      },
+      "runtimeTrimBounds": {
+        "x": 29,
+        "y": 0,
+        "width": 117,
+        "height": 96
+      },
+      "runtimeSourceSize": {
+        "width": 181,
+        "height": 151
       },
       "atlasFrame": {
-        "x": 304,
-        "y": 1479,
-        "w": 120,
-        "h": 98
+        "x": 8,
+        "y": 1439,
+        "w": 117,
+        "h": 96
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
-      "normalizationScale": 1.064677,
+      "normalizationScale": 1.070352,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.52,
-        "pixelX": 60.0,
-        "pixelY": 50.96
+        "pixelX": 90.5,
+        "pixelY": 78.52
       },
       "footprint": {
         "shape": "circle",
@@ -264,16 +324,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 36,
+        "x": 37,
         "y": 0,
-        "width": 191,
-        "height": 214
+        "width": 189,
+        "height": 213
+      },
+      "runtimeTrimBounds": {
+        "x": 20,
+        "y": 0,
+        "width": 104,
+        "height": 117
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 539,
-        "y": 1101,
-        "w": 107,
-        "h": 120
+        "x": 645,
+        "y": 1071,
+        "w": 104,
+        "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
@@ -282,8 +352,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.52,
-        "pixelX": 53.5,
-        "pixelY": 62.4
+        "pixelX": 84.5,
+        "pixelY": 73.32
       },
       "footprint": {
         "shape": "circle",
@@ -304,26 +374,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 19,
+        "x": 20,
         "y": 0,
-        "width": 206,
-        "height": 218
+        "width": 204,
+        "height": 217
+      },
+      "runtimeTrimBounds": {
+        "x": 11,
+        "y": 0,
+        "width": 110,
+        "height": 117
+      },
+      "runtimeSourceSize": {
+        "width": 166,
+        "height": 138
       },
       "atlasFrame": {
-        "x": 654,
-        "y": 1101,
-        "w": 113,
-        "h": 120
+        "x": 757,
+        "y": 1071,
+        "w": 110,
+        "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
-      "normalizationScale": 0.981651,
+      "normalizationScale": 0.981567,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.52,
-        "pixelX": 56.5,
-        "pixelY": 62.4
+        "pixelX": 83.0,
+        "pixelY": 71.76
       },
       "footprint": {
         "shape": "circle",
@@ -344,26 +424,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 15,
+        "x": 16,
         "y": 0,
-        "width": 200,
-        "height": 201
+        "width": 198,
+        "height": 200
+      },
+      "runtimeTrimBounds": {
+        "x": 9,
+        "y": 0,
+        "width": 116,
+        "height": 117
+      },
+      "runtimeSourceSize": {
+        "width": 180,
+        "height": 150
       },
       "atlasFrame": {
-        "x": 775,
-        "y": 1101,
-        "w": 119,
-        "h": 120
+        "x": 875,
+        "y": 1071,
+        "w": 116,
+        "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
-      "normalizationScale": 1.064677,
+      "normalizationScale": 1.065,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.52,
-        "pixelX": 59.5,
-        "pixelY": 62.4
+        "pixelX": 90.0,
+        "pixelY": 78.0
       },
       "footprint": {
         "shape": "circle",
@@ -384,26 +474,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 37,
+        "x": 38,
         "y": 0,
-        "width": 205,
-        "height": 215
+        "width": 203,
+        "height": 214
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 0,
+        "width": 111,
+        "height": 117
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 140
       },
       "atlasFrame": {
         "x": 8,
-        "y": 1233,
-        "w": 115,
-        "h": 120
+        "y": 1200,
+        "w": 111,
+        "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
-      "normalizationScale": 0.995349,
+      "normalizationScale": 0.995327,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.52,
-        "pixelX": 57.5,
-        "pixelY": 62.4
+        "pixelX": 84.0,
+        "pixelY": 72.8
       },
       "footprint": {
         "shape": "circle",
@@ -424,16 +524,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 60,
-        "y": 19,
-        "width": 113,
-        "height": 193
+        "x": 61,
+        "y": 20,
+        "width": 111,
+        "height": 191
+      },
+      "runtimeTrimBounds": {
+        "x": 34,
+        "y": 11,
+        "width": 61,
+        "height": 105
+      },
+      "runtimeSourceSize": {
+        "width": 170,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 407,
-        "y": 1361,
-        "w": 64,
-        "h": 108
+        "x": 275,
+        "y": 1325,
+        "w": 61,
+        "h": 105
       },
       "padding": 4,
       "normalizationFamily": "course/blank-wood-sign",
@@ -442,8 +552,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 32.0,
-        "pixelY": 101.52
+        "pixelX": 85.0,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -464,16 +574,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 105,
-        "y": 26,
-        "width": 161,
-        "height": 287
+        "x": 106,
+        "y": 27,
+        "width": 159,
+        "height": 286
+      },
+      "runtimeTrimBounds": {
+        "x": 58,
+        "y": 15,
+        "width": 87,
+        "height": 157
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 235,
-        "y": 191,
-        "w": 91,
-        "h": 160
+        "x": 102,
+        "y": 189,
+        "w": 87,
+        "h": 157
       },
       "padding": 4,
       "normalizationFamily": "course/blue-right-marker",
@@ -482,8 +602,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 45.5,
-        "pixelY": 150.4
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -504,16 +624,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 31,
+        "x": 32,
         "y": 0,
-        "width": 215,
-        "height": 304
+        "width": 213,
+        "height": 303
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 0,
+        "width": 117,
+        "height": 167
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 525,
+        "x": 513,
         "y": 8,
-        "w": 120,
-        "h": 169
+        "w": 117,
+        "h": 167
       },
       "padding": 4,
       "normalizationFamily": "course/controls-sign",
@@ -522,8 +652,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 60.0,
-        "pixelY": 158.86
+        "pixelX": 86.5,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -544,16 +674,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 82,
-        "y": 45,
-        "width": 169,
-        "height": 268
+        "x": 83,
+        "y": 46,
+        "width": 167,
+        "height": 267
+      },
+      "runtimeTrimBounds": {
+        "x": 46,
+        "y": 25,
+        "width": 92,
+        "height": 147
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 444,
-        "y": 191,
-        "w": 95,
-        "h": 149
+        "x": 304,
+        "y": 189,
+        "w": 92,
+        "h": 147
       },
       "padding": 4,
       "normalizationFamily": "course/correct-happy-marker",
@@ -562,8 +702,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 47.5,
-        "pixelY": 140.06
+        "pixelX": 86.5,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -584,16 +724,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 59,
+        "x": 60,
         "y": 0,
-        "width": 203,
+        "width": 201,
         "height": 314
+      },
+      "runtimeTrimBounds": {
+        "x": 33,
+        "y": 0,
+        "width": 111,
+        "height": 173
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
         "x": 8,
         "y": 8,
-        "w": 114,
-        "h": 175
+        "w": 111,
+        "h": 173
       },
       "padding": 4,
       "normalizationFamily": "course/finish-left",
@@ -602,8 +752,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 57.0,
-        "pixelY": 164.5
+        "pixelX": 86.5,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -624,16 +774,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 18,
+        "x": 19,
         "y": 0,
-        "width": 222,
+        "width": 220,
         "height": 314
       },
+      "runtimeTrimBounds": {
+        "x": 10,
+        "y": 0,
+        "width": 121,
+        "height": 173
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
+      },
       "atlasFrame": {
-        "x": 130,
+        "x": 127,
         "y": 8,
-        "w": 124,
-        "h": 175
+        "w": 121,
+        "h": 173
       },
       "padding": 4,
       "normalizationFamily": "course/finish-right",
@@ -642,8 +802,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 62.0,
-        "pixelY": 164.5
+        "pixelX": 86.0,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -664,16 +824,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 44,
+        "x": 45,
         "y": 0,
-        "width": 221,
-        "height": 304
+        "width": 219,
+        "height": 303
+      },
+      "runtimeTrimBounds": {
+        "x": 25,
+        "y": 0,
+        "width": 120,
+        "height": 167
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 653,
+        "x": 638,
         "y": 8,
-        "w": 124,
-        "h": 169
+        "w": 120,
+        "h": 167
       },
       "padding": 4,
       "normalizationFamily": "course/free-style-sign",
@@ -682,8 +852,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 62.0,
-        "pixelY": 158.86
+        "pixelX": 86.0,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -704,16 +874,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 61,
-        "y": 46,
-        "width": 169,
-        "height": 267
+        "x": 62,
+        "y": 47,
+        "width": 167,
+        "height": 266
+      },
+      "runtimeTrimBounds": {
+        "x": 34,
+        "y": 26,
+        "width": 92,
+        "height": 146
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 547,
-        "y": 191,
-        "w": 95,
-        "h": 149
+        "x": 404,
+        "y": 189,
+        "w": 92,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "course/missed-sad-marker",
@@ -722,8 +902,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 47.5,
-        "pixelY": 140.06
+        "pixelX": 86.5,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -744,16 +924,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 61,
-        "y": 31,
+        "x": 62,
+        "y": 32,
+        "width": 171,
+        "height": 248
+      },
+      "runtimeTrimBounds": {
+        "x": 34,
+        "y": 18,
+        "width": 94,
+        "height": 136
+      },
+      "runtimeSourceSize": {
         "width": 173,
-        "height": 250
+        "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 676,
-        "w": 97,
-        "h": 140
+        "x": 860,
+        "y": 505,
+        "w": 94,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/pause-sign",
@@ -762,8 +952,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 48.5,
-        "pixelY": 131.6
+        "pixelX": 86.5,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -784,16 +974,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 95,
-        "y": 24,
-        "width": 158,
-        "height": 289
+        "x": 96,
+        "y": 25,
+        "width": 156,
+        "height": 288
+      },
+      "runtimeTrimBounds": {
+        "x": 53,
+        "y": 14,
+        "width": 86,
+        "height": 158
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 138,
-        "y": 191,
-        "w": 89,
-        "h": 161
+        "x": 8,
+        "y": 189,
+        "w": 86,
+        "h": 158
       },
       "padding": 4,
       "normalizationFamily": "course/red-left-marker",
@@ -802,8 +1002,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 44.5,
-        "pixelY": 151.34
+        "pixelX": 86.5,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -824,16 +1024,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 83,
-        "y": 29,
-        "width": 175,
-        "height": 250
+        "x": 84,
+        "y": 30,
+        "width": 173,
+        "height": 248
+      },
+      "runtimeTrimBounds": {
+        "x": 46,
+        "y": 16,
+        "width": 95,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 113,
-        "y": 676,
-        "w": 98,
-        "h": 140
+        "x": 8,
+        "y": 655,
+        "w": 95,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/restart-sign",
@@ -842,8 +1052,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 49.0,
-        "pixelY": 131.6
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -865,15 +1075,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 69,
-        "width": 258,
-        "height": 194
+        "y": 70,
+        "width": 257,
+        "height": 192
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 38,
+        "width": 141,
+        "height": 106
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 134,
-        "y": 1361,
-        "w": 144,
-        "h": 109
+        "x": 8,
+        "y": 1325,
+        "w": 141,
+        "h": 106
       },
       "padding": 4,
       "normalizationFamily": "course/safety-fence",
@@ -882,8 +1102,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 72.0,
-        "pixelY": 102.46
+        "pixelX": 86.0,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -904,16 +1124,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 62,
+        "x": 63,
         "y": 0,
-        "width": 219,
-        "height": 303
+        "width": 217,
+        "height": 302
+      },
+      "runtimeTrimBounds": {
+        "x": 35,
+        "y": 0,
+        "width": 119,
+        "height": 166
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 785,
+        "x": 893,
         "y": 8,
-        "w": 122,
-        "h": 169
+        "w": 119,
+        "h": 166
       },
       "padding": 4,
       "normalizationFamily": "course/slalom-sign",
@@ -922,8 +1152,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 61.0,
-        "pixelY": 158.86
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -944,16 +1174,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 79,
+        "x": 80,
         "y": 0,
-        "width": 215,
+        "width": 213,
         "height": 314
       },
+      "runtimeTrimBounds": {
+        "x": 44,
+        "y": 0,
+        "width": 117,
+        "height": 173
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
+      },
       "atlasFrame": {
-        "x": 262,
+        "x": 256,
         "y": 8,
-        "w": 120,
-        "h": 175
+        "w": 117,
+        "h": 173
       },
       "padding": 4,
       "normalizationFamily": "course/start-left",
@@ -962,8 +1202,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 60.0,
-        "pixelY": 164.5
+        "pixelX": 86.0,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -984,16 +1224,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 37,
+        "x": 38,
         "y": 0,
-        "width": 228,
+        "width": 226,
         "height": 314
       },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 0,
+        "width": 124,
+        "height": 173
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 173
+      },
       "atlasFrame": {
-        "x": 390,
+        "x": 381,
         "y": 8,
-        "w": 127,
-        "h": 175
+        "w": 124,
+        "h": 173
       },
       "padding": 4,
       "normalizationFamily": "course/start-right",
@@ -1002,8 +1252,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 63.5,
-        "pixelY": 164.5
+        "pixelX": 86.5,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -1024,16 +1274,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 51,
+        "x": 52,
         "y": 0,
-        "width": 218,
-        "height": 304
+        "width": 216,
+        "height": 303
+      },
+      "runtimeTrimBounds": {
+        "x": 29,
+        "y": 0,
+        "width": 119,
+        "height": 167
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 191,
-        "w": 122,
-        "h": 169
+        "x": 766,
+        "y": 8,
+        "w": 119,
+        "h": 167
       },
       "padding": 4,
       "normalizationFamily": "course/tree-slalom-sign",
@@ -1042,8 +1302,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 61.0,
-        "pixelY": 158.86
+        "pixelX": 86.5,
+        "pixelY": 162.62
       },
       "footprint": {
         "shape": "circle",
@@ -1064,16 +1324,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 59,
-        "y": 34,
-        "width": 178,
-        "height": 222
+        "x": 60,
+        "y": 35,
+        "width": 176,
+        "height": 221
+      },
+      "runtimeTrimBounds": {
+        "x": 33,
+        "y": 19,
+        "width": 97,
+        "height": 122
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 293,
-        "y": 967,
-        "w": 100,
-        "h": 124
+        "x": 348,
+        "y": 939,
+        "w": 97,
+        "h": 122
       },
       "padding": 4,
       "normalizationFamily": "dog",
@@ -1082,8 +1352,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 50.0,
-        "pixelY": 109.12
+        "pixelX": 84.5,
+        "pixelY": 124.08
       },
       "footprint": {
         "shape": "circle",
@@ -1104,26 +1374,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 53,
-        "y": 29,
-        "width": 173,
-        "height": 227
+        "x": 54,
+        "y": 30,
+        "width": 171,
+        "height": 226
+      },
+      "runtimeTrimBounds": {
+        "x": 29,
+        "y": 16,
+        "width": 92,
+        "height": 122
+      },
+      "runtimeSourceSize": {
+        "width": 165,
+        "height": 138
       },
       "atlasFrame": {
-        "x": 401,
-        "y": 967,
-        "w": 95,
-        "h": 124
+        "x": 453,
+        "y": 939,
+        "w": 92,
+        "h": 122
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 0.977974,
+      "normalizationScale": 0.977876,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 47.5,
-        "pixelY": 109.12
+        "pixelX": 82.5,
+        "pixelY": 121.44
       },
       "footprint": {
         "shape": "circle",
@@ -1144,26 +1424,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 31,
-        "y": 58,
-        "width": 232,
-        "height": 198
+        "x": 32,
+        "y": 59,
+        "width": 230,
+        "height": 197
+      },
+      "runtimeTrimBounds": {
+        "x": 17,
+        "y": 31,
+        "width": 122,
+        "height": 104
+      },
+      "runtimeSourceSize": {
+        "width": 163,
+        "height": 135
       },
       "atlasFrame": {
-        "x": 479,
-        "y": 1361,
-        "w": 124,
-        "h": 106
+        "x": 344,
+        "y": 1325,
+        "w": 122,
+        "h": 104
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 0.956897,
+      "normalizationScale": 0.96087,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 62.0,
-        "pixelY": 93.28
+        "pixelX": 81.5,
+        "pixelY": 118.8
       },
       "footprint": {
         "shape": "circle",
@@ -1184,26 +1474,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 62,
-        "y": 38,
-        "width": 205,
-        "height": 218
+        "x": 63,
+        "y": 39,
+        "width": 203,
+        "height": 217
+      },
+      "runtimeTrimBounds": {
+        "x": 35,
+        "y": 22,
+        "width": 114,
+        "height": 122
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 144
       },
       "atlasFrame": {
-        "x": 504,
-        "y": 967,
-        "w": 117,
-        "h": 124
+        "x": 553,
+        "y": 939,
+        "w": 114,
+        "h": 122
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 1.018349,
+      "normalizationScale": 1.018433,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 58.5,
-        "pixelY": 109.12
+        "pixelX": 86.0,
+        "pixelY": 126.72
       },
       "footprint": {
         "shape": "circle",
@@ -1224,26 +1524,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 42,
-        "y": 41,
-        "width": 214,
-        "height": 215
+        "x": 43,
+        "y": 42,
+        "width": 212,
+        "height": 214
+      },
+      "runtimeTrimBounds": {
+        "x": 24,
+        "y": 24,
+        "width": 120,
+        "height": 122
+      },
+      "runtimeSourceSize": {
+        "width": 174,
+        "height": 146
       },
       "atlasFrame": {
-        "x": 629,
-        "y": 967,
-        "w": 124,
-        "h": 124
+        "x": 675,
+        "y": 939,
+        "w": 120,
+        "h": 122
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 1.032558,
+      "normalizationScale": 1.03271,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 62.0,
-        "pixelY": 109.12
+        "pixelX": 87.0,
+        "pixelY": 128.48
       },
       "footprint": {
         "shape": "circle",
@@ -1264,16 +1574,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 45,
-        "y": 34,
-        "width": 268,
-        "height": 245
+        "x": 46,
+        "y": 35,
+        "width": 267,
+        "height": 243
+      },
+      "runtimeTrimBounds": {
+        "x": 25,
+        "y": 19,
+        "width": 147,
+        "height": 134
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 849,
-        "y": 676,
-        "w": 149,
-        "h": 137
+        "x": 726,
+        "y": 655,
+        "w": 147,
+        "h": 134
       },
       "padding": 4,
       "normalizationFamily": "lift/cable-connector",
@@ -1282,8 +1602,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 74.5,
-        "pixelY": 126.04
+        "pixelX": 86.0,
+        "pixelY": 159.16
       },
       "footprint": {
         "shape": "circle",
@@ -1304,16 +1624,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 20,
+        "x": 21,
         "y": 0,
-        "width": 201,
-        "height": 215
+        "width": 199,
+        "height": 214
+      },
+      "runtimeTrimBounds": {
+        "x": 12,
+        "y": 0,
+        "width": 109,
+        "height": 118
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 131,
-        "y": 1233,
-        "w": 113,
-        "h": 120
+        "x": 403,
+        "y": 1071,
+        "w": 109,
+        "h": 118
       },
       "padding": 4,
       "normalizationFamily": "lift/tower",
@@ -1322,8 +1652,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 56.5,
-        "pixelY": 110.4
+        "pixelX": 84.5,
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
@@ -1344,26 +1674,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 50,
-        "y": 45,
-        "width": 172,
+        "x": 51,
+        "y": 46,
+        "width": 170,
+        "height": 164
+      },
+      "runtimeTrimBounds": {
+        "x": 33,
+        "y": 30,
+        "width": 110,
+        "height": 106
+      },
+      "runtimeSourceSize": {
+        "width": 166,
         "height": 166
       },
       "atlasFrame": {
-        "x": 286,
-        "y": 1361,
-        "w": 113,
-        "h": 109
+        "x": 157,
+        "y": 1325,
+        "w": 110,
+        "h": 106
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.168605,
+      "normalizationScale": 1.173529,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 102.46
+        "pixelX": 83.0,
+        "pixelY": 156.04
       },
       "footprint": {
         "shape": "circle",
@@ -1384,26 +1724,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 30,
-        "y": 75,
-        "width": 181,
-        "height": 152
+        "x": 31,
+        "y": 76,
+        "width": 179,
+        "height": 150
+      },
+      "runtimeTrimBounds": {
+        "x": 19,
+        "y": 47,
+        "width": 110,
+        "height": 92
+      },
+      "runtimeSourceSize": {
+        "width": 157,
+        "height": 157
       },
       "atlasFrame": {
-        "x": 854,
-        "y": 1479,
-        "w": 113,
-        "h": 95
+        "x": 597,
+        "y": 1439,
+        "w": 110,
+        "h": 92
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.110497,
+      "normalizationScale": 1.114525,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 89.3
+        "pixelX": 78.5,
+        "pixelY": 147.58
       },
       "footprint": {
         "shape": "circle",
@@ -1424,16 +1774,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 55,
-        "y": 46,
-        "width": 135,
-        "height": 147
+        "x": 56,
+        "y": 47,
+        "width": 133,
+        "height": 145
+      },
+      "runtimeTrimBounds": {
+        "x": 38,
+        "y": 32,
+        "width": 89,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1479,
-        "w": 93,
-        "h": 100
+        "x": 816,
+        "y": 1325,
+        "w": 89,
+        "h": 97
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -1442,8 +1802,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 46.5,
-        "pixelY": 94.0
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -1464,16 +1824,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 21,
-        "y": 22,
-        "width": 150,
-        "height": 155
+        "x": 22,
+        "y": 23,
+        "width": 148,
+        "height": 153
+      },
+      "runtimeTrimBounds": {
+        "x": 15,
+        "y": 15,
+        "width": 99,
+        "height": 103
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 611,
-        "y": 1361,
-        "w": 103,
-        "h": 106
+        "x": 474,
+        "y": 1325,
+        "w": 99,
+        "h": 103
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -1482,8 +1852,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 51.5,
-        "pixelY": 99.64
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -1504,26 +1874,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 18,
-        "y": 59,
-        "width": 238,
-        "height": 188
+        "x": 19,
+        "y": 60,
+        "width": 237,
+        "height": 186
+      },
+      "runtimeTrimBounds": {
+        "x": 9,
+        "y": 28,
+        "width": 110,
+        "height": 86
+      },
+      "runtimeSourceSize": {
+        "width": 119,
+        "height": 119
       },
       "atlasFrame": {
-        "x": 829,
-        "y": 1587,
-        "w": 113,
-        "h": 89
+        "x": 689,
+        "y": 1543,
+        "w": 110,
+        "h": 86
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.844538,
+      "normalizationScale": 0.841772,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 83.66
+        "pixelX": 59.5,
+        "pixelY": 111.86
       },
       "footprint": {
         "shape": "circle",
@@ -1545,25 +1925,35 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 69,
-        "width": 207,
-        "height": 172
+        "y": 70,
+        "width": 206,
+        "height": 170
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 37,
+        "width": 110,
+        "height": 91
+      },
+      "runtimeSourceSize": {
+        "width": 137,
+        "height": 137
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1587,
-        "w": 113,
-        "h": 94
+        "x": 853,
+        "y": 1439,
+        "w": 110,
+        "h": 91
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.971014,
+      "normalizationScale": 0.968447,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 88.36
+        "pixelX": 68.5,
+        "pixelY": 128.78
       },
       "footprint": {
         "shape": "circle",
@@ -1585,25 +1975,35 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 86,
-        "width": 212,
-        "height": 155
+        "y": 87,
+        "width": 211,
+        "height": 153
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 45,
+        "width": 110,
+        "height": 80
+      },
+      "runtimeSourceSize": {
+        "width": 133,
+        "height": 133
       },
       "atlasFrame": {
-        "x": 162,
-        "y": 1689,
-        "w": 113,
-        "h": 83
+        "x": 8,
+        "y": 1642,
+        "w": 110,
+        "h": 80
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.948113,
+      "normalizationScale": 0.945498,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 78.02
+        "pixelX": 66.5,
+        "pixelY": 125.02
       },
       "footprint": {
         "shape": "circle",
@@ -1624,26 +2024,36 @@
         "height": 256
       },
       "trimBounds": {
+        "x": 2,
+        "y": 72,
+        "width": 206,
+        "height": 171
+      },
+      "runtimeTrimBounds": {
         "x": 1,
-        "y": 71,
-        "width": 208,
-        "height": 173
+        "y": 38,
+        "width": 110,
+        "height": 91
+      },
+      "runtimeSourceSize": {
+        "width": 137,
+        "height": 136
       },
       "atlasFrame": {
-        "x": 129,
-        "y": 1587,
-        "w": 113,
-        "h": 94
+        "x": 8,
+        "y": 1543,
+        "w": 110,
+        "h": 91
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.966346,
+      "normalizationScale": 0.968447,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 88.36
+        "pixelX": 68.5,
+        "pixelY": 127.84
       },
       "footprint": {
         "shape": "circle",
@@ -1664,26 +2074,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 5,
-        "y": 87,
-        "width": 230,
-        "height": 161
+        "x": 6,
+        "y": 88,
+        "width": 228,
+        "height": 159
+      },
+      "runtimeTrimBounds": {
+        "x": 3,
+        "y": 42,
+        "width": 110,
+        "height": 77
+      },
+      "runtimeSourceSize": {
+        "width": 124,
+        "height": 123
       },
       "atlasFrame": {
-        "x": 404,
-        "y": 1689,
-        "w": 113,
-        "h": 80
+        "x": 244,
+        "y": 1642,
+        "w": 110,
+        "h": 77
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.873913,
+      "normalizationScale": 0.875,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 75.2
+        "pixelX": 62.0,
+        "pixelY": 115.62
       },
       "footprint": {
         "shape": "circle",
@@ -1704,26 +2124,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 21,
-        "y": 91,
-        "width": 208,
-        "height": 150
+        "x": 22,
+        "y": 92,
+        "width": 206,
+        "height": 148
+      },
+      "runtimeTrimBounds": {
+        "x": 12,
+        "y": 49,
+        "width": 110,
+        "height": 79
+      },
+      "runtimeSourceSize": {
+        "width": 137,
+        "height": 137
       },
       "atlasFrame": {
-        "x": 283,
-        "y": 1689,
-        "w": 113,
-        "h": 82
+        "x": 126,
+        "y": 1642,
+        "w": 110,
+        "h": 79
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.966346,
+      "normalizationScale": 0.968447,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 77.08
+        "pixelX": 68.5,
+        "pixelY": 128.78
       },
       "footprint": {
         "shape": "circle",
@@ -1744,26 +2174,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 70,
-        "y": 31,
-        "width": 123,
-        "height": 225
+        "x": 71,
+        "y": 32,
+        "width": 121,
+        "height": 224
+      },
+      "runtimeTrimBounds": {
+        "x": 35,
+        "y": 16,
+        "width": 59,
+        "height": 110
+      },
+      "runtimeSourceSize": {
+        "width": 125,
+        "height": 126
       },
       "atlasFrame": {
-        "x": 731,
-        "y": 1233,
-        "w": 63,
-        "h": 113
+        "x": 595,
+        "y": 1200,
+        "w": 59,
+        "h": 110
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.893333,
+      "normalizationScale": 0.890625,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 31.5,
-        "pixelY": 106.22
+        "pixelX": 62.5,
+        "pixelY": 118.44
       },
       "footprint": {
         "shape": "circle",
@@ -1784,26 +2224,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 33,
-        "y": 52,
-        "width": 179,
-        "height": 143
+        "x": 34,
+        "y": 53,
+        "width": 177,
+        "height": 141
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 33,
+        "width": 110,
+        "height": 87
+      },
+      "runtimeSourceSize": {
+        "width": 159,
+        "height": 158
       },
       "atlasFrame": {
-        "x": 708,
-        "y": 1587,
-        "w": 113,
-        "h": 91
+        "x": 571,
+        "y": 1543,
+        "w": 110,
+        "h": 87
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.122905,
+      "normalizationScale": 1.127119,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 85.54
+        "pixelX": 79.5,
+        "pixelY": 148.52
       },
       "footprint": {
         "shape": "circle",
@@ -1824,16 +2274,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 56,
-        "y": 79,
-        "width": 135,
-        "height": 138
+        "x": 57,
+        "y": 80,
+        "width": 133,
+        "height": 136
+      },
+      "runtimeTrimBounds": {
+        "x": 38,
+        "y": 54,
+        "width": 89,
+        "height": 91
+      },
+      "runtimeSourceSize": {
+        "width": 171,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 250,
-        "y": 1587,
-        "w": 93,
-        "h": 94
+        "x": 126,
+        "y": 1543,
+        "w": 89,
+        "h": 91
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -1842,8 +2302,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 46.5,
-        "pixelY": 88.36
+        "pixelX": 85.5,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -1864,26 +2324,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 33,
-        "y": 97,
-        "width": 174,
-        "height": 108
+        "x": 34,
+        "y": 98,
+        "width": 172,
+        "height": 106
+      },
+      "runtimeTrimBounds": {
+        "x": 22,
+        "y": 63,
+        "width": 110,
+        "height": 68
+      },
+      "runtimeSourceSize": {
+        "width": 164,
+        "height": 164
       },
       "atlasFrame": {
-        "x": 177,
-        "y": 1785,
-        "w": 113,
-        "h": 71
+        "x": 8,
+        "y": 1730,
+        "w": 110,
+        "h": 68
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.155172,
+      "normalizationScale": 1.159884,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 66.74
+        "pixelX": 82.0,
+        "pixelY": 154.16
       },
       "footprint": {
         "shape": "circle",
@@ -1904,26 +2374,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 4,
-        "y": 91,
-        "width": 224,
-        "height": 150
+        "x": 5,
+        "y": 92,
+        "width": 222,
+        "height": 148
+      },
+      "runtimeTrimBounds": {
+        "x": 2,
+        "y": 45,
+        "width": 110,
+        "height": 73
+      },
+      "runtimeSourceSize": {
+        "width": 126,
+        "height": 126
       },
       "atlasFrame": {
-        "x": 810,
-        "y": 1689,
-        "w": 113,
-        "h": 76
+        "x": 641,
+        "y": 1642,
+        "w": 110,
+        "h": 73
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.897321,
+      "normalizationScale": 0.898649,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 71.44
+        "pixelX": 63.0,
+        "pixelY": 118.44
       },
       "footprint": {
         "shape": "circle",
@@ -1944,26 +2424,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 16,
-        "y": 60,
-        "width": 195,
-        "height": 180
+        "x": 17,
+        "y": 61,
+        "width": 193,
+        "height": 178
+      },
+      "runtimeTrimBounds": {
+        "x": 10,
+        "y": 35,
+        "width": 110,
+        "height": 101
+      },
+      "runtimeSourceSize": {
+        "width": 146,
+        "height": 146
       },
       "atlasFrame": {
-        "x": 722,
-        "y": 1361,
-        "w": 113,
-        "h": 104
+        "x": 581,
+        "y": 1325,
+        "w": 110,
+        "h": 101
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.030769,
+      "normalizationScale": 1.033679,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 97.76
+        "pixelX": 73.0,
+        "pixelY": 137.24
       },
       "footprint": {
         "shape": "circle",
@@ -1984,26 +2474,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 75,
-        "y": 55,
-        "width": 102,
-        "height": 165
+        "x": 76,
+        "y": 56,
+        "width": 100,
+        "height": 163
+      },
+      "runtimeTrimBounds": {
+        "x": 51,
+        "y": 38,
+        "width": 67,
+        "height": 109
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 802,
-        "y": 1233,
-        "w": 70,
-        "h": 113
+        "x": 779,
+        "y": 1200,
+        "w": 67,
+        "h": 109
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.218182,
+      "normalizationScale": 1.22,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 35.0,
-        "pixelY": 106.22
+        "pixelX": 86.0,
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -2025,25 +2525,35 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 90,
-        "width": 226,
-        "height": 123
+        "y": 91,
+        "width": 225,
+        "height": 121
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 44,
+        "width": 110,
+        "height": 59
+      },
+      "runtimeSourceSize": {
+        "width": 125,
+        "height": 124
       },
       "atlasFrame": {
-        "x": 424,
-        "y": 1785,
-        "w": 113,
-        "h": 62
+        "x": 249,
+        "y": 1730,
+        "w": 110,
+        "h": 59
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.889381,
+      "normalizationScale": 0.886667,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 58.28
+        "pixelX": 62.5,
+        "pixelY": 116.56
       },
       "footprint": {
         "shape": "circle",
@@ -2064,16 +2574,26 @@
         "height": 256
       },
       "trimBounds": {
+        "x": 1,
+        "y": 61,
+        "width": 255,
+        "height": 130
+      },
+      "runtimeTrimBounds": {
         "x": 0,
-        "y": 60,
-        "width": 256,
-        "height": 132
+        "y": 28,
+        "width": 115,
+        "height": 59
+      },
+      "runtimeSourceSize": {
+        "width": 115,
+        "height": 116
       },
       "atlasFrame": {
-        "x": 545,
-        "y": 1785,
-        "w": 118,
-        "h": 61
+        "x": 367,
+        "y": 1730,
+        "w": 115,
+        "h": 59
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -2082,8 +2602,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 59.0,
-        "pixelY": 57.34
+        "pixelX": 57.5,
+        "pixelY": 109.04
       },
       "footprint": {
         "shape": "circle",
@@ -2105,15 +2625,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 74,
+        "y": 75,
         "width": 256,
-        "height": 141
+        "height": 139
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 34,
+        "width": 115,
+        "height": 63
+      },
+      "runtimeSourceSize": {
+        "width": 115,
+        "height": 116
       },
       "atlasFrame": {
-        "x": 298,
-        "y": 1785,
-        "w": 118,
-        "h": 66
+        "x": 126,
+        "y": 1730,
+        "w": 115,
+        "h": 63
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -2122,8 +2652,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 59.0,
-        "pixelY": 62.04
+        "pixelX": 57.5,
+        "pixelY": 109.04
       },
       "footprint": {
         "shape": "circle",
@@ -2144,26 +2674,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 21,
-        "y": 62,
-        "width": 195,
-        "height": 168
+        "x": 22,
+        "y": 63,
+        "width": 193,
+        "height": 166
+      },
+      "runtimeTrimBounds": {
+        "x": 13,
+        "y": 36,
+        "width": 110,
+        "height": 94
+      },
+      "runtimeSourceSize": {
+        "width": 146,
+        "height": 145
       },
       "atlasFrame": {
-        "x": 592,
-        "y": 1479,
-        "w": 113,
-        "h": 97
+        "x": 479,
+        "y": 1439,
+        "w": 110,
+        "h": 94
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.030769,
+      "normalizationScale": 1.033679,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 91.18
+        "pixelX": 73.0,
+        "pixelY": 136.3
       },
       "footprint": {
         "shape": "circle",
@@ -2184,26 +2724,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 43,
-        "y": 62,
-        "width": 184,
-        "height": 185
+        "x": 44,
+        "y": 63,
+        "width": 182,
+        "height": 183
+      },
+      "runtimeTrimBounds": {
+        "x": 26,
+        "y": 38,
+        "width": 109,
+        "height": 110
+      },
+      "runtimeSourceSize": {
+        "width": 153,
+        "height": 154
       },
       "atlasFrame": {
-        "x": 880,
-        "y": 1233,
-        "w": 112,
-        "h": 113
+        "x": 662,
+        "y": 1200,
+        "w": 109,
+        "h": 110
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.086486,
+      "normalizationScale": 1.090164,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.0,
-        "pixelY": 106.22
+        "pixelX": 76.5,
+        "pixelY": 144.76
       },
       "footprint": {
         "shape": "circle",
@@ -2224,16 +2774,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 73,
-        "y": 92,
-        "width": 86,
-        "height": 145
+        "x": 74,
+        "y": 93,
+        "width": 84,
+        "height": 143
+      },
+      "runtimeTrimBounds": {
+        "x": 50,
+        "y": 62,
+        "width": 56,
+        "height": 96
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 171
       },
       "atlasFrame": {
-        "x": 109,
-        "y": 1479,
-        "w": 60,
-        "h": 99
+        "x": 133,
+        "y": 1439,
+        "w": 56,
+        "h": 96
       },
       "padding": 4,
       "normalizationFamily": "player",
@@ -2242,8 +2802,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 30.0,
-        "pixelY": 93.06
+        "pixelX": 86.0,
+        "pixelY": 160.74
       },
       "footprint": {
         "shape": "circle",
@@ -2265,25 +2825,35 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 41,
-        "width": 221,
-        "height": 156
+        "y": 42,
+        "width": 220,
+        "height": 154
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 21,
+        "width": 110,
+        "height": 77
+      },
+      "runtimeSourceSize": {
+        "width": 128,
+        "height": 128
       },
       "atlasFrame": {
-        "x": 525,
-        "y": 1689,
-        "w": 113,
-        "h": 80
+        "x": 362,
+        "y": 1642,
+        "w": 110,
+        "h": 77
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.909502,
+      "normalizationScale": 0.906818,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 56.5,
-        "pixelY": 75.2
+        "pixelX": 64.0,
+        "pixelY": 120.32
       },
       "footprint": {
         "shape": "circle",
@@ -2304,16 +2874,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 92,
-        "y": 52,
-        "width": 152,
-        "height": 204
+        "x": 93,
+        "y": 53,
+        "width": 150,
+        "height": 203
+      },
+      "runtimeTrimBounds": {
+        "x": 51,
+        "y": 29,
+        "width": 82,
+        "height": 112
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 637,
-        "y": 1233,
-        "w": 86,
-        "h": 114
+        "x": 505,
+        "y": 1200,
+        "w": 82,
+        "h": 112
       },
       "padding": 4,
       "normalizationFamily": "secret/mushroom",
@@ -2322,8 +2902,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 43.0,
-        "pixelY": 100.32
+        "pixelX": 84.0,
+        "pixelY": 124.08
       },
       "footprint": {
         "shape": "circle",
@@ -2345,15 +2925,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 106,
-        "width": 233,
-        "height": 104
+        "y": 107,
+        "width": 232,
+        "height": 102
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 59,
+        "width": 128,
+        "height": 56
+      },
+      "runtimeSourceSize": {
+        "width": 170,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 671,
-        "y": 1785,
-        "w": 130,
-        "h": 59
+        "x": 490,
+        "y": 1730,
+        "w": 128,
+        "h": 56
       },
       "padding": 4,
       "normalizationFamily": "secret/yellow-snow",
@@ -2362,8 +2952,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 65.0,
-        "pixelY": 51.92
+        "pixelX": 85.0,
+        "pixelY": 124.08
       },
       "footprint": {
         "shape": "circle",
@@ -2384,26 +2974,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 38,
+        "x": 39,
         "y": 0,
-        "width": 191,
-        "height": 250
+        "width": 189,
+        "height": 249
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 0,
+        "width": 103,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 167,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 219,
-        "y": 676,
-        "w": 106,
-        "h": 138
+        "x": 111,
+        "y": 655,
+        "w": 103,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 0.992,
+      "normalizationScale": 0.991968,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 53.0,
-        "pixelY": 129.72
+        "pixelX": 83.5,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -2424,16 +3024,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 32,
+        "x": 33,
         "y": 0,
-        "width": 212,
-        "height": 248
+        "width": 210,
+        "height": 247
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 0,
+        "width": 116,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 333,
-        "y": 676,
-        "w": 119,
-        "h": 138
+        "x": 222,
+        "y": 655,
+        "w": 116,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
@@ -2442,8 +3052,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 59.5,
-        "pixelY": 129.72
+        "pixelX": 84.5,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -2464,26 +3074,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 36,
+        "x": 37,
         "y": 0,
-        "width": 191,
-        "height": 240
+        "width": 189,
+        "height": 239
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 0,
+        "width": 107,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 174,
+        "height": 146
       },
       "atlasFrame": {
-        "x": 460,
-        "y": 676,
-        "w": 110,
-        "h": 138
+        "x": 346,
+        "y": 655,
+        "w": 107,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 1.033333,
+      "normalizationScale": 1.033473,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 55.0,
-        "pixelY": 129.72
+        "pixelX": 87.0,
+        "pixelY": 137.24
       },
       "footprint": {
         "shape": "circle",
@@ -2504,26 +3124,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 105,
+        "x": 106,
         "y": 0,
-        "width": 164,
-        "height": 243
+        "width": 162,
+        "height": 242
+      },
+      "runtimeTrimBounds": {
+        "x": 60,
+        "y": 0,
+        "width": 91,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 144
       },
       "atlasFrame": {
-        "x": 578,
-        "y": 676,
-        "w": 94,
-        "h": 138
+        "x": 461,
+        "y": 655,
+        "w": 91,
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 1.020576,
+      "normalizationScale": 1.020661,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 47.0,
-        "pixelY": 129.72
+        "pixelX": 86.5,
+        "pixelY": 135.36
       },
       "footprint": {
         "shape": "circle",
@@ -2544,26 +3174,36 @@
         "height": 256
       },
       "trimBounds": {
+        "x": 2,
+        "y": 0,
+        "width": 289,
+        "height": 243
+      },
+      "runtimeTrimBounds": {
         "x": 1,
         "y": 0,
-        "width": 291,
-        "height": 244
+        "width": 136,
+        "height": 114
+      },
+      "runtimeSourceSize": {
+        "width": 145,
+        "height": 120
       },
       "atlasFrame": {
-        "x": 491,
-        "y": 1233,
-        "w": 138,
-        "h": 116
+        "x": 285,
+        "y": 1200,
+        "w": 136,
+        "h": 114
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 0.852234,
+      "normalizationScale": 0.854671,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 69.0,
-        "pixelY": 109.04
+        "pixelX": 72.5,
+        "pixelY": 112.8
       },
       "footprint": {
         "shape": "circle",
@@ -2584,16 +3224,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 8,
+        "x": 9,
         "y": 0,
-        "width": 247,
-        "height": 220
+        "width": 245,
+        "height": 219
+      },
+      "runtimeTrimBounds": {
+        "x": 5,
+        "y": 0,
+        "width": 135,
+        "height": 120
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 265,
-        "y": 1101,
-        "w": 138,
-        "h": 123
+        "x": 260,
+        "y": 1071,
+        "w": 135,
+        "h": 120
       },
       "padding": 4,
       "normalizationFamily": "terrain/bump-large",
@@ -2602,8 +3252,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.78,
-        "pixelX": 69.0,
-        "pixelY": 95.94
+        "pixelX": 84.5,
+        "pixelY": 109.2
       },
       "footprint": {
         "shape": "circle",
@@ -2624,16 +3274,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 56,
+        "x": 57,
         "y": 0,
-        "width": 154,
+        "width": 152,
         "height": 256
       },
+      "runtimeTrimBounds": {
+        "x": 31,
+        "y": 0,
+        "width": 84,
+        "height": 141
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
       "atlasFrame": {
-        "x": 666,
-        "y": 522,
-        "w": 87,
-        "h": 143
+        "x": 515,
+        "y": 505,
+        "w": 84,
+        "h": 141
       },
       "padding": 4,
       "normalizationFamily": "terrain/bump-small",
@@ -2642,8 +3302,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.78,
-        "pixelX": 43.5,
-        "pixelY": 111.54
+        "pixelX": 84.5,
+        "pixelY": 109.98
       },
       "footprint": {
         "shape": "circle",
@@ -2664,16 +3324,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 70,
+        "x": 71,
         "y": 0,
-        "width": 139,
+        "width": 137,
         "height": 256
       },
+      "runtimeTrimBounds": {
+        "x": 39,
+        "y": 0,
+        "width": 75,
+        "height": 141
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 141
+      },
       "atlasFrame": {
-        "x": 761,
-        "y": 522,
-        "w": 78,
-        "h": 143
+        "x": 607,
+        "y": 505,
+        "w": 75,
+        "h": 141
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-a",
@@ -2682,8 +3352,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 39.0,
-        "pixelY": 131.56
+        "pixelX": 84.0,
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
@@ -2704,16 +3374,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 63,
+        "x": 64,
         "y": 0,
-        "width": 139,
+        "width": 137,
         "height": 256
       },
+      "runtimeTrimBounds": {
+        "x": 35,
+        "y": 0,
+        "width": 75,
+        "height": 141
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 141
+      },
       "atlasFrame": {
-        "x": 847,
-        "y": 522,
-        "w": 78,
-        "h": 143
+        "x": 690,
+        "y": 505,
+        "w": 75,
+        "h": 141
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-b",
@@ -2722,8 +3402,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 39.0,
-        "pixelY": 131.56
+        "pixelX": 84.0,
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
@@ -2744,16 +3424,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 40,
+        "x": 41,
         "y": 0,
-        "width": 146,
+        "width": 144,
         "height": 256
       },
+      "runtimeTrimBounds": {
+        "x": 23,
+        "y": 0,
+        "width": 79,
+        "height": 141
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
       "atlasFrame": {
-        "x": 933,
-        "y": 522,
-        "w": 82,
-        "h": 143
+        "x": 773,
+        "y": 505,
+        "w": 79,
+        "h": 141
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-c",
@@ -2762,8 +3452,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 41.0,
-        "pixelY": 131.56
+        "pixelX": 84.5,
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
@@ -2784,16 +3474,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 53,
-        "y": 20,
-        "width": 152,
-        "height": 236
+        "x": 54,
+        "y": 21,
+        "width": 150,
+        "height": 235
+      },
+      "runtimeTrimBounds": {
+        "x": 30,
+        "y": 12,
+        "width": 82,
+        "height": 129
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 424,
-        "y": 824,
-        "w": 86,
-        "h": 132
+        "x": 414,
+        "y": 799,
+        "w": 82,
+        "h": 129
       },
       "padding": 4,
       "normalizationFamily": "terrain/dead-tree",
@@ -2802,8 +3502,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 43.0,
-        "pixelY": 124.08
+        "pixelX": 84.5,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -2824,16 +3524,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 56,
-        "y": 16,
-        "width": 172,
-        "height": 240
+        "x": 57,
+        "y": 17,
+        "width": 170,
+        "height": 239
+      },
+      "runtimeTrimBounds": {
+        "x": 31,
+        "y": 9,
+        "width": 94,
+        "height": 131
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 165,
-        "y": 824,
-        "w": 97,
-        "h": 134
+        "x": 162,
+        "y": 799,
+        "w": 94,
+        "h": 131
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-large",
@@ -2842,8 +3552,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 48.5,
-        "pixelY": 125.96
+        "pixelX": 84.5,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -2864,16 +3574,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 82,
-        "y": 47,
-        "width": 125,
-        "height": 209
+        "x": 83,
+        "y": 48,
+        "width": 123,
+        "height": 208
+      },
+      "runtimeTrimBounds": {
+        "x": 46,
+        "y": 26,
+        "width": 68,
+        "height": 114
+      },
+      "runtimeSourceSize": {
+        "width": 170,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 412,
-        "y": 1233,
-        "w": 71,
-        "h": 117
+        "x": 429,
+        "y": 1200,
+        "w": 68,
+        "h": 114
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-medium",
@@ -2882,8 +3602,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 35.5,
-        "pixelY": 109.98
+        "pixelX": 85.0,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -2904,16 +3624,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 114,
-        "y": 90,
-        "width": 106,
-        "height": 166
+        "x": 115,
+        "y": 91,
+        "width": 104,
+        "height": 165
+      },
+      "runtimeTrimBounds": {
+        "x": 63,
+        "y": 50,
+        "width": 57,
+        "height": 91
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 351,
-        "y": 1587,
-        "w": 60,
-        "h": 93
+        "x": 223,
+        "y": 1543,
+        "w": 57,
+        "h": 91
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-small",
@@ -2922,8 +3652,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 30.0,
-        "pixelY": 87.42
+        "pixelX": 84.0,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -2944,16 +3674,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 11,
+        "x": 12,
         "y": 0,
-        "width": 296,
-        "height": 224
+        "width": 295,
+        "height": 223
+      },
+      "runtimeTrimBounds": {
+        "x": 7,
+        "y": 0,
+        "width": 162,
+        "height": 123
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 120,
-        "y": 967,
-        "w": 165,
-        "h": 125
+        "x": 178,
+        "y": 939,
+        "w": 162,
+        "h": 123
       },
       "padding": 4,
       "normalizationFamily": "terrain/mogul-field",
@@ -2962,8 +3702,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.8,
-        "pixelX": 82.5,
-        "pixelY": 100.0
+        "pixelX": 84.5,
+        "pixelY": 112.8
       },
       "footprint": {
         "shape": "circle",
@@ -2986,14 +3726,24 @@
       "trimBounds": {
         "x": 0,
         "y": 0,
-        "width": 263,
-        "height": 232
+        "width": 262,
+        "height": 231
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 144,
+        "height": 127
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 688,
-        "y": 824,
-        "w": 147,
-        "h": 130
+        "x": 671,
+        "y": 799,
+        "w": 144,
+        "h": 127
       },
       "padding": 4,
       "normalizationFamily": "terrain/rainbow-ramp",
@@ -3002,8 +3752,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.79,
-        "pixelX": 73.5,
-        "pixelY": 102.7
+        "pixelX": 84.5,
+        "pixelY": 111.39
       },
       "footprint": {
         "shape": "circle",
@@ -3024,16 +3774,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 70,
+        "x": 71,
         "y": 0,
-        "width": 185,
-        "height": 226
+        "width": 183,
+        "height": 225
+      },
+      "runtimeTrimBounds": {
+        "x": 39,
+        "y": 0,
+        "width": 101,
+        "height": 124
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 967,
-        "w": 104,
-        "h": 126
+        "x": 823,
+        "y": 799,
+        "w": 101,
+        "h": 124
       },
       "padding": 4,
       "normalizationFamily": "terrain/rock",
@@ -3042,8 +3802,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.84,
-        "pixelX": 52.0,
-        "pixelY": 105.84
+        "pixelX": 84.5,
+        "pixelY": 118.44
       },
       "footprint": {
         "shape": "circle",
@@ -3064,16 +3824,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 20,
-        "y": 161,
-        "width": 164,
-        "height": 95
+        "x": 21,
+        "y": 162,
+        "width": 162,
+        "height": 94
+      },
+      "runtimeTrimBounds": {
+        "x": 12,
+        "y": 89,
+        "width": 89,
+        "height": 52
+      },
+      "runtimeSourceSize": {
+        "width": 170,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1868,
-        "w": 92,
-        "h": 54
+        "x": 784,
+        "y": 1730,
+        "w": 89,
+        "h": 52
       },
       "padding": 4,
       "normalizationFamily": "terrain/stump",
@@ -3082,8 +3852,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.86,
-        "pixelX": 46.0,
-        "pixelY": 46.44
+        "pixelX": 85.0,
+        "pixelY": 121.26
       },
       "footprint": {
         "shape": "circle",
@@ -3104,16 +3874,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 45,
-        "y": 78,
-        "width": 200,
-        "height": 180
+        "x": 46,
+        "y": 79,
+        "width": 198,
+        "height": 178
+      },
+      "runtimeTrimBounds": {
+        "x": 25,
+        "y": 43,
+        "width": 109,
+        "height": 98
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 843,
-        "y": 1361,
-        "w": 112,
-        "h": 101
+        "x": 699,
+        "y": 1325,
+        "w": 109,
+        "h": 98
       },
       "padding": 4,
       "normalizationFamily": "vfx/breath-mist",
@@ -3122,8 +3902,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 56.0,
-        "pixelY": 50.5
+        "pixelX": 86.0,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3144,16 +3924,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 43,
-        "y": 117,
-        "width": 239,
-        "height": 163
+        "x": 44,
+        "y": 118,
+        "width": 237,
+        "height": 161
+      },
+      "runtimeTrimBounds": {
+        "x": 24,
+        "y": 65,
+        "width": 130,
+        "height": 89
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 419,
-        "y": 1587,
-        "w": 133,
-        "h": 92
+        "x": 288,
+        "y": 1543,
+        "w": 130,
+        "h": 89
       },
       "padding": 4,
       "normalizationFamily": "vfx/carve-fan-left",
@@ -3162,8 +3952,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 66.5,
-        "pixelY": 46.0
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3184,16 +3974,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 28,
-        "y": 110,
-        "width": 239,
-        "height": 170
+        "x": 29,
+        "y": 111,
+        "width": 237,
+        "height": 168
+      },
+      "runtimeTrimBounds": {
+        "x": 16,
+        "y": 61,
+        "width": 130,
+        "height": 92
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 713,
-        "y": 1479,
-        "w": 133,
-        "h": 96
+        "x": 715,
+        "y": 1439,
+        "w": 130,
+        "h": 92
       },
       "padding": 4,
       "normalizationFamily": "vfx/carve-fan-right",
@@ -3202,8 +4002,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 66.5,
-        "pixelY": 48.0
+        "pixelX": 86.0,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3225,15 +4025,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 60,
-        "width": 290,
-        "height": 235
+        "y": 61,
+        "width": 289,
+        "height": 233
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 34,
+        "width": 159,
+        "height": 128
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 518,
-        "y": 824,
-        "w": 162,
-        "h": 131
+        "x": 504,
+        "y": 799,
+        "w": 159,
+        "h": 128
       },
       "padding": 4,
       "normalizationFamily": "vfx/crash-burst",
@@ -3242,8 +4052,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 81.0,
-        "pixelY": 65.5
+        "pixelX": 86.5,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3265,15 +4075,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 103,
-        "width": 280,
-        "height": 139
+        "y": 104,
+        "width": 279,
+        "height": 137
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 57,
+        "width": 153,
+        "height": 75
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 646,
-        "y": 1689,
-        "w": 156,
-        "h": 78
+        "x": 480,
+        "y": 1642,
+        "w": 153,
+        "h": 75
       },
       "padding": 4,
       "normalizationFamily": "vfx/crash-decal",
@@ -3282,8 +4102,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 78.0,
-        "pixelY": 39.0
+        "pixelX": 86.0,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3304,16 +4124,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 24,
-        "y": 4,
-        "width": 289,
-        "height": 247
+        "x": 25,
+        "y": 5,
+        "width": 288,
+        "height": 245
+      },
+      "runtimeTrimBounds": {
+        "x": 14,
+        "y": 3,
+        "width": 158,
+        "height": 135
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 680,
-        "y": 676,
-        "w": 161,
-        "h": 138
+        "x": 560,
+        "y": 655,
+        "w": 158,
+        "h": 135
       },
       "padding": 4,
       "normalizationFamily": "vfx/flame-embers",
@@ -3322,8 +4152,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 80.5,
-        "pixelY": 69.0
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3344,16 +4174,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 23,
-        "y": 199,
-        "width": 224,
-        "height": 50
+        "x": 24,
+        "y": 200,
+        "width": 222,
+        "height": 48
+      },
+      "runtimeTrimBounds": {
+        "x": 13,
+        "y": 110,
+        "width": 122,
+        "height": 26
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 242,
-        "y": 1868,
-        "w": 125,
-        "h": 30
+        "x": 8,
+        "y": 1806,
+        "w": 122,
+        "h": 26
       },
       "padding": 4,
       "normalizationFamily": "vfx/ground-shadow",
@@ -3362,8 +4202,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 62.5,
-        "pixelY": 15.0
+        "pixelX": 86.0,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3384,16 +4224,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 48,
-        "y": 58,
-        "width": 210,
-        "height": 197
+        "x": 49,
+        "y": 59,
+        "width": 208,
+        "height": 195
+      },
+      "runtimeTrimBounds": {
+        "x": 27,
+        "y": 32,
+        "width": 114,
+        "height": 107
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 171
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1361,
-        "w": 118,
-        "h": 110
+        "x": 854,
+        "y": 1200,
+        "w": 114,
+        "h": 107
       },
       "padding": 4,
       "normalizationFamily": "vfx/ice-impact",
@@ -3402,8 +4252,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 59.0,
-        "pixelY": 55.0
+        "pixelX": 86.0,
+        "pixelY": 85.5
       },
       "footprint": {
         "shape": "circle",
@@ -3424,16 +4274,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 18,
-        "y": 64,
-        "width": 295,
-        "height": 228
+        "x": 19,
+        "y": 65,
+        "width": 294,
+        "height": 226
+      },
+      "runtimeTrimBounds": {
+        "x": 10,
+        "y": 36,
+        "width": 162,
+        "height": 124
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 843,
-        "y": 824,
-        "w": 164,
-        "h": 127
+        "x": 8,
+        "y": 939,
+        "w": 162,
+        "h": 124
       },
       "padding": 4,
       "normalizationFamily": "vfx/landing-plume",
@@ -3442,8 +4302,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 82.0,
-        "pixelY": 63.5
+        "pixelX": 86.0,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3464,16 +4324,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 22,
-        "y": 118,
-        "width": 261,
-        "height": 157
+        "x": 23,
+        "y": 119,
+        "width": 259,
+        "height": 155
+      },
+      "runtimeTrimBounds": {
+        "x": 13,
+        "y": 65,
+        "width": 142,
+        "height": 85
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 171
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1689,
-        "w": 146,
-        "h": 88
+        "x": 807,
+        "y": 1543,
+        "w": 142,
+        "h": 85
       },
       "padding": 4,
       "normalizationFamily": "vfx/powder-medium",
@@ -3482,8 +4352,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 73.0,
-        "pixelY": 44.0
+        "pixelX": 86.5,
+        "pixelY": 85.5
       },
       "footprint": {
         "shape": "circle",
@@ -3504,16 +4374,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 37,
-        "y": 182,
-        "width": 226,
-        "height": 85
+        "x": 38,
+        "y": 183,
+        "width": 224,
+        "height": 83
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 101,
+        "width": 123,
+        "height": 46
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 108,
-        "y": 1868,
-        "w": 126,
-        "h": 49
+        "x": 881,
+        "y": 1730,
+        "w": 123,
+        "h": 46
       },
       "padding": 4,
       "normalizationFamily": "vfx/powder-tiny",
@@ -3522,8 +4402,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 63.0,
-        "pixelY": 24.5
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3544,16 +4424,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 40,
-        "y": 60,
-        "width": 212,
-        "height": 177
+        "x": 41,
+        "y": 61,
+        "width": 210,
+        "height": 175
+      },
+      "runtimeTrimBounds": {
+        "x": 23,
+        "y": 34,
+        "width": 116,
+        "height": 96
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 177,
-        "y": 1479,
-        "w": 119,
-        "h": 99
+        "x": 197,
+        "y": 1439,
+        "w": 116,
+        "h": 96
       },
       "padding": 4,
       "normalizationFamily": "vfx/ramp-glint",
@@ -3562,8 +4452,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 59.5,
-        "pixelY": 49.5
+        "pixelX": 86.5,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3584,16 +4474,26 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 24,
-        "y": 87,
-        "width": 251,
-        "height": 163
+        "x": 25,
+        "y": 88,
+        "width": 249,
+        "height": 161
+      },
+      "runtimeTrimBounds": {
+        "x": 14,
+        "y": 48,
+        "width": 137,
+        "height": 89
+      },
+      "runtimeSourceSize": {
+        "width": 173,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 560,
-        "y": 1587,
-        "w": 140,
-        "h": 92
+        "x": 426,
+        "y": 1543,
+        "w": 137,
+        "h": 89
       },
       "padding": 4,
       "normalizationFamily": "vfx/speed-streaks",
@@ -3602,8 +4502,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 70.0,
-        "pixelY": 46.0
+        "pixelX": 86.5,
+        "pixelY": 86.0
       },
       "footprint": {
         "shape": "circle",
@@ -3625,15 +4525,25 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 62,
-        "width": 267,
-        "height": 242
+        "y": 63,
+        "width": 266,
+        "height": 240
+      },
+      "runtimeTrimBounds": {
+        "x": 0,
+        "y": 35,
+        "width": 146,
+        "height": 132
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
         "x": 8,
-        "y": 824,
-        "w": 149,
-        "h": 135
+        "y": 799,
+        "w": 146,
+        "h": 132
       },
       "padding": 4,
       "normalizationFamily": "vfx/tracks-long",
@@ -3642,8 +4552,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 74.5,
-        "pixelY": 67.5
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3664,16 +4574,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 24,
-        "y": 139,
-        "width": 289,
-        "height": 133
+        "x": 25,
+        "y": 140,
+        "width": 288,
+        "height": 131
+      },
+      "runtimeTrimBounds": {
+        "x": 14,
+        "y": 77,
+        "width": 158,
+        "height": 72
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1785,
-        "w": 161,
-        "h": 75
+        "x": 759,
+        "y": 1642,
+        "w": 158,
+        "h": 72
       },
       "padding": 4,
       "normalizationFamily": "vfx/tracks-short",
@@ -3682,8 +4602,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 80.5,
-        "pixelY": 37.5
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3704,16 +4624,26 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 38,
-        "y": 24,
-        "width": 215,
-        "height": 216
+        "x": 39,
+        "y": 25,
+        "width": 213,
+        "height": 214
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 14,
+        "width": 117,
+        "height": 118
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 411,
-        "y": 1101,
-        "w": 120,
-        "h": 121
+        "x": 520,
+        "y": 1071,
+        "w": 117,
+        "h": 118
       },
       "padding": 4,
       "normalizationFamily": "vfx/trick-sparkle",
@@ -3722,8 +4652,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.5,
-        "pixelX": 60.0,
-        "pixelY": 60.5
+        "pixelX": 86.0,
+        "pixelY": 86.5
       },
       "footprint": {
         "shape": "circle",
@@ -3744,26 +4674,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 91,
+        "x": 92,
         "y": 0,
-        "width": 158,
-        "height": 218
+        "width": 156,
+        "height": 217
+      },
+      "runtimeTrimBounds": {
+        "x": 51,
+        "y": 0,
+        "width": 87,
+        "height": 121
+      },
+      "runtimeSourceSize": {
+        "width": 171,
+        "height": 143
       },
       "atlasFrame": {
-        "x": 761,
-        "y": 967,
-        "w": 90,
-        "h": 124
+        "x": 803,
+        "y": 939,
+        "w": 87,
+        "h": 121
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
-      "normalizationScale": 1.013761,
+      "normalizationScale": 1.013825,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 45.0,
-        "pixelY": 116.56
+        "pixelX": 85.5,
+        "pixelY": 134.42
       },
       "footprint": {
         "shape": "circle",
@@ -3784,26 +4724,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 60,
+        "x": 61,
         "y": 0,
-        "width": 174,
-        "height": 223
+        "width": 172,
+        "height": 222
+      },
+      "runtimeTrimBounds": {
+        "x": 33,
+        "y": 0,
+        "width": 94,
+        "height": 121
+      },
+      "runtimeSourceSize": {
+        "width": 167,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 859,
-        "y": 967,
-        "w": 97,
-        "h": 124
+        "x": 898,
+        "y": 939,
+        "w": 94,
+        "h": 121
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
-      "normalizationScale": 0.991031,
+      "normalizationScale": 0.990991,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 48.5,
-        "pixelY": 116.56
+        "pixelX": 83.5,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -3824,16 +4774,26 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 54,
+        "x": 55,
         "y": 0,
-        "width": 159,
-        "height": 221
+        "width": 157,
+        "height": 220
+      },
+      "runtimeTrimBounds": {
+        "x": 30,
+        "y": 0,
+        "width": 86,
+        "height": 121
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 141
       },
       "atlasFrame": {
         "x": 8,
-        "y": 1101,
-        "w": 89,
-        "h": 124
+        "y": 1071,
+        "w": 86,
+        "h": 121
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
@@ -3842,8 +4802,8 @@
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 44.5,
-        "pixelY": 116.56
+        "pixelX": 84.0,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -3864,26 +4824,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 39,
+        "x": 40,
         "y": 0,
-        "width": 210,
-        "height": 269
+        "width": 208,
+        "height": 268
+      },
+      "runtimeTrimBounds": {
+        "x": 21,
+        "y": 0,
+        "width": 111,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 167,
+        "height": 166
       },
       "atlasFrame": {
-        "x": 650,
-        "y": 191,
-        "w": 114,
-        "h": 146
+        "x": 504,
+        "y": 189,
+        "w": 111,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.97026,
+      "normalizationScale": 0.966418,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 57.0,
-        "pixelY": 138.7
+        "pixelX": 83.5,
+        "pixelY": 157.7
       },
       "footprint": {
         "shape": "circle",
@@ -3904,26 +4874,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 29,
-        "y": 12,
-        "width": 198,
-        "height": 255
+        "x": 30,
+        "y": 13,
+        "width": 196,
+        "height": 253
+      },
+      "runtimeTrimBounds": {
+        "x": 17,
+        "y": 7,
+        "width": 110,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 177,
+        "height": 175
       },
       "atlasFrame": {
-        "x": 772,
-        "y": 191,
-        "w": 114,
-        "h": 146
+        "x": 623,
+        "y": 189,
+        "w": 110,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.023529,
+      "normalizationScale": 1.023715,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 57.0,
-        "pixelY": 138.7
+        "pixelX": 88.5,
+        "pixelY": 166.25
       },
       "footprint": {
         "shape": "circle",
@@ -3944,26 +4924,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 69,
+        "x": 70,
         "y": 0,
-        "width": 182,
-        "height": 267
+        "width": 180,
+        "height": 266
+      },
+      "runtimeTrimBounds": {
+        "x": 37,
+        "y": 0,
+        "width": 96,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 167,
+        "height": 168
       },
       "atlasFrame": {
-        "x": 894,
-        "y": 191,
-        "w": 100,
-        "h": 146
+        "x": 741,
+        "y": 189,
+        "w": 96,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.977528,
+      "normalizationScale": 0.973684,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 50.0,
-        "pixelY": 138.7
+        "pixelX": 83.5,
+        "pixelY": 159.6
       },
       "footprint": {
         "shape": "circle",
@@ -3984,26 +4974,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 37,
-        "y": 13,
-        "width": 201,
-        "height": 300
+        "x": 38,
+        "y": 14,
+        "width": 199,
+        "height": 299
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 7,
+        "width": 95,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 149,
+        "height": 149
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 368,
-        "w": 98,
-        "h": 146
+        "x": 845,
+        "y": 189,
+        "w": 95,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.87,
+      "normalizationScale": 0.866221,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 49.0,
-        "pixelY": 138.7
+        "pixelX": 74.5,
+        "pixelY": 141.55
       },
       "footprint": {
         "shape": "circle",
@@ -4024,26 +5024,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 50,
-        "y": 4,
-        "width": 187,
-        "height": 268
+        "x": 51,
+        "y": 5,
+        "width": 185,
+        "height": 266
+      },
+      "runtimeTrimBounds": {
+        "x": 27,
+        "y": 3,
+        "width": 99,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 168,
+        "height": 168
       },
       "atlasFrame": {
-        "x": 114,
-        "y": 368,
-        "w": 102,
-        "h": 146
+        "x": 8,
+        "y": 355,
+        "w": 99,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.973881,
+      "normalizationScale": 0.973684,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 51.0,
-        "pixelY": 138.7
+        "pixelX": 84.0,
+        "pixelY": 159.6
       },
       "footprint": {
         "shape": "circle",
@@ -4064,26 +5074,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 9,
-        "y": 20,
-        "width": 267,
-        "height": 293
+        "x": 10,
+        "y": 21,
+        "width": 265,
+        "height": 292
+      },
+      "runtimeTrimBounds": {
+        "x": 5,
+        "y": 10,
+        "width": 129,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 153,
+        "height": 152
       },
       "atlasFrame": {
-        "x": 224,
-        "y": 368,
-        "w": 133,
-        "h": 146
+        "x": 115,
+        "y": 355,
+        "w": 129,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.890785,
+      "normalizationScale": 0.886986,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 66.5,
-        "pixelY": 138.7
+        "pixelX": 76.5,
+        "pixelY": 144.4
       },
       "footprint": {
         "shape": "circle",
@@ -4104,26 +5124,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 48,
-        "y": 46,
-        "width": 224,
-        "height": 206
+        "x": 49,
+        "y": 47,
+        "width": 222,
+        "height": 204
+      },
+      "runtimeTrimBounds": {
+        "x": 31,
+        "y": 30,
+        "width": 142,
+        "height": 131
+      },
+      "runtimeSourceSize": {
+        "width": 200,
+        "height": 201
       },
       "atlasFrame": {
-        "x": 270,
-        "y": 824,
-        "w": 146,
-        "h": 134
+        "x": 264,
+        "y": 799,
+        "w": 142,
+        "h": 131
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.165179,
+      "normalizationScale": 1.166667,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 73.0,
-        "pixelY": 127.3
+        "pixelX": 100.0,
+        "pixelY": 190.95
       },
       "footprint": {
         "shape": "circle",
@@ -4144,26 +5174,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 23,
+        "x": 24,
         "y": 0,
-        "width": 259,
-        "height": 272
+        "width": 257,
+        "height": 271
+      },
+      "runtimeTrimBounds": {
+        "x": 13,
+        "y": 0,
+        "width": 135,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 165,
+        "height": 165
       },
       "atlasFrame": {
-        "x": 365,
-        "y": 368,
-        "w": 139,
-        "h": 146
+        "x": 252,
+        "y": 355,
+        "w": 135,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.959559,
+      "normalizationScale": 0.95572,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 69.5,
-        "pixelY": 138.7
+        "pixelX": 82.5,
+        "pixelY": 156.75
       },
       "footprint": {
         "shape": "circle",
@@ -4184,26 +5224,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 42,
-        "y": 33,
-        "width": 226,
-        "height": 256
+        "x": 43,
+        "y": 34,
+        "width": 224,
+        "height": 254
+      },
+      "runtimeTrimBounds": {
+        "x": 24,
+        "y": 19,
+        "width": 126,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 176,
+        "height": 175
       },
       "atlasFrame": {
-        "x": 512,
-        "y": 368,
-        "w": 129,
-        "h": 146
+        "x": 395,
+        "y": 355,
+        "w": 126,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.019531,
+      "normalizationScale": 1.019685,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 64.5,
-        "pixelY": 138.7
+        "pixelX": 88.0,
+        "pixelY": 166.25
       },
       "footprint": {
         "shape": "circle",
@@ -4224,26 +5274,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 41,
-        "y": 36,
-        "width": 210,
-        "height": 255
+        "x": 42,
+        "y": 37,
+        "width": 208,
+        "height": 253
+      },
+      "runtimeTrimBounds": {
+        "x": 24,
+        "y": 21,
+        "width": 117,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 177,
+        "height": 176
       },
       "atlasFrame": {
-        "x": 649,
-        "y": 368,
-        "w": 120,
-        "h": 146
+        "x": 529,
+        "y": 355,
+        "w": 117,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.023529,
+      "normalizationScale": 1.023715,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 60.0,
-        "pixelY": 138.7
+        "pixelX": 88.5,
+        "pixelY": 167.2
       },
       "footprint": {
         "shape": "circle",
@@ -4264,26 +5324,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 69,
-        "y": 29,
-        "width": 186,
-        "height": 247
+        "x": 70,
+        "y": 30,
+        "width": 184,
+        "height": 245
+      },
+      "runtimeTrimBounds": {
+        "x": 41,
+        "y": 17,
+        "width": 107,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 182,
+        "height": 182
       },
       "atlasFrame": {
-        "x": 777,
-        "y": 368,
-        "w": 110,
-        "h": 146
+        "x": 654,
+        "y": 355,
+        "w": 107,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.05668,
+      "normalizationScale": 1.057143,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 55.0,
-        "pixelY": 138.7
+        "pixelX": 91.0,
+        "pixelY": 172.9
       },
       "footprint": {
         "shape": "circle",
@@ -4304,26 +5374,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 37,
-        "y": 28,
-        "width": 222,
-        "height": 248
+        "x": 38,
+        "y": 29,
+        "width": 220,
+        "height": 246
+      },
+      "runtimeTrimBounds": {
+        "x": 22,
+        "y": 17,
+        "width": 127,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 181,
+        "height": 182
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 522,
-        "w": 131,
-        "h": 146
+        "x": 769,
+        "y": 355,
+        "w": 127,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.052419,
+      "normalizationScale": 1.052846,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 65.5,
-        "pixelY": 138.7
+        "pixelX": 90.5,
+        "pixelY": 172.9
       },
       "footprint": {
         "shape": "circle",
@@ -4344,26 +5424,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 48,
-        "y": 24,
-        "width": 204,
-        "height": 252
+        "x": 49,
+        "y": 25,
+        "width": 202,
+        "height": 250
+      },
+      "runtimeTrimBounds": {
+        "x": 28,
+        "y": 14,
+        "width": 115,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 178,
+        "height": 178
       },
       "atlasFrame": {
-        "x": 147,
-        "y": 522,
-        "w": 118,
-        "h": 146
+        "x": 8,
+        "y": 505,
+        "w": 115,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.035714,
+      "normalizationScale": 1.036,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 59.0,
-        "pixelY": 138.7
+        "pixelX": 89.0,
+        "pixelY": 169.1
       },
       "footprint": {
         "shape": "circle",
@@ -4384,26 +5474,36 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 30,
-        "y": 28,
-        "width": 211,
-        "height": 248
+        "x": 31,
+        "y": 29,
+        "width": 209,
+        "height": 246
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 17,
+        "width": 121,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 182,
+        "height": 182
       },
       "atlasFrame": {
-        "x": 273,
-        "y": 522,
-        "w": 124,
-        "h": 146
+        "x": 131,
+        "y": 505,
+        "w": 121,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.052419,
+      "normalizationScale": 1.052846,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 62.0,
-        "pixelY": 138.7
+        "pixelX": 91.0,
+        "pixelY": 172.9
       },
       "footprint": {
         "shape": "circle",
@@ -4424,26 +5524,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 55,
-        "y": 28,
-        "width": 218,
-        "height": 266
+        "x": 56,
+        "y": 29,
+        "width": 216,
+        "height": 264
+      },
+      "runtimeTrimBounds": {
+        "x": 30,
+        "y": 16,
+        "width": 117,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 169
       },
       "atlasFrame": {
-        "x": 405,
-        "y": 522,
-        "w": 120,
-        "h": 146
+        "x": 260,
+        "y": 505,
+        "w": 117,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.981203,
+      "normalizationScale": 0.981061,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 60.0,
-        "pixelY": 138.7
+        "pixelX": 84.5,
+        "pixelY": 160.55
       },
       "footprint": {
         "shape": "circle",
@@ -4464,26 +5574,36 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 42,
-        "y": 27,
-        "width": 228,
-        "height": 266
+        "x": 43,
+        "y": 28,
+        "width": 226,
+        "height": 264
+      },
+      "runtimeTrimBounds": {
+        "x": 23,
+        "y": 15,
+        "width": 122,
+        "height": 142
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 168
       },
       "atlasFrame": {
-        "x": 533,
-        "y": 522,
-        "w": 125,
-        "h": 146
+        "x": 385,
+        "y": 505,
+        "w": 122,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.981203,
+      "normalizationScale": 0.981061,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 62.5,
-        "pixelY": 138.7
+        "pixelX": 84.5,
+        "pixelY": 159.6
       },
       "footprint": {
         "shape": "circle",

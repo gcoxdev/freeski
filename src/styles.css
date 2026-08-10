@@ -183,6 +183,43 @@ body {
   font-weight: 700;
 }
 
+.metric--seed {
+  position: relative;
+}
+
+#seed-label {
+  display: block;
+  overflow: visible;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+#seed-label:focus-visible {
+  outline: 1px solid #f5c844;
+  outline-offset: 2px;
+}
+
+#seed-label:focus-visible::after {
+  position: absolute;
+  z-index: 5;
+  bottom: calc(100% + 12px);
+  left: 0;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 24px));
+  padding: 7px 9px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  color: #f7f9f5;
+  background: rgb(16 41 51 / 94%);
+  box-shadow: 0 8px 24px rgb(16 41 51 / 24%);
+  content: attr(data-seed);
+  font-size: 10px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .metric--speed strong,
 .metric--style strong,
 [data-turbo="true"] #turbo-indicator {
@@ -427,7 +464,10 @@ body {
   }
 
   .instrument-strip {
-    grid-template-columns: repeat(7, minmax(60px, 1fr)) repeat(3, 64px);
+    grid-template-columns:
+      minmax(48px, 0.7fr) minmax(52px, 0.75fr) minmax(54px, 0.8fr)
+      minmax(62px, 0.9fr) minmax(48px, 0.7fr) minmax(120px, 1.7fr)
+      minmax(55px, 0.8fr) repeat(3, 64px);
     padding-inline: 5px;
   }
 
@@ -438,6 +478,24 @@ body {
   .pointer-toggle {
     min-width: 60px;
     letter-spacing: 0.02em;
+  }
+
+  #motion-label,
+  #seed-label {
+    font-size: 9px;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  #turbo-indicator {
+    font-size: 8px;
+    text-overflow: clip;
+  }
+
+  .metric--style #trick-label {
+    display: none;
   }
 }
 

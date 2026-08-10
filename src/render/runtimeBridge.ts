@@ -68,8 +68,15 @@ export interface FreeSkiRuntime {
   art: {
     atlasFrameCount: number;
     atlasLoaded: boolean;
+    capacityFallbacks: number;
+    fallbackDraws: number;
+    frameFallbacks: number;
+    missingFrameFallbacks: number;
+    peakPooledSprites: number;
+    playerRenderedHeight: number;
     pooledSprites: number;
     spriteCapacity: number;
+    statusLabelDepth: number;
   };
   audio: AlpineAudioSnapshot;
   camera: {

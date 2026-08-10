@@ -4,6 +4,9 @@ import { AlpineScene } from "./scenes/AlpineScene";
 export function createGame(parent: string, seed: string): Phaser.Game {
   return new Phaser.Game({
     type: Phaser.CANVAS,
+    audio: {
+      noAudio: true,
+    },
     parent,
     backgroundColor: "#dbe9e9",
     scale: {

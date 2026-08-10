@@ -18,15 +18,21 @@ export interface AtlasDrawOptions {
 
 /** A bounded render-only pool for the production atlas. */
 export class AtlasSpritePool {
-  static readonly MAX_SPRITES = 196;
+  static readonly MAX_SPRITES = 512;
 
   private readonly images: Phaser.GameObjects.Image[] = [];
   private cursor = 0;
+  private capacityFallbacksValue = 0;
+  private frameFallbacksValue = 0;
+  private missingFrameFallbacksValue = 0;
+  private peakActiveValue = 0;
+  private totalFallbacksValue = 0;
 
   constructor(private readonly scene: Phaser.Scene) {}
 
   beginFrame(): void {
     this.cursor = 0;
+    this.frameFallbacksValue = 0;
   }
 
   draw(
@@ -37,15 +43,21 @@ export class AtlasSpritePool {
   ): Phaser.GameObjects.Image | null {
     if (
       !this.scene.textures.exists(PRODUCTION_ATLAS_KEY) ||
-      !this.scene.textures.get(PRODUCTION_ATLAS_KEY).has(frameName) ||
-      this.cursor >= AtlasSpritePool.MAX_SPRITES
-    )
+      !this.scene.textures.get(PRODUCTION_ATLAS_KEY).has(frameName)
+    ) {
+      this.recordFallback("missing");
       return null;
+    }
+    if (this.cursor >= AtlasSpritePool.MAX_SPRITES) {
+      this.recordFallback("capacity");
+      return null;
+    }
     const image =
       this.images[this.cursor] ??
       this.scene.add.image(x, y, PRODUCTION_ATLAS_KEY, frameName);
     if (!this.images[this.cursor]) this.images.push(image);
     this.cursor += 1;
+    this.peakActiveValue = Math.max(this.peakActiveValue, this.cursor);
     image
       .setTexture(PRODUCTION_ATLAS_KEY, frameName)
       .setPosition(x, y)
@@ -79,8 +91,35 @@ export class AtlasSpritePool {
     return AtlasSpritePool.MAX_SPRITES;
   }
 
+  get capacityFallbacks(): number {
+    return this.capacityFallbacksValue;
+  }
+
+  get fallbackDraws(): number {
+    return this.totalFallbacksValue;
+  }
+
+  get frameFallbacks(): number {
+    return this.frameFallbacksValue;
+  }
+
+  get missingFrameFallbacks(): number {
+    return this.missingFrameFallbacksValue;
+  }
+
+  get peakActiveCount(): number {
+    return this.peakActiveValue;
+  }
+
   destroy(): void {
     for (const image of this.images) image.destroy();
     this.images.length = 0;
+  }
+
+  private recordFallback(kind: "capacity" | "missing"): void {
+    this.frameFallbacksValue += 1;
+    this.totalFallbacksValue += 1;
+    if (kind === "capacity") this.capacityFallbacksValue += 1;
+    else this.missingFrameFallbacksValue += 1;
   }
 }

@@ -8,6 +8,61 @@ async function screenshot(page: Page, name: string): Promise<void> {
     await page.screenshot({ path: join(directory, name), fullPage: true });
 }
 
+async function instrumentAudioContexts(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const scope = window as typeof window & {
+      __FREE_SKI_AUDIO_CONTEXT_AUDIT__?: {
+        constructed: number;
+        initialStates: string[];
+      };
+      webkitAudioContext?: typeof AudioContext;
+    };
+    const audit = { constructed: 0, initialStates: [] as string[] };
+    scope.__FREE_SKI_AUDIO_CONTEXT_AUDIT__ = audit;
+    const wrapped = new Map<typeof AudioContext, typeof AudioContext>();
+    const wrap = (Original: typeof AudioContext): typeof AudioContext => {
+      const existing = wrapped.get(Original);
+      if (existing) return existing;
+      const Instrumented = new Proxy(Original, {
+        construct(target, argumentsList) {
+          const context = Reflect.construct(
+            target,
+            argumentsList,
+          ) as AudioContext;
+          audit.constructed += 1;
+          audit.initialStates.push(context.state);
+          return context;
+        },
+      });
+      wrapped.set(Original, Instrumented);
+      return Instrumented;
+    };
+    if (scope.AudioContext)
+      Object.defineProperty(scope, "AudioContext", {
+        configurable: true,
+        value: wrap(scope.AudioContext),
+        writable: true,
+      });
+    if (scope.webkitAudioContext)
+      Object.defineProperty(scope, "webkitAudioContext", {
+        configurable: true,
+        value: wrap(scope.webkitAudioContext),
+        writable: true,
+      });
+  });
+}
+
+async function audioContextCount(page: Page): Promise<number> {
+  return page.evaluate(
+    () =>
+      (
+        window as typeof window & {
+          __FREE_SKI_AUDIO_CONTEXT_AUDIT__?: { constructed: number };
+        }
+      ).__FREE_SKI_AUDIO_CONTEXT_AUDIT__?.constructed ?? -1,
+  );
+}
+
 test("loads production art, bounded VFX, compact HUD, and gesture-gated persistent audio", async ({
   page,
 }) => {
@@ -26,6 +81,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
       errorResponses.push(`${response.status()} ${response.url()}`);
   });
 
+  await instrumentAudioContexts(page);
   await page.goto("/?seed=gate-six-presentation&debug=1");
   await expect(page.locator("#game-shell")).toHaveAttribute(
     "data-game-ready",
@@ -35,7 +91,10 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   expect(await page.evaluate(() => window.__FREE_SKI__!.art)).toMatchObject({
     atlasFrameCount: 112,
     atlasLoaded: true,
-    spriteCapacity: 196,
+    capacityFallbacks: 0,
+    fallbackDraws: 0,
+    missingFrameFallbacks: 0,
+    spriteCapacity: 512,
   });
   expect(await page.evaluate(() => window.__FREE_SKI__!.audio)).toMatchObject({
     availableCues: 26,
@@ -43,6 +102,8 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     muted: false,
     unlocked: false,
   });
+  const initialColdAudioContexts = await audioContextCount(page);
+  expect(initialColdAudioContexts).toBe(0);
 
   await page.evaluate(() =>
     window.__FREE_SKI_DEBUG__?.stageLivingScenario("population"),
@@ -56,6 +117,8 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
       (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 8,
   );
   await page.keyboard.up("s");
+  const initialGestureAudioContexts = await audioContextCount(page);
+  expect(initialGestureAudioContexts).toBe(1);
   await screenshot(page, "bright-snow-desktop.png");
   const activePresentation = await page.evaluate(() => ({
     art: window.__FREE_SKI__!.art,
@@ -68,6 +131,41 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   expect(activePresentation.vfx.activeTracks).toBeLessThanOrEqual(
     activePresentation.vfx.maximumTracks,
   );
+  expect(activePresentation.art).toMatchObject({
+    capacityFallbacks: 0,
+    fallbackDraws: 0,
+    frameFallbacks: 0,
+    missingFrameFallbacks: 0,
+    statusLabelDepth: 90,
+  });
+  expect(activePresentation.art.playerRenderedHeight).toBeGreaterThanOrEqual(
+    48,
+  );
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.evaluate(() => {
+    window.__FREE_SKI_DEBUG__?.stageLivingScenario("population");
+    window.__FREE_SKI_DEBUG__?.stageLivingScenario("chair-drop");
+  });
+  await page.waitForFunction(
+    () => (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 196,
+  );
+  const stressPresentation = await page.evaluate(
+    () => window.__FREE_SKI__!.art,
+  );
+  expect(stressPresentation.pooledSprites).toBeLessThanOrEqual(
+    stressPresentation.spriteCapacity,
+  );
+  expect(stressPresentation.peakPooledSprites).toBeLessThanOrEqual(
+    stressPresentation.spriteCapacity,
+  );
+  expect(stressPresentation).toMatchObject({
+    capacityFallbacks: 0,
+    fallbackDraws: 0,
+    frameFallbacks: 0,
+    missingFrameFallbacks: 0,
+  });
+  await page.setViewportSize({ width: 1280, height: 720 });
 
   await page.locator("#audio-toggle").click();
   await expect(page.locator("#audio-toggle")).toHaveText("SOUND MUTED");
@@ -84,14 +182,28 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     muted: true,
     unlocked: false,
   });
+  const reloadColdAudioContexts = await audioContextCount(page);
+  expect(reloadColdAudioContexts).toBe(0);
   await page.locator("#audio-toggle").click();
   await page.waitForFunction(
     () =>
       window.__FREE_SKI__?.audio.unlocked === true &&
       window.__FREE_SKI__?.audio.muted === false,
   );
+  const reloadGestureAudioContexts = await audioContextCount(page);
+  expect(reloadGestureAudioContexts).toBe(1);
 
   await page.setViewportSize({ width: 768, height: 600 });
+  await page.evaluate(() => {
+    window.__FREE_SKI_DEBUG__?.setVisible(false);
+    return window.__FREE_SKI_DEBUG__?.stageLivingScenario("population");
+  });
+  await page.waitForFunction(
+    () =>
+      (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 8 &&
+      window.__FREE_SKI__?.art.fallbackDraws === 0,
+  );
+  await screenshot(page, "bright-snow-768x600.png");
   await page.evaluate(() => {
     window.__FREE_SKI_DEBUG__?.setVisible(false);
     return window.__FREE_SKI_DEBUG__?.stageLivingScenario("foreshadow");
@@ -139,15 +251,88 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   await expect(page.locator("#mode-name")).toBeVisible();
   await expect(page.locator("#turbo-indicator")).toBeVisible();
   await expect(page.locator("#seed-label")).toBeVisible();
+  const seedAudit = await page.locator("#seed-label").evaluate((element) => ({
+    ariaLabel: element.getAttribute("aria-label"),
+    clientHeight: element.clientHeight,
+    clientWidth: element.clientWidth,
+    scrollHeight: element.scrollHeight,
+    scrollWidth: element.scrollWidth,
+    text: element.textContent,
+    title: element.getAttribute("title"),
+  }));
+  expect(seedAudit).toMatchObject({
+    ariaLabel: "Active world seed: gate-six-presentation",
+    text: "gate-six-presentation",
+    title: "Active world seed: gate-six-presentation",
+  });
+  expect(seedAudit.scrollWidth).toBeLessThanOrEqual(seedAudit.clientWidth);
+  expect(seedAudit.scrollHeight).toBeLessThanOrEqual(seedAudit.clientHeight);
+  const formAudit = await page.locator("#motion-label").evaluate((element) => ({
+    clientHeight: element.clientHeight,
+    clientWidth: element.clientWidth,
+    scrollHeight: element.scrollHeight,
+    scrollWidth: element.scrollWidth,
+  }));
+  expect(formAudit.scrollWidth).toBeLessThanOrEqual(formAudit.clientWidth);
+  expect(formAudit.scrollHeight).toBeLessThanOrEqual(formAudit.clientHeight);
+  const turboAudit = await page
+    .locator("#turbo-indicator")
+    .evaluate((element) => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      text: element.textContent,
+    }));
+  expect(turboAudit.text).toBe("TURBO OFF");
+  expect(turboAudit.scrollWidth).toBeLessThanOrEqual(turboAudit.clientWidth);
+  expect(await page.evaluate(() => window.__FREE_SKI__!.art)).toMatchObject({
+    capacityFallbacks: 0,
+    fallbackDraws: 0,
+    frameFallbacks: 0,
+    missingFrameFallbacks: 0,
+    statusLabelDepth: 90,
+  });
+  expect(
+    await page.evaluate(() => window.__FREE_SKI__!.art.playerRenderedHeight),
+  ).toBeGreaterThanOrEqual(48);
   await screenshot(page, "dark-snow-768x600.png");
 
-  const telemetry = await page.evaluate(() => ({
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await screenshot(page, "dark-snow-desktop.png");
+
+  const runtimeTelemetry = await page.evaluate(() => ({
     art: window.__FREE_SKI__!.art,
     audio: window.__FREE_SKI__!.audio,
+    audioContextAudit: (
+      window as typeof window & {
+        __FREE_SKI_AUDIO_CONTEXT_AUDIT__?: {
+          constructed: number;
+          initialStates: string[];
+        };
+      }
+    ).__FREE_SKI_AUDIO_CONTEXT_AUDIT__,
+    hud: {
+      form: document.querySelector("#motion-label")?.textContent,
+      seed: document.querySelector("#seed-label")?.textContent,
+    },
     player: window.__FREE_SKI__!.player,
     vfx: window.__FREE_SKI__!.vfx,
     yeti: window.__FREE_SKI__!.yeti,
   }));
+  const telemetry = {
+    ...runtimeTelemetry,
+    audioContextLifecycle: {
+      initialCold: initialColdAudioContexts,
+      initialGesture: initialGestureAudioContexts,
+      reloadCold: reloadColdAudioContexts,
+      reloadGesture: reloadGestureAudioContexts,
+    },
+    minimumViewport: {
+      form: formAudit,
+      seed: seedAudit,
+      turbo: turboAudit,
+    },
+    stressPresentation,
+  };
   const telemetryPath = process.env.FREESKI_GATE6_TELEMETRY;
   if (telemetryPath)
     writeFileSync(telemetryPath, `${JSON.stringify(telemetry, null, 2)}\n`);

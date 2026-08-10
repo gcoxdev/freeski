@@ -21,7 +21,7 @@ MANIFEST_PATH = SOURCE_DIR / "manifest.json"
 ATLAS_WIDTH = 1024
 PADDING = 4
 ALPHA_CROP_THRESHOLD = 8
-PIPELINE_VERSION = "freeski-atlas-v1"
+PIPELINE_VERSION = "freeski-atlas-v2"
 RUNTIME_SCALE = 0.55
 
 
@@ -36,6 +36,8 @@ class Frame:
     image: Image.Image
     family: str
     normalization_scale: float = 1.0
+    runtime_source_size: tuple[int, int] = (1, 1)
+    runtime_trim: tuple[int, int, int, int] = (0, 0, 1, 1)
     atlas_x: int = 0
     atlas_y: int = 0
 
@@ -103,13 +105,7 @@ def alpha_bounds(image: Image.Image) -> tuple[int, int, int, int]:
     bounds = mask.getbbox()
     if bounds is None:
         return (0, 0, 1, 1)
-    left, top, right, bottom = bounds
-    return (
-        max(0, left - 1),
-        max(0, top - 1),
-        min(image.width, right + 1),
-        min(image.height, bottom + 1),
-    )
+    return bounds
 
 
 def remove_specks(image: Image.Image) -> Image.Image:
@@ -200,27 +196,30 @@ def normalize_families(frames: list[Frame]) -> None:
             extent = max(frame.image.width, frame.image.height)
             scale = max(0.82, min(1.22, target_extent / max(1, extent)))
             frame.normalization_scale = round(scale, 6)
-            if abs(scale - 1) < 0.005:
-                continue
-            frame.image = frame.image.resize(
-                (
-                    max(1, round(frame.image.width * scale)),
-                    max(1, round(frame.image.height * scale)),
-                ),
-                Image.Resampling.LANCZOS,
-            )
     for frame in frames:
-        resized = frame.image.resize(
-            (
-                max(1, round(frame.image.width * RUNTIME_SCALE)),
-                max(1, round(frame.image.height * RUNTIME_SCALE)),
-            ),
-            Image.Resampling.LANCZOS,
+        scale = frame.normalization_scale * RUNTIME_SCALE
+        trim_left, trim_top, trim_right, trim_bottom = frame.trim
+        cell_width = frame.cell[2] - frame.cell[0]
+        cell_height = frame.cell[3] - frame.cell[1]
+        runtime_trim_x = round(trim_left * scale)
+        runtime_trim_y = round(trim_top * scale)
+        runtime_width = max(1, round((trim_right - trim_left) * scale))
+        runtime_height = max(1, round((trim_bottom - trim_top) * scale))
+        runtime_right_margin = round((cell_width - trim_right) * scale)
+        runtime_bottom_margin = round((cell_height - trim_bottom) * scale)
+        frame.runtime_source_size = (
+            runtime_trim_x + runtime_width + runtime_right_margin,
+            runtime_trim_y + runtime_height + runtime_bottom_margin,
         )
-        frame.image = Image.new(
-            "RGBA", (resized.width + 2, resized.height + 2), (0, 0, 0, 0)
+        frame.runtime_trim = (
+            runtime_trim_x,
+            runtime_trim_y,
+            runtime_width,
+            runtime_height,
         )
-        frame.image.alpha_composite(resized, (1, 1))
+        frame.image = frame.image.resize(
+            (runtime_width, runtime_height), Image.Resampling.LANCZOS
+        )
 
 
 def pack(frames: list[Frame]) -> tuple[int, int]:
@@ -250,13 +249,17 @@ def paste_extruded(atlas: Image.Image, frame: Frame) -> None:
     y = frame.atlas_y
     image = frame.image
     atlas.alpha_composite(image, (x, y))
-    left = image.crop((0, 0, 1, image.height)).resize((PADDING, image.height))
-    right = image.crop((image.width - 1, 0, image.width, image.height)).resize(
-        (PADDING, image.height)
+    left = image.crop((0, 0, 1, image.height)).resize(
+        (PADDING, image.height), Image.Resampling.NEAREST
     )
-    top = image.crop((0, 0, image.width, 1)).resize((image.width, PADDING))
+    right = image.crop((image.width - 1, 0, image.width, image.height)).resize(
+        (PADDING, image.height), Image.Resampling.NEAREST
+    )
+    top = image.crop((0, 0, image.width, 1)).resize(
+        (image.width, PADDING), Image.Resampling.NEAREST
+    )
     bottom = image.crop((0, image.height - 1, image.width, image.height)).resize(
-        (image.width, PADDING)
+        (image.width, PADDING), Image.Resampling.NEAREST
     )
     atlas.alpha_composite(left, (x - PADDING, y))
     atlas.alpha_composite(right, (x + image.width, y))
@@ -273,7 +276,10 @@ def paste_extruded(atlas: Image.Image, frame: Frame) -> None:
         ),
     ]
     for corner, target_x, target_y in corners:
-        atlas.alpha_composite(corner.resize((PADDING, PADDING)), (target_x, target_y))
+        atlas.alpha_composite(
+            corner.resize((PADDING, PADDING), Image.Resampling.NEAREST),
+            (target_x, target_y),
+        )
 
 
 def geometry_for(name: str) -> tuple[float, float, float]:
@@ -331,6 +337,10 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
     for frame in sorted(frames, key=lambda value: value.name):
         cell_left, cell_top, cell_right, cell_bottom = frame.cell
         trim_left, trim_top, trim_right, trim_bottom = frame.trim
+        runtime_trim_x, runtime_trim_y, runtime_width, runtime_height = (
+            frame.runtime_trim
+        )
+        runtime_source_width, runtime_source_height = frame.runtime_source_size
         footprint, clearance, pivot_y = geometry_for(frame.name)
         phaser_frames[frame.name] = {
             "frame": {
@@ -342,14 +352,14 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
             "rotated": False,
             "trimmed": True,
             "spriteSourceSize": {
-                "x": trim_left,
-                "y": trim_top,
-                "w": trim_right - trim_left,
-                "h": trim_bottom - trim_top,
+                "x": runtime_trim_x,
+                "y": runtime_trim_y,
+                "w": runtime_width,
+                "h": runtime_height,
             },
             "sourceSize": {
-                "w": cell_right - cell_left,
-                "h": cell_bottom - cell_top,
+                "w": runtime_source_width,
+                "h": runtime_source_height,
             },
             "pivot": {"x": 0.5, "y": pivot_y},
         }
@@ -369,6 +379,16 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
                 "width": trim_right - trim_left,
                 "height": trim_bottom - trim_top,
             },
+            "runtimeTrimBounds": {
+                "x": runtime_trim_x,
+                "y": runtime_trim_y,
+                "width": runtime_width,
+                "height": runtime_height,
+            },
+            "runtimeSourceSize": {
+                "width": runtime_source_width,
+                "height": runtime_source_height,
+            },
             "atlasFrame": phaser_frames[frame.name]["frame"],
             "padding": PADDING,
             "normalizationFamily": frame.family,
@@ -377,8 +397,8 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
             "groundPivot": {
                 "normalizedX": 0.5,
                 "normalizedY": pivot_y,
-                "pixelX": round(frame.image.width * 0.5, 3),
-                "pixelY": round(frame.image.height * pivot_y, 3),
+                "pixelX": round(runtime_source_width * 0.5, 3),
+                "pixelY": round(runtime_source_height * pivot_y, 3),
             },
             "footprint": {
                 "shape": "circle",
@@ -445,8 +465,44 @@ def validate() -> None:
     magenta_pixels = 0
     opaque_pixels = 0
     transparent_corners = True
+    extrusion_mismatch_pixels = 0
+    non_empty_padding_bands = 0
+    geometry_mismatches: list[str] = []
+    padded_rectangles: list[tuple[str, int, int, int, int]] = []
     for name, value in phaser["frames"].items():
         rectangle = value["frame"]
+        source_size = value["sourceSize"]
+        sprite_source = value["spriteSourceSize"]
+        if (
+            sprite_source["w"] != rectangle["w"]
+            or sprite_source["h"] != rectangle["h"]
+            or sprite_source["x"] < 0
+            or sprite_source["y"] < 0
+            or sprite_source["x"] + sprite_source["w"] > source_size["w"]
+            or sprite_source["y"] + sprite_source["h"] > source_size["h"]
+        ):
+            geometry_mismatches.append(name)
+        metadata_frame = metadata["frames"][name]
+        runtime_trim = metadata_frame["runtimeTrimBounds"]
+        runtime_source = metadata_frame["runtimeSourceSize"]
+        if (
+            runtime_trim["x"] != sprite_source["x"]
+            or runtime_trim["y"] != sprite_source["y"]
+            or runtime_trim["width"] != rectangle["w"]
+            or runtime_trim["height"] != rectangle["h"]
+            or runtime_source["width"] != source_size["w"]
+            or runtime_source["height"] != source_size["h"]
+        ):
+            geometry_mismatches.append(name)
+        padded_rectangles.append(
+            (
+                name,
+                rectangle["x"] - PADDING,
+                rectangle["y"] - PADDING,
+                rectangle["x"] + rectangle["w"] + PADDING,
+                rectangle["y"] + rectangle["h"] + PADDING,
+            )
+        )
         frame = atlas.crop(
             (
                 rectangle["x"],
@@ -462,9 +518,72 @@ def validate() -> None:
             for red, green, blue, alpha in frame_pixels
             if alpha > 16 and red > 180 and blue > 180 and green < 70
         )
+        x = rectangle["x"]
+        y = rectangle["y"]
+        width = rectangle["w"]
+        height = rectangle["h"]
+        edge_bands = (
+            (
+                atlas.crop((x - PADDING, y, x, y + height)),
+                frame.crop((0, 0, 1, height)).resize(
+                    (PADDING, height), Image.Resampling.NEAREST
+                ),
+            ),
+            (
+                atlas.crop((x + width, y, x + width + PADDING, y + height)),
+                frame.crop((width - 1, 0, width, height)).resize(
+                    (PADDING, height), Image.Resampling.NEAREST
+                ),
+            ),
+            (
+                atlas.crop((x, y - PADDING, x + width, y)),
+                frame.crop((0, 0, width, 1)).resize(
+                    (width, PADDING), Image.Resampling.NEAREST
+                ),
+            ),
+            (
+                atlas.crop((x, y + height, x + width, y + height + PADDING)),
+                frame.crop((0, height - 1, width, height)).resize(
+                    (width, PADDING), Image.Resampling.NEAREST
+                ),
+            ),
+        )
+        for actual, expected_band in edge_bands:
+            extrusion_mismatch_pixels += sum(
+                actual_pixel != expected_pixel
+                for actual_pixel, expected_pixel in zip(
+                    actual.get_flattened_data(),
+                    expected_band.get_flattened_data(),
+                    strict=True,
+                )
+            )
+            if any(pixel[3] > 0 for pixel in actual.get_flattened_data()):
+                non_empty_padding_bands += 1
+        corner_pixels = (
+            (x - PADDING, y - PADDING, frame.getpixel((0, 0))),
+            (x + width, y - PADDING, frame.getpixel((width - 1, 0))),
+            (x - PADDING, y + height, frame.getpixel((0, height - 1))),
+            (
+                x + width,
+                y + height,
+                frame.getpixel((width - 1, height - 1)),
+            ),
+        )
+        for corner_x, corner_y, expected_pixel in corner_pixels:
+            corner = atlas.crop(
+                (
+                    corner_x,
+                    corner_y,
+                    corner_x + PADDING,
+                    corner_y + PADDING,
+                )
+            )
+            extrusion_mismatch_pixels += sum(
+                pixel != expected_pixel for pixel in corner.get_flattened_data()
+            )
         if name.startswith("vfx/"):
             continue
-        transparent_corners &= all(
+        transparent_corners &= any(
             frame.getpixel(point)[3] < 16
             for point in [
                 (0, 0),
@@ -477,13 +596,44 @@ def validate() -> None:
     if ratio > 0.00035:
         raise RuntimeError(f"magenta audit ratio too high: {ratio:.6f}")
     if not transparent_corners:
-        raise RuntimeError("non-VFX frame has an opaque trim corner")
+        raise RuntimeError("non-VFX frame has no transparent trim corner")
+    if extrusion_mismatch_pixels:
+        raise RuntimeError(
+            f"atlas extrusion has {extrusion_mismatch_pixels} mismatched pixels"
+        )
+    expected_padding_bands = expected * 4
+    if non_empty_padding_bands != expected_padding_bands:
+        raise RuntimeError(
+            "atlas contains empty pseudo-extrusion: "
+            f"{non_empty_padding_bands}/{expected_padding_bands} bands contain content"
+        )
+    if geometry_mismatches:
+        raise RuntimeError(
+            f"inconsistent runtime trim geometry: {sorted(set(geometry_mismatches))}"
+        )
+    overlaps: list[tuple[str, str]] = []
+    for index, first in enumerate(padded_rectangles):
+        for second in padded_rectangles[index + 1 :]:
+            if not (
+                first[3] <= second[1]
+                or second[3] <= first[1]
+                or first[4] <= second[2]
+                or second[4] <= first[2]
+            ):
+                overlaps.append((first[0], second[0]))
+    if overlaps:
+        raise RuntimeError(f"padded atlas rectangles overlap: {overlaps}")
     print(
         json.dumps(
             {
                 "atlas": f"{atlas.width}x{atlas.height}",
                 "frames": expected,
                 "magentaPixelRatio": round(ratio, 8),
+                "extrudedFrames": expected,
+                "extrusionMismatchPixels": extrusion_mismatch_pixels,
+                "nonEmptyPaddingBands": non_empty_padding_bands,
+                "paddingOverlaps": len(overlaps),
+                "geometryMismatches": len(geometry_mismatches),
                 "paddingPixels": PADDING,
                 "transparentCorners": transparent_corners,
             },
