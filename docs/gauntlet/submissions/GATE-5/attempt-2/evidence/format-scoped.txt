@@ -1,0 +1,4 @@
+npm notice run freeski@0.1.0 npx
+npm notice run 'prettier' --check src/render/scenes/AlpineScene.ts src/simulation/livingSlope.ts src/simulation/livingSlope.test.ts tests/e2e/livingSlope.spec.ts
+Checking formatting...
+All matched files use Prettier code style!

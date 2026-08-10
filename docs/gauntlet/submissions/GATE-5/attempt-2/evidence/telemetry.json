@@ -1,0 +1,750 @@
+{
+  "interactions": {
+    "deltas": {},
+    "feedbackEvents": [],
+    "interactionEvents": [],
+    "scenario": "none",
+    "snapshot": {
+      "activeTrick": "none",
+      "collisionChecks": 0,
+      "deltaCount": 0,
+      "footprintHits": 0,
+      "lastEvent": "none",
+      "preset": "modern",
+      "style": 0
+    },
+    "styleEvents": []
+  },
+  "livingSlope": {
+    "events": [
+      {
+        "actorId": "chair-up-0",
+        "atSeconds": 0.016666666666666666,
+        "id": "living-0",
+        "terrainObjectId": null,
+        "type": "chair-looped",
+        "worldX": -7,
+        "worldY": 1471.9666666666667
+      },
+      {
+        "actorId": "walking-tree-0",
+        "atSeconds": 0.11666666666666665,
+        "id": "living-1",
+        "terrainObjectId": null,
+        "type": "walking-tree-woke",
+        "worldX": 22,
+        "worldY": 10
+      },
+      {
+        "actorId": "snowboarder-top",
+        "atSeconds": 0.4666666666666666,
+        "id": "living-2",
+        "terrainObjectId": null,
+        "type": "snowboarder-entered",
+        "worldX": 25,
+        "worldY": -5.2750000000000075
+      },
+      {
+        "actorId": "snowboarder-top",
+        "atSeconds": 0.8833333333333344,
+        "id": "living-3",
+        "terrainObjectId": "scenario-living-ramp",
+        "type": "snowboarder-jumped",
+        "worldX": 22.708333333333375,
+        "worldY": 1.408333333333323
+      },
+      {
+        "actorId": "snowboarder-top",
+        "atSeconds": 1.5166666666666662,
+        "id": "living-4",
+        "terrainObjectId": null,
+        "type": "snowboarder-tumbled",
+        "worldX": 20.343690321506905,
+        "worldY": 11.76833333333332
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 1.5999999999999992,
+        "id": "living-5",
+        "terrainObjectId": null,
+        "type": "beginner-fell",
+        "worldX": 4.2368243501942136,
+        "worldY": 13.230000000000025
+      },
+      {
+        "actorId": "snowboarder-top",
+        "atSeconds": 2.1833333333333305,
+        "id": "living-6",
+        "terrainObjectId": null,
+        "type": "snowboarder-landed",
+        "worldX": 18.642071397634773,
+        "worldY": 16.923333333333318
+      },
+      {
+        "actorId": "walking-tree-0",
+        "atSeconds": 2.533333333333329,
+        "id": "living-7",
+        "terrainObjectId": null,
+        "type": "walking-tree-moved",
+        "worldX": 27.316666666666467,
+        "worldY": 10
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 2.916666666666661,
+        "id": "living-8",
+        "terrainObjectId": null,
+        "type": "beginner-recovered",
+        "worldX": 4.258271313933578,
+        "worldY": 13.300000000000026
+      },
+      {
+        "actorId": "dog-0",
+        "atSeconds": 2.9999999999999942,
+        "id": "living-9",
+        "terrainObjectId": null,
+        "type": "dog-hit",
+        "worldX": 15.05,
+        "worldY": 49.19166666666683
+      },
+      {
+        "actorId": "dog-0",
+        "atSeconds": 4.383333333333323,
+        "id": "living-10",
+        "terrainObjectId": null,
+        "type": "dog-recovered",
+        "worldX": 15.05,
+        "worldY": 49.19166666666683
+      },
+      {
+        "actorId": "chair-down-0",
+        "atSeconds": 4.483333333333323,
+        "id": "living-11",
+        "terrainObjectId": null,
+        "type": "chair-rider-dropped",
+        "worldX": -9,
+        "worldY": 85.40833333333353
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 4.516666666666656,
+        "id": "living-12",
+        "terrainObjectId": null,
+        "type": "beginner-fell",
+        "worldX": 4.495095664127792,
+        "worldY": 19.950000000000053
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 5.116666666666654,
+        "id": "living-13",
+        "terrainObjectId": null,
+        "type": "snowboarder-tumbled",
+        "worldX": -7.495227174292243,
+        "worldY": 97.26833333333357
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 5.783333333333318,
+        "id": "living-14",
+        "terrainObjectId": null,
+        "type": "snowboarder-landed",
+        "worldX": -6.412378768191775,
+        "worldY": 102.42333333333357
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 5.833333333333318,
+        "id": "living-15",
+        "terrainObjectId": null,
+        "type": "beginner-recovered",
+        "worldX": -17,
+        "worldY": 1754.8608333333334
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 7.433333333333312,
+        "id": "living-16",
+        "terrainObjectId": null,
+        "type": "beginner-fell",
+        "worldX": -16.763175649805792,
+        "worldY": 1761.5108333333274
+      },
+      {
+        "actorId": "chair-down-5",
+        "atSeconds": 8.11666666666665,
+        "id": "living-17",
+        "terrainObjectId": null,
+        "type": "chair-rider-dropped",
+        "worldX": -9,
+        "worldY": 107.67499999999359
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 8.750000000000014,
+        "id": "living-18",
+        "terrainObjectId": null,
+        "type": "beginner-recovered",
+        "worldX": -17,
+        "worldY": 1807.8899999999903
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 8.750000000000014,
+        "id": "living-19",
+        "terrainObjectId": null,
+        "type": "snowboarder-tumbled",
+        "worldX": -7.495227174292243,
+        "worldY": 119.53499999999363
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 9.416666666666714,
+        "id": "living-20",
+        "terrainObjectId": null,
+        "type": "snowboarder-landed",
+        "worldX": -6.412378768191775,
+        "worldY": 124.68999999999363
+      },
+      {
+        "actorId": "chair-down-0",
+        "atSeconds": 10.150000000000084,
+        "id": "living-21",
+        "terrainObjectId": null,
+        "type": "chair-rider-dropped",
+        "worldX": -9,
+        "worldY": 96.74166666665656
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 10.350000000000094,
+        "id": "living-22",
+        "terrainObjectId": null,
+        "type": "beginner-fell",
+        "worldX": -16.763175649805792,
+        "worldY": 1814.5399999999843
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 10.783333333333449,
+        "id": "living-23",
+        "terrainObjectId": null,
+        "type": "snowboarder-tumbled",
+        "worldX": -7.495227174292243,
+        "worldY": 108.6016666666566
+      },
+      {
+        "actorId": "snowboarder-chair-drop",
+        "atSeconds": 11.450000000000149,
+        "id": "living-24",
+        "terrainObjectId": null,
+        "type": "snowboarder-landed",
+        "worldX": -6.412378768191775,
+        "worldY": 113.7566666666566
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 11.666666666666826,
+        "id": "living-25",
+        "terrainObjectId": null,
+        "type": "beginner-recovered",
+        "worldX": -17,
+        "worldY": 1955.4891666666665
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 13.266666666666906,
+        "id": "living-26",
+        "terrainObjectId": null,
+        "type": "beginner-fell",
+        "worldX": -16.763175649805792,
+        "worldY": 2008.3213333333308
+      },
+      {
+        "actorId": "beginner-0",
+        "atSeconds": 14.583333333333638,
+        "id": "living-27",
+        "terrainObjectId": null,
+        "type": "beginner-recovered",
+        "worldX": -16.741728686066427,
+        "worldY": 2008.3913333333307
+      },
+      {
+        "actorId": "chair-up-0",
+        "atSeconds": 0.016666666666666666,
+        "id": "living-0",
+        "terrainObjectId": null,
+        "type": "chair-looped",
+        "worldX": -7,
+        "worldY": 1471.9666666666667
+      },
+      {
+        "actorId": "snowboarder-top",
+        "atSeconds": 0.4666666666666666,
+        "id": "living-1",
+        "terrainObjectId": null,
+        "type": "snowboarder-entered",
+        "worldX": 14,
+        "worldY": -31.92499999999996
+      }
+    ],
+    "scenario": "none",
+    "snapshot": {
+      "actorCount": 21,
+      "actors": [
+        {
+          "active": true,
+          "direction": 1,
+          "id": "beginner-0",
+          "kind": "beginner",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "wobble",
+          "stateSeconds": 0.4833333333333333,
+          "velocityX": 2.1840077989904967,
+          "velocityY": 4.2,
+          "worldX": -17.86156645836373,
+          "worldY": 20.440000000000026
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "snowboarder-top",
+          "kind": "snowboarder",
+          "riderCount": 0,
+          "source": "top-entry",
+          "state": "carve-right",
+          "stateSeconds": 0.3333333333333333,
+          "velocityX": 5.5,
+          "velocityY": 15.5,
+          "worldX": 11.799999999999997,
+          "worldY": -15.166666666666657
+        },
+        {
+          "active": false,
+          "direction": 1,
+          "id": "snowboarder-chair-drop",
+          "kind": "snowboarder",
+          "riderCount": 0,
+          "source": "chairlift",
+          "state": "jumping",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": -9,
+          "worldY": -64
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "dog-0",
+          "kind": "dog",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "running-left",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": -4.8,
+          "velocityY": 1.2,
+          "worldX": 4.6399999999999935,
+          "worldY": 26.83999999999996
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "walking-tree-0",
+          "kind": "walking-tree",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "idle",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 22,
+          "worldY": 21
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-0",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 1468.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-1",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 124.93333333333612
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-2",
+          "kind": "chairlift",
+          "riderCount": 1,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 316.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-3",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 508.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-4",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 700.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-5",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 892.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-6",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 1084.9333333333361
+        },
+        {
+          "active": true,
+          "direction": -1,
+          "id": "chair-up-7",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": -2,
+          "worldX": -7,
+          "worldY": 1276.9333333333361
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-0",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 35.06666666666388
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-1",
+          "kind": "chairlift",
+          "riderCount": 1,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 227.06666666666388
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-2",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 419.0666666666639
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-3",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 611.0666666666639
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-4",
+          "kind": "chairlift",
+          "riderCount": 1,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 803.0666666666639
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-5",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 995.0666666666639
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-6",
+          "kind": "chairlift",
+          "riderCount": 2,
+          "source": "mountain",
+          "state": "occupied",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 1187.0666666666639
+        },
+        {
+          "active": true,
+          "direction": 1,
+          "id": "chair-down-7",
+          "kind": "chairlift",
+          "riderCount": 0,
+          "source": "mountain",
+          "state": "empty",
+          "stateSeconds": 1.5333333333333328,
+          "velocityX": 0,
+          "velocityY": 2,
+          "worldX": -9,
+          "worldY": 1379.0666666666639
+        }
+      ],
+      "bounded": true,
+      "lastEvent": "snowboarder-entered",
+      "simulationSeconds": 1.5333333333333328,
+      "workUnitsLastStep": 21
+    }
+  },
+  "player": {
+    "airHeight": 0,
+    "airPitch": 0,
+    "airSpin": 0,
+    "airTilt": 0,
+    "crashCount": 0,
+    "heading": "downhill",
+    "jumpCount": 0,
+    "lastLanding": "none",
+    "motion": "grounded",
+    "paused": false,
+    "recoveryGraceSeconds": 0,
+    "runNumber": 2,
+    "simulationSeconds": 1.5333333333333328,
+    "speedMetersPerSecond": 19,
+    "turbo": false,
+    "velocityX": 0,
+    "velocityY": 19,
+    "worldX": 0,
+    "worldY": 23.541666666666657
+  },
+  "yeti": {
+    "events": [
+      {
+        "atSeconds": 10.866666666666786,
+        "boundary": "bottom",
+        "id": "yeti-event-0",
+        "safeDistanceMeters": 25.709920264364882,
+        "type": "yeti-activated",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 11.250000000000139,
+        "boundary": "bottom",
+        "id": "yeti-event-1",
+        "safeDistanceMeters": 28.949802798766356,
+        "type": "turbo-evasion",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 12.76666666666688,
+        "boundary": "bottom",
+        "id": "yeti-event-2",
+        "safeDistanceMeters": 0.19818272384649696,
+        "type": "capture-started",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 13.133333333333566,
+        "boundary": "bottom",
+        "id": "yeti-event-3",
+        "safeDistanceMeters": 1.4060022632463913,
+        "type": "pounced",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 13.43333333333358,
+        "boundary": "bottom",
+        "id": "yeti-event-4",
+        "safeDistanceMeters": 0,
+        "type": "grabbed",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 13.783333333333598,
+        "boundary": "bottom",
+        "id": "yeti-event-5",
+        "safeDistanceMeters": 0.3616666666675883,
+        "type": "eaten",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 14.266666666666955,
+        "boundary": "bottom",
+        "id": "yeti-event-6",
+        "safeDistanceMeters": 0.5308333333357496,
+        "type": "chewing",
+        "yetiId": "yeti-bottom"
+      },
+      {
+        "atSeconds": 15.683333333333692,
+        "boundary": "bottom",
+        "id": "yeti-event-7",
+        "safeDistanceMeters": 1.0266666666734636,
+        "type": "reset-requested",
+        "yetiId": "yeti-bottom"
+      }
+    ],
+    "snapshot": {
+      "activeBoundaries": [],
+      "capturePhase": "none",
+      "capturedBy": null,
+      "controllers": [
+        {
+          "active": false,
+          "boundary": "top",
+          "id": "yeti-top",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "bottom",
+          "id": "yeti-bottom",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "left",
+          "id": "yeti-left",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        },
+        {
+          "active": false,
+          "boundary": "right",
+          "id": "yeti-right",
+          "protectionSeconds": 0,
+          "state": "inactive",
+          "stateSeconds": 0,
+          "velocityX": 0,
+          "velocityY": 0,
+          "worldX": 0,
+          "worldY": 0
+        }
+      ],
+      "foreshadow": {
+        "breathMist": 0,
+        "intensity": 0,
+        "warningLayer": 0,
+        "windStreaks": 0
+      },
+      "lastEvent": "reset-requested",
+      "playerRemoved": false,
+      "resetRequested": false,
+      "turboEvasionSeconds": 0
+    }
+  }
+}

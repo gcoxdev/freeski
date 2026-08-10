@@ -1,0 +1,102 @@
+{
+  "gate": "GATE_5",
+  "attempt": 2,
+  "candidate_revision": "9e23730469a5d901ec2cb533987b37e89e3ccd4a",
+  "base_revision": "b1e6448f1934410ac2dc036e87ce78e417be5921",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm ci",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/npm-ci.txt"
+    },
+    {
+      "command": "npm run format:check",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/format-check.txt"
+    },
+    {
+      "command": "npx prettier --check src/render/scenes/AlpineScene.ts src/simulation/livingSlope.ts src/simulation/livingSlope.test.ts tests/e2e/livingSlope.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/format-scoped.txt"
+    },
+    {
+      "command": "npm run typecheck",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/typecheck.txt"
+    },
+    {
+      "command": "npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/lint.txt"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/unit-tests.txt"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/production-build.txt"
+    },
+    {
+      "command": "FREESKI_GATE5_EVIDENCE_DIR=docs/gauntlet/submissions/GATE-5/attempt-2/evidence FREESKI_GATE5_TELEMETRY=docs/gauntlet/submissions/GATE-5/attempt-2/evidence/telemetry.json npm run test:e2e -- tests/e2e/livingSlope.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/focused-living-browser.txt"
+    },
+    {
+      "command": "npm run test:e2e -- tests/e2e/interactions.spec.ts",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/focused-interactions-browser.txt"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/e2e-run-1.txt"
+    },
+    {
+      "command": "npm run test:e2e",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/e2e-run-2.txt"
+    },
+    {
+      "command": "temporary Playwright default-session inspection at /?seed=gate-five-default-inspection",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/default-inspection.txt"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/telemetry.json",
+      "demonstrates": ["G5.2", "G5.7"]
+    },
+    {
+      "type": "screenshot",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/snowboarder-ramp-encounter.png",
+      "demonstrates": ["G5.2", "G5.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/default-inspection.txt",
+      "demonstrates": ["G5.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/e2e-run-1.txt",
+      "demonstrates": ["G5.7"]
+    },
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/GATE-5/attempt-2/evidence/e2e-run-2.txt",
+      "demonstrates": ["G5.7"]
+    }
+  ],
+  "known_limitations": [
+    "Gate 5 emits named interaction and Yeti audio cues, but original audio assets, playback and mute behavior remain intentionally deferred to Gate 6.",
+    "The approved ultra-realistic concept sheets are not yet sliced into production atlases; Gate 5 continues to use the temporary code-rendered presentation accepted by earlier gates.",
+    "Vite reports its existing advisory that the Phaser-containing production chunk exceeds 500 kB; the production build succeeds."
+  ],
+  "executor_claimed_criteria": ["G5.2", "G5.7"]
+}

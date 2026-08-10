@@ -1,0 +1,8 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test tests/e2e/livingSlope.spec.ts
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › tests/e2e/livingSlope.spec.ts:19:1 › living population, foreshadow, Turbo chase, and capture recover without a soft lock (28.2s)
+
+  1 passed (31.8s)

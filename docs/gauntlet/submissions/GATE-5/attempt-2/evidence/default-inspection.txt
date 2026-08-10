@@ -1,0 +1,11 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test tests/e2e/default-inspection.tmp.spec.ts
+
+Running 1 test using 1 worker
+
+DEFAULT_INSPECTION {"activeChunks":28,"collisionChecks":57608,"debugVisible":false,"simulationSeconds":1.266666666666667,"trainingMode":false,"worldY":20.83333333333334}
+  ✓  1 [chromium] › tests/e2e/default-inspection.tmp.spec.ts:3:1 › inspects the default collision-enabled runtime and network (7.3s)
+
+  1 passed (12.0s)
+
+Assertions passed with empty console-error, page-error, failed-request, and HTTP >=400 response arrays. The temporary diagnostic spec was removed after the run.
