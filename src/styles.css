@@ -43,7 +43,7 @@ body {
 #game-shell {
   position: relative;
   display: grid;
-  grid-template-rows: 54px minmax(0, 1fr) 62px;
+  grid-template-rows: 46px minmax(0, 1fr) 68px;
   width: min(100vw, 1440px);
   height: 100dvh;
   min-height: 600px;
@@ -64,7 +64,7 @@ body {
 
 .masthead {
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 20px;
   border-bottom: 3px solid var(--signal);
 }
 
@@ -74,12 +74,12 @@ body {
   text-transform: uppercase;
   letter-spacing: -0.055em;
   font-family: Copperplate, "Copperplate Gothic Light", serif;
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .wordmark strong {
   color: #ff6b45;
-  font-size: 25px;
+  font-size: 22px;
   font-style: italic;
 }
 
@@ -146,10 +146,10 @@ body {
 .instrument-strip {
   display: grid;
   grid-template-columns:
-    0.48fr 0.52fr 0.72fr 0.58fr 0.92fr minmax(180px, 1.3fr)
-    86px 86px;
-  gap: 6px;
-  padding: 1px 20px;
+    0.42fr 0.46fr 0.48fr 0.68fr 0.52fr 0.82fr 0.58fr
+    minmax(135px, 1.1fr) 82px 82px 82px;
+  gap: 4px;
+  padding: 1px 14px;
   border-top: 1px solid rgb(255 255 255 / 12%);
 }
 
@@ -157,14 +157,14 @@ body {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  gap: 4px;
-  padding-left: 16px;
+  gap: 3px;
+  padding-left: 10px;
   border-left: 1px solid rgb(255 255 255 / 13%);
 }
 
 .instrument-strip small {
   color: #94a8ad;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
@@ -172,14 +172,14 @@ body {
 .instrument-strip span {
   overflow: hidden;
   font-family: "Courier New", monospace;
-  font-size: 12px;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .instrument-strip strong {
   color: #f7f9f5;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -203,17 +203,28 @@ body {
 }
 
 .pointer-toggle {
-  min-width: 86px;
-  margin-block: 10px;
+  min-width: 78px;
+  margin-block: 13px;
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 2px;
   color: #b4c4c6;
   background: transparent;
   font:
-    800 9px/1 "Courier New",
+    800 8px/1 "Courier New",
     monospace;
   letter-spacing: 0.08em;
   cursor: pointer;
+}
+
+.audio-toggle:not([aria-pressed="true"])[data-unlocked="false"],
+[data-audio-unlocked="false"] .audio-toggle {
+  border-style: dashed;
+  color: #f5c844;
+}
+
+[data-audio-muted="true"] .audio-toggle {
+  border-color: #ff6b45;
+  color: #ff9a7c;
 }
 
 .pointer-toggle:hover,
@@ -284,24 +295,25 @@ body {
 .mode-card {
   position: absolute;
   z-index: 2;
-  top: 72px;
-  left: 18px;
+  top: 58px;
+  left: 12px;
   display: grid;
-  width: min(278px, calc(100% - 36px));
-  gap: 5px;
-  padding: 12px 14px 11px;
+  width: min(226px, calc(100% - 24px));
+  gap: 3px;
+  padding: 9px 12px 8px;
+  border: 1px solid rgb(255 255 255 / 22%);
   border-left: 3px solid #3dbfa6;
   color: #f7f9f5;
-  background: rgb(16 41 51 / 84%);
-  box-shadow: 0 12px 34px rgb(16 41 51 / 18%);
-  backdrop-filter: blur(8px);
+  background: linear-gradient(110deg, rgb(16 41 51 / 76%), rgb(16 41 51 / 54%));
+  box-shadow: 0 10px 28px rgb(16 41 51 / 13%);
+  backdrop-filter: blur(6px);
   pointer-events: none;
 }
 
 .mode-card small,
 .mode-card span {
   font:
-    700 9px/1.25 "Courier New",
+    700 8px/1.2 "Courier New",
     monospace;
   letter-spacing: 0.08em;
 }
@@ -313,15 +325,15 @@ body {
 
 .mode-card strong {
   font-family: Copperplate, "Copperplate Gothic Light", serif;
-  font-size: 16px;
+  font-size: 14px;
   letter-spacing: 0.08em;
 }
 
 .mode-card__metrics {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3px 10px;
-  padding-top: 6px;
+  gap: 2px 8px;
+  padding-top: 4px;
   border-top: 1px solid rgb(255 255 255 / 16%);
   color: #c6d9da;
 }
@@ -350,7 +362,7 @@ body {
 .world-debug {
   position: absolute;
   z-index: 3;
-  top: 72px;
+  top: 58px;
   right: 18px;
   display: grid;
   width: min(260px, calc(100% - 36px));
@@ -415,13 +427,17 @@ body {
   }
 
   .instrument-strip {
-    grid-template-columns: 0.8fr 0.8fr 1.1fr 0.9fr 86px 86px;
-    padding-inline: 10px;
+    grid-template-columns: repeat(7, minmax(60px, 1fr)) repeat(3, 64px);
+    padding-inline: 5px;
   }
 
-  .instrument-strip__hint,
-  .metric:nth-of-type(5) {
+  .instrument-strip__hint {
     display: none !important;
+  }
+
+  .pointer-toggle {
+    min-width: 60px;
+    letter-spacing: 0.02em;
   }
 }
 
@@ -431,8 +447,8 @@ body {
   }
 
   .instrument-strip {
-    grid-template-columns: 1fr 1fr 1fr 1fr 76px 76px;
-    padding-inline: 10px;
+    grid-template-columns: repeat(4, minmax(62px, 1fr)) repeat(3, 70px);
+    padding-inline: 6px;
   }
 
   .instrument-strip__hint {
@@ -440,7 +456,11 @@ body {
   }
 
   .pointer-toggle {
-    min-width: 74px;
+    min-width: 68px;
+  }
+
+  .metric:nth-of-type(6) {
+    display: none !important;
   }
 }
 

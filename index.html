@@ -60,6 +60,9 @@
       </aside>
 
       <footer class="instrument-strip" aria-label="Run information">
+        <div class="metric metric--time">
+          <small>TIME</small><span><strong id="time-label">0.0</strong> S</span>
+        </div>
         <div class="metric metric--speed">
           <small>SPEED</small
           ><span><strong id="speed-label">0</strong> KM/H</span>
@@ -79,12 +82,22 @@
           <small>WORLD / <span id="generator-label">—</span></small>
           <span id="seed-label">classic-1991</span>
         </div>
+        <div class="metric metric--turbo">
+          <small>TURBO</small><span id="turbo-indicator">TURBO OFF</span>
+        </div>
         <div class="instrument-strip__hint">
-          <small
-            ><span id="turbo-indicator">TURBO OFF</span> · SHIFT/B BRAKE</small
-          >
+          <small>SHIFT/B BRAKE · M SOUND</small>
           <span>ARROWS/WASD · SPACE JUMP · Q/E SPIN · Z/X FLIP · F TURBO</span>
         </div>
+        <button
+          id="audio-toggle"
+          class="pointer-toggle audio-toggle"
+          type="button"
+          aria-pressed="false"
+          title="Mute or enable original procedural sound (M)"
+        >
+          SOUND ARMED
+        </button>
         <button
           id="pointer-toggle"
           class="pointer-toggle"

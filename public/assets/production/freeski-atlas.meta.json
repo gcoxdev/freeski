@@ -1,0 +1,4498 @@
+{
+  "pipelineVersion": "freeski-atlas-v1",
+  "sourceManifest": "assets/sprite-sheets/manifest.json",
+  "sourceManifestSha256": "5211102c821cdc36ee5a7464eab16f50666f600a9798173d97513663164e055e",
+  "approvedSourcesPreserved": true,
+  "runtimeScale": 0.55,
+  "frameCount": 112,
+  "atlas": {
+    "image": "freeski-atlas.png",
+    "width": 1024,
+    "height": 2048,
+    "extrudedPaddingPixels": 4,
+    "sha256": "729b543d1fc710607b6ff60a8234c605314c009d37a7b4877d11339668fa9048"
+  },
+  "frames": {
+    "beginner/carve-left": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 307,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 36,
+        "width": 273,
+        "height": 220
+      },
+      "atlasFrame": {
+        "x": 105,
+        "y": 1101,
+        "w": 152,
+        "h": 123
+      },
+      "padding": 4,
+      "normalizationFamily": "beginner",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 76.0,
+        "pixelY": 115.62
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.45
+    },
+    "beginner/carve-right": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 614,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 28,
+        "y": 41,
+        "width": 279,
+        "height": 215
+      },
+      "atlasFrame": {
+        "x": 252,
+        "y": 1233,
+        "w": 152,
+        "h": 118
+      },
+      "padding": 4,
+      "normalizationFamily": "beginner",
+      "normalizationScale": 0.978495,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 76.0,
+        "pixelY": 110.92
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.45
+    },
+    "beginner/downhill": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 82,
+        "y": 13,
+        "width": 162,
+        "height": 243
+      },
+      "atlasFrame": {
+        "x": 334,
+        "y": 191,
+        "w": 102,
+        "h": 152
+      },
+      "padding": 4,
+      "normalizationFamily": "beginner",
+      "normalizationScale": 1.123457,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 51.0,
+        "pixelY": 142.88
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.45
+    },
+    "beginner/fall-backward": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 921,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 71,
+        "width": 293,
+        "height": 185
+      },
+      "atlasFrame": {
+        "x": 432,
+        "y": 1479,
+        "w": 152,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "beginner",
+      "normalizationScale": 0.931741,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 76.0,
+        "pixelY": 91.18
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.45
+    },
+    "beginner/fall-forward": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 1228,
+        "y": 0,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 8,
+        "y": 162,
+        "width": 260,
+        "height": 94
+      },
+      "atlasFrame": {
+        "x": 809,
+        "y": 1785,
+        "w": 152,
+        "h": 56
+      },
+      "padding": 4,
+      "normalizationFamily": "beginner",
+      "normalizationScale": 1.05,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 76.0,
+        "pixelY": 52.64
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.45
+    },
+    "chairlift/empty": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 0,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 48,
+        "y": 0,
+        "width": 201,
+        "height": 164
+      },
+      "atlasFrame": {
+        "x": 304,
+        "y": 1479,
+        "w": 120,
+        "h": 98
+      },
+      "padding": 4,
+      "normalizationFamily": "chairlift",
+      "normalizationScale": 1.064677,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.52,
+        "pixelX": 60.0,
+        "pixelY": 50.96
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 3.2
+    },
+    "chairlift/one-skier": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 16,
+      "cellBounds": {
+        "x": 307,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 36,
+        "y": 0,
+        "width": 191,
+        "height": 214
+      },
+      "atlasFrame": {
+        "x": 539,
+        "y": 1101,
+        "w": 107,
+        "h": 120
+      },
+      "padding": 4,
+      "normalizationFamily": "chairlift",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.52,
+        "pixelX": 53.5,
+        "pixelY": 62.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 3.2
+    },
+    "chairlift/skier-drop": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 18,
+      "cellBounds": {
+        "x": 921,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 19,
+        "y": 0,
+        "width": 206,
+        "height": 218
+      },
+      "atlasFrame": {
+        "x": 654,
+        "y": 1101,
+        "w": 113,
+        "h": 120
+      },
+      "padding": 4,
+      "normalizationFamily": "chairlift",
+      "normalizationScale": 0.981651,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.52,
+        "pixelX": 56.5,
+        "pixelY": 62.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 3.2
+    },
+    "chairlift/snowboarder-drop": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 19,
+      "cellBounds": {
+        "x": 1228,
+        "y": 768,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 15,
+        "y": 0,
+        "width": 200,
+        "height": 201
+      },
+      "atlasFrame": {
+        "x": 775,
+        "y": 1101,
+        "w": 119,
+        "h": 120
+      },
+      "padding": 4,
+      "normalizationFamily": "chairlift",
+      "normalizationScale": 1.064677,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.52,
+        "pixelX": 59.5,
+        "pixelY": 62.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 3.2
+    },
+    "chairlift/two-riders": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 17,
+      "cellBounds": {
+        "x": 614,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 37,
+        "y": 0,
+        "width": 205,
+        "height": 215
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1233,
+        "w": 115,
+        "h": 120
+      },
+      "padding": 4,
+      "normalizationFamily": "chairlift",
+      "normalizationScale": 0.995349,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.52,
+        "pixelX": 57.5,
+        "pixelY": 62.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 3.2
+    },
+    "course/blank-wood-sign": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 19,
+      "cellBounds": {
+        "x": 1228,
+        "y": 768,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 60,
+        "y": 19,
+        "width": 113,
+        "height": 193
+      },
+      "atlasFrame": {
+        "x": 407,
+        "y": 1361,
+        "w": 64,
+        "h": 108
+      },
+      "padding": 4,
+      "normalizationFamily": "course/blank-wood-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 32.0,
+        "pixelY": 101.52
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/blue-right-marker": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 313,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 105,
+        "y": 26,
+        "width": 161,
+        "height": 287
+      },
+      "atlasFrame": {
+        "x": 235,
+        "y": 191,
+        "w": 91,
+        "h": 160
+      },
+      "padding": 4,
+      "normalizationFamily": "course/blue-right-marker",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 45.5,
+        "pixelY": 150.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/controls-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 940,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 31,
+        "y": 0,
+        "width": 215,
+        "height": 304
+      },
+      "atlasFrame": {
+        "x": 525,
+        "y": 8,
+        "w": 120,
+        "h": 169
+      },
+      "padding": 4,
+      "normalizationFamily": "course/controls-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 60.0,
+        "pixelY": 158.86
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/correct-happy-marker": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 627,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 82,
+        "y": 45,
+        "width": 169,
+        "height": 268
+      },
+      "atlasFrame": {
+        "x": 444,
+        "y": 191,
+        "w": 95,
+        "h": 149
+      },
+      "padding": 4,
+      "normalizationFamily": "course/correct-happy-marker",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 47.5,
+        "pixelY": 140.06
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/finish-left": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 627,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 59,
+        "y": 0,
+        "width": 203,
+        "height": 314
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 8,
+        "w": 114,
+        "h": 175
+      },
+      "padding": 4,
+      "normalizationFamily": "course/finish-left",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 57.0,
+        "pixelY": 164.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/finish-right": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 940,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 18,
+        "y": 0,
+        "width": 222,
+        "height": 314
+      },
+      "atlasFrame": {
+        "x": 130,
+        "y": 8,
+        "w": 124,
+        "h": 175
+      },
+      "padding": 4,
+      "normalizationFamily": "course/finish-right",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 62.0,
+        "pixelY": 164.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/free-style-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 627,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 44,
+        "y": 0,
+        "width": 221,
+        "height": 304
+      },
+      "atlasFrame": {
+        "x": 653,
+        "y": 8,
+        "w": 124,
+        "h": 169
+      },
+      "padding": 4,
+      "normalizationFamily": "course/free-style-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 62.0,
+        "pixelY": 158.86
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/missed-sad-marker": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 940,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 61,
+        "y": 46,
+        "width": 169,
+        "height": 267
+      },
+      "atlasFrame": {
+        "x": 547,
+        "y": 191,
+        "w": 95,
+        "h": 149
+      },
+      "padding": 4,
+      "normalizationFamily": "course/missed-sad-marker",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 47.5,
+        "pixelY": 140.06
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/pause-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 313,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 61,
+        "y": 31,
+        "width": 173,
+        "height": 250
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 676,
+        "w": 97,
+        "h": 140
+      },
+      "padding": 4,
+      "normalizationFamily": "course/pause-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 48.5,
+        "pixelY": 131.6
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/red-left-marker": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 95,
+        "y": 24,
+        "width": 158,
+        "height": 289
+      },
+      "atlasFrame": {
+        "x": 138,
+        "y": 191,
+        "w": 89,
+        "h": 161
+      },
+      "padding": 4,
+      "normalizationFamily": "course/red-left-marker",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 44.5,
+        "pixelY": 151.34
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/restart-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 0,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 83,
+        "y": 29,
+        "width": 175,
+        "height": 250
+      },
+      "atlasFrame": {
+        "x": 113,
+        "y": 676,
+        "w": 98,
+        "h": 140
+      },
+      "padding": 4,
+      "normalizationFamily": "course/restart-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 49.0,
+        "pixelY": 131.6
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/safety-fence": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 940,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 69,
+        "width": 258,
+        "height": 194
+      },
+      "atlasFrame": {
+        "x": 134,
+        "y": 1361,
+        "w": 144,
+        "h": 109
+      },
+      "padding": 4,
+      "normalizationFamily": "course/safety-fence",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 72.0,
+        "pixelY": 102.46
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/slalom-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 0,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 62,
+        "y": 0,
+        "width": 219,
+        "height": 303
+      },
+      "atlasFrame": {
+        "x": 785,
+        "y": 8,
+        "w": 122,
+        "h": 169
+      },
+      "padding": 4,
+      "normalizationFamily": "course/slalom-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 61.0,
+        "pixelY": 158.86
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/start-left": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 0,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 79,
+        "y": 0,
+        "width": 215,
+        "height": 314
+      },
+      "atlasFrame": {
+        "x": 262,
+        "y": 8,
+        "w": 120,
+        "h": 175
+      },
+      "padding": 4,
+      "normalizationFamily": "course/start-left",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 60.0,
+        "pixelY": 164.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/start-right": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 313,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 37,
+        "y": 0,
+        "width": 228,
+        "height": 314
+      },
+      "atlasFrame": {
+        "x": 390,
+        "y": 8,
+        "w": 127,
+        "h": 175
+      },
+      "padding": 4,
+      "normalizationFamily": "course/start-right",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 63.5,
+        "pixelY": 164.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "course/tree-slalom-sign": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 313,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 51,
+        "y": 0,
+        "width": 218,
+        "height": 304
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 191,
+        "w": 122,
+        "h": 169
+      },
+      "padding": 4,
+      "normalizationFamily": "course/tree-slalom-sign",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 61.0,
+        "pixelY": 158.86
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.5
+      },
+      "clearanceHeightMeters": 1.4
+    },
+    "dog/alert": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 614,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 59,
+        "y": 34,
+        "width": 178,
+        "height": 222
+      },
+      "atlasFrame": {
+        "x": 293,
+        "y": 967,
+        "w": 100,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "dog",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 50.0,
+        "pixelY": 109.12
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 0.42
+    },
+    "dog/bark": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 921,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 53,
+        "y": 29,
+        "width": 173,
+        "height": 227
+      },
+      "atlasFrame": {
+        "x": 401,
+        "y": 967,
+        "w": 95,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "dog",
+      "normalizationScale": 0.977974,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 47.5,
+        "pixelY": 109.12
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 0.42
+    },
+    "dog/knocked-over": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 1228,
+        "y": 512,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 31,
+        "y": 58,
+        "width": 232,
+        "height": 198
+      },
+      "atlasFrame": {
+        "x": 479,
+        "y": 1361,
+        "w": 124,
+        "h": 106
+      },
+      "padding": 4,
+      "normalizationFamily": "dog",
+      "normalizationScale": 0.956897,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 62.0,
+        "pixelY": 93.28
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 0.42
+    },
+    "dog/trot-a": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 0,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 62,
+        "y": 38,
+        "width": 205,
+        "height": 218
+      },
+      "atlasFrame": {
+        "x": 504,
+        "y": 967,
+        "w": 117,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "dog",
+      "normalizationScale": 1.018349,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 58.5,
+        "pixelY": 109.12
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 0.42
+    },
+    "dog/trot-b": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 307,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 42,
+        "y": 41,
+        "width": 214,
+        "height": 215
+      },
+      "atlasFrame": {
+        "x": 629,
+        "y": 967,
+        "w": 124,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "dog",
+      "normalizationScale": 1.032558,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 62.0,
+        "pixelY": 109.12
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 0.42
+    },
+    "lift/cable-connector": {
+      "sourceSheet": "05-course-props.png",
+      "sourceSha256": "2892fd1369190a4f0163436f01771557916eace554b863885d7a2e681172abe8",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 627,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 45,
+        "y": 34,
+        "width": 268,
+        "height": 245
+      },
+      "atlasFrame": {
+        "x": 849,
+        "y": 676,
+        "w": 149,
+        "h": 137
+      },
+      "padding": 4,
+      "normalizationFamily": "lift/cable-connector",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 74.5,
+        "pixelY": 126.04
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.4
+      },
+      "clearanceHeightMeters": 2.6
+    },
+    "lift/tower": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 18,
+      "cellBounds": {
+        "x": 921,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 20,
+        "y": 0,
+        "width": 201,
+        "height": 215
+      },
+      "atlasFrame": {
+        "x": 131,
+        "y": 1233,
+        "w": 113,
+        "h": 120
+      },
+      "padding": 4,
+      "normalizationFamily": "lift/tower",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 56.5,
+        "pixelY": 110.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.4
+      },
+      "clearanceHeightMeters": 2.6
+    },
+    "player/air-neutral": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 256,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 50,
+        "y": 45,
+        "width": 172,
+        "height": 166
+      },
+      "atlasFrame": {
+        "x": 286,
+        "y": 1361,
+        "w": 113,
+        "h": 109
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.168605,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 102.46
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/back-flip-1": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 17,
+      "cellBounds": {
+        "x": 1280,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 30,
+        "y": 75,
+        "width": 181,
+        "height": 152
+      },
+      "atlasFrame": {
+        "x": 854,
+        "y": 1479,
+        "w": 113,
+        "h": 95
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.110497,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 89.3
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/back-flip-2": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 18,
+      "cellBounds": {
+        "x": 0,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 55,
+        "y": 46,
+        "width": 135,
+        "height": 147
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1479,
+        "w": 93,
+        "h": 100
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.22,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 46.5,
+        "pixelY": 94.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/back-flip-3": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 19,
+      "cellBounds": {
+        "x": 256,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 21,
+        "y": 22,
+        "width": 150,
+        "height": 155
+      },
+      "atlasFrame": {
+        "x": 611,
+        "y": 1361,
+        "w": 103,
+        "h": 106
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.22,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 51.5,
+        "pixelY": 99.64
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-left-1": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 256,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 18,
+        "y": 59,
+        "width": 238,
+        "height": 188
+      },
+      "atlasFrame": {
+        "x": 829,
+        "y": 1587,
+        "w": 113,
+        "h": 89
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.844538,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 83.66
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-left-2": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 512,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 69,
+        "width": 207,
+        "height": 172
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1587,
+        "w": 113,
+        "h": 94
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.971014,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 88.36
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-left-3": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 768,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 86,
+        "width": 212,
+        "height": 155
+      },
+      "atlasFrame": {
+        "x": 162,
+        "y": 1689,
+        "w": 113,
+        "h": 83
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.948113,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 78.02
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-right-1": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 1024,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 1,
+        "y": 71,
+        "width": 208,
+        "height": 173
+      },
+      "atlasFrame": {
+        "x": 129,
+        "y": 1587,
+        "w": 113,
+        "h": 94
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.966346,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 88.36
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-right-2": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 1280,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 5,
+        "y": 87,
+        "width": 230,
+        "height": 161
+      },
+      "atlasFrame": {
+        "x": 404,
+        "y": 1689,
+        "w": 113,
+        "h": 80
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.873913,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 75.2
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/carve-right-3": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 0,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 21,
+        "y": 91,
+        "width": 208,
+        "height": 150
+      },
+      "atlasFrame": {
+        "x": 283,
+        "y": 1689,
+        "w": 113,
+        "h": 82
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.966346,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 77.08
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/downhill": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 70,
+        "y": 31,
+        "width": 123,
+        "height": 225
+      },
+      "atlasFrame": {
+        "x": 731,
+        "y": 1233,
+        "w": 63,
+        "h": 113
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.893333,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 31.5,
+        "pixelY": 106.22
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/front-flip-1": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 512,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 33,
+        "y": 52,
+        "width": 179,
+        "height": 143
+      },
+      "atlasFrame": {
+        "x": 708,
+        "y": 1587,
+        "w": 113,
+        "h": 91
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.122905,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 85.54
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/front-flip-2": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 768,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 56,
+        "y": 79,
+        "width": 135,
+        "height": 138
+      },
+      "atlasFrame": {
+        "x": 250,
+        "y": 1587,
+        "w": 93,
+        "h": 94
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.22,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 46.5,
+        "pixelY": 88.36
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/front-flip-3": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 16,
+      "cellBounds": {
+        "x": 1024,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 33,
+        "y": 97,
+        "width": 174,
+        "height": 108
+      },
+      "atlasFrame": {
+        "x": 177,
+        "y": 1785,
+        "w": 113,
+        "h": 71
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.155172,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 66.74
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/hockey-stop-left": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 256,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 4,
+        "y": 91,
+        "width": 224,
+        "height": 150
+      },
+      "atlasFrame": {
+        "x": 810,
+        "y": 1689,
+        "w": 113,
+        "h": 76
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.897321,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 71.44
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/hockey-stop-right": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 512,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 16,
+        "y": 60,
+        "width": 195,
+        "height": 180
+      },
+      "atlasFrame": {
+        "x": 722,
+        "y": 1361,
+        "w": 113,
+        "h": 104
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.030769,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 97.76
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/jump-takeoff": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 0,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 75,
+        "y": 55,
+        "width": 102,
+        "height": 165
+      },
+      "atlasFrame": {
+        "x": 802,
+        "y": 1233,
+        "w": 70,
+        "h": 113
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.218182,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 35.0,
+        "pixelY": 106.22
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/landing-crouch": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 22,
+      "cellBounds": {
+        "x": 1024,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 90,
+        "width": 226,
+        "height": 123
+      },
+      "atlasFrame": {
+        "x": 424,
+        "y": 1785,
+        "w": 113,
+        "h": 62
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.889381,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 58.28
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/spin-left": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 20,
+      "cellBounds": {
+        "x": 512,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 60,
+        "width": 256,
+        "height": 132
+      },
+      "atlasFrame": {
+        "x": 545,
+        "y": 1785,
+        "w": 118,
+        "h": 61
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.82,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 59.0,
+        "pixelY": 57.34
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/spin-right": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 21,
+      "cellBounds": {
+        "x": 768,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 74,
+        "width": 256,
+        "height": 141
+      },
+      "atlasFrame": {
+        "x": 298,
+        "y": 1785,
+        "w": 118,
+        "h": 66
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.82,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 59.0,
+        "pixelY": 62.04
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/tuck": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 1280,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 21,
+        "y": 62,
+        "width": 195,
+        "height": 168
+      },
+      "atlasFrame": {
+        "x": 592,
+        "y": 1479,
+        "w": 113,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.030769,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 91.18
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/uphill-left": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 768,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 43,
+        "y": 62,
+        "width": 184,
+        "height": 185
+      },
+      "atlasFrame": {
+        "x": 880,
+        "y": 1233,
+        "w": 112,
+        "h": 113
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.086486,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.0,
+        "pixelY": 106.22
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/uphill-right": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 1024,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 73,
+        "y": 92,
+        "width": 86,
+        "height": 145
+      },
+      "atlasFrame": {
+        "x": 109,
+        "y": 1479,
+        "w": 60,
+        "h": 99
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.22,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 30.0,
+        "pixelY": 93.06
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/wipeout": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "cellIndex": 23,
+      "cellBounds": {
+        "x": 1280,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 41,
+        "width": 221,
+        "height": 156
+      },
+      "atlasFrame": {
+        "x": 525,
+        "y": 1689,
+        "w": 113,
+        "h": 80
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.909502,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 56.5,
+        "pixelY": 75.2
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "secret/mushroom": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 0,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 92,
+        "y": 52,
+        "width": 152,
+        "height": 204
+      },
+      "atlasFrame": {
+        "x": 637,
+        "y": 1233,
+        "w": 86,
+        "h": 114
+      },
+      "padding": 4,
+      "normalizationFamily": "secret/mushroom",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 43.0,
+        "pixelY": 100.32
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 0.2
+    },
+    "secret/yellow-snow": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 1228,
+        "y": 512,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 106,
+        "width": 233,
+        "height": 104
+      },
+      "atlasFrame": {
+        "x": 671,
+        "y": 1785,
+        "w": 130,
+        "h": 59
+      },
+      "padding": 4,
+      "normalizationFamily": "secret/yellow-snow",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 65.0,
+        "pixelY": 51.92
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.7
+      },
+      "clearanceHeightMeters": 0.2
+    },
+    "snowboarder/carve-left": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 0,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 38,
+        "y": 0,
+        "width": 191,
+        "height": 250
+      },
+      "atlasFrame": {
+        "x": 219,
+        "y": 676,
+        "w": 106,
+        "h": 138
+      },
+      "padding": 4,
+      "normalizationFamily": "snowboarder",
+      "normalizationScale": 0.992,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 53.0,
+        "pixelY": 129.72
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.35
+    },
+    "snowboarder/carve-right": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 307,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 32,
+        "y": 0,
+        "width": 212,
+        "height": 248
+      },
+      "atlasFrame": {
+        "x": 333,
+        "y": 676,
+        "w": 119,
+        "h": 138
+      },
+      "padding": 4,
+      "normalizationFamily": "snowboarder",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 59.5,
+        "pixelY": 129.72
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.35
+    },
+    "snowboarder/jump": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 921,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 36,
+        "y": 0,
+        "width": 191,
+        "height": 240
+      },
+      "atlasFrame": {
+        "x": 460,
+        "y": 676,
+        "w": 110,
+        "h": 138
+      },
+      "padding": 4,
+      "normalizationFamily": "snowboarder",
+      "normalizationScale": 1.033333,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 55.0,
+        "pixelY": 129.72
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.35
+    },
+    "snowboarder/tuck": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 614,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 105,
+        "y": 0,
+        "width": 164,
+        "height": 243
+      },
+      "atlasFrame": {
+        "x": 578,
+        "y": 676,
+        "w": 94,
+        "h": 138
+      },
+      "padding": 4,
+      "normalizationFamily": "snowboarder",
+      "normalizationScale": 1.020576,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 47.0,
+        "pixelY": 129.72
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.35
+    },
+    "snowboarder/tumble": {
+      "sourceSheet": "02-hill-population.png",
+      "sourceSha256": "acbd96f1f854f713a7c04aa48f7dfa309227a151af7cfa4c2cf0ca8e2ec984e9",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 1228,
+        "y": 256,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 1,
+        "y": 0,
+        "width": 291,
+        "height": 244
+      },
+      "atlasFrame": {
+        "x": 491,
+        "y": 1233,
+        "w": 138,
+        "h": 116
+      },
+      "padding": 4,
+      "normalizationFamily": "snowboarder",
+      "normalizationScale": 0.852234,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 69.0,
+        "pixelY": 109.04
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.75
+      },
+      "clearanceHeightMeters": 1.35
+    },
+    "terrain/bump-large": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 614,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 8,
+        "y": 0,
+        "width": 247,
+        "height": 220
+      },
+      "atlasFrame": {
+        "x": 265,
+        "y": 1101,
+        "w": 138,
+        "h": 123
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/bump-large",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.78,
+        "pixelX": 69.0,
+        "pixelY": 95.94
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.5
+      },
+      "clearanceHeightMeters": 0.16
+    },
+    "terrain/bump-small": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 307,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 56,
+        "y": 0,
+        "width": 154,
+        "height": 256
+      },
+      "atlasFrame": {
+        "x": 666,
+        "y": 522,
+        "w": 87,
+        "h": 143
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/bump-small",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.78,
+        "pixelX": 43.5,
+        "pixelY": 111.54
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.8
+      },
+      "clearanceHeightMeters": 0.08
+    },
+    "terrain/burning-tree-a": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 307,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 70,
+        "y": 0,
+        "width": 139,
+        "height": 256
+      },
+      "atlasFrame": {
+        "x": 761,
+        "y": 522,
+        "w": 78,
+        "h": 143
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/burning-tree-a",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 39.0,
+        "pixelY": 131.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.0
+      },
+      "clearanceHeightMeters": 0.7
+    },
+    "terrain/burning-tree-b": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 614,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 63,
+        "y": 0,
+        "width": 139,
+        "height": 256
+      },
+      "atlasFrame": {
+        "x": 847,
+        "y": 522,
+        "w": 78,
+        "h": 143
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/burning-tree-b",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 39.0,
+        "pixelY": 131.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.0
+      },
+      "clearanceHeightMeters": 0.7
+    },
+    "terrain/burning-tree-c": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 921,
+        "y": 512,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 40,
+        "y": 0,
+        "width": 146,
+        "height": 256
+      },
+      "atlasFrame": {
+        "x": 933,
+        "y": 522,
+        "w": 82,
+        "h": 143
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/burning-tree-c",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 41.0,
+        "pixelY": 131.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.0
+      },
+      "clearanceHeightMeters": 0.7
+    },
+    "terrain/dead-tree": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 921,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 53,
+        "y": 20,
+        "width": 152,
+        "height": 236
+      },
+      "atlasFrame": {
+        "x": 424,
+        "y": 824,
+        "w": 86,
+        "h": 132
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/dead-tree",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 43.0,
+        "pixelY": 124.08
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "terrain/evergreen-large": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 614,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 56,
+        "y": 16,
+        "width": 172,
+        "height": 240
+      },
+      "atlasFrame": {
+        "x": 165,
+        "y": 824,
+        "w": 97,
+        "h": 134
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/evergreen-large",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 48.5,
+        "pixelY": 125.96
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "terrain/evergreen-medium": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 307,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 82,
+        "y": 47,
+        "width": 125,
+        "height": 209
+      },
+      "atlasFrame": {
+        "x": 412,
+        "y": 1233,
+        "w": 71,
+        "h": 117
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/evergreen-medium",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 35.5,
+        "pixelY": 109.98
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.85
+      },
+      "clearanceHeightMeters": 2.2
+    },
+    "terrain/evergreen-small": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 114,
+        "y": 90,
+        "width": 106,
+        "height": 166
+      },
+      "atlasFrame": {
+        "x": 351,
+        "y": 1587,
+        "w": 60,
+        "h": 93
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/evergreen-small",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 30.0,
+        "pixelY": 87.42
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.45
+      },
+      "clearanceHeightMeters": 2.0
+    },
+    "terrain/mogul-field": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 921,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 11,
+        "y": 0,
+        "width": 296,
+        "height": 224
+      },
+      "atlasFrame": {
+        "x": 120,
+        "y": 967,
+        "w": 165,
+        "h": 125
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/mogul-field",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.8,
+        "pixelX": 82.5,
+        "pixelY": 100.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.1
+      },
+      "clearanceHeightMeters": 0.18
+    },
+    "terrain/rainbow-ramp": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 1228,
+        "y": 256,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 263,
+        "height": 232
+      },
+      "atlasFrame": {
+        "x": 688,
+        "y": 824,
+        "w": 147,
+        "h": 130
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/rainbow-ramp",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.79,
+        "pixelX": 73.5,
+        "pixelY": 102.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.0
+      },
+      "clearanceHeightMeters": 0.2
+    },
+    "terrain/rock": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 0,
+        "y": 256,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 70,
+        "y": 0,
+        "width": 185,
+        "height": 226
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 967,
+        "w": 104,
+        "h": 126
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/rock",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.84,
+        "pixelX": 52.0,
+        "pixelY": 105.84
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 0.72
+    },
+    "terrain/stump": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 1228,
+        "y": 0,
+        "width": 308,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 20,
+        "y": 161,
+        "width": 164,
+        "height": 95
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1868,
+        "w": 92,
+        "h": 54
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/stump",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.86,
+        "pixelX": 46.0,
+        "pixelY": 46.44
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.0
+      },
+      "clearanceHeightMeters": 0.68
+    },
+    "vfx/breath-mist": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 627,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 45,
+        "y": 78,
+        "width": 200,
+        "height": 180
+      },
+      "atlasFrame": {
+        "x": 843,
+        "y": 1361,
+        "w": 112,
+        "h": 101
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/breath-mist",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 56.0,
+        "pixelY": 50.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/carve-fan-left": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 0,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 43,
+        "y": 117,
+        "width": 239,
+        "height": 163
+      },
+      "atlasFrame": {
+        "x": 419,
+        "y": 1587,
+        "w": 133,
+        "h": 92
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/carve-fan-left",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 66.5,
+        "pixelY": 46.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/carve-fan-right": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 313,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 28,
+        "y": 110,
+        "width": 239,
+        "height": 170
+      },
+      "atlasFrame": {
+        "x": 713,
+        "y": 1479,
+        "w": 133,
+        "h": 96
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/carve-fan-right",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 66.5,
+        "pixelY": 48.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/crash-burst": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 940,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 60,
+        "width": 290,
+        "height": 235
+      },
+      "atlasFrame": {
+        "x": 518,
+        "y": 824,
+        "w": 162,
+        "h": 131
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/crash-burst",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 81.0,
+        "pixelY": 65.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/crash-decal": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 940,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 103,
+        "width": 280,
+        "height": 139
+      },
+      "atlasFrame": {
+        "x": 646,
+        "y": 1689,
+        "w": 156,
+        "h": 78
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/crash-decal",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 78.0,
+        "pixelY": 39.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/flame-embers": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 627,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 24,
+        "y": 4,
+        "width": 289,
+        "height": 247
+      },
+      "atlasFrame": {
+        "x": 680,
+        "y": 676,
+        "w": 161,
+        "h": 138
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/flame-embers",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 80.5,
+        "pixelY": 69.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/ground-shadow": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 940,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 23,
+        "y": 199,
+        "width": 224,
+        "height": 50
+      },
+      "atlasFrame": {
+        "x": 242,
+        "y": 1868,
+        "w": 125,
+        "h": 30
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/ground-shadow",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 62.5,
+        "pixelY": 15.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/ice-impact": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 0,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 48,
+        "y": 58,
+        "width": 210,
+        "height": 197
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1361,
+        "w": 118,
+        "h": 110
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/ice-impact",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 59.0,
+        "pixelY": 55.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/landing-plume": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 627,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 18,
+        "y": 64,
+        "width": 295,
+        "height": 228
+      },
+      "atlasFrame": {
+        "x": 843,
+        "y": 824,
+        "w": 164,
+        "h": 127
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/landing-plume",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 82.0,
+        "pixelY": 63.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/powder-medium": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 313,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 22,
+        "y": 118,
+        "width": 261,
+        "height": 157
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1689,
+        "w": 146,
+        "h": 88
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/powder-medium",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 73.0,
+        "pixelY": 44.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/powder-tiny": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 37,
+        "y": 182,
+        "width": 226,
+        "height": 85
+      },
+      "atlasFrame": {
+        "x": 108,
+        "y": 1868,
+        "w": 126,
+        "h": 49
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/powder-tiny",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 63.0,
+        "pixelY": 24.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/ramp-glint": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 0,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 40,
+        "y": 60,
+        "width": 212,
+        "height": 177
+      },
+      "atlasFrame": {
+        "x": 177,
+        "y": 1479,
+        "w": 119,
+        "h": 99
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/ramp-glint",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 59.5,
+        "pixelY": 49.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/speed-streaks": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 313,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 24,
+        "y": 87,
+        "width": 251,
+        "height": 163
+      },
+      "atlasFrame": {
+        "x": 560,
+        "y": 1587,
+        "w": 140,
+        "h": 92
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/speed-streaks",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 70.0,
+        "pixelY": 46.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/tracks-long": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 940,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 0,
+        "y": 62,
+        "width": 267,
+        "height": 242
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 824,
+        "w": 149,
+        "h": 135
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/tracks-long",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 74.5,
+        "pixelY": 67.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/tracks-short": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 627,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 24,
+        "y": 139,
+        "width": 289,
+        "height": 133
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1785,
+        "w": 161,
+        "h": 75
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/tracks-short",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 80.5,
+        "pixelY": 37.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "vfx/trick-sparkle": {
+      "sourceSheet": "06-vfx.png",
+      "sourceSha256": "3b74762aadd82a9c86bfd4ed5a97279680be39f385be09212f4e0fbc236fe4ad",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 313,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 38,
+        "y": 24,
+        "width": 215,
+        "height": 216
+      },
+      "atlasFrame": {
+        "x": 411,
+        "y": 1101,
+        "w": 120,
+        "h": 121
+      },
+      "padding": 4,
+      "normalizationFamily": "vfx/trick-sparkle",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.5,
+        "pixelX": 60.0,
+        "pixelY": 60.5
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 0.0
+      },
+      "clearanceHeightMeters": 0.0
+    },
+    "walking-tree/idle": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 0,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 91,
+        "y": 0,
+        "width": 158,
+        "height": 218
+      },
+      "atlasFrame": {
+        "x": 761,
+        "y": 967,
+        "w": 90,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree",
+      "normalizationScale": 1.013761,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 45.0,
+        "pixelY": 116.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/step-left": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 16,
+      "cellBounds": {
+        "x": 307,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 60,
+        "y": 0,
+        "width": 174,
+        "height": 223
+      },
+      "atlasFrame": {
+        "x": 859,
+        "y": 967,
+        "w": 97,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree",
+      "normalizationScale": 0.991031,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 48.5,
+        "pixelY": 116.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/step-right": {
+      "sourceSheet": "04-terrain.png",
+      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "cellIndex": 17,
+      "cellBounds": {
+        "x": 614,
+        "y": 768,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 54,
+        "y": 0,
+        "width": 159,
+        "height": 221
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1101,
+        "w": 89,
+        "h": 124
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree",
+      "normalizationScale": 1.0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 44.5,
+        "pixelY": 116.56
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "yeti/belly-pat": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 313,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 39,
+        "y": 0,
+        "width": 210,
+        "height": 269
+      },
+      "atlasFrame": {
+        "x": 650,
+        "y": 191,
+        "w": 114,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.97026,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 57.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/chew-a": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 11,
+      "cellBounds": {
+        "x": 940,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 29,
+        "y": 12,
+        "width": 198,
+        "height": 255
+      },
+      "atlasFrame": {
+        "x": 772,
+        "y": 191,
+        "w": 114,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.023529,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 57.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/chew-b": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 12,
+      "cellBounds": {
+        "x": 0,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 69,
+        "y": 0,
+        "width": 182,
+        "height": 267
+      },
+      "atlasFrame": {
+        "x": 894,
+        "y": 191,
+        "w": 100,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.977528,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 50.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/grab": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 627,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 37,
+        "y": 13,
+        "width": 201,
+        "height": 300
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 368,
+        "w": 98,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.87,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 49.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/idle-recovery": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 940,
+        "y": 940,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 50,
+        "y": 4,
+        "width": 187,
+        "height": 268
+      },
+      "atlasFrame": {
+        "x": 114,
+        "y": 368,
+        "w": 102,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.973881,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 51.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/pounce-air": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 9,
+      "cellBounds": {
+        "x": 313,
+        "y": 627,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 9,
+        "y": 20,
+        "width": 267,
+        "height": 293
+      },
+      "atlasFrame": {
+        "x": 224,
+        "y": 368,
+        "w": 133,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.890785,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 66.5,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/pounce-windup": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 8,
+      "cellBounds": {
+        "x": 0,
+        "y": 627,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 48,
+        "y": 46,
+        "width": 224,
+        "height": 206
+      },
+      "atlasFrame": {
+        "x": 270,
+        "y": 824,
+        "w": 146,
+        "h": 134
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.165179,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 73.0,
+        "pixelY": 127.3
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/roar": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 627,
+        "y": 940,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 23,
+        "y": 0,
+        "width": 259,
+        "height": 272
+      },
+      "atlasFrame": {
+        "x": 365,
+        "y": 368,
+        "w": 139,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.959559,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 69.5,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-away-a": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 627,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 42,
+        "y": 33,
+        "width": 226,
+        "height": 256
+      },
+      "atlasFrame": {
+        "x": 512,
+        "y": 368,
+        "w": 129,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.019531,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 64.5,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-away-b": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 940,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 41,
+        "y": 36,
+        "width": 210,
+        "height": 255
+      },
+      "atlasFrame": {
+        "x": 649,
+        "y": 368,
+        "w": 120,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.023529,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 60.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-left-a": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 4,
+      "cellBounds": {
+        "x": 0,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 69,
+        "y": 29,
+        "width": 186,
+        "height": 247
+      },
+      "atlasFrame": {
+        "x": 777,
+        "y": 368,
+        "w": 110,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.05668,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 55.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-left-b": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 5,
+      "cellBounds": {
+        "x": 313,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 37,
+        "y": 28,
+        "width": 222,
+        "height": 248
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 522,
+        "w": 131,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.052419,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 65.5,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-right-a": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 6,
+      "cellBounds": {
+        "x": 627,
+        "y": 313,
+        "width": 313,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 48,
+        "y": 24,
+        "width": 204,
+        "height": 252
+      },
+      "atlasFrame": {
+        "x": 147,
+        "y": 522,
+        "w": 118,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.035714,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 59.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-right-b": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 940,
+        "y": 313,
+        "width": 314,
+        "height": 314
+      },
+      "trimBounds": {
+        "x": 30,
+        "y": 28,
+        "width": 211,
+        "height": 248
+      },
+      "atlasFrame": {
+        "x": 273,
+        "y": 522,
+        "w": 124,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 1.052419,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 62.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-toward-a": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 313,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 55,
+        "y": 28,
+        "width": 218,
+        "height": 266
+      },
+      "atlasFrame": {
+        "x": 405,
+        "y": 522,
+        "w": 120,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.981203,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 60.0,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-toward-b": {
+      "sourceSheet": "03-yeti.png",
+      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 313,
+        "y": 0,
+        "width": 314,
+        "height": 313
+      },
+      "trimBounds": {
+        "x": 42,
+        "y": 27,
+        "width": 228,
+        "height": 266
+      },
+      "atlasFrame": {
+        "x": 533,
+        "y": 522,
+        "w": 125,
+        "h": 146
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti",
+      "normalizationScale": 0.981203,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 62.5,
+        "pixelY": 138.7
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    }
+  },
+  "sourceStatus": "review-concept-atlases"
+}

@@ -26,7 +26,12 @@ Cell order is documented in `manifest.json`. The magenta-key sources are retaine
 
 ## Production status
 
-These are **concept atlases**, not slice-ready runtime atlases. Before integration, cells need manual trim bounds, family scale normalization, ground pivots, collision footprints, edge cleanup and padded packing. The build gauntlet explicitly treats those as an asset-ingestion phase.
+These remain the immutable **concept atlases**. Gate 6 derives the runtime atlas
+non-destructively with `npm run assets:build`: deterministic fractional-grid
+slicing, alpha trim, actor-family scale normalization, residual key/speck
+cleanup, 4 px extruded packing, and per-frame pivot/footprint/clearance metadata.
+Generated outputs live under `public/assets/production/`; this review package
+and every `source-chroma/` original remain unchanged.
 
 ## Generation method
 

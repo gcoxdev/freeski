@@ -34,6 +34,13 @@ player, and occupied chairs loop continuously. The weather begins to turn
 after 1,800 m; what happens beyond the formal mountain is intentionally left as
 a surprise, and Turbo may buy some breathing room.
 
+The approved ultra-realistic concept art is integrated through a deterministic
+production atlas. Powder, carve fans, persistent tracks, plumes, impacts,
+shadows, mist, glints, embers and crash decals use bounded render pools. FreeSki
+also includes an original procedurally authored Web Audio sound bank: audio is
+created only after the first input gesture, and the mute preference persists
+locally.
+
 | Action              | Keyboard                                           |
 | ------------------- | -------------------------------------------------- |
 | Carve left/right    | Left/right arrows or A/D; hold to deepen the carve |
@@ -46,6 +53,7 @@ a surprise, and Turbo may buy some breathing room.
 | Turbo               | F                                                  |
 | Pause               | Escape or F3                                       |
 | Reset run           | R or F2                                            |
+| Mute/unmute         | M or the **SOUND** control                         |
 
 Optional pointer steering and click-to-jump are disabled by default. Enable them with the **POINTER OFF** control below the game or add `?pointer=1` to the URL.
 
@@ -62,12 +70,26 @@ npm run build
 npm run test:e2e
 ```
 
+Production raster assets are reproducible from the retained approved sheets.
+The asset-only pipeline requires Python 3 and Pillow 12.3 (`python3 -m pip
+install -r requirements-assets.txt`):
+
+```bash
+npm run assets:build
+npm run assets:check
+```
+
+The builder never modifies `assets/sprite-sheets/*.png` or `source-chroma/`.
+It writes the runtime PNG, Phaser atlas data and provenance/geometry metadata to
+`public/assets/production/`.
+
 `src/render/` is the Phaser boundary. Deterministic, engine-independent code lives in `src/simulation/` and `src/world/`.
 
 ## Contents
 
 - `docs/SKIFREE_RESEARCH_AND_DESIGN.md` — mechanics, map reconstruction, procedural-generation proposal, asset inventory, and acceptance targets.
 - `docs/GAUNTLET_LOOP_PROMPT.md` — copy/paste implementation prompt with iterative quality gates.
-- `assets/sprite-sheets/*.png` — alpha-processed ultra-realistic concept sheets.
+- `assets/sprite-sheets/*.png` — retained alpha-processed ultra-realistic concept sheets.
+- `public/assets/production/` — generated runtime atlas and metadata.
 - `assets/sprite-sheets/manifest.json` — cell order, intended states, and atlas-production notes.
 - `assets/sprite-sheets/source-chroma/` — unprocessed magenta-key generation outputs retained for review and future re-matting.

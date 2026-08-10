@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { AlpineAudio, type AlpineSoundCue } from "../../audio/AlpineAudio";
 import {
   BrowserInputAdapter,
   type InputTelemetryEvent,
@@ -63,6 +64,13 @@ import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
 import { CHUNK_SIZE_METERS } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
+import {
+  AtlasSpritePool,
+  PRODUCTION_ATLAS_DATA,
+  PRODUCTION_ATLAS_IMAGE,
+  PRODUCTION_ATLAS_KEY,
+} from "../atlas/AtlasSpritePool";
+import { AlpineVfx } from "../vfx/AlpineVfx";
 import type {
   CourseCrossingTarget,
   DescentAuditReport,
@@ -102,11 +110,19 @@ export class AlpineScene extends Phaser.Scene {
   private readonly modes = new MountainModeSimulation();
   private readonly livingSlope: LivingSlopeSimulation;
   private readonly yeti = new YetiSimulation();
+  private readonly vfx = new AlpineVfx();
   private background?: Phaser.GameObjects.Graphics;
-  private skier?: Phaser.GameObjects.Container;
-  private skierShadow?: Phaser.GameObjects.Ellipse;
+  private skier?: Phaser.GameObjects.Image;
+  private fallbackSkier?: Phaser.GameObjects.Container;
+  private skierShadow?: Phaser.GameObjects.Ellipse | Phaser.GameObjects.Image;
+  private spritePool!: AtlasSpritePool;
+  private audio!: AlpineAudio;
   private locationLabel?: Phaser.GameObjects.Text;
   private runLabel?: Phaser.GameObjects.Text;
+  private readonly courseLabels = new Map<
+    EventModeId,
+    Phaser.GameObjects.Text
+  >();
   private inputAdapter?: BrowserInputAdapter;
   private runtime?: FreeSkiRuntime;
   private readonly inputEvents: InputTelemetryEvent[] = [];
@@ -139,6 +155,15 @@ export class AlpineScene extends Phaser.Scene {
   private previousChunk = "";
   private visibleObjects = 0;
   private worldTransitions = 0;
+  private readonly unlockAudio = (): void => {
+    void this.audio?.unlock().then(() => this.updateAudioControl());
+  };
+  private readonly handleAudioKey = (event: KeyboardEvent): void => {
+    if (event.key.toLowerCase() !== "m" || event.repeat) return;
+    this.audio?.toggleMuted();
+    this.audio?.play("ui-toggle");
+    this.updateAudioControl();
+  };
 
   constructor(seed: string) {
     super("alpine-baseline");
@@ -148,8 +173,22 @@ export class AlpineScene extends Phaser.Scene {
     this.livingSlope = new LivingSlopeSimulation(seed);
   }
 
+  preload(): void {
+    this.load.atlas(
+      PRODUCTION_ATLAS_KEY,
+      PRODUCTION_ATLAS_IMAGE,
+      PRODUCTION_ATLAS_DATA,
+    );
+  }
+
   create(): void {
-    this.background = this.add.graphics();
+    this.background = this.add.graphics().setDepth(0);
+    this.spritePool = new AtlasSpritePool(this);
+    try {
+      this.audio = new AlpineAudio(window.localStorage);
+    } catch {
+      this.audio = new AlpineAudio();
+    }
     this.createSkier();
     this.createLabels();
 
@@ -182,6 +221,17 @@ export class AlpineScene extends Phaser.Scene {
     debugToggle?.addEventListener("click", () =>
       this.setDebugVisible(!this.debugVisible),
     );
+    const audioToggle =
+      document.querySelector<HTMLButtonElement>("#audio-toggle");
+    audioToggle?.addEventListener("click", () => {
+      this.audio?.toggleMuted();
+      this.audio?.play("ui-toggle");
+      this.updateAudioControl();
+    });
+    window.addEventListener("pointerdown", this.unlockAudio, { capture: true });
+    window.addEventListener("keydown", this.unlockAudio, { capture: true });
+    window.addEventListener("keydown", this.handleAudioKey);
+    this.updateAudioControl();
 
     const player = this.simulation.getSnapshot();
     this.modes.syncPosition({
@@ -200,6 +250,14 @@ export class AlpineScene extends Phaser.Scene {
     this.refreshWorldStream(player);
     const stream = this.stream.getSnapshot();
     this.runtime = {
+      art: {
+        atlasFrameCount: this.textures.get(PRODUCTION_ATLAS_KEY).getFrameNames()
+          .length,
+        atlasLoaded: this.textures.exists(PRODUCTION_ATLAS_KEY),
+        pooledSprites: 0,
+        spriteCapacity: this.spritePool.capacity,
+      },
+      audio: this.audio.getSnapshot(),
       camera: {
         playerScreenRatio: PLAYER_SCREEN_RATIO,
         playerScreenX: this.scale.width * 0.5,
@@ -245,6 +303,7 @@ export class AlpineScene extends Phaser.Scene {
         samples: this.samples,
         worldTransitions: 0,
       },
+      vfx: this.vfx.getSnapshot(),
       world: {
         activeChunks: stream.activeKeys.length,
         aheadRows: stream.aheadRows,
@@ -285,6 +344,15 @@ export class AlpineScene extends Phaser.Scene {
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.inputAdapter?.destroy();
+      this.spritePool?.destroy();
+      this.audio?.destroy();
+      window.removeEventListener("pointerdown", this.unlockAudio, {
+        capture: true,
+      });
+      window.removeEventListener("keydown", this.unlockAudio, {
+        capture: true,
+      });
+      window.removeEventListener("keydown", this.handleAudioKey);
       delete window.__FREE_SKI_DEBUG__;
     });
   }
@@ -307,6 +375,7 @@ export class AlpineScene extends Phaser.Scene {
           this.livingScenario = "none";
           this.scenarioObjects = [];
           this.yellowSnowLocations.clear();
+          this.vfx.reset();
         }
         if (actions.pausePressed) this.simulation.togglePause();
         if (actions.turboPressed) this.simulation.toggleTurbo();
@@ -359,6 +428,23 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private createSkier(): void {
+    if (
+      this.textures.exists(PRODUCTION_ATLAS_KEY) &&
+      this.textures.get(PRODUCTION_ATLAS_KEY).has("player/downhill")
+    ) {
+      this.skierShadow = this.add
+        .image(0, 0, PRODUCTION_ATLAS_KEY, "vfx/ground-shadow")
+        .setOrigin(0.5)
+        .setDisplaySize(46, 12)
+        .setDepth(38)
+        .setAlpha(0.28);
+      this.skier = this.add
+        .image(0, 0, PRODUCTION_ATLAS_KEY, "player/downhill")
+        .setOrigin(0.5, 0.94)
+        .setDepth(40)
+        .setDisplaySize(54, 64);
+      return;
+    }
     this.skierShadow = this.add.ellipse(0, 0, 43, 14, COLORS.ink, 0.15);
 
     const figure = this.add.graphics();
@@ -378,7 +464,7 @@ export class AlpineScene extends Phaser.Scene {
     figure.fillStyle(COLORS.white, 0.9);
     figure.fillRect(-5, -18, 10, 2);
 
-    this.skier = this.add.container(0, 0, [figure]);
+    this.fallbackSkier = this.add.container(0, 0, [figure]).setDepth(40);
   }
 
   private createLabels(): void {
@@ -410,11 +496,42 @@ export class AlpineScene extends Phaser.Scene {
         lineSpacing: 4,
       })
       .setOrigin(1, 0);
+    for (const course of CLASSIC_COURSES) {
+      const label = this.add
+        .text(0, 0, course.name, {
+          align: "center",
+          color: "#f7f9f5",
+          fontFamily: '"Courier New", monospace',
+          fontSize: "7px",
+          fontStyle: "bold",
+          letterSpacing: 0.8,
+        })
+        .setOrigin(0.5)
+        .setDepth(11)
+        .setVisible(false);
+      this.courseLabels.set(course.id as EventModeId, label);
+    }
   }
 
   private renderState(player: PlayerSnapshot): void {
+    this.spritePool.beginFrame();
     this.drawSnowfield(player);
+    const foreshadow = this.yeti.getSnapshot(player.worldY).foreshadow
+      .intensity;
+    this.vfx.update(player, foreshadow);
+    this.vfx.draw(
+      player,
+      (worldX, worldY) => this.toScreen(worldX, worldY, player),
+      this.spritePool,
+    );
     this.updateSkier(player);
+    this.spritePool.endFrame();
+    this.audio.update(
+      player.speedMetersPerSecond,
+      player.heading.includes("carve"),
+      foreshadow,
+      player.paused,
+    );
     this.updateHud(player);
     this.updateRuntime(player);
   }
@@ -543,6 +660,15 @@ export class AlpineScene extends Phaser.Scene {
     for (const location of this.yellowSnowLocations.values()) {
       const [x, y] = this.toScreen(location.x, location.y, player);
       if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
+      if (
+        this.spritePool.draw("secret/yellow-snow", x, y + 4, {
+          alpha: 0.82,
+          depth: 3,
+          displayHeight: 16,
+          originY: 0.5,
+        })
+      )
+        continue;
       this.background.fillStyle(0xd8bd3d, 0.48);
       this.background.fillEllipse(x, y + 4, 17, 6);
     }
@@ -561,6 +687,7 @@ export class AlpineScene extends Phaser.Scene {
     y: number,
   ): void {
     if (!this.background) return;
+    if (this.drawLivingAtlasActor(actor, x, y)) return;
     this.background.fillStyle(COLORS.ink, 0.15);
     this.background.fillEllipse(
       x + 2,
@@ -644,6 +771,84 @@ export class AlpineScene extends Phaser.Scene {
     this.background.fillTriangle(x, y - 20, x - 13, y + 4, x + 13, y + 4);
   }
 
+  private drawLivingAtlasActor(
+    actor: Readonly<LivingActorSnapshot>,
+    x: number,
+    y: number,
+  ): boolean {
+    let frame = "";
+    let height = 44;
+    let originY = 0.94;
+    if (actor.kind === "chairlift") {
+      frame =
+        actor.riderCount === 0
+          ? "chairlift/empty"
+          : actor.riderCount === 1
+            ? "chairlift/one-skier"
+            : "chairlift/two-riders";
+      height = 48;
+      originY = 0.52;
+    } else if (actor.kind === "beginner") {
+      frame = actor.state.startsWith("fallen")
+        ? actor.state.endsWith("forward")
+          ? "beginner/fall-forward"
+          : "beginner/fall-backward"
+        : actor.direction < 0
+          ? "beginner/carve-left"
+          : actor.direction > 0
+            ? "beginner/carve-right"
+            : "beginner/downhill";
+      height = actor.state.startsWith("fallen") ? 34 : 50;
+    } else if (actor.kind === "snowboarder") {
+      frame =
+        actor.state === "jumping"
+          ? "snowboarder/jump"
+          : actor.state.startsWith("tumbling")
+            ? "snowboarder/tumble"
+            : actor.state === "carve-left"
+              ? "snowboarder/carve-left"
+              : actor.state === "carve-right"
+                ? "snowboarder/carve-right"
+                : "snowboarder/tuck";
+      height = actor.state === "jumping" ? 55 : 46;
+    } else if (actor.kind === "dog") {
+      frame =
+        actor.state === "knocked"
+          ? "dog/knocked-over"
+          : actor.state === "recovering"
+            ? "dog/alert"
+            : Math.floor(actor.stateSeconds * 7) % 2 === 0
+              ? "dog/trot-a"
+              : "dog/trot-b";
+      height = actor.state === "knocked" ? 25 : 31;
+      originY = 0.88;
+    } else {
+      frame = actor.state.startsWith("walking")
+        ? Math.floor(actor.stateSeconds * 5) % 2 === 0
+          ? "walking-tree/step-left"
+          : "walking-tree/step-right"
+        : "walking-tree/idle";
+      height = 66;
+    }
+    if (
+      !this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
+        alpha: actor.kind === "chairlift" ? 0.1 : 0.22,
+        depth: 4,
+        displayHeight: actor.kind === "chairlift" ? 7 : 9,
+        displayWidth: actor.kind === "chairlift" ? 34 : height * 0.7,
+        originY: 0.5,
+      })
+    )
+      return false;
+    this.spritePool.draw(frame, x, y + 8, {
+      depth: actor.kind === "chairlift" ? 12 : 14,
+      displayHeight: height,
+      flipX: actor.kind === "dog" && actor.direction < 0,
+      originY,
+    });
+    return true;
+  }
+
   private drawYetis(
     player: PlayerSnapshot,
     width: number,
@@ -669,6 +874,26 @@ export class AlpineScene extends Phaser.Scene {
     y: number,
   ): void {
     if (!this.background) return;
+    const atlasFrame = this.yetiFrame(controller);
+    if (
+      this.spritePool.draw("vfx/ground-shadow", x + 3, y + 15, {
+        alpha: 0.3,
+        depth: 16,
+        displayHeight: 13,
+        displayWidth: 58,
+        originY: 0.5,
+      })
+    ) {
+      this.spritePool.draw(atlasFrame, x, y + 14, {
+        depth: 17,
+        displayHeight:
+          controller.state === "pounce" || controller.state === "grab"
+            ? 92
+            : 84,
+        originY: 0.95,
+      });
+      return;
+    }
     const pouncing =
       controller.state === "pounce" || controller.state === "grab";
     const chewing = controller.state === "eat" || controller.state === "chew";
@@ -703,6 +928,21 @@ export class AlpineScene extends Phaser.Scene {
     this.background.fillCircle(x + 5, y - 18, 2);
     this.background.fillStyle(chewing ? COLORS.signal : 0x58717a, 0.96);
     this.background.fillEllipse(x, y - 10, chewing ? 12 : 8, chewing ? 7 : 4);
+  }
+
+  private yetiFrame(controller: Readonly<YetiControllerSnapshot>): string {
+    if (controller.state === "windup") return "yeti/pounce-windup";
+    if (controller.state === "pounce") return "yeti/pounce-air";
+    if (controller.state === "grab") return "yeti/grab";
+    if (controller.state === "eat" || controller.state === "chew")
+      return Math.floor(controller.stateSeconds * 7) % 2 === 0
+        ? "yeti/chew-a"
+        : "yeti/chew-b";
+    if (controller.state === "recovery") return "yeti/belly-pat";
+    const second = Math.floor(controller.stateSeconds * 8) % 2 === 1;
+    if (Math.abs(controller.velocityX) > Math.abs(controller.velocityY))
+      return `yeti/run-${controller.velocityX < 0 ? "left" : "right"}-${second ? "b" : "a"}`;
+    return `yeti/run-${controller.velocityY < 0 ? "away" : "toward"}-${second ? "b" : "a"}`;
   }
 
   private drawWorld(
@@ -770,6 +1010,26 @@ export class AlpineScene extends Phaser.Scene {
   ): void {
     if (!this.background) return;
     for (const course of CLASSIC_COURSES) {
+      const [signX, signY] = this.toScreen(
+        course.centerX,
+        course.startGate.y - 2.8,
+        player,
+      );
+      const signVisible =
+        signX >= -50 &&
+        signX <= width + 50 &&
+        signY >= -45 &&
+        signY <= height + 45;
+      if (signVisible)
+        this.spritePool.draw("course/blank-wood-sign", signX, signY + 15, {
+          depth: 9,
+          displayHeight: 40,
+          originY: 0.94,
+        });
+      this.courseLabels
+        .get(course.id as EventModeId)
+        ?.setPosition(signX, signY - 2)
+        .setVisible(signVisible);
       const [left, startY] = this.toScreen(
         course.centerX - course.halfWidth,
         course.startGate.y,
@@ -831,6 +1091,22 @@ export class AlpineScene extends Phaser.Scene {
               : marker.color === "red"
                 ? COLORS.signal
                 : COLORS.blueSuit;
+        const markerFrame =
+          markerState === "correct"
+            ? "course/correct-happy-marker"
+            : markerState === "wrong-side" || markerState === "missed"
+              ? "course/missed-sad-marker"
+              : marker.color === "red"
+                ? "course/red-left-marker"
+                : "course/blue-right-marker";
+        if (
+          this.spritePool.draw(markerFrame, x, y + 9, {
+            depth: 7,
+            displayHeight: markerState === "pending" ? 35 : 32,
+            originY: 0.94,
+          })
+        )
+          continue;
         this.background.lineStyle(2, COLORS.ink, 0.38);
         this.background.lineBetween(x, y - 10, x, y + 9);
         this.background.fillStyle(color, 0.92);
@@ -866,6 +1142,23 @@ export class AlpineScene extends Phaser.Scene {
     const [left, y] = this.toScreen(leftX, worldY, player);
     const [right] = this.toScreen(rightX, worldY, player);
     if (right < -20 || left > width + 20 || y < -20 || y > height + 20) return;
+    const gateKind = color === COLORS.signal ? "finish" : "start";
+    if (
+      this.spritePool.draw(`course/${gateKind}-left`, left, y + 10, {
+        depth: 6,
+        displayHeight: 46,
+        originX: 0.18,
+        originY: 0.94,
+      })
+    ) {
+      this.spritePool.draw(`course/${gateKind}-right`, right, y + 10, {
+        depth: 6,
+        displayHeight: 46,
+        originX: 0.82,
+        originY: 0.94,
+      });
+      return;
+    }
     this.background.lineStyle(2, COLORS.ink, 0.48);
     this.background.lineBetween(left, y - 13, left, y + 10);
     this.background.lineBetween(right, y - 13, right, y + 10);
@@ -904,6 +1197,14 @@ export class AlpineScene extends Phaser.Scene {
     for (const tower of CLASSIC_LIFT.towers) {
       const [x, y] = this.toScreen(tower.x, tower.y, player);
       if (x < -30 || x > width + 30 || y < -30 || y > height + 30) continue;
+      if (
+        this.spritePool.draw("lift/tower", x, y + 13, {
+          depth: 8,
+          displayHeight: 84,
+          originY: 0.94,
+        })
+      )
+        continue;
       this.background.lineStyle(3, COLORS.ink, 0.62);
       this.background.lineBetween(x, y - 14, x, y + 15);
       this.background.lineBetween(x - 12, y - 12, x + 12, y - 12);
@@ -923,6 +1224,35 @@ export class AlpineScene extends Phaser.Scene {
   ): void {
     if (!this.background) return;
     const scale = Math.max(0.75, object.interaction.footprint.radius * 0.75);
+    const atlasFrame = this.interactiveAtlasFrame(object, delta);
+    if (atlasFrame) {
+      const display = this.interactiveAtlasDisplay(object, delta);
+      const shadowWidth = Math.max(18, display.height * display.shadowScale);
+      if (
+        this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
+          alpha: 0.2,
+          depth: 4,
+          displayHeight: Math.max(5, display.height * 0.12),
+          displayWidth: shadowWidth,
+          originY: 0.5,
+        })
+      ) {
+        this.spritePool.draw(atlasFrame, x, y + 7, {
+          depth: display.depth,
+          displayHeight: display.height,
+          originY: display.originY,
+          tint: delta?.burned ? 0x879397 : undefined,
+        });
+        if (delta?.burning)
+          this.spritePool.draw("vfx/flame-embers", x, y - 12, {
+            alpha: 0.82,
+            depth: display.depth + 1,
+            displayHeight: 38,
+            originY: 0.8,
+          });
+        return;
+      }
+    }
     if (delta?.form === "mushroom") {
       this.background.fillStyle(0xf7f0d8, 1);
       this.background.fillRect(x - 2, y, 4, 7);
@@ -1033,6 +1363,80 @@ export class AlpineScene extends Phaser.Scene {
     this.background.lineStyle(2, COLORS.ink, 0.55);
     this.background.lineBetween(x - 4, y + 5, x - 6, y + 10);
     this.background.lineBetween(x + 4, y + 5, x + 6, y + 10);
+  }
+
+  private interactiveAtlasFrame(
+    object: Pick<
+      InteractiveWorldObject,
+      "id" | "interaction" | "type" | "variant" | "x" | "y"
+    >,
+    delta?: Readonly<ObjectDelta>,
+  ): string | null {
+    if (delta?.form === "mushroom") return "secret/mushroom";
+    if (object.type === "tree") {
+      if (delta?.burning)
+        return `terrain/burning-tree-${["a", "b", "c"][Math.floor(this.fixedSteps / 7) % 3]}`;
+      return object.variant === "dead-tree"
+        ? "terrain/dead-tree"
+        : object.interaction.spriteBounds.height > 7
+          ? "terrain/evergreen-large"
+          : object.interaction.spriteBounds.height > 5
+            ? "terrain/evergreen-medium"
+            : "terrain/evergreen-small";
+    }
+    if (object.type === "walking-tree") return "walking-tree/idle";
+    if (object.type === "rock") return "terrain/rock";
+    if (object.type === "stump") return "terrain/stump";
+    if (object.type === "bump-small") return "terrain/bump-small";
+    if (object.type === "bump-large") return "terrain/bump-large";
+    if (object.type === "mogul") return "terrain/mogul-field";
+    if (object.type === "ramp") return "terrain/rainbow-ramp";
+    if (object.type === "lift-tower") return "lift/tower";
+    if (object.type === "chairlift") return "chairlift/empty";
+    if (object.type === "dog")
+      return delta?.npcState === "knocked" ? "dog/knocked-over" : "dog/alert";
+    if (object.type === "beginner") return "beginner/downhill";
+    return null;
+  }
+
+  private interactiveAtlasDisplay(
+    object: Pick<InteractiveWorldObject, "interaction" | "type">,
+    delta?: Readonly<ObjectDelta>,
+  ): { depth: number; height: number; originY: number; shadowScale: number } {
+    if (delta?.form === "mushroom")
+      return { depth: 8, height: 30, originY: 0.88, shadowScale: 0.75 };
+    const heights: Readonly<
+      Partial<Record<InteractiveWorldObject["type"], number>>
+    > = {
+      beginner: 48,
+      "bump-large": 22,
+      "bump-small": 14,
+      chairlift: 46,
+      dog: 30,
+      "lift-tower": 84,
+      mogul: 28,
+      ramp: 38,
+      rock: 31,
+      stump: 27,
+      tree: Math.max(56, object.interaction.spriteBounds.height * 8.5),
+      "walking-tree": 68,
+    };
+    const ground = ["bump-large", "bump-small", "mogul", "ramp"].includes(
+      object.type,
+    );
+    return {
+      depth: ground ? 5 : 8,
+      height: heights[object.type] ?? 38,
+      originY:
+        object.type === "ramp"
+          ? 0.79
+          : object.type === "chairlift"
+            ? 0.52
+            : object.type === "dog"
+              ? 0.88
+              : 0.94,
+      shadowScale: ground ? 1.15 : 0.72,
+    };
   }
 
   private drawYetiBoundary(
@@ -1181,9 +1585,10 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private updateSkier(player: PlayerSnapshot): void {
-    if (!this.skier || !this.skierShadow) return;
+    if ((!this.skier && !this.fallbackSkier) || !this.skierShadow) return;
     const playerRemoved = this.yeti.getSnapshot(player.worldY).playerRemoved;
-    this.skier.setVisible(!playerRemoved);
+    this.skier?.setVisible(!playerRemoved);
+    this.fallbackSkier?.setVisible(!playerRemoved);
     this.skierShadow.setVisible(!playerRemoved);
     if (playerRemoved) return;
     const anchorX = this.scale.width * 0.5;
@@ -1194,11 +1599,22 @@ export class AlpineScene extends Phaser.Scene {
     this.skierShadow.setPosition(anchorX, anchorY + 18);
     this.skierShadow.setScale(Math.max(0.62, 1 - player.airHeight * 0.06));
     this.skierShadow.setAlpha(Math.max(0.05, 0.17 - player.airHeight * 0.018));
-    this.skier.setPosition(anchorX, anchorY - airOffset);
-    this.skier.setRotation(
+    const skier = this.skier ?? this.fallbackSkier!;
+    skier.setPosition(anchorX, anchorY - airOffset);
+    if (this.skier) {
+      this.skier.setTexture(PRODUCTION_ATLAS_KEY, this.playerFrame(player));
+      this.skier.setOrigin(0.5, player.motion === "airborne" ? 0.62 : 0.94);
+    }
+    skier.setRotation(
       player.motion === "crashed"
-        ? velocityAngle + Math.PI * 0.55
-        : velocityAngle +
+        ? this.skier
+          ? 0
+          : velocityAngle + Math.PI * 0.55
+        : this.skier
+          ? player.motion === "airborne"
+            ? player.airTilt * 0.18
+            : 0
+          : velocityAngle +
             (player.motion === "airborne"
               ? player.airTilt * 0.45 + player.airSpin
               : 0),
@@ -1207,17 +1623,55 @@ export class AlpineScene extends Phaser.Scene {
       player.motion === "recovering"
         ? 0.88
         : 1 + Math.min(player.airHeight * 0.022, 0.14);
-    this.skier.setScale(
-      skierScale,
-      skierScale *
-        (player.motion === "airborne" ? Math.cos(player.airPitch) : 1),
-    );
-    this.skier.setAlpha(player.motion === "recovering" ? 0.62 : 1);
+    if (this.skier) {
+      const frame = this.skier.frame;
+      const displayHeight =
+        (player.motion === "airborne"
+          ? 72
+          : player.motion === "crashed"
+            ? 54
+            : 64) * skierScale;
+      this.skier.setDisplaySize(
+        displayHeight * (frame.realWidth / Math.max(1, frame.realHeight)),
+        displayHeight,
+      );
+    } else {
+      skier.setScale(
+        skierScale,
+        skierScale *
+          (player.motion === "airborne" ? Math.cos(player.airPitch) : 1),
+      );
+    }
+    skier.setAlpha(player.motion === "recovering" ? 0.62 : 1);
+  }
+
+  private playerFrame(player: Readonly<PlayerSnapshot>): string {
+    if (player.motion === "crashed") return "player/wipeout";
+    if (player.motion === "recovering") return "player/landing-crouch";
+    if (player.motion === "airborne") {
+      if (Math.abs(player.airPitch) > 0.42) {
+        const phase =
+          (Math.floor(Math.abs(player.airPitch) / (Math.PI / 2)) % 3) + 1;
+        return `player/${player.airPitch < 0 ? "back" : "front"}-flip-${phase}`;
+      }
+      if (Math.abs(player.airSpin) > 0.42)
+        return player.airSpin < 0 ? "player/spin-left" : "player/spin-right";
+      return "player/air-neutral";
+    }
+    if (player.heading === "brake")
+      return player.velocityX < 0
+        ? "player/hockey-stop-left"
+        : "player/hockey-stop-right";
+    if (player.heading === "traverse-left") return "player/carve-left-3";
+    if (player.heading === "traverse-right") return "player/carve-right-3";
+    if (player.heading === "tuck") return "player/tuck";
+    return `player/${player.heading}`;
   }
 
   private updateHud(player: PlayerSnapshot): void {
     const shell = document.querySelector<HTMLElement>("#game-shell");
     const speed = document.querySelector<HTMLElement>("#speed-label");
+    const time = document.querySelector<HTMLElement>("#time-label");
     const distance = document.querySelector<HTMLElement>("#distance-label");
     const motion = document.querySelector<HTMLElement>("#motion-label");
     const turbo = document.querySelector<HTMLElement>("#turbo-indicator");
@@ -1236,6 +1690,7 @@ export class AlpineScene extends Phaser.Scene {
       speed.textContent = Math.round(
         player.speedMetersPerSecond * 3.6,
       ).toString();
+    if (time) time.textContent = player.simulationSeconds.toFixed(1);
     if (distance) distance.textContent = Math.floor(player.worldY).toString();
     if (motion)
       motion.textContent = `${player.motion} / ${player.heading}`.toUpperCase();
@@ -1333,6 +1788,10 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.telemetry.fixedSteps = this.fixedSteps;
     this.runtime.telemetry.renderFrames = this.renderFrames;
     this.runtime.telemetry.worldTransitions = this.worldTransitions;
+    this.runtime.art.atlasLoaded = this.textures.exists(PRODUCTION_ATLAS_KEY);
+    this.runtime.art.pooledSprites = this.spritePool.activeCount;
+    this.runtime.audio = this.audio.getSnapshot();
+    this.runtime.vfx = this.vfx.getSnapshot();
     this.runtime.world.activeChunks = stream.activeKeys.length;
     this.runtime.world.aheadRows = stream.aheadRows;
     this.runtime.world.cachedChunks = stream.cachedKeys.length;
@@ -1383,6 +1842,7 @@ export class AlpineScene extends Phaser.Scene {
         ? `BOUNDARY ${snapshot.activeBoundaries.join("/").toUpperCase()} · PHASE ${snapshot.capturePhase.toUpperCase()}`
         : "BOUNDARY CLEAR · PHASE NONE";
     }
+    this.updateAudioControl();
   }
 
   private refreshWorldStream(player: PlayerSnapshot): void {
@@ -1792,6 +2252,22 @@ export class AlpineScene extends Phaser.Scene {
     if (this.runtime) this.runtime.settings.pointerSteeringEnabled = enabled;
   }
 
+  private updateAudioControl(): void {
+    const snapshot = this.audio?.getSnapshot();
+    if (!snapshot) return;
+    const button = document.querySelector<HTMLButtonElement>("#audio-toggle");
+    const shell = document.querySelector<HTMLElement>("#game-shell");
+    button?.setAttribute("aria-pressed", snapshot.muted.toString());
+    if (button)
+      button.textContent = snapshot.muted
+        ? "SOUND MUTED"
+        : snapshot.unlocked
+          ? "SOUND ON"
+          : "SOUND ARMED";
+    shell?.setAttribute("data-audio-unlocked", snapshot.unlocked.toString());
+    shell?.setAttribute("data-audio-muted", snapshot.muted.toString());
+  }
+
   private recordInput(event: InputTelemetryEvent): void {
     this.inputEvents.push(event);
     if (this.inputEvents.length > MAX_TELEMETRY_EVENTS)
@@ -1800,7 +2276,26 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private capturePlayerEvents(): void {
-    this.playerEvents.push(...this.simulation.drainEvents());
+    const events = this.simulation.drainEvents();
+    const player = this.simulation.getSnapshot();
+    this.playerEvents.push(...events);
+    const cues: Readonly<Partial<Record<PlayerEvent["type"], AlpineSoundCue>>> =
+      {
+        crashed: "crash",
+        jumped: "jump",
+        "landed-clean": "landing",
+        paused: "pause",
+        recovered: "landing",
+        reset: "reset",
+        resumed: "resume",
+        "turbo-off": "turbo-off",
+        "turbo-on": "turbo-on",
+      };
+    for (const event of events) {
+      this.vfx.emitPlayer(event, player);
+      const cue = cues[event.type];
+      if (cue) this.audio.play(cue);
+    }
     if (this.playerEvents.length > MAX_TELEMETRY_EVENTS) {
       this.playerEvents.splice(
         0,
@@ -1816,6 +2311,36 @@ export class AlpineScene extends Phaser.Scene {
     this.interactionEvents.push(...interactionEvents);
     this.feedbackEvents.push(...feedbackEvents);
     this.styleEvents.push(...styleEvents);
+    const player = this.simulation.getSnapshot();
+    const interactionCues: Readonly<
+      Partial<Record<InteractionEvent["type"], AlpineSoundCue>>
+    > = {
+      "bump-hop": "bump",
+      "burning-tree-cleared": "fire-secret",
+      crash: "crash",
+      "dead-tree-ignited": "fire-secret",
+      "dog-knocked": "dog-bark",
+      "landed-clean": "landing",
+      "landing-crash": "crash",
+      "mushroom-created": "mushroom-secret",
+      "mushroom-jumped": "mushroom-secret",
+      "ramp-launch": "jump",
+      "trick-completed": "landing",
+      "walking-tree-awake": "walking-tree",
+      "yellow-snow": "yellow-snow",
+    };
+    for (const event of interactionEvents) {
+      const object = this.getInteractiveObjects().find(
+        (candidate) => candidate.id === event.objectId,
+      );
+      this.vfx.emitInteraction(
+        event,
+        object?.x ?? player.worldX,
+        object?.y ?? player.worldY,
+      );
+      const cue = interactionCues[event.type];
+      if (cue) this.audio.play(cue);
+    }
     for (const events of [
       this.interactionEvents,
       this.feedbackEvents,
@@ -1860,6 +2385,15 @@ export class AlpineScene extends Phaser.Scene {
       this.modeEvents.splice(0, this.modeEvents.length - MAX_TELEMETRY_EVENTS);
     }
     for (const event of events) {
+      this.audio.play(
+        event.type === "mode-started"
+          ? "gate-start"
+          : event.type === "mode-finished"
+            ? "gate-finish"
+            : event.type === "marker-correct"
+              ? "gate-correct"
+              : "gate-penalty",
+      );
       if (event.type !== "mode-finished") continue;
       const result = this.modes.getSnapshot().courses[event.mode].result;
       if (!result) continue;
@@ -1916,6 +2450,22 @@ export class AlpineScene extends Phaser.Scene {
         this.livingEvents.length - MAX_TELEMETRY_EVENTS,
       );
     for (const event of events) {
+      const cue: AlpineSoundCue =
+        event.type === "beginner-fell"
+          ? "beginner-fall"
+          : event.type === "snowboarder-jumped" ||
+              event.type === "snowboarder-tumbled"
+            ? "snowboard-air"
+            : event.type === "dog-hit"
+              ? "dog-bark"
+              : event.type === "chair-looped" ||
+                  event.type === "chair-rider-dropped"
+                ? "lift-clack"
+                : event.type === "walking-tree-woke" ||
+                    event.type === "walking-tree-moved"
+                  ? "walking-tree"
+                  : "landing";
+      this.audio.play(cue);
       if (event.type === "dog-hit") {
         this.interactions.deltas.patch(event.actorId, {
           npcState: "knocked",
@@ -1957,6 +2507,27 @@ export class AlpineScene extends Phaser.Scene {
     this.yetiEvents.push(...events);
     if (this.yetiEvents.length > MAX_TELEMETRY_EVENTS)
       this.yetiEvents.splice(0, this.yetiEvents.length - MAX_TELEMETRY_EVENTS);
+    for (const event of events) {
+      const controller = this.yeti
+        .getSnapshot(this.simulation.getSnapshot().worldY)
+        .controllers.find((candidate) => candidate.id === event.yetiId);
+      this.vfx.emitYeti(
+        event,
+        controller?.worldX ?? this.simulation.getSnapshot().worldX,
+        controller?.worldY ?? this.simulation.getSnapshot().worldY,
+      );
+      this.audio.play(
+        event.type === "capture-started" || event.type === "yeti-activated"
+          ? "yeti-warning"
+          : event.type === "pounced"
+            ? "yeti-pounce"
+            : event.type === "grabbed"
+              ? "yeti-grab"
+              : event.type === "eaten" || event.type === "chewing"
+                ? "yeti-eat"
+                : "ui-toggle",
+      );
+    }
     const latest = events.at(-1)!;
     const labels: Readonly<Record<YetiEvent["type"], string>> = {
       "capture-started": "SHADOW CLOSING",
@@ -1999,6 +2570,7 @@ export class AlpineScene extends Phaser.Scene {
     this.livingScenario = "none";
     this.scenarioObjects = [];
     this.yellowSnowLocations.clear();
+    this.vfx.reset();
     this.feedbackPriorityUntil = 1.35;
     this.feedbackVisibleUntil = FEEDBACK_VISIBLE_SECONDS;
   }

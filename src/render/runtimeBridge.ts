@@ -17,6 +17,8 @@ import type {
   LivingActorEvent,
   LivingSlopeSnapshot,
 } from "../simulation/livingSlope";
+import type { AlpineAudioSnapshot } from "../audio/AlpineAudio";
+import type { AlpineVfxSnapshot } from "./vfx/AlpineVfx";
 import type { YetiEvent, YetiSnapshot } from "../simulation/yeti";
 import type { ObjectDelta } from "../world/chunkDeltas";
 
@@ -63,6 +65,13 @@ export interface TelemetrySample {
 }
 
 export interface FreeSkiRuntime {
+  art: {
+    atlasFrameCount: number;
+    atlasLoaded: boolean;
+    pooledSprites: number;
+    spriteCapacity: number;
+  };
+  audio: AlpineAudioSnapshot;
   camera: {
     playerScreenRatio: number;
     playerScreenX: number;
@@ -108,6 +117,7 @@ export interface FreeSkiRuntime {
     samples: TelemetrySample[];
     worldTransitions: number;
   };
+  vfx: AlpineVfxSnapshot;
   world: {
     activeChunks: number;
     aheadRows: readonly number[];
