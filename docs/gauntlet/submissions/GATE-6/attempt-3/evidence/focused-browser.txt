@@ -1,0 +1,19 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test tests/e2e/baseline.spec.ts tests/e2e/presentation.spec.ts --workers=1
+[WebServer] npm notice run freeski@0.1.0 dev
+[WebServer] npm notice run vite
+[WebServer] (node:3617281) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:3617454) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › tests/e2e/baseline.spec.ts:20:1 › loads an interactive Phaser baseline without console errors (14.6s)
+  ✓  2 [chromium] › tests/e2e/baseline.spec.ts:60:1 › remains playable at the minimum supported viewport (4.5s)
+  ✓  3 [chromium] › tests/e2e/baseline.spec.ts:74:1 › plays the full fixed-step skiing control sequence (17.0s)
+  ✓  4 [chromium] › tests/e2e/baseline.spec.ts:293:1 › keeps pointer steering opt-in and click-to-jump functional (6.0s)
+  ✓  5 [chromium] › tests/e2e/presentation.spec.ts:127:1 › loads production art, bounded VFX, compact HUD, and gesture-gated persistent audio (22.1s)
+  ✓  6 [chromium] › tests/e2e/presentation.spec.ts:406:1 › keeps every representative player state readable at 768x600 (8.0s)
+
+  6 passed (1.4m)

@@ -1,0 +1,25 @@
+npm notice run freeski@0.1.0 test:e2e
+npm notice run playwright test --workers=1
+[WebServer] npm notice run freeski@0.1.0 dev
+[WebServer] npm notice run vite
+[WebServer] (node:3635325) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 12 tests using 1 worker
+
+(node:3635637) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/e2e/baseline.spec.ts:20:1 › loads an interactive Phaser baseline without console errors (5.8s)
+  ✓   2 [chromium] › tests/e2e/baseline.spec.ts:60:1 › remains playable at the minimum supported viewport (4.5s)
+  ✓   3 [chromium] › tests/e2e/baseline.spec.ts:74:1 › plays the full fixed-step skiing control sequence (16.9s)
+  ✓   4 [chromium] › tests/e2e/baseline.spec.ts:293:1 › keeps pointer steering opt-in and click-to-jump functional (6.7s)
+  ✓   5 [chromium] › tests/e2e/interactions.spec.ts:46:1 › demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequences (16.2s)
+  ✓   6 [chromium] › tests/e2e/livingSlope.spec.ts:19:1 › living population, foreshadow, Turbo chase, and capture recover without a soft lock (24.3s)
+  ✓   7 [chromium] › tests/e2e/modes.spec.ts:74:1 › crosses real gates to finish all modes and reloads classic records (31.2s)
+  ✓   8 [chromium] › tests/e2e/modes.spec.ts:198:1 › open skiing can ignore start gates and an active run survives leaving its lane (9.8s)
+  ✓   9 [chromium] › tests/e2e/presentation.spec.ts:127:1 › loads production art, bounded VFX, compact HUD, and gesture-gated persistent audio (21.4s)
+  ✓  10 [chromium] › tests/e2e/presentation.spec.ts:406:1 › keeps every representative player state readable at 768x600 (6.2s)
+  ✓  11 [chromium] › tests/e2e/world.spec.ts:4:1 › streams and renders a deterministic classic mountain (23.6s)
+  ✓  12 [chromium] › tests/e2e/world.spec.ts:105:1 › audits a 2100m fixed-step descent without missing chunks or blockers (8.1s)
+
+  12 passed (3.0m)

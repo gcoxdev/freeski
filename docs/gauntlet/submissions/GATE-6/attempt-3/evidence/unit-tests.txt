@@ -1,0 +1,10 @@
+npm notice run freeski@0.1.0 test
+npm notice run vitest run
+
+ RUN  v4.1.10 /home/drpepper/Desktop/CodexProjects/freeski
+
+
+ Test Files  17 passed (17)
+      Tests  92 passed (92)
+   Start at  02:22:36
+   Duration  10.34s (transform 1.73s, setup 0ms, import 2.96s, tests 6.53s, environment 16ms)

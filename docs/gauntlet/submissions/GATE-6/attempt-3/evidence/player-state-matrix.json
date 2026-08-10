@@ -1,0 +1,54 @@
+[
+  {
+    "canvasCssScale": 1,
+    "cssRenderedHeight": 55.99999999999999,
+    "fallbackDraws": 0,
+    "frame": "player/downhill",
+    "frameFallbacks": 0,
+    "label": "grounded",
+    "minimumRenderedHeight": 48,
+    "missingFrameFallbacks": 0,
+    "motion": "grounded",
+    "renderedHeight": 55.99999999999999,
+    "targetRenderedHeight": 56
+  },
+  {
+    "canvasCssScale": 1,
+    "cssRenderedHeight": 54,
+    "fallbackDraws": 0,
+    "frame": "player/air-neutral",
+    "frameFallbacks": 0,
+    "label": "manual-airborne",
+    "minimumRenderedHeight": 48,
+    "missingFrameFallbacks": 0,
+    "motion": "airborne",
+    "renderedHeight": 54,
+    "targetRenderedHeight": 54
+  },
+  {
+    "canvasCssScale": 1,
+    "cssRenderedHeight": 52,
+    "fallbackDraws": 0,
+    "frame": "player/wipeout",
+    "frameFallbacks": 0,
+    "label": "crashed",
+    "minimumRenderedHeight": 48,
+    "missingFrameFallbacks": 0,
+    "motion": "crashed",
+    "renderedHeight": 52,
+    "targetRenderedHeight": 52
+  },
+  {
+    "canvasCssScale": 1,
+    "cssRenderedHeight": 52,
+    "fallbackDraws": 0,
+    "frame": "player/landing-crouch",
+    "frameFallbacks": 0,
+    "label": "recovering",
+    "minimumRenderedHeight": 48,
+    "missingFrameFallbacks": 0,
+    "motion": "recovering",
+    "renderedHeight": 52,
+    "targetRenderedHeight": 52
+  }
+]

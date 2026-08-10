@@ -1,0 +1,10 @@
+npm notice run freeski@0.1.0 npx
+npm notice run 'vitest' run src/render/playerPresentation.test.ts src/render/atlas/productionAtlas.test.ts
+
+ RUN  v4.1.10 /home/drpepper/Desktop/CodexProjects/freeski
+
+
+ Test Files  2 passed (2)
+      Tests  7 passed (7)
+   Start at  02:22:27
+   Duration  3.64s (transform 349ms, setup 0ms, import 517ms, tests 659ms, environment 0ms)
