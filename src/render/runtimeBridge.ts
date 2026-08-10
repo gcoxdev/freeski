@@ -21,6 +21,10 @@ import type { AlpineAudioSnapshot } from "../audio/AlpineAudio";
 import type { AlpineVfxSnapshot } from "./vfx/AlpineVfx";
 import type { YetiEvent, YetiSnapshot } from "../simulation/yeti";
 import type { ObjectDelta } from "../world/chunkDeltas";
+import type { AccessibilitySettings } from "../accessibility/settings";
+import type { GameAction } from "../input/actions";
+import type { FramePerformanceSnapshot } from "../performance/frameMonitor";
+import type { ReplayExport, ReplaySnapshot } from "../replay/replay";
 
 export type GateThreeScenario =
   | "burning-clear"
@@ -64,6 +68,22 @@ export interface TelemetrySample {
   worldY: number;
 }
 
+export interface LifecycleTelemetryEvent {
+  readonly fixedStep: number;
+  readonly height: number;
+  readonly paused: boolean;
+  readonly type:
+    | "blurred"
+    | "focused"
+    | "hidden"
+    | "resized"
+    | "settings-closed"
+    | "settings-opened"
+    | "visible";
+  readonly wallTimeMs: number;
+  readonly width: number;
+}
+
 export interface FreeSkiRuntime {
   art: {
     atlasFrameCount: number;
@@ -104,18 +124,50 @@ export interface FreeSkiRuntime {
     snapshot: ModeSnapshot;
     storageAvailable: boolean;
   };
+  lifecycle: {
+    autoPaused: boolean;
+    events: LifecycleTelemetryEvent[];
+    reasons: readonly string[];
+    resizeCount: number;
+    visibilityState: DocumentVisibilityState;
+  };
   livingSlope: {
     events: LivingActorEvent[];
     scenario: GateFiveScenario;
     snapshot: LivingSlopeSnapshot;
   };
   player: PlayerSnapshot;
+  performance: {
+    bounds: {
+      actorCapacity: number;
+      actorCount: number;
+      pooledSprites: number;
+      spriteCapacity: number;
+      vfxEffects: number;
+      vfxEffectsCapacity: number;
+      vfxTracks: number;
+      vfxTracksCapacity: number;
+    };
+    frame: FramePerformanceSnapshot;
+  };
+  presentation: {
+    flashActive: boolean;
+    flashCount: number;
+    shakeCount: number;
+    yetiPresentation: AccessibilitySettings["yetiPresentation"];
+  };
   ready: boolean;
+  replay: ReplaySnapshot;
   seed: string;
   seedHash: number;
   settings: {
+    accessibility: AccessibilitySettings;
+    connectedGamepads: number;
     debugVisible: boolean;
+    heldActions: readonly GameAction[];
     pointerSteeringEnabled: boolean;
+    settingsPanelOpen: boolean;
+    touchControlsEnabled: boolean;
     trainingMode: boolean;
   };
   telemetry: {
@@ -158,6 +210,7 @@ declare global {
         outcome?: Exclude<MarkerState, "pending">,
       ) => boolean;
       stageLivingScenario: (scenario: GateFiveScenario) => boolean;
+      exportReplay: () => ReplayExport;
       setVisible: (visible: boolean) => void;
     };
   }

@@ -65,6 +65,7 @@ export interface AlpineAudioSnapshot {
   readonly lastCue: AlpineSoundCue | "none";
   readonly muted: boolean;
   readonly unlocked: boolean;
+  readonly volume: number;
 }
 
 type StorageLike = Pick<Storage, "getItem" | "setItem">;
@@ -300,6 +301,7 @@ export class AlpineAudio {
   private lastCue: AlpineSoundCue | "none" = "none";
   private mutedValue: boolean;
   private unlockedValue = false;
+  private volumeValue = 1;
 
   constructor(private readonly storage?: StorageLike) {
     let persisted = false;
@@ -383,7 +385,19 @@ export class AlpineAudio {
     }
     if (this.master && this.context)
       this.master.gain.setTargetAtTime(
-        muted ? 0 : 0.72,
+        muted ? 0 : 0.72 * this.volumeValue,
+        this.context.currentTime,
+        0.025,
+      );
+  }
+
+  setVolume(volume: number): void {
+    this.volumeValue = Number.isFinite(volume)
+      ? Math.max(0, Math.min(1, volume))
+      : this.volumeValue;
+    if (this.master && this.context)
+      this.master.gain.setTargetAtTime(
+        this.mutedValue ? 0 : 0.72 * this.volumeValue,
         this.context.currentTime,
         0.025,
       );
@@ -391,13 +405,15 @@ export class AlpineAudio {
 
   getSnapshot(): AlpineAudioSnapshot {
     return Object.freeze({
-      activeAmbientLayers: this.unlockedValue && !this.mutedValue ? 3 : 0,
+      activeAmbientLayers:
+        this.unlockedValue && !this.mutedValue && this.volumeValue > 0 ? 3 : 0,
       availableCues: ALPINE_SOUND_BANK.length,
       cueCount: this.cueCount,
       gestureRequired: !this.unlockedValue,
       lastCue: this.lastCue,
       muted: this.mutedValue,
       unlocked: this.unlockedValue,
+      volume: this.volumeValue,
     });
   }
 
@@ -412,7 +428,7 @@ export class AlpineAudio {
     if (!AudioContextConstructor) return;
     const context = new AudioContextConstructor();
     const master = context.createGain();
-    master.gain.value = this.mutedValue ? 0 : 0.72;
+    master.gain.value = this.mutedValue ? 0 : 0.72 * this.volumeValue;
     master.connect(context.destination);
     this.context = context;
     this.master = master;

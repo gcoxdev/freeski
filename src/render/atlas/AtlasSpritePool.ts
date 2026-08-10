@@ -58,29 +58,41 @@ export class AtlasSpritePool {
     if (!this.images[this.cursor]) this.images.push(image);
     this.cursor += 1;
     this.peakActiveValue = Math.max(this.peakActiveValue, this.cursor);
-    image
-      .setTexture(PRODUCTION_ATLAS_KEY, frameName)
-      .setPosition(x, y)
-      .setOrigin(options.originX ?? 0.5, options.originY ?? 0.92)
-      .setDepth(options.depth ?? 5)
-      .setAlpha(options.alpha ?? 1)
-      .setRotation(options.rotation ?? 0)
-      .setFlipX(options.flipX ?? false)
-      .setVisible(true)
-      .clearTint();
+    if (
+      image.texture.key !== PRODUCTION_ATLAS_KEY ||
+      image.frame.name !== frameName
+    )
+      image.setTexture(PRODUCTION_ATLAS_KEY, frameName);
+    if (image.x !== x || image.y !== y) image.setPosition(x, y);
+    const originX = options.originX ?? 0.5;
+    const originY = options.originY ?? 0.92;
+    if (image.originX !== originX || image.originY !== originY)
+      image.setOrigin(originX, originY);
+    const depth = options.depth ?? 5;
+    if (image.depth !== depth) image.setDepth(depth);
+    const alpha = options.alpha ?? 1;
+    if (image.alpha !== alpha) image.setAlpha(alpha);
+    const rotation = options.rotation ?? 0;
+    if (image.rotation !== rotation) image.setRotation(rotation);
+    const flipX = options.flipX ?? false;
+    if (image.flipX !== flipX) image.setFlipX(flipX);
+    if (!image.visible) image.setVisible(true);
     if (options.tint !== undefined) image.setTint(options.tint);
+    else if (image.isTinted) image.clearTint();
     const frame = image.frame;
     const ratio = frame.realWidth / Math.max(1, frame.realHeight);
-    image.setDisplaySize(
-      options.displayWidth ?? options.displayHeight * ratio,
-      options.displayHeight,
-    );
+    const displayWidth = options.displayWidth ?? options.displayHeight * ratio;
+    if (
+      Math.abs(image.displayWidth - displayWidth) > 0.01 ||
+      Math.abs(image.displayHeight - options.displayHeight) > 0.01
+    )
+      image.setDisplaySize(displayWidth, options.displayHeight);
     return image;
   }
 
   endFrame(): void {
     for (let index = this.cursor; index < this.images.length; index += 1)
-      this.images[index]!.setVisible(false);
+      if (this.images[index]!.visible) this.images[index]!.setVisible(false);
   }
 
   get activeCount(): number {

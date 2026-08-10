@@ -9,7 +9,9 @@
   "scripts": {
     "assets:build": "python3 scripts/build_runtime_atlas.py",
     "assets:check": "python3 scripts/build_runtime_atlas.py --check",
+    "audit:clean-room": "node scripts/audit_clean_room.mjs",
     "dev": "vite",
+    "preview": "vite preview",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
@@ -17,7 +19,9 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:e2e:production": "playwright test --config playwright.production.config.ts",
+    "test:soak": "node scripts/run_release_soak.mjs"
   },
   "dependencies": {
     "phaser": "3.90.0"

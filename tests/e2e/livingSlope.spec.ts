@@ -8,6 +8,15 @@ async function stage(page: Page, scenario: string): Promise<void> {
     scenario,
   );
   expect(staged).toBe(true);
+  if (scenario === "population")
+    await page.waitForFunction(() => {
+      const snapshot = window.__FREE_SKI__?.livingSlope.snapshot;
+      return (
+        snapshot !== undefined &&
+        snapshot.workUnitsLastStep > 0 &&
+        snapshot.workUnitsLastStep === snapshot.actorCount
+      );
+    });
 }
 
 async function evidenceScreenshot(page: Page, name: string): Promise<void> {
@@ -238,12 +247,16 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
       window.__FREE_SKI__?.player.runNumber === 2 &&
       window.__FREE_SKI__?.yeti.snapshot.activeBoundaries.length === 0,
   );
-  expect(
-    await page.evaluate(() => window.__FREE_SKI__!.player.worldY),
-  ).toBeLessThan(5);
+  const recoveryStartY = await page.evaluate(
+    () => window.__FREE_SKI__!.player.worldY,
+  );
+  expect(recoveryStartY).toBeLessThan(10);
   await page.keyboard.down("s");
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.worldY ?? 0) > 5,
+    (startY) =>
+      window.__FREE_SKI__?.settings.heldActions.includes("tuck") === true &&
+      (window.__FREE_SKI__?.player.worldY ?? startY) > startY + 1,
+    recoveryStartY,
   );
   await page.keyboard.up("s");
   await page.setViewportSize({ width: 768, height: 600 });

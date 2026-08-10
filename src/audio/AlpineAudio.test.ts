@@ -50,4 +50,18 @@ describe("AlpineAudio", () => {
       unlocked: false,
     });
   });
+
+  it("clamps presentation volume without unlocking audio", () => {
+    const audio = new AlpineAudio();
+    audio.setVolume(0.35);
+    expect(audio.getSnapshot()).toMatchObject({
+      gestureRequired: true,
+      unlocked: false,
+      volume: 0.35,
+    });
+    audio.setVolume(2);
+    expect(audio.getSnapshot().volume).toBe(1);
+    audio.setVolume(-1);
+    expect(audio.getSnapshot().volume).toBe(0);
+  });
 });

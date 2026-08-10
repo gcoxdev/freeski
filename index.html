@@ -14,7 +14,11 @@
     <title>FreeSki — Alpine Systems Online</title>
   </head>
   <body>
-    <main id="game-shell" aria-label="FreeSki game">
+    <a class="skip-link" href="#game-canvas">Skip to playable mountain</a>
+    <main id="game-shell" aria-labelledby="game-title">
+      <h1 id="game-title" class="visually-hidden">
+        FreeSki — Downhill Mountain Game
+      </h1>
       <header class="masthead" aria-label="Game status">
         <div class="wordmark" aria-label="FreeSki">
           <span>Free</span><strong>Ski</strong>
@@ -25,7 +29,139 @@
         </div>
       </header>
 
-      <section id="game-canvas" aria-label="Playable mountain canvas"></section>
+      <section
+        id="game-canvas"
+        tabindex="-1"
+        aria-label="Playable mountain canvas"
+      ></section>
+
+      <nav
+        id="touch-controls"
+        class="touch-controls"
+        aria-label="Touch ski controls"
+        aria-hidden="true"
+        hidden
+      >
+        <div class="touch-controls__cluster touch-controls__direction">
+          <button
+            id="touch-left"
+            type="button"
+            data-action="steer-left"
+            aria-label="Carve left"
+          >
+            LEFT
+          </button>
+          <button
+            id="touch-uphill"
+            type="button"
+            data-action="uphill"
+            aria-label="Traverse uphill"
+          >
+            UP
+          </button>
+          <button
+            id="touch-tuck"
+            type="button"
+            data-action="tuck"
+            aria-label="Tuck downhill"
+          >
+            TUCK
+          </button>
+          <button
+            id="touch-right"
+            type="button"
+            data-action="steer-right"
+            aria-label="Carve right"
+          >
+            RIGHT
+          </button>
+        </div>
+        <div class="touch-controls__cluster touch-controls__air">
+          <button
+            id="touch-spin-left"
+            type="button"
+            data-action="trick-left"
+            aria-label="Spin left while airborne"
+          >
+            SPIN−
+          </button>
+          <button
+            id="touch-flip-back"
+            type="button"
+            data-action="trick-back"
+            aria-label="Back flip while airborne"
+          >
+            FLIP−
+          </button>
+          <button
+            id="touch-flip-front"
+            type="button"
+            data-action="trick-front"
+            aria-label="Front flip while airborne"
+          >
+            FLIP+
+          </button>
+          <button
+            id="touch-spin-right"
+            type="button"
+            data-action="trick-right"
+            aria-label="Spin right while airborne"
+          >
+            SPIN+
+          </button>
+          <button
+            id="touch-reset"
+            type="button"
+            data-action="reset"
+            aria-label="Reset the run"
+          >
+            RESET
+          </button>
+          <button
+            id="touch-debug"
+            type="button"
+            data-action="debug"
+            aria-label="Toggle world diagnostics"
+          >
+            GRID
+          </button>
+        </div>
+        <div class="touch-controls__cluster touch-controls__actions">
+          <button
+            id="touch-brake"
+            type="button"
+            data-action="brake"
+            aria-label="Brake"
+          >
+            BRAKE
+          </button>
+          <button
+            id="touch-jump"
+            class="touch-controls__primary"
+            type="button"
+            data-action="jump"
+            aria-label="Jump"
+          >
+            JUMP
+          </button>
+          <button
+            id="touch-turbo"
+            type="button"
+            data-action="turbo"
+            aria-label="Toggle Turbo"
+          >
+            TURBO
+          </button>
+          <button
+            id="touch-pause"
+            type="button"
+            data-action="pause"
+            aria-label="Pause or resume run"
+          >
+            PAUSE
+          </button>
+        </div>
+      </nav>
 
       <aside id="pause-card" class="pause-card" hidden aria-live="polite">
         <small>RUN SUSPENDED</small>
@@ -57,6 +193,103 @@
         </div>
         <span id="mode-final" class="mode-card__final">NO ACTIVE CLOCK</span>
         <span id="mode-record">CLASSIC / NO RECORD</span>
+      </aside>
+
+      <aside
+        id="settings-panel"
+        class="settings-panel"
+        role="dialog"
+        aria-labelledby="settings-title"
+        aria-describedby="settings-status"
+        aria-modal="true"
+        aria-hidden="true"
+        hidden
+      >
+        <div class="settings-panel__header">
+          <div>
+            <small>RUN COMFORT / DEVICE</small>
+            <h2 id="settings-title">ACCESSIBILITY</h2>
+          </div>
+          <button id="settings-close" type="button">CLOSE</button>
+        </div>
+        <form autocomplete="off">
+          <label class="setting-row" for="setting-reduced-motion">
+            <span
+              ><strong>Reduced Motion</strong
+              ><small>Fewer moving effects</small></span
+            >
+            <input
+              id="setting-reduced-motion"
+              name="reduced-motion"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
+          <label class="setting-row" for="setting-screen-shake">
+            <span
+              ><strong>Screen Shake</strong
+              ><small>Impact camera movement</small></span
+            >
+            <input
+              id="setting-screen-shake"
+              name="screen-shake"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
+          <label class="setting-row" for="setting-flash">
+            <span
+              ><strong>Impact Flash</strong
+              ><small>Brief collision highlight</small></span
+            >
+            <input
+              id="setting-flash"
+              name="impact-flash"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
+          <label class="setting-row" for="setting-yeti-presentation">
+            <span
+              ><strong>Gentle Yeti</strong
+              ><small>Reduce capture intensity</small></span
+            >
+            <input
+              id="setting-yeti-presentation"
+              name="gentle-yeti"
+              type="checkbox"
+              autocomplete="off"
+            />
+          </label>
+          <label class="setting-volume" for="setting-volume">
+            <span
+              ><strong>Volume</strong
+              ><output id="setting-volume-output" for="setting-volume"
+                >80%</output
+              ></span
+            >
+            <input
+              id="setting-volume"
+              name="volume"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.8"
+              autocomplete="off"
+            />
+          </label>
+        </form>
+        <button id="replay-export" class="settings-panel__export" type="button">
+          EXPORT RECENT REPLAY
+        </button>
+        <p
+          id="settings-status"
+          class="settings-panel__status"
+          aria-live="polite"
+        >
+          Settings are saved on this device.
+        </p>
       </aside>
 
       <footer class="instrument-strip" aria-label="Run information">
@@ -115,6 +348,16 @@
           title="Toggle deterministic world diagnostics (G)"
         >
           WORLD GRID
+        </button>
+        <button
+          id="settings-toggle"
+          class="pointer-toggle"
+          type="button"
+          aria-controls="settings-panel"
+          aria-expanded="false"
+          title="Open accessibility and replay controls"
+        >
+          ACCESS
         </button>
       </footer>
     </main>

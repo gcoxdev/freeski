@@ -16,6 +16,7 @@ export function createGame(parent: string, seed: string): Phaser.Game {
     },
     render: {
       antialias: true,
+      desynchronized: true,
       roundPixels: false,
     },
     banner: false,

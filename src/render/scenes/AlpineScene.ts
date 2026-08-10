@@ -1,4 +1,9 @@
 import Phaser from "phaser";
+import {
+  AccessibilitySettingsStore,
+  defaultAccessibilitySettings,
+  type AccessibilitySettings,
+} from "../../accessibility/settings";
 import { AlpineAudio, type AlpineSoundCue } from "../../audio/AlpineAudio";
 import {
   BrowserInputAdapter,
@@ -22,21 +27,31 @@ import {
 } from "../../simulation/slopeInteractions";
 import type { StyleEvent } from "../../simulation/style";
 import {
+  LIVING_SLOPE_TUNING,
   LivingSlopeSimulation,
   type LivingActorEvent,
   type LivingActorSnapshot,
   type LivingSlopeRamp,
+  type LivingSlopeSnapshot,
 } from "../../simulation/livingSlope";
+import {
+  AutomaticPauseController,
+  type AutomaticPauseReason,
+} from "../../lifecycle/automaticPause";
+import { FramePerformanceMonitor } from "../../performance/frameMonitor";
+import { ReplayRecorder, type ReplayExport } from "../../replay/replay";
 import {
   YetiSimulation,
   type YetiControllerSnapshot,
   type YetiEvent,
+  type YetiSnapshot,
 } from "../../simulation/yeti";
 import {
   MountainModeSimulation,
   type EventModeId,
   type MarkerState,
   type ModeEvent,
+  type ModeSnapshot,
 } from "../../simulation/modes";
 import {
   addRecord,
@@ -74,6 +89,7 @@ import {
   PRODUCTION_ATLAS_IMAGE,
   PRODUCTION_ATLAS_KEY,
 } from "../atlas/AtlasSpritePool";
+import { AccessibilityControls } from "../accessibilityControls";
 import { AlpineVfx } from "../vfx/AlpineVfx";
 import type {
   CourseCrossingTarget,
@@ -81,6 +97,7 @@ import type {
   FreeSkiRuntime,
   GateFiveScenario,
   GateThreeScenario,
+  LifecycleTelemetryEvent,
   TelemetrySample,
 } from "../runtimeBridge";
 
@@ -89,6 +106,7 @@ const PIXELS_PER_METER = 7.5;
 const MAX_TELEMETRY_EVENTS = 240;
 const MAX_TELEMETRY_SAMPLES = 600;
 const FEEDBACK_VISIBLE_SECONDS = 1.15;
+const PRESENTATION_SYNC_FIXED_STEPS = 30;
 
 const COLORS = {
   blueSuit: 0x1d5b85,
@@ -115,6 +133,9 @@ export class AlpineScene extends Phaser.Scene {
   private readonly livingSlope: LivingSlopeSimulation;
   private readonly yeti = new YetiSimulation();
   private readonly vfx = new AlpineVfx();
+  private readonly performanceMonitor = new FramePerformanceMonitor();
+  private readonly replay: ReplayRecorder;
+  private readonly automaticPause: AutomaticPauseController;
   private background?: Phaser.GameObjects.Graphics;
   private skier?: Phaser.GameObjects.Image;
   private fallbackSkier?: Phaser.GameObjects.Container;
@@ -128,7 +149,13 @@ export class AlpineScene extends Phaser.Scene {
     Phaser.GameObjects.Text
   >();
   private inputAdapter?: BrowserInputAdapter;
+  private accessibilityControls?: AccessibilityControls;
+  private accessibilityStore?: AccessibilitySettingsStore;
+  private accessibilitySettings = defaultAccessibilitySettings(false);
   private runtime?: FreeSkiRuntime;
+  private renderLivingSnapshot?: LivingSlopeSnapshot;
+  private renderModeSnapshot?: ModeSnapshot;
+  private renderYetiSnapshot?: YetiSnapshot;
   private readonly inputEvents: InputTelemetryEvent[] = [];
   private readonly playerEvents: PlayerEvent[] = [];
   private readonly interactionEvents: InteractionEvent[] = [];
@@ -137,6 +164,7 @@ export class AlpineScene extends Phaser.Scene {
   private readonly modeEvents: ModeEvent[] = [];
   private readonly livingEvents: LivingActorEvent[] = [];
   private readonly yetiEvents: YetiEvent[] = [];
+  private readonly lifecycleEvents: LifecycleTelemetryEvent[] = [];
   private readonly samples: TelemetrySample[] = [];
   private scenario: GateThreeScenario = "none";
   private livingScenario: GateFiveScenario = "none";
@@ -147,6 +175,7 @@ export class AlpineScene extends Phaser.Scene {
   >();
   private feedbackVisibleUntil = 0;
   private feedbackPriorityUntil = 0;
+  private trickVisibleUntil = 0;
   private trainingMode = false;
   private courseTestMode = false;
   private recordBook: RecordBook = emptyRecordBook();
@@ -159,6 +188,14 @@ export class AlpineScene extends Phaser.Scene {
   private previousChunk = "";
   private visibleObjects = 0;
   private worldTransitions = 0;
+  private lastReplaySnapshotStep = 0;
+  private lastHudSyncFixedStep = -PRESENTATION_SYNC_FIXED_STEPS;
+  private lastRuntimeSyncFixedStep = -PRESENTATION_SYNC_FIXED_STEPS / 2;
+  private resizeCount = 0;
+  private flashActiveUntilMs = 0;
+  private flashPresented = false;
+  private flashCount = 0;
+  private shakeCount = 0;
   private readonly unlockAudio = (): void => {
     void this.audio?.unlock().then(() => this.updateAudioControl());
   };
@@ -168,6 +205,21 @@ export class AlpineScene extends Phaser.Scene {
     this.audio?.play("ui-toggle");
     this.updateAudioControl();
   };
+  private readonly handleWindowBlur = (): void => {
+    this.setAutomaticPause("blur", true, "blurred");
+  };
+  private readonly handleWindowFocus = (): void => {
+    this.setAutomaticPause("blur", false, "focused");
+  };
+  private readonly handleVisibilityChange = (): void => {
+    const hidden = document.visibilityState !== "visible";
+    this.setAutomaticPause("hidden", hidden, hidden ? "hidden" : "visible");
+  };
+  private readonly handleWindowResize = (): void => {
+    this.resizeCount += 1;
+    this.clock.reset();
+    this.recordLifecycle("resized");
+  };
 
   constructor(seed: string) {
     super("alpine-baseline");
@@ -175,6 +227,18 @@ export class AlpineScene extends Phaser.Scene {
     this.generator = new WorldGenerator(seed);
     this.stream = new MountainStream(this.generator);
     this.livingSlope = new LivingSlopeSimulation(seed);
+    this.replay = new ReplayRecorder(seed, GENERATOR_VERSION);
+    this.automaticPause = new AutomaticPauseController(
+      () => this.simulation.getSnapshot().paused,
+      (paused) => {
+        if (this.simulation.getSnapshot().paused !== paused)
+          this.simulation.togglePause();
+      },
+      () => {
+        this.inputAdapter?.releaseAll();
+        this.clock.reset();
+      },
+    );
   }
 
   preload(): void {
@@ -205,15 +269,45 @@ export class AlpineScene extends Phaser.Scene {
       (event) => this.recordInput(event),
     );
 
-    const pointerFromUrl =
-      new URLSearchParams(window.location.search).get("pointer") === "1";
-    this.trainingMode =
-      new URLSearchParams(window.location.search).get("training") === "1";
-    this.courseTestMode =
-      new URLSearchParams(window.location.search).get("courseTest") === "1";
-    this.debugVisible =
-      new URLSearchParams(window.location.search).get("debug") === "1";
+    const search = new URLSearchParams(window.location.search);
+    const pointerFromUrl = search.get("pointer") === "1";
+    const touchFromUrl = search.get("touch") === "1";
+    const coarsePointer =
+      window.matchMedia("(pointer: coarse)").matches &&
+      navigator.maxTouchPoints > 0;
+    this.trainingMode = search.get("training") === "1";
+    this.courseTestMode = search.get("courseTest") === "1";
+    this.debugVisible = search.get("debug") === "1";
+    this.game.canvas.tabIndex = 0;
+    this.game.canvas.setAttribute("aria-label", "FreeSki downhill playfield");
     this.setPointerSteering(pointerFromUrl);
+    this.inputAdapter.setTouchEnabled(touchFromUrl || coarsePointer);
+
+    let settingsStorage: Storage | undefined;
+    try {
+      settingsStorage = window.localStorage;
+    } catch {
+      settingsStorage = undefined;
+    }
+    this.accessibilityStore = new AccessibilitySettingsStore(
+      settingsStorage,
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+    this.accessibilityControls = new AccessibilityControls(
+      this.accessibilityStore,
+      {
+        onChange: (settings) => this.applyAccessibilitySettings(settings),
+        onExportReplay: () => this.exportReplayDownload(),
+        onPanelVisibility: (visible) => {
+          this.setAutomaticPause(
+            "settings",
+            visible,
+            visible ? "settings-opened" : "settings-closed",
+          );
+        },
+      },
+    );
+    this.applyAccessibilitySettings(this.accessibilityControls.settings);
     const pointerToggle =
       document.querySelector<HTMLButtonElement>("#pointer-toggle");
     pointerToggle?.addEventListener("click", () =>
@@ -235,6 +329,10 @@ export class AlpineScene extends Phaser.Scene {
     window.addEventListener("pointerdown", this.unlockAudio, { capture: true });
     window.addEventListener("keydown", this.unlockAudio, { capture: true });
     window.addEventListener("keydown", this.handleAudioKey);
+    window.addEventListener("blur", this.handleWindowBlur);
+    window.addEventListener("focus", this.handleWindowFocus);
+    window.addEventListener("resize", this.handleWindowResize);
+    document.addEventListener("visibilitychange", this.handleVisibilityChange);
     this.updateAudioControl();
 
     const player = this.simulation.getSnapshot();
@@ -288,6 +386,13 @@ export class AlpineScene extends Phaser.Scene {
         styleEvents: this.styleEvents,
       },
       lastInput: "none",
+      lifecycle: {
+        autoPaused: false,
+        events: this.lifecycleEvents,
+        reasons: [],
+        resizeCount: 0,
+        visibilityState: document.visibilityState,
+      },
       livingSlope: {
         events: this.livingEvents,
         scenario: this.livingScenario,
@@ -299,13 +404,38 @@ export class AlpineScene extends Phaser.Scene {
         snapshot: this.modes.getSnapshot(),
         storageAvailable: this.storageAvailable,
       },
+      performance: {
+        bounds: {
+          actorCapacity: LIVING_SLOPE_TUNING.maximumActors,
+          actorCount: this.livingSlope.getSnapshot().actorCount,
+          pooledSprites: 0,
+          spriteCapacity: this.spritePool.capacity,
+          vfxEffects: 0,
+          vfxEffectsCapacity: AlpineVfx.MAX_EFFECTS,
+          vfxTracks: 0,
+          vfxTracksCapacity: AlpineVfx.MAX_TRACKS,
+        },
+        frame: this.performanceMonitor.getSnapshot(),
+      },
       player,
+      presentation: {
+        flashActive: false,
+        flashCount: 0,
+        shakeCount: 0,
+        yetiPresentation: this.accessibilitySettings.yetiPresentation,
+      },
       ready: true,
+      replay: this.replay.getSnapshot(),
       seed: this.worldSeed,
       seedHash: hashSeed(this.worldSeed),
       settings: {
+        accessibility: this.accessibilitySettings,
+        connectedGamepads: 0,
         debugVisible: this.debugVisible,
+        heldActions: [],
         pointerSteeringEnabled: pointerFromUrl,
+        settingsPanelOpen: false,
+        touchControlsEnabled: this.inputAdapter.isTouchEnabled,
         trainingMode: this.trainingMode,
       },
       telemetry: {
@@ -346,17 +476,20 @@ export class AlpineScene extends Phaser.Scene {
       stageCourseCrossing: (mode, target, outcome = "correct") =>
         this.stageCourseCrossing(mode, target, outcome),
       stageLivingScenario: (scenario) => this.stageLivingScenario(scenario),
+      exportReplay: () => this.replay.export(),
       setVisible: (visible) => this.setDebugVisible(visible),
     };
 
     const shell = document.querySelector<HTMLElement>("#game-shell");
     const status = document.querySelector<HTMLElement>("#system-label");
+    this.renderState(player);
+    this.updateRuntime(player);
     shell?.setAttribute("data-game-ready", "true");
     if (status) status.textContent = "Alpine systems online";
     this.setDebugVisible(this.debugVisible);
-    this.renderState(player);
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.accessibilityControls?.destroy();
       this.inputAdapter?.destroy();
       this.spritePool?.destroy();
       this.audio?.destroy();
@@ -367,17 +500,26 @@ export class AlpineScene extends Phaser.Scene {
         capture: true,
       });
       window.removeEventListener("keydown", this.handleAudioKey);
+      window.removeEventListener("blur", this.handleWindowBlur);
+      window.removeEventListener("focus", this.handleWindowFocus);
+      window.removeEventListener("resize", this.handleWindowResize);
+      document.removeEventListener(
+        "visibilitychange",
+        this.handleVisibilityChange,
+      );
       delete window.__FREE_SKI_DEBUG__;
     });
   }
 
   update(_time: number, deltaMilliseconds: number): void {
     if (!this.inputAdapter || !this.runtime) return;
+    this.performanceMonitor.record(deltaMilliseconds);
     const result = this.clock.advance(
       Math.min(deltaMilliseconds / 1000, 0.25),
       (deltaSeconds) => {
         const actions = this.inputAdapter?.sample();
         if (!actions) return;
+        this.replay.record(this.fixedSteps + 1, actions);
 
         if (actions.resetPressed) {
           this.simulation.reset();
@@ -391,7 +533,11 @@ export class AlpineScene extends Phaser.Scene {
           this.yellowSnowLocations.clear();
           this.vfx.reset();
         }
-        if (actions.pausePressed) this.simulation.togglePause();
+        if (
+          actions.pausePressed &&
+          this.automaticPause.getSnapshot().reasons.length === 0
+        )
+          this.simulation.togglePause();
         if (actions.turboPressed) this.simulation.toggleTurbo();
         if (actions.debugPressed) this.setDebugVisible(!this.debugVisible);
         const captureBeforeStep = this.yeti.getSnapshot(
@@ -530,10 +676,12 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private renderState(player: PlayerSnapshot): void {
+    this.renderLivingSnapshot = this.livingSlope.getSnapshot();
+    this.renderModeSnapshot = this.modes.getSnapshot();
+    this.renderYetiSnapshot = this.yeti.getSnapshot(player.worldY);
     this.spritePool.beginFrame();
     this.drawSnowfield(player);
-    const foreshadow = this.yeti.getSnapshot(player.worldY).foreshadow
-      .intensity;
+    const foreshadow = this.renderYetiSnapshot.foreshadow.intensity;
     this.vfx.update(player, foreshadow);
     this.vfx.draw(
       player,
@@ -548,8 +696,22 @@ export class AlpineScene extends Phaser.Scene {
       foreshadow,
       player.paused,
     );
-    this.updateHud(player);
-    this.updateRuntime(player);
+    this.syncImpactPresentation();
+    this.updateRuntimeFrame(player);
+    if (
+      this.fixedSteps - this.lastHudSyncFixedStep >=
+      PRESENTATION_SYNC_FIXED_STEPS
+    ) {
+      this.lastHudSyncFixedStep = this.fixedSteps;
+      this.updateHud(player);
+    }
+    if (
+      this.fixedSteps - this.lastRuntimeSyncFixedStep >=
+      PRESENTATION_SYNC_FIXED_STEPS
+    ) {
+      this.lastRuntimeSyncFixedStep = this.fixedSteps;
+      this.updateRuntime(player);
+    }
   }
 
   private drawSnowfield(player: PlayerSnapshot): void {
@@ -644,7 +806,9 @@ export class AlpineScene extends Phaser.Scene {
     height: number,
   ): void {
     if (!this.background) return;
-    const foreshadow = this.yeti.getSnapshot(player.worldY).foreshadow;
+    const foreshadow =
+      this.renderYetiSnapshot?.foreshadow ??
+      this.yeti.getSnapshot(player.worldY).foreshadow;
     if (foreshadow.intensity <= 0) return;
     this.background.fillStyle(0x5f7d89, foreshadow.intensity * 0.09);
     this.background.fillRect(0, 0, width, height);
@@ -688,7 +852,7 @@ export class AlpineScene extends Phaser.Scene {
       this.background.fillStyle(0xd8bd3d, 0.48);
       this.background.fillEllipse(x, y + 4, 17, 6);
     }
-    for (const actor of this.livingSlope.getSnapshot().actors) {
+    for (const actor of this.renderLivingSnapshot?.actors ?? []) {
       if (!actor.active) continue;
       const [x, y] = this.toScreen(actor.worldX, actor.worldY, player);
       if (x < -40 || x > width + 40 || y < -45 || y > height + 45) continue;
@@ -871,7 +1035,7 @@ export class AlpineScene extends Phaser.Scene {
     height: number,
   ): void {
     if (!this.background) return;
-    for (const controller of this.yeti.getSnapshot(player.worldY).controllers) {
+    for (const controller of this.renderYetiSnapshot?.controllers ?? []) {
       if (!controller.active) continue;
       const [x, y] = this.toScreen(
         controller.worldX,
@@ -1093,7 +1257,7 @@ export class AlpineScene extends Phaser.Scene {
         height,
       );
       const modeRun =
-        this.modes.getSnapshot().courses[course.id as EventModeId];
+        this.renderModeSnapshot?.courses[course.id as EventModeId];
       for (const marker of course.markers) {
         const [x, y] = this.toScreen(marker.x, marker.y, player);
         if (x < -20 || x > width + 20 || y < -25 || y > height + 25) continue;
@@ -1244,21 +1408,29 @@ export class AlpineScene extends Phaser.Scene {
     if (atlasFrame) {
       const display = this.interactiveAtlasDisplay(object, delta);
       const shadowWidth = Math.max(18, display.height * display.shadowScale);
+      const needsProjectedShadow =
+        display.height >= 75 &&
+        ["lift-tower", "tree", "walking-tree"].includes(object.type);
+      const shadowReady =
+        !needsProjectedShadow ||
+        Boolean(
+          this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
+            alpha: 0.2,
+            depth: 4,
+            displayHeight: Math.max(5, display.height * 0.12),
+            displayWidth: shadowWidth,
+            originY: 0.5,
+          }),
+        );
       if (
-        this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
-          alpha: 0.2,
-          depth: 4,
-          displayHeight: Math.max(5, display.height * 0.12),
-          displayWidth: shadowWidth,
-          originY: 0.5,
-        })
-      ) {
+        shadowReady &&
         this.spritePool.draw(atlasFrame, x, y + 7, {
           depth: display.depth,
           displayHeight: display.height,
           originY: display.originY,
           tint: delta?.burned ? 0x879397 : undefined,
-        });
+        })
+      ) {
         if (delta?.burning)
           this.spritePool.draw("vfx/flame-embers", x, y - 12, {
             alpha: 0.82,
@@ -1602,27 +1774,38 @@ export class AlpineScene extends Phaser.Scene {
 
   private updateSkier(player: PlayerSnapshot): void {
     if ((!this.skier && !this.fallbackSkier) || !this.skierShadow) return;
-    const playerRemoved = this.yeti.getSnapshot(player.worldY).playerRemoved;
-    this.skier?.setVisible(!playerRemoved);
-    this.fallbackSkier?.setVisible(!playerRemoved);
-    this.skierShadow.setVisible(!playerRemoved);
+    const playerRemoved = this.renderYetiSnapshot?.playerRemoved ?? false;
+    if (this.skier && this.skier.visible === playerRemoved)
+      this.skier.setVisible(!playerRemoved);
+    if (this.fallbackSkier && this.fallbackSkier.visible === playerRemoved)
+      this.fallbackSkier.setVisible(!playerRemoved);
+    if (this.skierShadow.visible === playerRemoved)
+      this.skierShadow.setVisible(!playerRemoved);
     if (playerRemoved) return;
     const anchorX = this.scale.width * 0.5;
     const anchorY = this.scale.height * PLAYER_SCREEN_RATIO;
     const velocityAngle =
       Math.atan2(player.velocityY, player.velocityX) - Math.PI / 2;
     const airOffset = player.airHeight * 19;
-    this.skierShadow.setPosition(anchorX, anchorY + 18);
-    this.skierShadow.setScale(Math.max(0.62, 1 - player.airHeight * 0.06));
-    this.skierShadow.setAlpha(Math.max(0.05, 0.17 - player.airHeight * 0.018));
+    if (this.skierShadow.x !== anchorX || this.skierShadow.y !== anchorY + 18)
+      this.skierShadow.setPosition(anchorX, anchorY + 18);
+    const shadowScale = Math.max(0.62, 1 - player.airHeight * 0.06);
+    if (this.skierShadow.scaleX !== shadowScale)
+      this.skierShadow.setScale(shadowScale);
+    const shadowAlpha = Math.max(0.05, 0.17 - player.airHeight * 0.018);
+    if (this.skierShadow.alpha !== shadowAlpha)
+      this.skierShadow.setAlpha(shadowAlpha);
     const skier = this.skier ?? this.fallbackSkier!;
-    skier.setPosition(anchorX, anchorY - airOffset);
+    if (skier.x !== anchorX || skier.y !== anchorY - airOffset)
+      skier.setPosition(anchorX, anchorY - airOffset);
     if (this.skier) {
       const frameName = this.playerFrame(player);
-      this.skier.setTexture(PRODUCTION_ATLAS_KEY, frameName);
-      this.skier.setOrigin(0.5, player.motion === "airborne" ? 0.62 : 0.94);
+      if (this.skier.frame.name !== frameName)
+        this.skier.setTexture(PRODUCTION_ATLAS_KEY, frameName);
+      const originY = player.motion === "airborne" ? 0.62 : 0.94;
+      if (this.skier.originY !== originY) this.skier.setOrigin(0.5, originY);
     }
-    skier.setRotation(
+    const rotation =
       player.motion === "crashed"
         ? this.skier
           ? 0
@@ -1634,15 +1817,16 @@ export class AlpineScene extends Phaser.Scene {
           : velocityAngle +
             (player.motion === "airborne"
               ? player.airTilt * 0.45 + player.airSpin
-              : 0),
-    );
+              : 0);
+    if (skier.rotation !== rotation) skier.setRotation(rotation);
     if (this.skier) {
       const frame = this.skier.frame;
       const presentation = playerPresentationScale(
         String(frame.name),
         frame.height,
       );
-      this.skier.setScale(presentation.uniformScale);
+      if (this.skier.scaleX !== presentation.uniformScale)
+        this.skier.setScale(presentation.uniformScale);
     } else {
       const skierScale =
         player.motion === "recovering"
@@ -1654,7 +1838,8 @@ export class AlpineScene extends Phaser.Scene {
           (player.motion === "airborne" ? Math.cos(player.airPitch) : 1),
       );
     }
-    skier.setAlpha(player.motion === "recovering" ? 0.62 : 1);
+    const alpha = player.motion === "recovering" ? 0.62 : 1;
+    if (skier.alpha !== alpha) skier.setAlpha(alpha);
   }
 
   private playerFrame(player: Readonly<PlayerSnapshot>): string {
@@ -1709,11 +1894,14 @@ export class AlpineScene extends Phaser.Scene {
     if (turbo) turbo.textContent = player.turbo ? "TURBO ON" : "TURBO OFF";
     const interaction = this.interactions.getSnapshot();
     if (style) style.textContent = interaction.style.toString();
-    if (trick)
-      trick.textContent =
-        interaction.activeTrick === "none"
-          ? "LINE READY"
-          : interaction.activeTrick.replaceAll("-", " ").toUpperCase();
+    if (trick) {
+      if (interaction.activeTrick !== "none")
+        trick.textContent = interaction.activeTrick
+          .replaceAll("-", " ")
+          .toUpperCase();
+      else if (player.simulationSeconds > this.trickVisibleUntil)
+        trick.textContent = "LINE READY";
+    }
     if (feedback && player.simulationSeconds > this.feedbackVisibleUntil)
       feedback.hidden = true;
     if (pauseCard) pauseCard.hidden = !player.paused;
@@ -1721,7 +1909,12 @@ export class AlpineScene extends Phaser.Scene {
       status.textContent = player.paused
         ? "Run suspended"
         : "Alpine systems online";
-    const yetiSnapshot = this.yeti.getSnapshot(player.worldY);
+    const yetiSnapshot =
+      this.renderYetiSnapshot ?? this.yeti.getSnapshot(player.worldY);
+    const flashActive =
+      !this.accessibilitySettings.reducedMotion &&
+      this.accessibilitySettings.flash &&
+      performance.now() < this.flashActiveUntilMs;
     shell?.setAttribute("data-turbo", player.turbo.toString());
     shell?.setAttribute("data-paused", player.paused.toString());
     shell?.setAttribute(
@@ -1733,7 +1926,8 @@ export class AlpineScene extends Phaser.Scene {
       (yetiSnapshot.foreshadow.intensity > 0).toString(),
     );
     shell?.setAttribute("data-capture-phase", yetiSnapshot.capturePhase);
-    const modeSnapshot = this.modes.getSnapshot();
+    shell?.setAttribute("data-flash-active", flashActive.toString());
+    const modeSnapshot = this.renderModeSnapshot ?? this.modes.getSnapshot();
     const lastFinished = [...this.modeEvents]
       .reverse()
       .find((event) => event.type === "mode-finished")?.mode;
@@ -1790,16 +1984,8 @@ export class AlpineScene extends Phaser.Scene {
 
   private updateRuntime(player: PlayerSnapshot): void {
     if (!this.runtime) return;
+    this.updateRuntimeFrame(player);
     const stream = this.stream.getSnapshot();
-    this.runtime.player = player;
-    this.runtime.camera.playerScreenX = this.scale.width * 0.5;
-    this.runtime.camera.playerScreenY = this.scale.height * PLAYER_SCREEN_RATIO;
-    this.runtime.settings.pointerSteeringEnabled =
-      this.inputAdapter?.isPointerEnabled ?? false;
-    this.runtime.telemetry.droppedSeconds = this.droppedSeconds;
-    this.runtime.telemetry.fixedSteps = this.fixedSteps;
-    this.runtime.telemetry.renderFrames = this.renderFrames;
-    this.runtime.telemetry.worldTransitions = this.worldTransitions;
     this.runtime.art.atlasLoaded = this.textures.exists(PRODUCTION_ATLAS_KEY);
     this.runtime.art.capacityFallbacks = this.spritePool.capacityFallbacks;
     this.runtime.art.fallbackDraws = this.spritePool.fallbackDraws;
@@ -1807,25 +1993,14 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.art.missingFrameFallbacks =
       this.spritePool.missingFrameFallbacks;
     this.runtime.art.peakPooledSprites = this.spritePool.peakActiveCount;
-    const playerFrame = this.skier ? String(this.skier.frame.name) : "fallback";
-    const playerPresentation = this.skier
-      ? playerPresentationScale(playerFrame, this.skier.frame.height)
-      : undefined;
-    this.runtime.art.playerFrame = playerFrame;
-    this.runtime.art.playerMinimumRenderedHeight =
-      PLAYER_MIN_RENDERED_CONTENT_HEIGHT;
-    this.runtime.art.playerRenderedHeight = this.skier
-      ? this.skier.frame.height * Math.abs(this.skier.scaleY)
-      : 0;
-    this.runtime.art.playerTargetRenderedHeight =
-      playerPresentation?.targetContentHeight ?? 0;
     this.runtime.art.pooledSprites = this.spritePool.activeCount;
     this.runtime.art.statusLabelDepth = Math.min(
       this.locationLabel?.depth ?? 0,
       this.runLabel?.depth ?? 0,
     );
     this.runtime.audio = this.audio.getSnapshot();
-    this.runtime.vfx = this.vfx.getSnapshot();
+    const vfx = this.vfx.getSnapshot();
+    this.runtime.vfx = vfx;
     this.runtime.world.activeChunks = stream.activeKeys.length;
     this.runtime.world.aheadRows = stream.aheadRows;
     this.runtime.world.cachedChunks = stream.cachedKeys.length;
@@ -1842,12 +2017,39 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.interactions.deltas = this.interactions.deltas.snapshot();
     this.runtime.interactions.scenario = this.scenario;
     this.runtime.interactions.snapshot = this.interactions.getSnapshot();
-    this.runtime.modes.snapshot = this.modes.getSnapshot();
+    this.runtime.modes.snapshot =
+      this.renderModeSnapshot ?? this.modes.getSnapshot();
     this.runtime.modes.records = this.recordBook;
     this.runtime.modes.storageAvailable = this.storageAvailable;
     this.runtime.livingSlope.scenario = this.livingScenario;
-    this.runtime.livingSlope.snapshot = this.livingSlope.getSnapshot();
-    this.runtime.yeti.snapshot = this.yeti.getSnapshot(player.worldY);
+    const livingSlope =
+      this.renderLivingSnapshot ?? this.livingSlope.getSnapshot();
+    this.runtime.livingSlope.snapshot = livingSlope;
+    this.runtime.yeti.snapshot =
+      this.renderYetiSnapshot ?? this.yeti.getSnapshot(player.worldY);
+    const lifecycle = this.automaticPause.getSnapshot();
+    this.runtime.lifecycle.autoPaused = lifecycle.autoPaused;
+    this.runtime.lifecycle.reasons = lifecycle.reasons;
+    this.runtime.lifecycle.resizeCount = this.resizeCount;
+    this.runtime.lifecycle.visibilityState = document.visibilityState;
+    this.runtime.performance.frame = this.performanceMonitor.getSnapshot();
+    this.runtime.performance.bounds.actorCount = livingSlope.actorCount;
+    this.runtime.performance.bounds.pooledSprites = this.spritePool.activeCount;
+    this.runtime.performance.bounds.vfxEffects = vfx.activeEffects;
+    this.runtime.performance.bounds.vfxTracks = vfx.activeTracks;
+    const flashActive =
+      !this.accessibilitySettings.reducedMotion &&
+      this.accessibilitySettings.flash &&
+      performance.now() < this.flashActiveUntilMs;
+    this.runtime.presentation.flashActive = flashActive;
+    this.runtime.presentation.flashCount = this.flashCount;
+    this.runtime.presentation.shakeCount = this.shakeCount;
+    this.runtime.presentation.yetiPresentation =
+      this.accessibilitySettings.yetiPresentation;
+    if (this.fixedSteps - this.lastReplaySnapshotStep >= 60) {
+      this.lastReplaySnapshotStep = this.fixedSteps;
+      this.runtime.replay = this.replay.getSnapshot();
+    }
 
     const chunk = document.querySelector<HTMLElement>("#world-debug-chunk");
     const streamLabel = document.querySelector<HTMLElement>(
@@ -1867,16 +2069,52 @@ export class AlpineScene extends Phaser.Scene {
       ahead.textContent = `AHEAD ${stream.aheadRows.join("/")} · CORRIDOR ${CORRIDOR_WIDTH_METERS.toFixed(1)}M`;
     }
     if (living) {
-      const snapshot = this.livingSlope.getSnapshot();
+      const snapshot =
+        this.renderLivingSnapshot ?? this.livingSlope.getSnapshot();
       living.textContent = `POPULATION ${snapshot.actorCount} · WORK ${snapshot.workUnitsLastStep}`;
     }
     if (boundary) {
-      const snapshot = this.yeti.getSnapshot(player.worldY);
+      const snapshot =
+        this.renderYetiSnapshot ?? this.yeti.getSnapshot(player.worldY);
       boundary.textContent = snapshot.activeBoundaries.length
         ? `BOUNDARY ${snapshot.activeBoundaries.join("/").toUpperCase()} · PHASE ${snapshot.capturePhase.toUpperCase()}`
         : "BOUNDARY CLEAR · PHASE NONE";
     }
     this.updateAudioControl();
+  }
+
+  private updateRuntimeFrame(player: PlayerSnapshot): void {
+    if (!this.runtime) return;
+    this.runtime.player = player;
+    const playerFrame = this.skier ? String(this.skier.frame.name) : "fallback";
+    const playerPresentation = this.skier
+      ? playerPresentationScale(playerFrame, this.skier.frame.height)
+      : undefined;
+    this.runtime.art.playerFrame = playerFrame;
+    this.runtime.art.playerMinimumRenderedHeight =
+      PLAYER_MIN_RENDERED_CONTENT_HEIGHT;
+    this.runtime.art.playerRenderedHeight = this.skier
+      ? this.skier.frame.height * Math.abs(this.skier.scaleY)
+      : 0;
+    this.runtime.art.playerTargetRenderedHeight =
+      playerPresentation?.targetContentHeight ?? 0;
+    if (this.renderYetiSnapshot)
+      this.runtime.yeti.snapshot = this.renderYetiSnapshot;
+    this.runtime.camera.playerScreenX = this.scale.width * 0.5;
+    this.runtime.camera.playerScreenY = this.scale.height * PLAYER_SCREEN_RATIO;
+    this.runtime.settings.pointerSteeringEnabled =
+      this.inputAdapter?.isPointerEnabled ?? false;
+    this.runtime.settings.connectedGamepads =
+      this.inputAdapter?.connectedGamepads ?? 0;
+    this.runtime.settings.heldActions = this.inputAdapter?.heldActions ?? [];
+    this.runtime.settings.settingsPanelOpen =
+      this.accessibilityControls?.isOpen ?? false;
+    this.runtime.settings.touchControlsEnabled =
+      this.inputAdapter?.isTouchEnabled ?? false;
+    this.runtime.telemetry.droppedSeconds = this.droppedSeconds;
+    this.runtime.telemetry.fixedSteps = this.fixedSteps;
+    this.runtime.telemetry.renderFrames = this.renderFrames;
+    this.runtime.telemetry.worldTransitions = this.worldTransitions;
   }
 
   private refreshWorldStream(player: PlayerSnapshot): void {
@@ -1978,7 +2216,11 @@ export class AlpineScene extends Phaser.Scene {
       this.interactions.reset();
       this.clock.reset();
     }
-    const player = this.simulation.getSnapshot();
+    let player = this.simulation.getSnapshot();
+    if (scenario === "mushroom" && !preserveMushroom) {
+      this.simulation.reposition(player.worldX, player.worldY, 0, -6);
+      player = this.simulation.getSnapshot();
+    }
     const createObject = (
       type: InteractiveWorldObject["type"],
       id: string,
@@ -2021,8 +2263,8 @@ export class AlpineScene extends Phaser.Scene {
         createObject(
           "stump",
           "scenario-stump",
-          preserveMushroom ? player.worldX : player.worldX - 9.8,
-          preserveMushroom ? player.worldY - 0.15 : player.worldY - 3.5,
+          preserveMushroom ? player.worldX : player.worldX - 0.4,
+          preserveMushroom ? player.worldY - 0.15 : player.worldY - 1.8,
         ),
       ];
     } else if (scenario === "burning-ignite") {
@@ -2212,6 +2454,130 @@ export class AlpineScene extends Phaser.Scene {
     });
   }
 
+  private applyAccessibilitySettings(settings: AccessibilitySettings): void {
+    this.accessibilitySettings = settings;
+    this.audio?.setVolume(settings.volume);
+    this.vfx.setReducedMotion(settings.reducedMotion);
+    const shell = document.querySelector<HTMLElement>("#game-shell");
+    shell?.setAttribute(
+      "data-reduced-motion",
+      settings.reducedMotion.toString(),
+    );
+    shell?.setAttribute("data-flash-enabled", settings.flash.toString());
+    shell?.setAttribute(
+      "data-screen-shake-enabled",
+      settings.screenShake.toString(),
+    );
+    shell?.setAttribute("data-yeti-presentation", settings.yetiPresentation);
+    if (settings.reducedMotion || !settings.flash) {
+      this.flashActiveUntilMs = 0;
+      this.setFlashPresented(false);
+    }
+    if (this.runtime) {
+      this.runtime.settings.accessibility = settings;
+      this.runtime.presentation.yetiPresentation = settings.yetiPresentation;
+      this.runtime.audio = this.audio.getSnapshot();
+      this.runtime.vfx = this.vfx.getSnapshot();
+    }
+  }
+
+  private setAutomaticPause(
+    reason: AutomaticPauseReason,
+    active: boolean,
+    eventType: LifecycleTelemetryEvent["type"],
+  ): void {
+    const wasPaused = this.simulation.getSnapshot().paused;
+    this.automaticPause.setReason(reason, active);
+    const player = this.simulation.getSnapshot();
+    if (player.paused !== wasPaused) this.capturePlayerEvents();
+    this.recordLifecycle(eventType);
+    this.updateHud(player);
+    this.updateRuntime(player);
+  }
+
+  private recordLifecycle(type: LifecycleTelemetryEvent["type"]): void {
+    this.lifecycleEvents.push(
+      Object.freeze({
+        fixedStep: this.fixedSteps,
+        height: this.scale.height,
+        paused: this.simulation.getSnapshot().paused,
+        type,
+        wallTimeMs: performance.now(),
+        width: this.scale.width,
+      }),
+    );
+    if (this.lifecycleEvents.length > MAX_TELEMETRY_EVENTS)
+      this.lifecycleEvents.shift();
+    if (!this.runtime) return;
+    const snapshot = this.automaticPause.getSnapshot();
+    this.runtime.lifecycle.autoPaused = snapshot.autoPaused;
+    this.runtime.lifecycle.reasons = snapshot.reasons;
+    this.runtime.lifecycle.resizeCount = this.resizeCount;
+    this.runtime.lifecycle.visibilityState = document.visibilityState;
+  }
+
+  private presentImpact(kind: "crash" | "yeti"): void {
+    const settings = this.accessibilitySettings;
+    const gentleYeti =
+      kind === "yeti" && settings.yetiPresentation === "reduced";
+    if (settings.reducedMotion || gentleYeti) return;
+    if (settings.flash) {
+      this.flashActiveUntilMs = performance.now() + 120;
+      this.flashCount += 1;
+      this.setFlashPresented(true);
+    }
+    if (settings.screenShake) {
+      this.cameras.main.shake(
+        kind === "yeti" ? 180 : 125,
+        kind === "yeti" ? 0.008 : 0.006,
+      );
+      this.shakeCount += 1;
+    }
+    if (this.runtime) {
+      this.runtime.presentation.flashActive = this.flashPresented;
+      this.runtime.presentation.flashCount = this.flashCount;
+      this.runtime.presentation.shakeCount = this.shakeCount;
+    }
+  }
+
+  private syncImpactPresentation(): void {
+    if (!this.flashPresented) return;
+    if (performance.now() < this.flashActiveUntilMs) return;
+    this.setFlashPresented(false);
+    if (this.runtime) this.runtime.presentation.flashActive = false;
+  }
+
+  private setFlashPresented(active: boolean): void {
+    if (this.flashPresented === active) return;
+    this.flashPresented = active;
+    document
+      .querySelector<HTMLElement>("#game-shell")
+      ?.setAttribute("data-flash-active", active.toString());
+  }
+
+  private exportReplay(): ReplayExport {
+    return this.replay.export();
+  }
+
+  private exportReplayDownload(): boolean {
+    const replay = this.exportReplay();
+    if (replay.frames.length === 0) return false;
+    try {
+      const blob = new Blob([JSON.stringify(replay, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.download = `freeski-replay-${hashSeed(this.worldSeed).toString(16)}.json`;
+      anchor.href = url;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   private setDebugVisible(visible: boolean): void {
     this.debugVisible = visible;
     const panel = document.querySelector<HTMLElement>("#world-debug");
@@ -2327,6 +2693,7 @@ export class AlpineScene extends Phaser.Scene {
       };
     for (const event of events) {
       this.vfx.emitPlayer(event, player);
+      if (event.type === "crashed") this.presentImpact("crash");
       const cue = cues[event.type];
       if (cue) this.audio.play(cue);
     }
@@ -2404,10 +2771,19 @@ export class AlpineScene extends Phaser.Scene {
         feedback.dataset.cue = latestVisual.cue;
       }
       if (label) label.textContent = latestVisual.label;
+      if (interactionEvents.some((event) => event.type === "trick-completed")) {
+        const trick = document.querySelector<HTMLElement>("#trick-label");
+        if (trick) trick.textContent = latestVisual.label;
+        this.trickVisibleUntil = priorityUntil;
+      }
     }
     if (latestAudio) {
       const audio = document.querySelector<HTMLElement>("#audio-cue");
       if (audio) audio.textContent = `AUDIO CUE ${latestAudio.cue}`;
+    }
+    if (this.runtime && interactionEvents.length > 0) {
+      this.runtime.interactions.deltas = this.interactions.deltas.snapshot();
+      this.runtime.interactions.snapshot = this.interactions.getSnapshot();
     }
   }
 
@@ -2513,6 +2889,13 @@ export class AlpineScene extends Phaser.Scene {
         this.interactions.deltas.patch(event.actorId, { npcState: "active" });
       }
     }
+    if (this.runtime)
+      this.runtime.interactions.deltas = this.interactions.deltas.snapshot();
+    if (this.runtime) {
+      const snapshot = this.livingSlope.getSnapshot();
+      this.runtime.livingSlope.snapshot = snapshot;
+      this.runtime.performance.bounds.actorCount = snapshot.actorCount;
+    }
     const latest = events.at(-1)!;
     const labels: Readonly<Record<LivingActorEvent["type"], string>> = {
       "beginner-fell": "BEGINNER DOWN",
@@ -2545,21 +2928,28 @@ export class AlpineScene extends Phaser.Scene {
       const controller = this.yeti
         .getSnapshot(this.simulation.getSnapshot().worldY)
         .controllers.find((candidate) => candidate.id === event.yetiId);
-      this.vfx.emitYeti(
-        event,
-        controller?.worldX ?? this.simulation.getSnapshot().worldX,
-        controller?.worldY ?? this.simulation.getSnapshot().worldY,
-      );
+      const gentleYeti =
+        this.accessibilitySettings.yetiPresentation === "reduced";
+      if (!gentleYeti)
+        this.vfx.emitYeti(
+          event,
+          controller?.worldX ?? this.simulation.getSnapshot().worldX,
+          controller?.worldY ?? this.simulation.getSnapshot().worldY,
+        );
+      if (event.type === "pounced") this.presentImpact("yeti");
       this.audio.play(
-        event.type === "capture-started" || event.type === "yeti-activated"
-          ? "yeti-warning"
-          : event.type === "pounced"
-            ? "yeti-pounce"
-            : event.type === "grabbed"
-              ? "yeti-grab"
-              : event.type === "eaten" || event.type === "chewing"
-                ? "yeti-eat"
-                : "ui-toggle",
+        gentleYeti &&
+          ["pounced", "grabbed", "eaten", "chewing"].includes(event.type)
+          ? "ui-toggle"
+          : event.type === "capture-started" || event.type === "yeti-activated"
+            ? "yeti-warning"
+            : event.type === "pounced"
+              ? "yeti-pounce"
+              : event.type === "grabbed"
+                ? "yeti-grab"
+                : event.type === "eaten" || event.type === "chewing"
+                  ? "yeti-eat"
+                  : "ui-toggle",
       );
     }
     const latest = events.at(-1)!;

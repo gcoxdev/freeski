@@ -19,6 +19,7 @@ export interface AlpineVfxSnapshot {
   readonly emitted: number;
   readonly maximumEffects: number;
   readonly maximumTracks: number;
+  readonly reducedMotion: boolean;
 }
 
 type ToScreen = (worldX: number, worldY: number) => readonly [number, number];
@@ -34,6 +35,15 @@ export class AlpineVfx {
   private lastPowderAt = -1;
   private lastTrackAt = -1;
   private lastMistAt = -1;
+  private reducedMotion = false;
+
+  setReducedMotion(enabled: boolean): void {
+    this.reducedMotion = enabled;
+    if (enabled) {
+      this.effects.splice(0, Math.max(0, this.effects.length - 8));
+      this.tracks.splice(0, Math.max(0, this.tracks.length - 24));
+    }
+  }
 
   update(player: Readonly<PlayerSnapshot>, foreshadowIntensity: number): void {
     const now = player.simulationSeconds;
@@ -43,11 +53,11 @@ export class AlpineVfx {
       player.motion === "grounded" &&
       player.speedMetersPerSecond > 4
     ) {
-      if (now - this.lastTrackAt >= 0.14) {
+      if (now - this.lastTrackAt >= (this.reducedMotion ? 0.4 : 0.28)) {
         this.lastTrackAt = now;
         this.spawnTrack(player.worldX, player.worldY + 0.45, now);
       }
-      if (now - this.lastPowderAt >= 0.12) {
+      if (now - this.lastPowderAt >= (this.reducedMotion ? 0.42 : 0.12)) {
         this.lastPowderAt = now;
         const carving = player.heading.includes("carve");
         this.spawn(
@@ -66,7 +76,11 @@ export class AlpineVfx {
         );
       }
     }
-    if (foreshadowIntensity > 0.15 && now - this.lastMistAt >= 0.75) {
+    if (
+      !this.reducedMotion &&
+      foreshadowIntensity > 0.15 &&
+      now - this.lastMistAt >= 0.75
+    ) {
       this.lastMistAt = now;
       this.spawn(
         "vfx/breath-mist",
@@ -88,13 +102,14 @@ export class AlpineVfx {
       player.worldY + 0.45,
       event.atSeconds,
     ] as const;
-    if (event.type === "jumped")
+    if (event.type === "jumped" && !this.reducedMotion)
       this.spawn("vfx/powder-medium", ...common, 0.5, 28);
     else if (event.type === "landed-clean")
       this.spawn("vfx/landing-plume", ...common, 0.75, 48);
     else if (event.type === "crashed") {
       this.spawn("vfx/crash-burst", ...common, 0.9, 64);
-      this.spawn("vfx/ice-impact", ...common, 0.55, 36);
+      if (!this.reducedMotion)
+        this.spawn("vfx/ice-impact", ...common, 0.55, 36);
       this.spawnTrack(
         player.worldX,
         player.worldY + 0.4,
@@ -110,9 +125,9 @@ export class AlpineVfx {
     worldX: number,
     worldY: number,
   ): void {
-    if (event.type === "ramp-launch")
+    if (event.type === "ramp-launch" && !this.reducedMotion)
       this.spawn("vfx/ramp-glint", worldX, worldY, event.atSeconds, 0.7, 42);
-    else if (event.type === "trick-completed")
+    else if (event.type === "trick-completed" && !this.reducedMotion)
       this.spawn(
         "vfx/trick-sparkle",
         worldX,
@@ -123,7 +138,7 @@ export class AlpineVfx {
       );
     else if (event.type === "crash" || event.type === "landing-crash")
       this.spawn("vfx/ice-impact", worldX, worldY, event.atSeconds, 0.65, 42);
-    else if (event.type === "burning-tree-cleared")
+    else if (event.type === "burning-tree-cleared" && !this.reducedMotion)
       this.spawn(
         "vfx/flame-embers",
         worldX,
@@ -135,6 +150,7 @@ export class AlpineVfx {
   }
 
   emitYeti(event: Readonly<YetiEvent>, worldX: number, worldY: number): void {
+    if (this.reducedMotion) return;
     if (event.type === "pounced" || event.type === "capture-started")
       this.spawn(
         event.type === "pounced" ? "vfx/crash-burst" : "vfx/speed-streaks",
@@ -165,14 +181,19 @@ export class AlpineVfx {
     for (const effect of this.effects) {
       const [x, y] = toScreen(effect.worldX, effect.worldY);
       const progress = (now - effect.bornAt) / effect.duration;
-      const rise =
-        effect.frame === "vfx/flame-embers" ? progress * 22 : progress * 5;
+      const rise = this.reducedMotion
+        ? 0
+        : effect.frame === "vfx/flame-embers"
+          ? progress * 22
+          : progress * 5;
       pool.draw(effect.frame, x, y - rise, {
         alpha: Math.max(0, 1 - progress),
         depth: 32,
-        displayHeight: effect.size * (0.85 + progress * 0.3),
+        displayHeight: this.reducedMotion
+          ? effect.size
+          : effect.size * (0.85 + progress * 0.3),
         originY: 0.72,
-        rotation: Math.sin(effect.id * 2.17) * 0.08,
+        rotation: this.reducedMotion ? 0 : Math.sin(effect.id * 2.17) * 0.08,
       });
     }
   }
@@ -184,6 +205,7 @@ export class AlpineVfx {
       emitted: this.sequence,
       maximumEffects: AlpineVfx.MAX_EFFECTS,
       maximumTracks: AlpineVfx.MAX_TRACKS,
+      reducedMotion: this.reducedMotion,
     });
   }
 
