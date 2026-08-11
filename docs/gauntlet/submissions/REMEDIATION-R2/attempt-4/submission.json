@@ -1,0 +1,75 @@
+{
+  "gate": "REMEDIATION_R2",
+  "attempt": 4,
+  "candidate_revision": "72b631a0c162992534941bb4b7aa451d75e61d12",
+  "base_revision": "355a6047c9dea02a3ace05e401cbccd45993750c",
+  "diff_path": null,
+  "commands": [
+    {
+      "command": "npm run format:check && npm run typecheck && npm run lint",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm test",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run assets:check && npm run audit:clean-room",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run build",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1 --reporter=list",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run test:e2e -- --workers=1 --reporter=list",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    },
+    {
+      "command": "npm run test:e2e:production -- --grep 'living population, foreshadow, Turbo chase, and capture recover without a soft lock|crosses real gates to finish all modes and reloads classic records|holds the 60 fps target' --workers=1 --reporter=list",
+      "exit_code": 0,
+      "raw_output_path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "report",
+      "path": "docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/evidence/verification-summary.md",
+      "demonstrates": ["R2.1", "R2.11", "R2.17"]
+    }
+  ],
+  "known_limitations": [
+    "The production bundle still emits Vite's disclosed non-blocking 500 kB chunk-size advisory.",
+    "The production performance profile is a Chromium/Canvas2D proxy, not physical integrated-GPU certification.",
+    "The exact 20-minute soak was not rerun because this remediation changed development startup scheduling and Yeti Turbo recoil, not long-run resource ownership; the accepted Gate 7 soak remains authoritative."
+  ],
+  "executor_claimed_criteria": [
+    "R2.1",
+    "R2.2",
+    "R2.3",
+    "R2.4",
+    "R2.5",
+    "R2.6",
+    "R2.7",
+    "R2.8",
+    "R2.9",
+    "R2.10",
+    "R2.11",
+    "R2.12",
+    "R2.13",
+    "R2.14",
+    "R2.15",
+    "R2.16",
+    "R2.17"
+  ]
+}

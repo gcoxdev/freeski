@@ -1,0 +1,188 @@
+{
+  "revision": "72b631a0c162992534941bb4b7aa451d75e61d12",
+  "tree": "d8d05ea0db5c22c77d4b897eff27cedc0f81286c",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "id": "R2.1",
+      "result": "PASS",
+      "evidence": [
+        "Styled startup passed in both complete development suites.",
+        "Forced Vite reoptimization completed in 3.333s, cold readiness in 2.197s, and six reloads in 0.570–1.932s.",
+        "The startup optimization is in application/development configuration; no E2E readiness assertion changed."
+      ]
+    },
+    {
+      "id": "R2.2",
+      "result": "PASS",
+      "evidence": [
+        "The renderer enforces a maximum of 20 populated objects and 10 terrain objects.",
+        "Independent population and production audits observed 15 and 8 visible objects."
+      ]
+    },
+    {
+      "id": "R2.3",
+      "result": "PASS",
+      "evidence": [
+        "Generation and rendering use small, medium, and large evergreen atlas frames at 54px, 70px, and 88px.",
+        "All three sizes were visible in the independent population inspection."
+      ]
+    },
+    {
+      "id": "R2.4",
+      "result": "PASS",
+      "evidence": [
+        "Courses use centers -34/0/34m, start y=96m, and widths 20/24/20m.",
+        "Natural-control course entry passed in both complete suites."
+      ]
+    },
+    {
+      "id": "R2.5",
+      "result": "PASS",
+      "evidence": [
+        "Runtime and independent visual inspection confirmed all three course signs, start/finish halves, arrows, and marker states from the production atlas."
+      ]
+    },
+    {
+      "id": "R2.6",
+      "result": "PASS",
+      "evidence": [
+        "Lift towers render at 128px with cable connectors.",
+        "Empty, occupied, two-rider, skier-drop, and snowboarder-drop chair assets are reachable and were independently exercised."
+      ]
+    },
+    {
+      "id": "R2.7",
+      "result": "PASS",
+      "evidence": [
+        "All three modes showed finish time/high-score results, closed, resumed skiing, and persisted records in both complete suites, focused development, and production.",
+        "Independent modal inspection showed TIME RECORDED AS SCORE and NEW COURSE HIGH SCORE; closing advanced simulation from 0.35s to 0.617s."
+      ]
+    },
+    {
+      "id": "R2.8",
+      "result": "PASS",
+      "evidence": [
+        "Cold, pose, course, result, and population views contained no blue-grey diagonal ray or player-origin line.",
+        "Visible vertical lines were lift cables and did not originate from the player."
+      ]
+    },
+    {
+      "id": "R2.9",
+      "result": "PASS",
+      "evidence": [
+        "Default pointer plus keyboard arbitration passed both complete suites.",
+        "Arrow, WASD, and numpad bindings are present; held digital steering takes priority without disabling pointer input."
+      ]
+    },
+    {
+      "id": "R2.10",
+      "result": "PASS",
+      "evidence": [
+        "Paused player, living-slope, and Yeti state remained exactly equal after 500ms in every living-slope run.",
+        "The scene exits before all interaction, mode, living-actor, and Yeti updates while paused."
+      ]
+    },
+    {
+      "id": "R2.11",
+      "result": "PASS",
+      "evidence": [
+        "Unit coverage verifies eight perimeter approach directions and a Turbo safety gap greater than four meters.",
+        "Capture through chew, reset, and playable recovery passed in 21.9s, 21.7s, 26.4s, and production 21.2s with no crash or timeout."
+      ]
+    },
+    {
+      "id": "R2.12",
+      "result": "PASS",
+      "evidence": [
+        "Independent telemetry observed walking-tree wake and movement events with walking atlas poses.",
+        "Burning trees remain at fixed coordinates while only object-local VFX/audio are emitted."
+      ]
+    },
+    {
+      "id": "R2.13",
+      "result": "PASS",
+      "evidence": [
+        "Dog flip derives from actual velocityX, verified by dedicated positive/negative unit assertions and production population assets."
+      ]
+    },
+    {
+      "id": "R2.14",
+      "result": "PASS",
+      "evidence": [
+        "Independent telemetry and visuals observed moving beginners and black-outfit snowboarders with fall, jump, tumble, landing, and directional poses."
+      ]
+    },
+    {
+      "id": "R2.15",
+      "result": "PASS",
+      "evidence": [
+        "No green target appeared across cold startup, six reloads, poses, course finish, modal close, or population staging.",
+        "Reset clears gameplay/VFX state and does not enable diagnostics."
+      ]
+    },
+    {
+      "id": "R2.16",
+      "result": "PASS",
+      "evidence": [
+        "Independent telemetry and images confirmed correct left/right travel frames, grounded tuck, and uphill-right visuals.",
+        "All inspected poses retained uniform readable atlas scaling."
+      ]
+    },
+    {
+      "id": "R2.17",
+      "result": "PASS",
+      "evidence": [
+        "Slalom remains 540m with 24 markers at 20m spacing; Tree Slalom and Free Style remain 1040m.",
+        "Every real marker crossing, finish modal, record, and reload assertion passed in two sequential complete suites.",
+        "Complete development suites passed 18 tests plus two expected policy skips in 3.8m and 3.6m.",
+        "Production passed Yeti, all-modes, and performance at 59.9 FPS, p95 16.68ms, p99 18.33ms, zero dropped seconds, and no browser errors."
+      ]
+    }
+  ],
+  "checks_run": [
+    {
+      "check": "Candidate identity, ancestry, diff, and initial/final tracked cleanliness",
+      "result": "PASS: exact revision/tree/parent matched; tracked and staged diffs remained empty."
+    },
+    {
+      "check": "Authoritative documentation, source sheets, production atlas, source, and tests",
+      "result": "PASS: independently read and inspected."
+    },
+    {
+      "check": "npm ci --ignore-scripts; format; typecheck; lint; unit; assets; clean-room; build",
+      "result": "PASS: 22 unit files/116 tests, 112 atlas frames, 80 clean-room files/no findings."
+    },
+    {
+      "check": "Complete development E2E run 1",
+      "result": "PASS: 18 passed, 2 expected policy skips, 0 failed in 3.8m."
+    },
+    {
+      "check": "Complete development E2E run 2",
+      "result": "PASS: 18 passed, 2 expected policy skips, 0 failed in 3.6m."
+    },
+    {
+      "check": "Focused development Yeti and all-modes",
+      "result": "PASS: 2/2 in 49.3s."
+    },
+    {
+      "check": "Forced cold optimization and six reloads",
+      "result": "PASS: cold readiness 2.197s; reloads 0.570–1.932s."
+    },
+    {
+      "check": "Independent visual and interactive audit",
+      "result": "PASS: poses, props, sparse population, lift assets, modal/resume, and artifact absence verified."
+    },
+    {
+      "check": "Focused production Yeti, all-modes, and performance",
+      "result": "PASS: 3/3 in 1.0m; 59.9 FPS, p95 16.68ms, zero dropped seconds."
+    },
+    {
+      "check": "Assertion/timeout/skip weakening audit",
+      "result": "PASS: no E2E/config/package changes; the only test change strengthens Turbo separation."
+    }
+  ],
+  "failures": [],
+  "blockers": [],
+  "confidence": 0.99
+}

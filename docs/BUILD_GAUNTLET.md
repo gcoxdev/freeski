@@ -190,3 +190,41 @@ No gate is accepted by this baseline entry. Only a fresh judge verdict recorded 
 - Soak verified: fresh measurement ran `1,200,019 ms` with 40 samples, all three modes, 2,100.253 m/33 rows, bottom Yeti/reset, resize/visibility/focus recovery, bounded heap/pools/cache/replay/audio, responsive post-soak input, and zero errors, missing chunks, blockers, or fallbacks.
 - Non-blocking notes: the performance profile remains a disclosed Chromium/Canvas2D proxy rather than physical integrated-GPU certification; Chromium is the independently certified browser; Phaser's production chunk-size advisory remains; replay export has no playback UI; and the clean-room audit is engineering evidence, not a legal opinion.
 - Verdict artifact: `docs/gauntlet/submissions/GATE-7/attempt-2/judge-verdict.json`
+
+## Post-release playtest remediation R2
+
+### Attempt 1
+
+- Candidate revision: `0b4ff7bda8fde18c73dcb63a293df42d0650ad10`
+- Independent verdict: **FAIL**
+- Passed: R2.1–R2.15.
+- Required remediation: correct grounded skier left/right visual direction; restore authoritative 540/1040m course geometry and 20m Slalom spacing; remove full-suite staging races.
+
+### Attempt 2
+
+- Candidate revision: `af9f3f4f3b71c8ab52edd2ab77e7133270f60be0`
+- Independent verdict: **FAIL**
+- Repair verified: corrected lateral skier direction and restored authoritative course geometry.
+- Required remediation: map grounded tuck/uphill-right to visually correct source-sheet cells and make the unchanged complete development suite pass repeatably within its existing timeouts.
+
+### Attempt 3
+
+- Candidate revision: `355a6047c9dea02a3ace05e401cbccd45993750c`
+- Independent verdict: **FAIL**
+- Repair verified: all player pose mappings and course geometry/crossing semantics passed direct inspection.
+- Required remediation: eliminate repeatable development reload-readiness failures and Chromium crashes/timeouts during Yeti capture, chew, reset, and recovery.
+
+### Attempt 4
+
+- Candidate revision: `72b631a0c162992534941bb4b7aa451d75e61d12`
+- Tree: `d8d05ea0db5c22c77d4b897eff27cedc0f81286c`
+- Judge isolation: new context with no inherited turns, detached immutable worktree, direct source/sprite/rendered inspection
+- Independent verdict: **PASS**
+- Confidence: `0.99`
+- Criteria: R2.1–R2.17 all PASS; no failures or blockers
+- Independent checks: exact identity/scope and assertion-policy audit; pristine install; formatting, typecheck, lint, 116 unit tests, 112-frame atlas, clean-room audit, build; two complete unchanged development suites (18 passed/2 policy skips each); focused Yeti/all-modes; forced cold startup and six reloads; direct pose/course/population/lift/modal inspection; production Yeti/all-modes/performance.
+- Startup verified: forced reoptimization 3.333s, cold readiness 2.197s, six reloads 0.570–1.932s with no errors.
+- Gameplay verified: Yeti capture through chew/reset/playable recovery passed four independent browser runs; every real course marker, finish modal, record, and reload assertion passed repeatedly.
+- Performance verified: 59.9 FPS, p95 16.68ms, p99 18.33ms, zero dropped seconds, sparse/bounded objects, and no browser errors.
+- Submission: `docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/submission.json`
+- Verdict: `docs/gauntlet/submissions/REMEDIATION-R2/attempt-4/judge-verdict.json`
