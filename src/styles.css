@@ -153,6 +153,93 @@ body {
   background: var(--glacier);
 }
 
+.loading-screen {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 9px;
+  padding: 24px;
+  color: #f7f9f5;
+  text-align: center;
+  background:
+    linear-gradient(180deg, rgb(16 41 51 / 8%), rgb(16 41 51 / 72%)),
+    repeating-linear-gradient(
+      118deg,
+      transparent 0 44px,
+      rgb(255 255 255 / 4%) 45px 46px
+    ),
+    #173d49;
+  transition:
+    opacity 180ms ease,
+    visibility 180ms linear;
+}
+
+.loading-screen[hidden],
+[data-game-ready="true"] .loading-screen {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-screen__mark {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 8px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 34%);
+  color: #fff;
+  background: #e84d2a;
+  box-shadow:
+    9px 9px 0 #0f2b35,
+    10px 10px 0 rgb(255 255 255 / 22%);
+  font-family: Copperplate, "Copperplate Gothic Light", serif;
+  font-size: 26px;
+  font-style: italic;
+  letter-spacing: -0.08em;
+  transform: skew(-7deg);
+}
+
+.loading-screen small,
+.loading-screen span {
+  font:
+    700 9px/1.35 "Courier New",
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.loading-screen small {
+  color: #83d8cb;
+}
+
+.loading-screen strong {
+  font-family: Copperplate, "Copperplate Gothic Light", serif;
+  font-size: clamp(17px, 2.4vw, 28px);
+  letter-spacing: 0.12em;
+}
+
+.loading-screen__track {
+  width: min(280px, 68vw);
+  height: 4px;
+  margin-top: 9px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 32%);
+  background: rgb(0 0 0 / 18%);
+}
+
+.loading-screen__track i {
+  display: block;
+  width: 8%;
+  height: 100%;
+  background: #f5c844;
+  box-shadow: 0 0 12px rgb(245 200 68 / 70%);
+  transition: width 120ms ease-out;
+}
+
 #game-canvas:focus-visible {
   outline: 3px solid #f5c844;
   outline-offset: -4px;
@@ -615,6 +702,94 @@ body {
     800 12px/1.1 "Courier New",
     monospace;
   letter-spacing: 0.1em;
+}
+
+.result-card {
+  position: absolute;
+  z-index: 7;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: min(390px, calc(100% - 32px));
+  translate: -50% -50%;
+  justify-items: center;
+  gap: 8px;
+  padding: 23px 26px 25px;
+  border: 1px solid rgb(255 255 255 / 42%);
+  border-top: 4px solid #f5c844;
+  color: #f7f9f5;
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 5%), transparent 45%),
+    rgb(16 41 51 / 96%);
+  box-shadow: 0 24px 90px rgb(16 41 51 / 48%);
+  backdrop-filter: blur(12px);
+}
+
+.result-card[hidden] {
+  display: none;
+}
+
+.result-card small,
+.result-card span,
+.result-card p,
+.result-card button {
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+}
+
+.result-card small {
+  color: #83d8cb;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.result-card h2 {
+  margin: 0;
+  font-family: Copperplate, "Copperplate Gothic Light", serif;
+  font-size: 18px;
+  letter-spacing: 0.12em;
+}
+
+.result-card > strong {
+  color: #f5c844;
+  font:
+    800 clamp(38px, 8vw, 62px)/1 "Courier New",
+    monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.07em;
+}
+
+.result-card p,
+.result-card span {
+  margin: 0;
+  color: #b8cdcf;
+  font-size: 10px;
+  line-height: 1.45;
+  letter-spacing: 0.05em;
+}
+
+.result-card button {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0 20px;
+  border: 1px solid #ff9a7c;
+  border-radius: 2px;
+  color: #fff;
+  background: #e84d2a;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.result-card button:hover,
+.result-card button:focus-visible {
+  color: #102933;
+  outline: 3px solid #f5c844;
+  outline-offset: 3px;
+  background: #f5c844;
 }
 
 .mode-card {

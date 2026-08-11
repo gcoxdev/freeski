@@ -63,6 +63,24 @@ async function finishMode(page: Page, mode: EventModeId): Promise<void> {
       "finished",
     mode,
   );
+  await expect(page.locator("#result-card")).toBeVisible();
+  await expect(page.locator("#result-time")).toContainText("S");
+  await expect(page.locator("#result-record")).toContainText(
+    /HIGH SCORE|COURSE BEST/,
+  );
+  await screenshot(page, `${mode}-result.png`);
+  const pausedAt = await page.evaluate(
+    () => window.__FREE_SKI__!.player.simulationSeconds,
+  );
+  await page.waitForTimeout(180);
+  expect(
+    await page.evaluate(() => window.__FREE_SKI__!.player.simulationSeconds),
+  ).toBe(pausedAt);
+  await page.locator("#result-close").click();
+  await expect(page.locator("#result-card")).toBeHidden();
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.paused === false,
+  );
 }
 
 async function screenshot(page: Page, name: string): Promise<void> {
@@ -97,7 +115,7 @@ test("starts every course and scores Slalom through normal player controls", asy
   await page.keyboard.up("s");
   await page.keyboard.down("a");
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -32,
+    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -39,
   );
   await page.keyboard.up("a");
   await page.keyboard.down("s");
@@ -214,7 +232,10 @@ test("crosses real gates to finish all modes and reloads classic records", async
     () => window.__FREE_SKI__!.modes.snapshot.courses["free-style"],
   );
   expect(freeStyle.result?.score).toBeGreaterThanOrEqual(215);
-  await expect(page.locator("#mode-final")).toContainText("FINAL STYLE");
+  expect(freeStyle.result?.adjustedTimeSeconds).toBe(
+    freeStyle.result?.rawTimeSeconds,
+  );
+  await expect(page.locator("#mode-final")).toContainText(/FINAL .*S/);
   await screenshot(page, "free-style-finish.png");
 
   const beforeReload = await page.evaluate(() => window.__FREE_SKI__!.modes);

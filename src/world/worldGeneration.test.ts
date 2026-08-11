@@ -49,29 +49,38 @@ describe("classic mountain declarative overlays", () => {
     const freeStyle = CLASSIC_COURSES[1]!;
     const treeSlalom = CLASSIC_COURSES[2]!;
     expect(slalom).toMatchObject({
-      centerX: -28,
-      lengthMeters: 540,
-      startGate: { leftX: -36, rightX: -20, y: 40 },
-      finishGate: { leftX: -36, rightX: -20, y: 540 },
+      centerX: -34,
+      halfWidth: 10,
+      lengthMeters: 500,
+      startGate: { leftX: -44, rightX: -24, y: 96 },
+      finishGate: { leftX: -44, rightX: -24, y: 596 },
     });
     expect(slalom.markers).toHaveLength(24);
-    expect(slalom.markers[0]).toMatchObject({ x: -31, y: 60 });
-    expect(slalom.markers.at(-1)).toMatchObject({ x: -25, y: 520 });
+    expect(slalom.markers[0]).toMatchObject({ x: -38, y: 120 });
+    expect(slalom.markers.at(-1)).toMatchObject({ x: -30, y: 557 });
 
     expect(freeStyle).toMatchObject({
-      lengthMeters: 1_040,
-      startGate: { leftX: -10, rightX: 10, y: 40 },
-      finishGate: { leftX: -10, rightX: 10, y: 1_040 },
+      halfWidth: 12,
+      lengthMeters: 1_000,
+      startGate: { leftX: -12, rightX: 12, y: 96 },
+      finishGate: { leftX: -12, rightX: 12, y: 1_096 },
     });
     expect(treeSlalom).toMatchObject({
-      centerX: 26,
-      lengthMeters: 1_040,
-      startGate: { leftX: 20, rightX: 32, y: 40 },
-      finishGate: { leftX: 20, rightX: 32, y: 1_040 },
+      centerX: 34,
+      halfWidth: 10,
+      lengthMeters: 1_000,
+      startGate: { leftX: 24, rightX: 44, y: 96 },
+      finishGate: { leftX: 24, rightX: 44, y: 1_096 },
     });
     expect(treeSlalom.markers).toHaveLength(39);
-    expect(treeSlalom.markers[0]).toMatchObject({ x: 25, y: 65 });
-    expect(treeSlalom.markers.at(-1)).toMatchObject({ x: 25, y: 1_015 });
+    expect(treeSlalom.markers[0]).toMatchObject({ x: 32, y: 121 });
+    expect(treeSlalom.markers.at(-1)).toMatchObject({ x: 32, y: 1_071 });
+
+    expect(slalom.startGate.rightX).toBeLessThan(freeStyle.startGate.leftX);
+    expect(freeStyle.startGate.rightX).toBeLessThan(treeSlalom.startGate.leftX);
+    expect(
+      Math.min(...CLASSIC_COURSES.map((course) => course.startGate.y)),
+    ).toBeGreaterThanOrEqual(90);
 
     expect(CLASSIC_LIFT.towers).toHaveLength(13);
     expect(CLASSIC_LIFT.towers[0]).toEqual({ x: -8, y: -64 });
@@ -94,10 +103,10 @@ describe("classic mountain declarative overlays", () => {
     ]);
     expect(SPAWN_PROFILES.slalom).toEqual([{ type: "mogul", weight: 1 }]);
     expect(ZONE_SPAWN_CHANCE).toEqual({
-      "free-style": 0.25,
-      "tree-slalom": 0.32,
-      open: 0.14,
-      slalom: 0.04,
+      "free-style": 0.12,
+      "tree-slalom": 0.08,
+      open: 0.07,
+      slalom: 0.02,
     });
     expect(
       Object.values(SPAWN_PROFILES)
@@ -212,8 +221,8 @@ describe("deterministic chunk generation", () => {
       (object) => object.zone === "tree-slalom",
     );
     const trees = objects.filter((object) => object.type === "tree");
-    expect(trees.length).toBeGreaterThanOrEqual(14);
-    expect(trees.length).toBeLessThanOrEqual(30);
+    expect(trees.length).toBeGreaterThanOrEqual(5);
+    expect(trees.length).toBeLessThanOrEqual(18);
     expect(
       objects.filter(
         (object) =>
@@ -229,6 +238,25 @@ describe("deterministic chunk generation", () => {
       const center = treeSlalomRouteCenterX(marker.y);
       expect(center).toBe(correctMarkerPassingX(marker));
     }
+  });
+
+  it("deterministically populates all three evergreen sizes", () => {
+    const trees = collectObjects(
+      new WorldGenerator("tree-size-proof"),
+      -4,
+      4,
+      -2,
+      24,
+    ).filter((object) => object.type === "tree");
+    const variants = new Set(trees.map((tree) => tree.variant));
+    expect(variants).toEqual(
+      new Set([
+        "dead-tree",
+        "evergreen-large",
+        "evergreen-medium",
+        "evergreen-small",
+      ]),
+    );
   });
 
   it("freezes generated truth while keeping runtime deltas separate", () => {

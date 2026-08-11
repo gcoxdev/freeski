@@ -11,6 +11,13 @@
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23102933'/%3E%3Cpath d='M12 16h40L31 52z' fill='%23e84d2a'/%3E%3C/svg%3E"
     />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link
+      rel="preload"
+      href="/assets/production/freeski-atlas.png"
+      as="image"
+      fetchpriority="high"
+    />
     <title>FreeSki — Alpine Systems Online</title>
   </head>
   <body>
@@ -33,7 +40,17 @@
         id="game-canvas"
         tabindex="-1"
         aria-label="Playable mountain canvas"
-      ></section>
+      >
+        <div id="loading-screen" class="loading-screen" aria-live="polite">
+          <div class="loading-screen__mark" aria-hidden="true">FS</div>
+          <small>ALPINE DISPATCH / 1991–2026</small>
+          <strong>PREPARING THE MOUNTAIN</strong>
+          <span id="loading-status">Loading skier and course equipment…</span>
+          <span class="loading-screen__track" aria-hidden="true"
+            ><i id="loading-progress"></i
+          ></span>
+        </div>
+      </section>
 
       <nav
         id="touch-controls"
@@ -181,6 +198,24 @@
       <aside id="feedback-card" class="feedback-card" hidden aria-live="polite">
         <small id="audio-cue">FEEDBACK READY</small>
         <strong id="feedback-label">LINE READY</strong>
+      </aside>
+
+      <aside
+        id="result-card"
+        class="result-card"
+        role="dialog"
+        aria-labelledby="result-title"
+        aria-describedby="result-summary"
+        aria-modal="true"
+        aria-hidden="true"
+        hidden
+      >
+        <small id="result-eyebrow">COURSE COMPLETE</small>
+        <h2 id="result-title">FINISH TIME</h2>
+        <strong id="result-time">0.0 S</strong>
+        <p id="result-summary">Your time has been recorded.</p>
+        <span id="result-record">COURSE BEST —</span>
+        <button id="result-close" type="button">CONTINUE SKIING</button>
       </aside>
 
       <aside id="mode-card" class="mode-card" aria-live="polite">

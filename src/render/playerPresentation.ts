@@ -1,59 +1,55 @@
 import type { PlayerHeading, PlayerSnapshot } from "../simulation/player";
 
-export const PLAYER_MIN_RENDERED_CONTENT_HEIGHT = 42;
-
-const GROUNDED_CONTENT_HEIGHT = 44;
-const AIRBORNE_CONTENT_HEIGHT = 43;
-const IMPACT_CONTENT_HEIGHT = 42;
+export const PLAYER_TARGET_RENDERED_EXTENT = 48;
+export const PLAYER_MIN_RENDERED_CONTENT_HEIGHT = 24;
 
 /**
  * Exhaustive presentation contract for production player atlas frames.
  *
- * Values describe visible, trimmed sprite content rather than the differently
- * sized transparent source canvases stored in the atlas. The narrow range
- * keeps state changes visually steady while retaining a little pose emphasis.
+ * Every pose receives the same maximum visible extent. This keeps horizontal
+ * carves and crashes from appearing much larger than the downhill silhouette.
  */
-export const PLAYER_FRAME_CONTENT_HEIGHTS = Object.freeze({
-  "player/air-neutral": AIRBORNE_CONTENT_HEIGHT,
-  "player/back-flip-1": AIRBORNE_CONTENT_HEIGHT,
-  "player/back-flip-2": AIRBORNE_CONTENT_HEIGHT,
-  "player/back-flip-3": AIRBORNE_CONTENT_HEIGHT,
-  "player/carve-left-1": GROUNDED_CONTENT_HEIGHT,
-  "player/carve-left-2": GROUNDED_CONTENT_HEIGHT,
-  "player/carve-left-3": GROUNDED_CONTENT_HEIGHT,
-  "player/carve-right-1": GROUNDED_CONTENT_HEIGHT,
-  "player/carve-right-2": GROUNDED_CONTENT_HEIGHT,
-  "player/carve-right-3": GROUNDED_CONTENT_HEIGHT,
-  "player/downhill": GROUNDED_CONTENT_HEIGHT,
-  "player/front-flip-1": AIRBORNE_CONTENT_HEIGHT,
-  "player/front-flip-2": AIRBORNE_CONTENT_HEIGHT,
-  "player/front-flip-3": AIRBORNE_CONTENT_HEIGHT,
-  "player/hockey-stop-left": GROUNDED_CONTENT_HEIGHT,
-  "player/hockey-stop-right": GROUNDED_CONTENT_HEIGHT,
-  "player/jump-takeoff": AIRBORNE_CONTENT_HEIGHT,
-  "player/landing-crouch": IMPACT_CONTENT_HEIGHT,
-  "player/spin-left": AIRBORNE_CONTENT_HEIGHT,
-  "player/spin-right": AIRBORNE_CONTENT_HEIGHT,
-  "player/tuck": AIRBORNE_CONTENT_HEIGHT,
-  "player/uphill-left": GROUNDED_CONTENT_HEIGHT,
-  "player/uphill-right": GROUNDED_CONTENT_HEIGHT,
-  "player/wipeout": IMPACT_CONTENT_HEIGHT,
+export const PLAYER_FRAME_TARGET_EXTENTS = Object.freeze({
+  "player/air-neutral": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/back-flip-1": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/back-flip-2": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/back-flip-3": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-left-1": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-left-2": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-left-3": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-right-1": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-right-2": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/carve-right-3": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/downhill": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/front-flip-1": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/front-flip-2": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/front-flip-3": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/hockey-stop-left": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/hockey-stop-right": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/jump-takeoff": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/landing-crouch": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/spin-left": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/spin-right": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/tuck": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/uphill-left": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/uphill-right": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/wipeout": PLAYER_TARGET_RENDERED_EXTENT,
 } as const);
 
-export type ProductionPlayerFrame = keyof typeof PLAYER_FRAME_CONTENT_HEIGHTS;
+export type ProductionPlayerFrame = keyof typeof PLAYER_FRAME_TARGET_EXTENTS;
 
 const GROUNDED_FRAME_FOR_HEADING: Readonly<
   Record<Exclude<PlayerHeading, "brake">, ProductionPlayerFrame>
 > = Object.freeze({
-  "carve-left-1": "player/carve-left-2",
-  "carve-left-2": "player/carve-left-3",
-  "carve-left-3": "player/carve-right-3",
-  "carve-right-1": "player/carve-left-1",
-  "carve-right-2": "player/carve-right-1",
-  "carve-right-3": "player/carve-right-2",
+  "carve-left-1": "player/carve-left-1",
+  "carve-left-2": "player/carve-right-2",
+  "carve-left-3": "player/hockey-stop-left",
+  "carve-right-1": "player/carve-left-2",
+  "carve-right-2": "player/carve-left-3",
+  "carve-right-3": "player/carve-right-1",
   downhill: "player/downhill",
-  "traverse-left": "player/carve-right-3",
-  "traverse-right": "player/hockey-stop-left",
+  "traverse-left": "player/carve-right-2",
+  "traverse-right": "player/carve-right-3",
   tuck: "player/uphill-right",
   "uphill-left": "player/uphill-left",
   "uphill-right": "player/hockey-stop-right",
@@ -61,8 +57,21 @@ const GROUNDED_FRAME_FOR_HEADING: Readonly<
 
 type PlayerPose = Pick<
   PlayerSnapshot,
-  "airPitch" | "heading" | "motion" | "velocityX"
+  "airHeight" | "airPitch" | "airSpin" | "heading" | "motion" | "velocityX"
 >;
+
+function wrappedMagnitude(value: number): number {
+  return Math.abs(Math.atan2(Math.sin(value), Math.cos(value)));
+}
+
+function rotationFrame(
+  prefix: "back-flip" | "front-flip",
+  rotation: number,
+): ProductionPlayerFrame {
+  const phase = (Math.abs(rotation) % (Math.PI * 2)) / (Math.PI * 2);
+  const index = (Math.floor(phase * 3) % 3) + 1;
+  return `player/${prefix}-${index}` as ProductionPlayerFrame;
+}
 
 /**
  * Maps simulation state to poses that were visually audited in the generated
@@ -75,24 +84,28 @@ export function playerAtlasFrame(
   if (player.motion === "crashed") return "player/wipeout";
   if (player.motion === "recovering") return "player/landing-crouch";
   if (player.motion === "airborne") {
-    const pitch = Math.abs(player.airPitch) % (Math.PI * 2);
-    if (pitch < Math.PI / 4 || pitch >= (Math.PI * 7) / 4) return "player/tuck";
-    const forward = player.airPitch > 0;
-    if (pitch < (Math.PI * 3) / 4)
-      return forward ? "player/front-flip-2" : "player/back-flip-1";
-    if (pitch < (Math.PI * 5) / 4)
-      return forward ? "player/front-flip-1" : "player/air-neutral";
-    return forward ? "player/back-flip-1" : "player/back-flip-3";
+    const pitch = wrappedMagnitude(player.airPitch);
+    const spin = wrappedMagnitude(player.airSpin);
+    if (pitch < 0.24 && spin < 0.24)
+      return player.airHeight < 0.45 ? "player/jump-takeoff" : "player/tuck";
+    if (spin >= pitch)
+      return player.airSpin < 0 ? "player/spin-left" : "player/spin-right";
+    if (Math.abs(pitch - Math.PI) < 0.32) return "player/air-neutral";
+    return rotationFrame(
+      player.airPitch < 0 ? "back-flip" : "front-flip",
+      player.airPitch,
+    );
   }
   if (player.heading === "brake")
     return player.velocityX < 0
-      ? "player/carve-right-3"
-      : "player/hockey-stop-left";
+      ? "player/hockey-stop-left"
+      : "player/carve-right-3";
   return GROUNDED_FRAME_FOR_HEADING[player.heading];
 }
 
 export interface PlayerPresentationScale {
   readonly knownFrame: boolean;
+  readonly targetContentExtent: number;
   readonly targetContentHeight: number;
   readonly uniformScale: number;
 }
@@ -103,19 +116,25 @@ export interface PlayerPresentationScale {
  */
 export function playerPresentationScale(
   frameName: string,
+  trimmedContentWidth: number,
   trimmedContentHeight: number,
 ): PlayerPresentationScale {
-  const knownFrame = Object.hasOwn(PLAYER_FRAME_CONTENT_HEIGHTS, frameName);
-  const targetContentHeight = knownFrame
-    ? PLAYER_FRAME_CONTENT_HEIGHTS[frameName as ProductionPlayerFrame]
-    : IMPACT_CONTENT_HEIGHT;
+  const knownFrame = Object.hasOwn(PLAYER_FRAME_TARGET_EXTENTS, frameName);
+  const targetContentExtent = PLAYER_TARGET_RENDERED_EXTENT;
+  const safeTrimmedWidth =
+    Number.isFinite(trimmedContentWidth) && trimmedContentWidth > 0
+      ? trimmedContentWidth
+      : 1;
   const safeTrimmedHeight =
     Number.isFinite(trimmedContentHeight) && trimmedContentHeight > 0
       ? trimmedContentHeight
       : 1;
+  const uniformScale =
+    targetContentExtent / Math.max(safeTrimmedWidth, safeTrimmedHeight);
   return {
     knownFrame,
-    targetContentHeight,
-    uniformScale: targetContentHeight / safeTrimmedHeight,
+    targetContentExtent,
+    targetContentHeight: safeTrimmedHeight * uniformScale,
+    uniformScale,
   };
 }

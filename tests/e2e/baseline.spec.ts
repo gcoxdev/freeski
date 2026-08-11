@@ -17,6 +17,29 @@ async function holdKey(page: Page, key: string, milliseconds: number) {
   await page.keyboard.up(key);
 }
 
+test("shows a fully styled loading state before the game bundle is ready", async ({
+  page,
+}) => {
+  await page.route("**/src/main.ts*", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 2_500));
+    await route.continue();
+  });
+  await page.goto("/", { waitUntil: "commit" });
+  const loading = page.locator("#loading-screen");
+  await expect(loading).toBeVisible();
+  await expect(loading).toHaveCSS("position", "absolute");
+  await expect(loading).toHaveCSS("color", "rgb(247, 249, 245)");
+  await expect(page.locator("#loading-status")).toHaveText(
+    /Starting|Loading|Opening/,
+  );
+  await expect(page.locator("#game-shell")).toHaveAttribute(
+    "data-game-ready",
+    "true",
+    { timeout: 20_000 },
+  );
+  await expect(loading).toBeHidden();
+});
+
 test("loads an interactive Phaser baseline without console errors", async ({
   page,
 }) => {
@@ -99,7 +122,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     () => window.__FREE_SKI__?.player.heading === "carve-left-3",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-3",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/hockey-stop-left",
   );
   const afterLeft = await runtimeSnapshot(page);
   expect(afterLeft.player.heading).toBe("carve-left-3");
@@ -119,7 +142,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     () => window.__FREE_SKI__?.player.heading === "carve-right-3",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-2",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-1",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.velocityX ?? -1) > 0,
@@ -318,6 +341,16 @@ test("keeps default pointer steering, opt-out, and click-to-jump functional", as
   const box = await canvas.boundingBox();
   if (!box) throw new Error("Game canvas has no bounds");
   await page.mouse.move(box.x + box.width * 0.83, box.y + box.height * 0.35);
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.heading === "carve-right-3",
+  );
+  await page.keyboard.down("a");
+  await page.waitForFunction(
+    () =>
+      window.__FREE_SKI__?.player.heading === "carve-left-3" &&
+      (window.__FREE_SKI__?.player.velocityX ?? 1) < 0,
+  );
+  await page.keyboard.up("a");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.heading === "carve-right-3",
   );

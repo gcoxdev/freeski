@@ -26,7 +26,7 @@ The game starts in open skiing. Cross a start gate on the mountain to enter Slal
 
 This release packet certifies the production build through automated Chromium testing. Current Firefox and WebKit are intended targets, but they were not independently certified in this environment. The qualified desktop layout is 768×600 or larger; smaller handset layouts are not part of this release claim.
 
-Keyboard is the primary desktop input. Standard-layout gamepads use the browser Gamepad API and its `mapping: "standard"` contract; availability, button labels, hot-plug behavior, and non-standard controllers depend on the browser, operating system, and device driver. Optional mouse or pen steering uses Pointer Events. Coarse-pointer/touch devices receive the same action abstraction through multi-touch controls, but simultaneous-touch behavior still depends on the browser and hardware; use `?touch=1` to expose those controls for review on a fine-pointer device.
+Mouse/pen and keyboard steering are enabled together by default; a held keyboard direction temporarily takes priority over pointer aim, then pointer steering resumes on release. Standard-layout gamepads use the browser Gamepad API and its `mapping: "standard"` contract; availability, button labels, hot-plug behavior, and non-standard controllers depend on the browser, operating system, and device driver. Coarse-pointer/touch devices receive the same action abstraction through multi-touch controls, but simultaneous-touch behavior still depends on the browser and hardware; use `?touch=1` to expose those controls for review on a fine-pointer device.
 
 Procedural sound requires Web Audio support and a user gesture before the browser may create or resume its single `AudioContext`. Autoplay policy, output routing, and gamepad support can therefore vary by browser or embedded webview. Accessibility and record settings use local storage and remain local to the current browser profile.
 
@@ -34,22 +34,22 @@ Procedural sound requires Web Audio support and a user gesture before the browse
 
 All gameplay devices feed the same engine-independent action layer. Keyboard bindings are centralized in `src/input/actions.ts` and can be replaced as a complete binding map without changing the simulation. Standard-layout gamepads support both held actions and one-shot button edges. The on-screen touch controls expose the same 14 actions and support simultaneous touches.
 
-| Action              | Keyboard                 | Standard gamepad               |
-| ------------------- | ------------------------ | ------------------------------ |
-| Carve left/right    | Left/right arrows or A/D | Left stick or D-pad left/right |
-| Traverse uphill     | Up arrow or W            | D-pad up                       |
-| Point downhill/tuck | Down arrow or S          | D-pad down                     |
-| Brake               | Shift or B               | B                              |
-| Jump                | Space                    | A                              |
-| Spin left/right     | Q/E while airborne       | Left/right shoulder            |
-| Back/front flip     | Z/X while airborne       | Left/right trigger             |
-| Turbo               | F                        | X                              |
-| Pause/resume        | Escape or F3             | Start                          |
-| Reset run           | R or F2                  | Y                              |
-| World debug         | G                        | Back                           |
-| Mute/unmute         | M or **SOUND**           | UI control                     |
+| Action              | Keyboard                              | Standard gamepad               |
+| ------------------- | ------------------------------------- | ------------------------------ |
+| Carve left/right    | Left/right arrows, A/D, or numpad 4/6 | Left stick or D-pad left/right |
+| Traverse uphill     | Up arrow, W, or numpad 8              | D-pad up                       |
+| Point downhill/tuck | Down arrow, S, or numpad 2            | D-pad down                     |
+| Brake               | Shift, B, or numpad 5                 | B                              |
+| Jump                | Space                                 | A                              |
+| Spin left/right     | Q/E while airborne                    | Left/right shoulder            |
+| Back/front flip     | Z/X while airborne                    | Left/right trigger             |
+| Turbo               | F                                     | X                              |
+| Pause/resume        | Escape or F3                          | Start                          |
+| Reset run           | R or F2                               | Y                              |
+| World debug         | G                                     | Back                           |
+| Mute/unmute         | M or **SOUND**                        | UI control                     |
 
-Pointer steering and click-to-jump are enabled by default. Disable them with **POINTER ON** below the game or add `?pointer=0` to the URL. Gameplay shortcuts are ignored while a form control or editable element has focus.
+Pointer steering and click-to-jump are enabled by default and coexist with keyboard input. Disable them with **POINTER ON** below the game or add `?pointer=0` to the URL. Gameplay shortcuts are ignored while a text-entry control or editable element has focus; directional keys continue to work when ordinary UI buttons hold focus.
 
 ## Gameplay
 
@@ -59,17 +59,17 @@ The three ski-through events share the open mountain:
 
 - **Slalom:** 24 gates, five-second missed/wrong-side penalties, adjusted-time result.
 - **Tree Slalom:** 39 markers threaded through a wooded lane, with the same time/penalty rules.
-- **Free Style:** ramps and airborne trick input produce a style score before the finish.
+- **Free Style:** ramps and airborne trick input produce a style total during a timed run.
 
 Ski through a labelled start gate to enter an event. Red arrow markers are passed on the left and blue arrow markers on the right; the HUD confirms clean, wrong-side, and missed crossings immediately.
 
-Results are stored locally as top-ten tables. The authored classic mountain and arbitrary generated seeds have separate record buckets. Leaving an event lane does not soft-lock or forcibly end open skiing.
+Crossing any finish line opens a compact result card with the final time and course high score. Closing it continues the same open-skiing run. Results are stored locally as top-ten time tables; the authored classic mountain and arbitrary generated seeds have separate record buckets. Leaving an event lane does not soft-lock or forcibly end open skiing.
 
 The slope population is simulated with a hard actor bound: beginners fall and recover, snowboarders encounter ramps and obstacles, dogs react to contact, walking trees wake, lift chairs circulate, and chair riders can drop onto the slope. Past 1,800 m the weather begins to foreshadow danger. Crossing the formal 2,000 m boundary activates a protected Yeti chase; Turbo can create distance, while capture plays through a bounded sequence and then resets to a playable run.
 
 ## Mountain generation
 
-World generation is deterministic for a seed and generator version. The browser streams 64 m chunks around the player, generates extra rows in the direction of travel, and evicts distant chunks. Every required chunk is present before it becomes active. A seeded clear corridor remains traversable through blocking terrain, while an authored overlay supplies the classic lift and event courses.
+World generation is deterministic for a seed and generator version. The browser streams 64 m chunks around the player, generates extra rows in the direction of travel, and evicts distant chunks. Every required chunk is present before it becomes active. A seeded clear corridor remains traversable through blocking terrain, while an authored overlay supplies the classic lift and event courses. Terrain, moving slope actors, and active Yetis share a hard 20-item on-screen population cap; nearby terrain is prioritized and the three evergreen sizes are generated independently.
 
 Use `?seed=<text>` for a repeatable generated mountain. `classic-1991` selects the classic record bucket; it does not load any historical game resource. Useful development-only query switches are:
 

@@ -39,6 +39,7 @@ describe("LivingSlopeSimulation", () => {
     runFor(first, 1);
     runFor(second, 1);
     expect(first.getSnapshot()).toEqual(second.getSnapshot());
+    expect(first.getSnapshot().actorCount).toBe(11);
     expect(first.getSnapshot().actorCount).toBeLessThanOrEqual(
       LIVING_SLOPE_TUNING.maximumActors,
     );
@@ -50,7 +51,10 @@ describe("LivingSlopeSimulation", () => {
 
   it("cycles a beginner through both falls and recovery", () => {
     const simulation = new LivingSlopeSimulation("beginner");
-    runFor(simulation, 6);
+    const start = simulation
+      .getSnapshot()
+      .actors.find((value) => value.kind === "beginner")!;
+    runFor(simulation, 7);
     const events = simulation.drainEvents();
     expect(
       events.filter((event) => event.type === "beginner-fell"),
@@ -62,6 +66,7 @@ describe("LivingSlopeSimulation", () => {
       .getSnapshot()
       .actors.find((value) => value.kind === "beginner")!;
     expect(["cruising", "wobble"]).toContain(beginner.state);
+    expect(beginner.worldY).toBeGreaterThan(start.worldY + 20);
   });
 
   it("triggers the top-entry snowboarder's jump and tumble only on ramp geometry", () => {
@@ -159,6 +164,19 @@ describe("LivingSlopeSimulation", () => {
     expect(simulation.drainEvents().map((event) => event.type)).toEqual(
       expect.arrayContaining(["walking-tree-woke", "walking-tree-moved"]),
     );
+  });
+
+  it("starts the walking tree patrol without requiring a collision", () => {
+    const simulation = new LivingSlopeSimulation("tree-patrol");
+    const before = simulation
+      .getSnapshot()
+      .actors.find((value) => value.id === "walking-tree-0")!;
+    runFor(simulation, 2, { worldX: -50, worldY: before.worldY });
+    const after = simulation
+      .getSnapshot()
+      .actors.find((value) => value.id === "walking-tree-0")!;
+    expect(after.state).toBe("walking-right");
+    expect(after.worldX).toBeGreaterThan(before.worldX);
   });
 
   it("loops chairs both ways and makes rider drops rare but seeded/injectable", () => {

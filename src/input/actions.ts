@@ -27,20 +27,20 @@ export interface ActionFrame {
 export type KeyBindings = Readonly<Record<GameAction, readonly string[]>>;
 
 export const KEY_BINDINGS: KeyBindings = Object.freeze({
-  brake: ["ShiftLeft", "ShiftRight", "KeyB"],
+  brake: ["ShiftLeft", "ShiftRight", "KeyB", "Numpad5"],
   debug: ["KeyG"],
   jump: ["Space"],
   pause: ["Escape", "F3"],
   reset: ["KeyR", "F2"],
-  "steer-left": ["ArrowLeft", "KeyA"],
-  "steer-right": ["ArrowRight", "KeyD"],
+  "steer-left": ["ArrowLeft", "KeyA", "Numpad4"],
+  "steer-right": ["ArrowRight", "KeyD", "Numpad6"],
   "trick-back": ["KeyZ"],
   "trick-front": ["KeyX"],
   "trick-left": ["KeyQ"],
   "trick-right": ["KeyE"],
-  tuck: ["ArrowDown", "KeyS"],
+  tuck: ["ArrowDown", "KeyS", "Numpad2"],
   turbo: ["KeyF"],
-  uphill: ["ArrowUp", "KeyW"],
+  uphill: ["ArrowUp", "KeyW", "Numpad8"],
 });
 
 export interface StandardGamepadBindings {

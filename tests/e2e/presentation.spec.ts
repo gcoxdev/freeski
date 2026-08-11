@@ -209,7 +209,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     window.__FREE_SKI_DEBUG__?.stageLivingScenario("chair-drop");
   });
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 72,
+    () => (window.__FREE_SKI__?.art.pooledSprites ?? 0) > 12,
   );
   const stressPresentation = await page.evaluate(
     () => window.__FREE_SKI__!.art,
@@ -226,6 +226,9 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     frameFallbacks: 0,
     missingFrameFallbacks: 0,
   });
+  expect(
+    await page.evaluate(() => window.__FREE_SKI__!.world.visibleObjects),
+  ).toBeLessThanOrEqual(20);
   await page.setViewportSize({ width: 1280, height: 720 });
 
   await page.locator("#audio-toggle").click();
@@ -439,7 +442,7 @@ test("keeps every representative player state readable at 768x600", async ({
   await page.waitForFunction(
     () =>
       window.__FREE_SKI__?.player.motion === "airborne" &&
-      (window.__FREE_SKI__?.player.airHeight ?? 0) > 0.35,
+      (window.__FREE_SKI__?.player.airHeight ?? 0) > 0.55,
   );
   samples.push(await playerScaleSample(page, "manual-airborne"));
   await screenshot(page, "player-airborne-768x600.png");

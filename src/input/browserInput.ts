@@ -47,12 +47,18 @@ function normalizedAxis(value: number): number {
   );
 }
 
-function isEditableTarget(target: EventTarget | null): boolean {
+function isTextEntryTarget(target: EventTarget | null): boolean {
   return (
     target instanceof HTMLElement &&
-    Boolean(
-      target.closest("button, input, select, textarea, [contenteditable]"),
-    )
+    Boolean(target.closest("input, select, textarea, [contenteditable]"))
+  );
+}
+
+function isButtonActivation(target: EventTarget | null, code: string): boolean {
+  return (
+    target instanceof HTMLElement &&
+    Boolean(target.closest("button")) &&
+    (code === "Space" || code === "Enter")
   );
 }
 
@@ -175,7 +181,11 @@ export class BrowserInputAdapter {
   }
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
-    if (isEditableTarget(event.target)) return;
+    if (
+      isTextEntryTarget(event.target) ||
+      isButtonActivation(event.target, event.code)
+    )
+      return;
     const action = actionForKeyCode(event.code, this.keyBindings);
     if (!action) return;
     event.preventDefault();
@@ -189,9 +199,14 @@ export class BrowserInputAdapter {
   };
 
   private readonly onKeyUp = (event: KeyboardEvent): void => {
+    if (
+      isTextEntryTarget(event.target) ||
+      isButtonActivation(event.target, event.code)
+    )
+      return;
     const action = actionForKeyCode(event.code, this.keyBindings);
     if (!action) return;
-    if (!isEditableTarget(event.target)) event.preventDefault();
+    event.preventDefault();
     const changed = this.actions.setDigital(
       action,
       `keyboard:${event.code}`,

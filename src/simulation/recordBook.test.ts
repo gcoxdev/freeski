@@ -17,12 +17,12 @@ function result(
   penaltySeconds = 0,
 ): ModeResult {
   return {
-    adjustedTimeSeconds: mode === "free-style" ? null : value,
+    adjustedTimeSeconds: value,
     finishedAtSeconds: 100,
     mode,
     penaltySeconds,
-    rawTimeSeconds: mode === "free-style" ? 20 : value - penaltySeconds,
-    score: mode === "free-style" ? value : null,
+    rawTimeSeconds: value - penaltySeconds,
+    score: mode === "free-style" ? 500 : null,
   };
 }
 
@@ -47,7 +47,7 @@ describe("record book", () => {
     ]);
   });
 
-  it("sorts time ascending, Style descending, and ties stably", () => {
+  it("sorts every course time ascending and ties stably", () => {
     let book = emptyRecordBook();
     for (const [id, value, at] of [
       ["later", 42, 30],
@@ -80,7 +80,7 @@ describe("record book", () => {
       );
     }
     expect(book.buckets.classic["free-style"].map((entry) => entry.id)).toEqual(
-      ["high", "mid", "low"],
+      ["low", "mid", "high"],
     );
   });
 

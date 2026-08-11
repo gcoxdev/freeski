@@ -279,10 +279,7 @@ export class MountainModeSimulation {
     run.elapsedSeconds = rawTimeSeconds;
     run.styleEarned = Math.max(0, current.style - run.styleAtStart);
     run.result = Object.freeze({
-      adjustedTimeSeconds:
-        run.definition.id === "free-style"
-          ? null
-          : rawTimeSeconds + run.penaltySeconds,
+      adjustedTimeSeconds: rawTimeSeconds + run.penaltySeconds,
       finishedAtSeconds: current.simulationSeconds,
       mode: run.definition.id,
       penaltySeconds: run.penaltySeconds,

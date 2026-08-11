@@ -1,11 +1,13 @@
-import "./styles.css";
-import { createGame } from "./render/createGame";
 import { GENERATOR_VERSION } from "./world/generatorVersion";
+import { createGame } from "./render/createGame";
 
 const seed =
   new URLSearchParams(window.location.search).get("seed") ?? "classic-1991";
 const generatorLabel = document.querySelector<HTMLElement>("#generator-label");
 const seedLabel = document.querySelector<HTMLElement>("#seed-label");
+const loadingStatus = document.querySelector<HTMLElement>("#loading-status");
+const loadingProgress =
+  document.querySelector<HTMLElement>("#loading-progress");
 
 if (generatorLabel) generatorLabel.textContent = GENERATOR_VERSION;
 if (seedLabel) {
@@ -15,4 +17,12 @@ if (seedLabel) {
   seedLabel.setAttribute("aria-label", `Active world seed: ${seed}`);
 }
 
-createGame("game-canvas", seed);
+if (loadingProgress) loadingProgress.style.width = "18%";
+
+requestAnimationFrame(() => {
+  if (loadingStatus) loadingStatus.textContent = "Starting slope systems…";
+  if (loadingProgress) loadingProgress.style.width = "36%";
+  if (loadingStatus) loadingStatus.textContent = "Loading alpine atlas…";
+  if (loadingProgress) loadingProgress.style.width = "58%";
+  createGame("game-canvas", seed);
+});

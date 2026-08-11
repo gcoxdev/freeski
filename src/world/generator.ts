@@ -164,6 +164,8 @@ export class WorldGenerator {
     const type = chooseObjectType(zone, random.next(), random.next());
     const interaction = interactionFor(type);
     const priority = random.next();
+    const spawnRoll = random.next();
+    const variantRoll = random.next();
     const candidate: Candidate = Object.freeze({
       cellX,
       cellY,
@@ -172,13 +174,19 @@ export class WorldGenerator {
       interaction,
       priority,
       spawned:
-        random.next() <
+        spawnRoll <
         Math.min(0.92, ZONE_SPAWN_CHANCE[zone] * difficultyMultiplier(y)),
       type,
       ...(type === "tree"
         ? {
             variant:
-              priority < 0.12 ? ("dead-tree" as const) : ("evergreen" as const),
+              variantRoll < 0.1
+                ? ("dead-tree" as const)
+                : variantRoll < 0.4
+                  ? ("evergreen-small" as const)
+                  : variantRoll < 0.72
+                    ? ("evergreen-medium" as const)
+                    : ("evergreen-large" as const),
           }
         : {}),
       x,

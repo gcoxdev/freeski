@@ -39,12 +39,14 @@ describe("MountainModeSimulation diegetic lifecycle", () => {
   it("starts each mode only by a downhill crossing inside its world gate", () => {
     for (const course of CLASSIC_COURSES) {
       const simulation = new MountainModeSimulation();
-      simulation.syncPosition(position(course.centerX, 42, 0));
-      simulation.step(position(course.centerX, 38, 1));
+      simulation.syncPosition(
+        position(course.centerX, course.startGate.y + 2, 0),
+      );
+      simulation.step(position(course.centerX, course.startGate.y - 2, 1));
       expect(simulation.getSnapshot().activeMode).toBeNull();
-      cross(simulation, course.startGate.leftX - 1, 40, 2);
+      cross(simulation, course.startGate.leftX - 1, course.startGate.y, 2);
       expect(simulation.getSnapshot().activeMode).toBeNull();
-      cross(simulation, course.centerX, 40, 3);
+      cross(simulation, course.centerX, course.startGate.y, 3);
       expect(simulation.getSnapshot().activeMode).toBe(course.id);
       expect(simulation.drainEvents()).toEqual([
         expect.objectContaining({ mode: course.id, type: "mode-started" }),
@@ -54,11 +56,12 @@ describe("MountainModeSimulation diegetic lifecycle", () => {
 
   it("ignores open skiing and other gates while one event is active", () => {
     const simulation = new MountainModeSimulation();
-    simulation.syncPosition(position(80, 39, 0));
-    simulation.step(position(80, 80, 2));
+    const startY = CLASSIC_COURSES[0]!.startGate.y;
+    simulation.syncPosition(position(80, startY - 1, 0));
+    simulation.step(position(80, startY + 40, 2));
     expect(simulation.getSnapshot().activeMode).toBeNull();
     start(simulation, "slalom");
-    cross(simulation, 0, 40, 3);
+    cross(simulation, 0, startY, 3);
     expect(simulation.getSnapshot().activeMode).toBe("slalom");
     expect(simulation.getSnapshot().courses["free-style"].lifecycle).toBe(
       "idle",
@@ -72,8 +75,8 @@ describe("MountainModeSimulation diegetic lifecycle", () => {
     cross(simulation, firstMarker.x - 1, firstMarker.y, 2);
     const afterMarker = simulation.getSnapshot().courses.slalom;
     expect(afterMarker.markers[0]?.state).toBe("correct");
-    simulation.syncPosition(position(100, 100, 3));
-    simulation.step(position(100, 20, 4));
+    simulation.syncPosition(position(100, firstMarker.y + 20, 3));
+    simulation.step(position(100, firstMarker.y - 20, 4));
     cross(simulation, firstMarker.x - 1, firstMarker.y, 5);
     const afterBacktrack = simulation.getSnapshot().courses.slalom;
     expect(afterBacktrack.markers[0]?.state).toBe("correct");
@@ -91,7 +94,7 @@ describe("timed marker events", () => {
     const simulation = new MountainModeSimulation();
     start(simulation, "slalom", 1);
     const course = CLASSIC_COURSES.find((item) => item.id === "slalom")!;
-    expect(course.lengthMeters).toBe(540);
+    expect(course.lengthMeters).toBe(500);
     expect(course.markers).toHaveLength(24);
     const [red, blue, third] = course.markers;
     cross(simulation, red!.x - 1, red!.y, 2);
@@ -139,7 +142,7 @@ describe("timed marker events", () => {
   it("uses 39 researched Tree Slalom markers and requires its finish gate", () => {
     const simulation = new MountainModeSimulation();
     const course = CLASSIC_COURSES.find((item) => item.id === "tree-slalom")!;
-    expect(course.lengthMeters).toBe(1_040);
+    expect(course.lengthMeters).toBe(1_000);
     expect(course.markers).toHaveLength(39);
     start(simulation, "tree-slalom", 1);
     course.markers.forEach((marker, index) =>
@@ -152,8 +155,10 @@ describe("timed marker events", () => {
     );
     cross(simulation, course.finishGate.rightX + 1, course.finishGate.y, 50);
     expect(simulation.getSnapshot().activeMode).toBe("tree-slalom");
-    simulation.syncPosition(position(course.centerX, 1_045, 51));
-    simulation.step(position(course.centerX, 1_030, 52));
+    simulation.syncPosition(
+      position(course.centerX, course.finishGate.y + 5, 51),
+    );
+    simulation.step(position(course.centerX, course.finishGate.y - 10, 52));
     cross(simulation, course.centerX, course.finishGate.y, 53);
     expect(simulation.getSnapshot().courses["tree-slalom"]).toMatchObject({
       lifecycle: "finished",
@@ -163,10 +168,10 @@ describe("timed marker events", () => {
 });
 
 describe("Free Style result", () => {
-  it("finishes the exact 1040m course with Style earned during the run", () => {
+  it("finishes the 1000m course with time and Style earned during the run", () => {
     const simulation = new MountainModeSimulation();
     const course = CLASSIC_COURSES.find((item) => item.id === "free-style")!;
-    expect(course.lengthMeters).toBe(1_040);
+    expect(course.lengthMeters).toBe(1_000);
     cross(simulation, course.centerX, course.startGate.y, 5, 120);
     simulation.syncPosition(position(80, 700, 20, 420));
     simulation.step(position(-70, 600, 25, 500));
@@ -174,7 +179,7 @@ describe("Free Style result", () => {
     cross(simulation, course.centerX, course.finishGate.y, 35, 620);
     expect(simulation.getSnapshot().courses["free-style"].result).toMatchObject(
       {
-        adjustedTimeSeconds: null,
+        adjustedTimeSeconds: 30,
         mode: "free-style",
         penaltySeconds: 0,
         rawTimeSeconds: 30,

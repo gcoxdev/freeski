@@ -8,6 +8,7 @@ import {
   YetiSimulation,
   foreshadowFor,
   foreshadowIntensity,
+  yetiApproachOffset,
   type YetiPlayerState,
 } from "./yeti";
 
@@ -111,6 +112,20 @@ describe("YetiSimulation", () => {
     );
   });
 
+  it("can approach from every side of the skier", () => {
+    const offsets = Array.from({ length: 8 }, (_, salt) =>
+      yetiApproachOffset(player(), salt),
+    );
+    expect(offsets.some(([x]) => x < 0)).toBe(true);
+    expect(offsets.some(([x]) => x > 0)).toBe(true);
+    expect(offsets.some(([, y]) => y < 0)).toBe(true);
+    expect(offsets.some(([, y]) => y > 0)).toBe(true);
+    for (const [x, y] of offsets)
+      expect(Math.hypot(x, y)).toBeCloseTo(
+        YETI_TUNING.safeRepositionDistanceMeters,
+      );
+  });
+
   it("steers toward the skier within directional velocity caps", () => {
     const simulation = new YetiSimulation();
     let current = player({ worldY: 2_001, velocityY: 25 });
@@ -139,6 +154,14 @@ describe("YetiSimulation", () => {
     expect(
       simulation.getSnapshot(current.worldY).turboEvasionSeconds,
     ).toBeGreaterThan(1.5);
+    const recoiling = simulation
+      .getSnapshot(current.worldY)
+      .controllers.find((value) => value.boundary === "bottom")!;
+    const towardX = current.worldX - recoiling.worldX;
+    const towardY = current.worldY - recoiling.worldY;
+    expect(
+      recoiling.velocityX * towardX + recoiling.velocityY * towardY,
+    ).toBeLessThan(0);
 
     current = stepFor(simulation, current, 1.2);
     const controller = simulation

@@ -123,7 +123,7 @@ test("skip link and heading hierarchy reach play at the minimum viewport", async
       .evaluateAll((headings) =>
         headings.map((heading) => Number(heading.tagName.slice(1))),
       ),
-  ).toEqual([1, 2]);
+  ).toEqual([1, 2, 2]);
 
   const skipLink = page.getByRole("link", {
     name: "Skip to playable mountain",

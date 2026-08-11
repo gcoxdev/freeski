@@ -26,7 +26,12 @@ export type GeneratedObjectType =
   | "tree"
   | "walking-tree";
 
-export type GeneratedObjectVariant = "dead-tree" | "evergreen";
+export type GeneratedObjectVariant =
+  | "dead-tree"
+  | "evergreen"
+  | "evergreen-large"
+  | "evergreen-medium"
+  | "evergreen-small";
 
 export interface GroundFootprint {
   readonly offsetX: number;

@@ -21,7 +21,16 @@ describe("central action layer", () => {
   it("keeps keyboard and standard gamepad mappings explicit and remappable", () => {
     expect(KEY_BINDINGS.pause).toEqual(["Escape", "F3"]);
     expect(KEY_BINDINGS.reset).toEqual(["KeyR", "F2"]);
-    expect(KEY_BINDINGS.brake).toEqual(["ShiftLeft", "ShiftRight", "KeyB"]);
+    expect(KEY_BINDINGS.brake).toEqual([
+      "ShiftLeft",
+      "ShiftRight",
+      "KeyB",
+      "Numpad5",
+    ]);
+    expect(KEY_BINDINGS["steer-left"]).toContain("Numpad4");
+    expect(KEY_BINDINGS["steer-right"]).toContain("Numpad6");
+    expect(KEY_BINDINGS.uphill).toContain("Numpad8");
+    expect(KEY_BINDINGS.tuck).toContain("Numpad2");
     expect(STANDARD_GAMEPAD_BINDINGS.buttons).toMatchObject({
       0: "jump",
       1: "brake",

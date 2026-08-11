@@ -9,7 +9,7 @@ export const LIVING_SLOPE_TUNING = Object.freeze({
   chairLoopTopY: -64,
   chairSpeedMetersPerSecond: 2,
   dogContactRadiusMeters: 1.35,
-  maximumActors: 22,
+  maximumActors: 12,
   snowboarderFootprintRadiusMeters: 0.75,
   snowboarderEntryDistanceMeters: 46,
   walkingTreeWakeRadiusMeters: 14,
@@ -22,6 +22,8 @@ export type LivingActorState =
   | "carve-left"
   | "carve-right"
   | "cruising"
+  | "dropping-skier"
+  | "dropping-snowboarder"
   | "empty"
   | "entering"
   | "fallen-backward"
@@ -176,7 +178,7 @@ function initialActors(seed: string): MutableActor[] {
   const random = createSeededRandom(hashSeed(`living-slope:${seed}`));
   const chairs: MutableActor[] = [];
   for (const direction of [-1, 1] as const) {
-    for (let index = 0; index < 8; index += 1) {
+    for (let index = 0; index < 3; index += 1) {
       const occupied = random.next() < 0.58;
       chairs.push(
         actor({
@@ -188,7 +190,7 @@ function initialActors(seed: string): MutableActor[] {
           source: "mountain",
           state: occupied ? "occupied" : "empty",
           worldX: direction < 0 ? -7 : -9,
-          worldY: -64 + index * 192 + (direction > 0 ? 96 : 0),
+          worldY: -64 + index * 512 + (direction > 0 ? 256 : 0),
         }),
       );
     }
@@ -359,11 +361,15 @@ export class LivingSlopeSimulation {
     deltaSeconds: number,
   ): void {
     if (value.state === "cruising") {
-      value.velocityY = 4.2;
-      if (value.stateSeconds >= 1.05) this.changeState(value, "wobble");
+      value.velocityX = value.direction * 1.3;
+      value.velocityY = 7;
+      if (value.stateSeconds >= 1.1) this.changeState(value, "wobble");
     } else if (value.state === "wobble") {
-      value.velocityX = Math.sin(value.stateSeconds * 16) * 2.2;
-      if (value.stateSeconds >= 0.55) {
+      value.velocityX =
+        value.direction *
+        (1.8 + Math.abs(Math.sin(value.stateSeconds * 13)) * 1.8);
+      value.velocityY = 6;
+      if (value.stateSeconds >= 0.7) {
         const state =
           value.direction > 0 ? "fallen-forward" : "fallen-backward";
         value.direction = value.direction > 0 ? -1 : 1;
@@ -525,6 +531,7 @@ export class LivingSlopeSimulation {
         this.emit("dog-hit", value);
       } else if (Math.abs(value.worldX - player.worldX) > 28) {
         value.direction = value.worldX > player.worldX ? -1 : 1;
+        value.velocityX = value.direction * 4.8;
         this.changeState(
           value,
           value.direction < 0 ? "running-left" : "running-right",
@@ -534,6 +541,8 @@ export class LivingSlopeSimulation {
       if (value.stateSeconds >= 0.65) this.changeState(value, "recovering");
     } else if (value.state === "recovering" && value.stateSeconds >= 0.72) {
       value.direction = value.direction < 0 ? 1 : -1;
+      value.velocityX = value.direction * 4.8;
+      value.velocityY = 1.2;
       this.changeState(
         value,
         value.direction < 0 ? "running-left" : "running-right",
@@ -560,7 +569,8 @@ export class LivingSlopeSimulation {
       );
       if (
         value.stateSeconds >= 0 &&
-        distance <= LIVING_SLOPE_TUNING.walkingTreeWakeRadiusMeters
+        (value.stateSeconds >= 1.5 ||
+          distance <= LIVING_SLOPE_TUNING.walkingTreeWakeRadiusMeters)
       ) {
         this.changeState(
           value,
@@ -600,6 +610,15 @@ export class LivingSlopeSimulation {
     )
       this.emit("chair-looped", value);
 
+    if (
+      value.state === "dropping-skier" ||
+      value.state === "dropping-snowboarder"
+    ) {
+      if (value.stateSeconds >= 0.55)
+        this.changeState(value, value.riderCount > 0 ? "occupied" : "empty");
+      return;
+    }
+
     if (value.direction < 0 || value.riderCount === 0) return;
     if (
       this.forcedChairDrop ||
@@ -616,8 +635,11 @@ export class LivingSlopeSimulation {
       dropped.velocityY = 12;
       dropped.direction = 1;
       this.changeState(dropped, "jumping");
+      this.changeState(
+        value,
+        value.riderCount === 2 ? "dropping-skier" : "dropping-snowboarder",
+      );
       value.riderCount = value.riderCount === 2 ? 1 : 0;
-      value.state = value.riderCount > 0 ? "occupied" : "empty";
       this.emit("chair-rider-dropped", value);
     }
   }

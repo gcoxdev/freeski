@@ -51,6 +51,7 @@ import {
   type EventModeId,
   type MarkerState,
   type ModeEvent,
+  type ModeResult,
   type ModeSnapshot,
 } from "../../simulation/modes";
 import {
@@ -59,6 +60,7 @@ import {
   emptyRecordBook,
   recordFromResult,
   type RecordBook,
+  type RunRecord,
 } from "../../simulation/recordBook";
 import type { ObjectDelta } from "../../world/chunkDeltas";
 import {
@@ -79,6 +81,7 @@ import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
 import { CHUNK_SIZE_METERS, type WorldChunk } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
+import { livingActorPresentation } from "../livingActorPresentation";
 import {
   PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
   playerAtlasFrame,
@@ -108,6 +111,8 @@ const MAX_TELEMETRY_EVENTS = 240;
 const MAX_TELEMETRY_SAMPLES = 600;
 const FEEDBACK_VISIBLE_SECONDS = 1.15;
 const PRESENTATION_SYNC_FIXED_STEPS = 30;
+export const MAX_VISIBLE_POPULATED_OBJECTS = 20;
+const MAX_VISIBLE_TERRAIN_OBJECTS = 10;
 const EMPTY_INTERACTIVE_OBJECTS: readonly InteractiveWorldObject[] =
   Object.freeze([]);
 
@@ -146,10 +151,6 @@ export class AlpineScene extends Phaser.Scene {
   private audio!: AlpineAudio;
   private locationLabel?: Phaser.GameObjects.Text;
   private runLabel?: Phaser.GameObjects.Text;
-  private readonly courseLabels = new Map<
-    EventModeId,
-    Phaser.GameObjects.Text
-  >();
   private inputAdapter?: BrowserInputAdapter;
   private accessibilityControls?: AccessibilityControls;
   private accessibilityStore?: AccessibilitySettingsStore;
@@ -190,17 +191,11 @@ export class AlpineScene extends Phaser.Scene {
   private previousChunkX: number | undefined;
   private previousChunkY: number | undefined;
   private readonly screenCoordinates: [number, number] = [0, 0];
-  private readonly contourPoints = [
-    new Phaser.Geom.Point(),
-    new Phaser.Geom.Point(),
-    new Phaser.Geom.Point(),
-    new Phaser.Geom.Point(),
-  ];
-  private readonly groomerPoints = [
-    new Phaser.Geom.Point(),
-    new Phaser.Geom.Point(),
-    new Phaser.Geom.Point(),
-  ];
+  private resultCardOpen = false;
+  private resultPauseOwned = false;
+  private readonly closeResultCard = (): void => {
+    this.dismissResultCard(true);
+  };
   private livingSlopeRampChunks?: readonly WorldChunk[];
   private livingSlopeRampScenario?: readonly InteractiveWorldObject[];
   private livingSlopeRampDeltaRevision = -1;
@@ -261,6 +256,16 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   preload(): void {
+    const status = document.querySelector<HTMLElement>("#loading-status");
+    const progress = document.querySelector<HTMLElement>("#loading-progress");
+    this.load.on("progress", (value: number) => {
+      if (status) status.textContent = "Loading alpine atlas…";
+      if (progress) progress.style.width = `${Math.round(58 + value * 38)}%`;
+    });
+    this.load.once("complete", () => {
+      if (status) status.textContent = "Opening the slope…";
+      if (progress) progress.style.width = "100%";
+    });
     this.load.atlas(
       PRODUCTION_ATLAS_KEY,
       PRODUCTION_ATLAS_IMAGE,
@@ -345,6 +350,9 @@ export class AlpineScene extends Phaser.Scene {
       this.audio?.play("ui-toggle");
       this.updateAudioControl();
     });
+    document
+      .querySelector<HTMLButtonElement>("#result-close")
+      ?.addEventListener("click", this.closeResultCard);
     window.addEventListener("pointerdown", this.unlockAudio, { capture: true });
     window.addEventListener("keydown", this.unlockAudio, { capture: true });
     window.addEventListener("keydown", this.handleAudioKey);
@@ -504,6 +512,9 @@ export class AlpineScene extends Phaser.Scene {
     this.renderState(player);
     this.updateRuntime(player);
     shell?.setAttribute("data-game-ready", "true");
+    const loadingScreen =
+      document.querySelector<HTMLElement>("#loading-screen");
+    if (loadingScreen) loadingScreen.hidden = true;
     if (status) status.textContent = "Alpine systems online";
     this.setDebugVisible(this.debugVisible);
 
@@ -519,6 +530,9 @@ export class AlpineScene extends Phaser.Scene {
         capture: true,
       });
       window.removeEventListener("keydown", this.handleAudioKey);
+      document
+        .querySelector<HTMLButtonElement>("#result-close")
+        ?.removeEventListener("click", this.closeResultCard);
       window.removeEventListener("blur", this.handleWindowBlur);
       window.removeEventListener("focus", this.handleWindowFocus);
       window.removeEventListener("resize", this.handleWindowResize);
@@ -541,6 +555,7 @@ export class AlpineScene extends Phaser.Scene {
         this.replay.record(this.fixedSteps + 1, actions);
 
         if (actions.resetPressed) {
+          this.dismissResultCard(false);
           this.simulation.reset();
           this.interactions.reset();
           this.modes.reset();
@@ -568,6 +583,13 @@ export class AlpineScene extends Phaser.Scene {
         this.simulation.step(playerInput, deltaSeconds);
         if (captureBeforeStep.playerRemoved)
           this.simulation.applySpeedMultiplier(0);
+        const player = this.simulation.getSnapshot();
+        if (player.paused) {
+          this.capturePlayerEvents();
+          this.updateHud(player);
+          this.updateRuntime(player);
+          return;
+        }
         if (!captureBeforeStep.capturedBy) {
           this.interactions.step(
             this.simulation,
@@ -576,7 +598,6 @@ export class AlpineScene extends Phaser.Scene {
             deltaSeconds,
           );
         }
-        const player = this.simulation.getSnapshot();
         if (!captureBeforeStep.capturedBy) {
           this.modes.step({
             simulationSeconds: player.simulationSeconds,
@@ -677,21 +698,6 @@ export class AlpineScene extends Phaser.Scene {
       })
       .setOrigin(1, 0)
       .setDepth(90);
-    for (const course of CLASSIC_COURSES) {
-      const label = this.add
-        .text(0, 0, course.name, {
-          align: "center",
-          color: "#f7f9f5",
-          fontFamily: '"Courier New", monospace',
-          fontSize: "7px",
-          fontStyle: "bold",
-          letterSpacing: 0.8,
-        })
-        .setOrigin(0.5)
-        .setDepth(11)
-        .setVisible(false);
-      this.courseLabels.set(course.id as EventModeId, label);
-    }
   }
 
   private renderState(player: PlayerSnapshot): void {
@@ -741,57 +747,12 @@ export class AlpineScene extends Phaser.Scene {
     this.background.clear();
     this.background.fillStyle(COLORS.powder);
     this.background.fillRect(0, 0, width, height);
-    this.background.fillStyle(COLORS.glacierShadow, 0.08);
-    this.background.fillRect(0, 0, width, Math.min(72, height * 0.1));
-
-    const contourSpacing = 76;
-    const verticalOffset = -(
-      (player.worldY * PIXELS_PER_METER) %
-      contourSpacing
-    );
-    const horizontalOffset = -player.worldX * PIXELS_PER_METER * 0.16;
-    this.background.lineStyle(1, COLORS.ink, 0.09);
-    for (
-      let line = -1;
-      line <= Math.ceil(height / contourSpacing) + 1;
-      line += 1
-    ) {
-      const y = line * contourSpacing + verticalOffset;
-      const bend = Math.sin((player.worldY + line * 8) * 0.05) * 15;
-      this.contourPoints[0]!.setTo(-30, y + bend);
-      this.contourPoints[1]!.setTo(width * 0.27 + horizontalOffset, y - 8);
-      this.contourPoints[2]!.setTo(width * 0.58 + horizontalOffset, y + 9);
-      this.contourPoints[3]!.setTo(width + 30, y - bend);
-      this.background.strokePoints(this.contourPoints, false, false);
-    }
-
-    this.drawGroomerTracks(player, anchorY, height);
     this.drawForeshadow(player, width, height);
     this.drawWorld(player, width, height);
     this.background.fillStyle(COLORS.signal, 0.9);
     this.background.fillRect(width - 15, height * 0.12, 3, height * 0.76);
     this.background.fillStyle(COLORS.ink, 0.9);
     this.background.fillRect(width - 18, anchorY, 9, 2);
-  }
-
-  private drawGroomerTracks(
-    player: PlayerSnapshot,
-    anchorY: number,
-    height: number,
-  ): void {
-    if (!this.background) return;
-    const centerX = this.scale.width * 0.5;
-    const drift = Math.max(-70, Math.min(70, -player.velocityX * 3.2));
-    this.background.lineStyle(1, COLORS.ink, 0.1);
-    for (const skiOffset of [-7, 7]) {
-      this.groomerPoints[0]!.setTo(centerX + skiOffset, anchorY + 13);
-      this.groomerPoints[1]!.setTo(
-        centerX + skiOffset + drift * 0.25,
-        anchorY + height * 0.18,
-      );
-      this.groomerPoints[2]!.setTo(centerX + skiOffset + drift, height + 20);
-      this.background.strokePoints(this.groomerPoints, false, false);
-    }
   }
 
   private drawForeshadow(
@@ -848,6 +809,7 @@ export class AlpineScene extends Phaser.Scene {
     }
     for (const actor of this.renderLivingSnapshot?.actors ?? []) {
       if (!actor.active) continue;
+      if (this.visibleObjects >= MAX_VISIBLE_POPULATED_OBJECTS) break;
       const [x, y] = this.toScreen(actor.worldX, actor.worldY, player);
       if (x < -40 || x > width + 40 || y < -45 || y > height + 45) continue;
       this.visibleObjects += 1;
@@ -950,75 +912,22 @@ export class AlpineScene extends Phaser.Scene {
     x: number,
     y: number,
   ): boolean {
-    let frame = "";
-    let height = 44;
-    let originY = 0.94;
-    if (actor.kind === "chairlift") {
-      frame =
-        actor.riderCount === 0
-          ? "chairlift/empty"
-          : actor.riderCount === 1
-            ? "chairlift/one-skier"
-            : "chairlift/two-riders";
-      height = 48;
-      originY = 0.52;
-    } else if (actor.kind === "beginner") {
-      frame = actor.state.startsWith("fallen")
-        ? actor.state.endsWith("forward")
-          ? "beginner/fall-forward"
-          : "beginner/fall-backward"
-        : actor.direction < 0
-          ? "beginner/carve-left"
-          : actor.direction > 0
-            ? "beginner/carve-right"
-            : "beginner/downhill";
-      height = actor.state.startsWith("fallen") ? 34 : 50;
-    } else if (actor.kind === "snowboarder") {
-      frame =
-        actor.state === "jumping"
-          ? "snowboarder/jump"
-          : actor.state.startsWith("tumbling")
-            ? "snowboarder/tumble"
-            : actor.state === "carve-left"
-              ? "snowboarder/carve-left"
-              : actor.state === "carve-right"
-                ? "snowboarder/carve-right"
-                : "snowboarder/tuck";
-      height = actor.state === "jumping" ? 55 : 46;
-    } else if (actor.kind === "dog") {
-      frame =
-        actor.state === "knocked"
-          ? "dog/knocked-over"
-          : actor.state === "recovering"
-            ? "dog/alert"
-            : Math.floor(actor.stateSeconds * 7) % 2 === 0
-              ? "dog/trot-a"
-              : "dog/trot-b";
-      height = actor.state === "knocked" ? 25 : 31;
-      originY = 0.88;
-    } else {
-      frame = actor.state.startsWith("walking")
-        ? Math.floor(actor.stateSeconds * 5) % 2 === 0
-          ? "walking-tree/step-left"
-          : "walking-tree/step-right"
-        : "walking-tree/idle";
-      height = 66;
-    }
+    const presentation = livingActorPresentation(actor);
     if (
       !this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
         alpha: actor.kind === "chairlift" ? 0.1 : 0.22,
         depth: 4,
-        displayHeight: actor.kind === "chairlift" ? 7 : 9,
-        displayWidth: actor.kind === "chairlift" ? 34 : height * 0.7,
+        displayHeight: presentation.shadowHeight,
+        displayWidth: presentation.shadowWidth,
         originY: 0.5,
       })
     )
       return false;
-    this.spritePool.draw(frame, x, y + 8, {
+    this.spritePool.draw(presentation.frame, x, y + 8, {
       depth: actor.kind === "chairlift" ? 12 : 14,
-      displayHeight: height,
-      flipX: actor.kind === "dog" && actor.direction < 0,
-      originY,
+      displayHeight: presentation.displayHeight,
+      flipX: presentation.flipX,
+      originY: presentation.originY,
     });
     return true;
   }
@@ -1031,6 +940,7 @@ export class AlpineScene extends Phaser.Scene {
     if (!this.background) return;
     for (const controller of this.renderYetiSnapshot?.controllers ?? []) {
       if (!controller.active) continue;
+      if (this.visibleObjects >= MAX_VISIBLE_POPULATED_OBJECTS) break;
       const [x, y] = this.toScreen(
         controller.worldX,
         controller.worldY,
@@ -1125,9 +1035,16 @@ export class AlpineScene extends Phaser.Scene {
     height: number,
   ): void {
     if (!this.background) return;
+    this.visibleObjects = 0;
     this.drawClassicCourses(player, width, height);
     this.drawClassicLift(player, width, height);
-    this.visibleObjects = 0;
+    const terrainCandidates: Array<{
+      readonly delta: Readonly<ObjectDelta> | undefined;
+      readonly distanceSquared: number;
+      readonly object: InteractiveWorldObject;
+      readonly screenX: number;
+      readonly screenY: number;
+    }> = [];
     for (const chunk of this.stream.getActiveChunks()) {
       for (const object of chunk.objects) {
         const delta = this.interactions.deltas.get(object.id);
@@ -1145,8 +1062,15 @@ export class AlpineScene extends Phaser.Scene {
         ) {
           continue;
         }
-        this.visibleObjects += 1;
-        this.drawInteractiveObject(object, screenX, screenY, delta);
+        terrainCandidates.push({
+          delta,
+          distanceSquared:
+            (screenX - width * 0.5) ** 2 +
+            (screenY - height * PLAYER_SCREEN_RATIO) ** 2,
+          object,
+          screenX,
+          screenY,
+        });
       }
     }
     for (const object of this.scenarioObjects) {
@@ -1164,15 +1088,38 @@ export class AlpineScene extends Phaser.Scene {
         screenY > height + 50
       )
         continue;
+      terrainCandidates.push({
+        delta,
+        distanceSquared:
+          (screenX - width * 0.5) ** 2 +
+          (screenY - height * PLAYER_SCREEN_RATIO) ** 2,
+        object,
+        screenX,
+        screenY,
+      });
+    }
+    terrainCandidates.sort(
+      (left, right) =>
+        left.distanceSquared - right.distanceSquared ||
+        left.object.id.localeCompare(right.object.id),
+    );
+    for (const candidate of terrainCandidates.slice(
+      0,
+      MAX_VISIBLE_TERRAIN_OBJECTS,
+    )) {
       this.visibleObjects += 1;
-      this.drawInteractiveObject(object, screenX, screenY, delta);
+      this.drawInteractiveObject(
+        candidate.object,
+        candidate.screenX,
+        candidate.screenY,
+        candidate.delta,
+      );
     }
     this.drawLivingSlope(player, width, height);
     this.drawYetis(player, width, height);
     this.drawYetiBoundary(player, width, height);
     if (this.debugVisible) {
       this.drawWorldDiagnostics(player, width, height);
-      this.drawCollisionFootprints(player, width, height);
     }
   }
 
@@ -1193,16 +1140,19 @@ export class AlpineScene extends Phaser.Scene {
         signX <= width + 50 &&
         signY >= -45 &&
         signY <= height + 45;
-      if (signVisible)
-        this.spritePool.draw("course/blank-wood-sign", signX, signY + 15, {
+      if (signVisible) {
+        const signFrame =
+          course.id === "slalom"
+            ? "course/slalom-sign"
+            : course.id === "tree-slalom"
+              ? "course/tree-slalom-sign"
+              : "course/free-style-sign";
+        this.spritePool.draw(signFrame, signX, signY + 15, {
           depth: 9,
-          displayHeight: 40,
+          displayHeight: 62,
           originY: 0.94,
         });
-      this.courseLabels
-        .get(course.id as EventModeId)
-        ?.setPosition(signX, signY - 2)
-        .setVisible(signVisible);
+      }
       const [left, startY] = this.toScreen(
         course.centerX - course.halfWidth,
         course.startGate.y,
@@ -1275,7 +1225,7 @@ export class AlpineScene extends Phaser.Scene {
         if (
           this.spritePool.draw(markerFrame, x, y + 9, {
             depth: 7,
-            displayHeight: markerState === "pending" ? 35 : 32,
+            displayHeight: markerState === "pending" ? 46 : 38,
             originY: 0.94,
           })
         )
@@ -1373,11 +1323,17 @@ export class AlpineScene extends Phaser.Scene {
       if (
         this.spritePool.draw("lift/tower", x, y + 13, {
           depth: 8,
-          displayHeight: 84,
+          displayHeight: 128,
           originY: 0.94,
         })
-      )
+      ) {
+        this.spritePool.draw("lift/cable-connector", x, y - 102, {
+          depth: 9,
+          displayHeight: 32,
+          originY: 0.5,
+        });
         continue;
+      }
       this.background.lineStyle(3, COLORS.ink, 0.62);
       this.background.lineBetween(x, y - 14, x, y + 15);
       this.background.lineBetween(x - 12, y - 12, x + 12, y - 12);
@@ -1555,13 +1511,13 @@ export class AlpineScene extends Phaser.Scene {
   ): string | null {
     if (delta?.form === "mushroom") return "secret/mushroom";
     if (object.type === "tree") {
-      if (delta?.burning)
-        return `terrain/burning-tree-${["a", "b", "c"][Math.floor(this.fixedSteps / 7) % 3]}`;
+      if (delta?.burning) return "terrain/burning-tree-b";
       return object.variant === "dead-tree"
         ? "terrain/dead-tree"
-        : object.interaction.spriteBounds.height > 7
+        : object.variant === "evergreen-large"
           ? "terrain/evergreen-large"
-          : object.interaction.spriteBounds.height > 5
+          : object.variant === "evergreen-medium" ||
+              object.variant === "evergreen"
             ? "terrain/evergreen-medium"
             : "terrain/evergreen-small";
     }
@@ -1581,7 +1537,7 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private interactiveAtlasDisplay(
-    object: Pick<InteractiveWorldObject, "interaction" | "type">,
+    object: Pick<InteractiveWorldObject, "interaction" | "type" | "variant">,
     delta?: Readonly<ObjectDelta>,
   ): { depth: number; height: number; originY: number; shadowScale: number } {
     if (delta?.form === "mushroom")
@@ -1594,12 +1550,19 @@ export class AlpineScene extends Phaser.Scene {
       "bump-small": 28,
       chairlift: 46,
       dog: 30,
-      "lift-tower": 84,
+      "lift-tower": 128,
       mogul: 52,
       ramp: 58,
       rock: 31,
       stump: 27,
-      tree: Math.max(56, object.interaction.spriteBounds.height * 8.5),
+      tree:
+        object.variant === "evergreen-small"
+          ? 54
+          : object.variant === "evergreen-large"
+            ? 88
+            : object.variant === "dead-tree"
+              ? 82
+              : 70,
       "walking-tree": 68,
     };
     const ground = ["bump-large", "bump-small", "mogul", "ramp"].includes(
@@ -1673,45 +1636,6 @@ export class AlpineScene extends Phaser.Scene {
     this.background.strokePoints(rightEdge, false, false);
   }
 
-  private drawCollisionFootprints(
-    player: PlayerSnapshot,
-    width: number,
-    height: number,
-  ): void {
-    if (!this.background) return;
-    for (const object of this.getInteractiveObjects()) {
-      const delta = this.interactions.deltas.get(object.id);
-      if (delta?.consumed || delta?.destroyed) continue;
-      const footprint = object.interaction.footprint;
-      const [x, y] = this.toScreen(
-        object.x + (delta?.offsetX ?? 0) + footprint.offsetX,
-        object.y + footprint.offsetY,
-        player,
-      );
-      const radius = footprint.radius * PIXELS_PER_METER;
-      if (
-        x + radius < 0 ||
-        x - radius > width ||
-        y + radius < 0 ||
-        y - radius > height
-      )
-        continue;
-      this.background.lineStyle(
-        2,
-        object.interaction.blocksGroundedPlayer ? COLORS.signal : 0x3dbfa6,
-        0.82,
-      );
-      this.background.strokeCircle(x, y, radius);
-      this.background.lineStyle(1, COLORS.ink, 0.45);
-      this.background.lineBetween(
-        x,
-        y,
-        x,
-        y - object.interaction.clearanceHeight * PIXELS_PER_METER,
-      );
-    }
-  }
-
   private toScreen(
     worldX: number,
     worldY: number,
@@ -1777,6 +1701,7 @@ export class AlpineScene extends Phaser.Scene {
       const frame = this.skier.frame;
       const presentation = playerPresentationScale(
         String(frame.name),
+        frame.width,
         frame.height,
       );
       if (this.skier.scaleX !== presentation.uniformScale)
@@ -1835,11 +1760,13 @@ export class AlpineScene extends Phaser.Scene {
     }
     if (feedback && player.simulationSeconds > this.feedbackVisibleUntil)
       feedback.hidden = true;
-    if (pauseCard) pauseCard.hidden = !player.paused;
+    if (pauseCard) pauseCard.hidden = !player.paused || this.resultCardOpen;
     if (status)
-      status.textContent = player.paused
-        ? "Run suspended"
-        : "Alpine systems online";
+      status.textContent = this.resultCardOpen
+        ? "Course time recorded"
+        : player.paused
+          ? "Run suspended"
+          : "Alpine systems online";
     const yetiSnapshot =
       this.renderYetiSnapshot ?? this.yeti.getSnapshot(player.worldY);
     const flashActive =
@@ -1883,9 +1810,7 @@ export class AlpineScene extends Phaser.Scene {
       modePenalty.textContent = `PENALTY +${(displayRun?.penaltySeconds ?? 0).toFixed(1)}S`;
     if (modeFinal)
       modeFinal.textContent = displayRun?.result
-        ? displayRun.result.mode === "free-style"
-          ? `FINAL STYLE ${displayRun.result.score ?? 0}`
-          : `FINAL ${(displayRun.result.adjustedTimeSeconds ?? 0).toFixed(1)}S`
+        ? `FINAL ${(displayRun.result.adjustedTimeSeconds ?? displayRun.result.rawTimeSeconds).toFixed(1)}S`
         : displayRun?.lifecycle === "active"
           ? "COURSE LIVE / LEAVE ANY TIME"
           : "NO ACTIVE CLOCK";
@@ -2019,7 +1944,11 @@ export class AlpineScene extends Phaser.Scene {
     this.runtime.player = player;
     const playerFrame = this.skier ? String(this.skier.frame.name) : "fallback";
     const playerPresentation = this.skier
-      ? playerPresentationScale(playerFrame, this.skier.frame.height)
+      ? playerPresentationScale(
+          playerFrame,
+          this.skier.frame.width,
+          this.skier.frame.height,
+        )
       : undefined;
     this.runtime.art.playerFrame = playerFrame;
     this.runtime.art.playerMinimumRenderedHeight =
@@ -2066,7 +1995,8 @@ export class AlpineScene extends Phaser.Scene {
   }
 
   private getInteractiveObjects(): readonly InteractiveWorldObject[] {
-    if (this.scenario !== "none") return this.scenarioObjects;
+    if (this.scenario !== "none")
+      return this.scenarioObjects.slice(0, MAX_VISIBLE_POPULATED_OBJECTS);
     if (this.trainingMode || this.courseTestMode)
       return EMPTY_INTERACTIVE_OBJECTS;
     const objects: InteractiveWorldObject[] = [];
@@ -2093,7 +2023,16 @@ export class AlpineScene extends Phaser.Scene {
         });
       }
     }
-    return objects;
+    const player = this.simulation.getSnapshot();
+    return objects
+      .sort(
+        (left, right) =>
+          (left.x - player.worldX) ** 2 +
+            (left.y - player.worldY) ** 2 -
+            ((right.x - player.worldX) ** 2 + (right.y - player.worldY) ** 2) ||
+          left.id.localeCompare(right.id),
+      )
+      .slice(0, MAX_VISIBLE_POPULATED_OBJECTS);
   }
 
   private getLivingSlopeRamps(): readonly LivingSlopeRamp[] {
@@ -2366,7 +2305,7 @@ export class AlpineScene extends Phaser.Scene {
         player.worldY,
       );
     } else if (scenario === "chair-drop") {
-      for (let index = 0; index < 8; index += 1) {
+      for (let index = 0; index < 3; index += 1) {
         this.livingSlope.repositionActor(
           `chair-down-${index}`,
           -9,
@@ -2446,6 +2385,72 @@ export class AlpineScene extends Phaser.Scene {
     this.recordLifecycle(eventType);
     this.updateHud(player);
     this.updateRuntime(player);
+  }
+
+  private presentModeResult(result: ModeResult, record: RunRecord): void {
+    const courseName =
+      CLASSIC_COURSES.find((course) => course.id === result.mode)?.name ??
+      result.mode.replaceAll("-", " ").toUpperCase();
+    const finalSeconds = result.adjustedTimeSeconds ?? result.rawTimeSeconds;
+    const leader = this.recordBook.buckets[record.bucket][result.mode][0];
+    const card = document.querySelector<HTMLElement>("#result-card");
+    const eyebrow = document.querySelector<HTMLElement>("#result-eyebrow");
+    const title = document.querySelector<HTMLElement>("#result-title");
+    const time = document.querySelector<HTMLElement>("#result-time");
+    const summary = document.querySelector<HTMLElement>("#result-summary");
+    const best = document.querySelector<HTMLElement>("#result-record");
+    if (eyebrow) eyebrow.textContent = `${courseName} / COURSE COMPLETE`;
+    if (title) title.textContent = "FINISH TIME";
+    if (time) time.textContent = `${finalSeconds.toFixed(1)} S`;
+    if (summary)
+      summary.textContent =
+        result.mode === "free-style"
+          ? `STYLE ${result.score ?? 0} · TIME RECORDED AS SCORE`
+          : result.penaltySeconds > 0
+            ? `RAW ${result.rawTimeSeconds.toFixed(1)} S · PENALTY +${result.penaltySeconds.toFixed(1)} S`
+            : "CLEAN RUN · TIME RECORDED AS SCORE";
+    if (best)
+      best.textContent =
+        leader?.id === record.id
+          ? "NEW COURSE HIGH SCORE"
+          : `COURSE BEST ${(leader?.value ?? finalSeconds).toFixed(1)} S`;
+    if (card) {
+      card.hidden = false;
+      card.setAttribute("aria-hidden", "false");
+    }
+    this.resultCardOpen = true;
+    this.inputAdapter?.releaseAll();
+    if (!this.simulation.getSnapshot().paused) {
+      this.simulation.togglePause();
+      this.resultPauseOwned = true;
+    }
+    this.clock.reset();
+    this.capturePlayerEvents();
+    document.querySelector<HTMLButtonElement>("#result-close")?.focus();
+  }
+
+  private dismissResultCard(continueSkiing: boolean): void {
+    if (!this.resultCardOpen) return;
+    const card = document.querySelector<HTMLElement>("#result-card");
+    if (card) {
+      card.hidden = true;
+      card.setAttribute("aria-hidden", "true");
+    }
+    this.resultCardOpen = false;
+    const shouldResume =
+      continueSkiing &&
+      this.resultPauseOwned &&
+      this.automaticPause.getSnapshot().reasons.length === 0 &&
+      this.simulation.getSnapshot().paused;
+    this.resultPauseOwned = false;
+    if (shouldResume) this.simulation.togglePause();
+    this.inputAdapter?.releaseAll();
+    this.clock.reset();
+    this.capturePlayerEvents();
+    const player = this.simulation.getSnapshot();
+    this.updateHud(player);
+    this.updateRuntime(player);
+    if (continueSkiing) this.game.canvas.focus();
   }
 
   private recordLifecycle(type: LifecycleTelemetryEvent["type"]): void {
@@ -2769,6 +2774,7 @@ export class AlpineScene extends Phaser.Scene {
       this.recordBook = addRecord(this.recordBook, record);
       if (this.recordStorage && !this.recordStorage.save(this.recordBook))
         this.storageAvailable = false;
+      this.presentModeResult(result, record);
     }
 
     const latest = events.at(-1)!;
@@ -2780,9 +2786,7 @@ export class AlpineScene extends Phaser.Scene {
       latest.type === "mode-started"
         ? `${latest.mode.replaceAll("-", " ").toUpperCase()} START`
         : latest.type === "mode-finished"
-          ? latest.mode === "free-style"
-            ? `FINAL STYLE ${run.result?.score ?? 0}`
-            : `FINAL ${(run.result?.adjustedTimeSeconds ?? 0).toFixed(1)}S`
+          ? `FINAL ${(run.result?.adjustedTimeSeconds ?? run.result?.rawTimeSeconds ?? 0).toFixed(1)}S`
           : latest.type === "marker-correct"
             ? `MARKER ${latest.markerIndex} CLEAN`
             : latest.type === "marker-wrong-side"

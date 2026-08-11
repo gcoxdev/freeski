@@ -49,7 +49,7 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
     () => window.__FREE_SKI__!.livingSlope.snapshot,
   );
   expect(initialPopulation.bounded).toBe(true);
-  expect(initialPopulation.actorCount).toBeLessThanOrEqual(22);
+  expect(initialPopulation.actorCount).toBeLessThanOrEqual(12);
   expect(initialPopulation.workUnitsLastStep).toBe(
     initialPopulation.actorCount,
   );
@@ -176,6 +176,39 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
   );
   await evidenceScreenshot(page, "bottom-chase.png");
 
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#pause-card")).toBeVisible();
+  const frozenChase = await page.evaluate(() => {
+    const runtime = window.__FREE_SKI__!;
+    const chaser = runtime.yeti.snapshot.controllers.find(
+      (controller) => controller.boundary === "bottom",
+    )!;
+    return {
+      livingSeconds: runtime.livingSlope.snapshot.simulationSeconds,
+      playerSeconds: runtime.player.simulationSeconds,
+      stateSeconds: chaser.stateSeconds,
+      worldX: chaser.worldX,
+      worldY: chaser.worldY,
+    };
+  });
+  await page.waitForTimeout(500);
+  const pausedChase = await page.evaluate(() => {
+    const runtime = window.__FREE_SKI__!;
+    const chaser = runtime.yeti.snapshot.controllers.find(
+      (controller) => controller.boundary === "bottom",
+    )!;
+    return {
+      livingSeconds: runtime.livingSlope.snapshot.simulationSeconds,
+      playerSeconds: runtime.player.simulationSeconds,
+      stateSeconds: chaser.stateSeconds,
+      worldX: chaser.worldX,
+      worldY: chaser.worldY,
+    };
+  });
+  expect(pausedChase).toEqual(frozenChase);
+  await page.keyboard.press("F3");
+  await expect(page.locator("#pause-card")).toBeHidden();
+
   const distanceBeforeTurbo = await page.evaluate(() => {
     const runtime = window.__FREE_SKI__!;
     const chaser = runtime.yeti.snapshot.controllers.find(
@@ -186,8 +219,18 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
       runtime.player.worldY - chaser.worldY,
     );
   });
+  const escapeKey = await page.evaluate(() => {
+    const runtime = window.__FREE_SKI__!;
+    const chaser = runtime.yeti.snapshot.controllers.find(
+      (controller) => controller.boundary === "bottom",
+    )!;
+    const awayX = runtime.player.worldX - chaser.worldX;
+    const awayY = runtime.player.worldY - chaser.worldY;
+    if (Math.abs(awayX) >= Math.abs(awayY) * 0.7) return awayX < 0 ? "a" : "d";
+    return awayY < 0 ? "w" : "s";
+  });
   await page.keyboard.press("f");
-  await page.keyboard.down("s");
+  await page.keyboard.down(escapeKey);
   await page.waitForFunction(() =>
     window.__FREE_SKI__?.yeti.events.some(
       (event) => event.type === "turbo-evasion",
@@ -206,7 +249,7 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
   });
   expect(distanceAfterTurbo).toBeGreaterThan(distanceBeforeTurbo + 4);
   await evidenceScreenshot(page, "turbo-evasion.png");
-  await page.keyboard.up("s");
+  await page.keyboard.up(escapeKey);
   await page.keyboard.press("f");
 
   await page.waitForFunction(() => {

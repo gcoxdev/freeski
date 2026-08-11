@@ -60,34 +60,34 @@ function alternatingMarkers(
 
 export const CLASSIC_COURSES: readonly ClassicCourse[] = Object.freeze([
   Object.freeze({
-    centerX: -28,
-    finishGate: Object.freeze({ leftX: -36, rightX: -20, y: 540 }),
-    halfWidth: 8,
+    centerX: -34,
+    finishGate: Object.freeze({ leftX: -44, rightX: -24, y: 596 }),
+    halfWidth: 10,
     id: "slalom" as const,
-    lengthMeters: 540,
-    markers: alternatingMarkers(24, 60, 20, -31, -25),
+    lengthMeters: 500,
+    markers: alternatingMarkers(24, 120, 19, -38, -30),
     name: "SLALOM",
-    startGate: Object.freeze({ leftX: -36, rightX: -20, y: 40 }),
+    startGate: Object.freeze({ leftX: -44, rightX: -24, y: 96 }),
   }),
   Object.freeze({
     centerX: 0,
-    finishGate: Object.freeze({ leftX: -10, rightX: 10, y: 1_040 }),
-    halfWidth: 10,
+    finishGate: Object.freeze({ leftX: -12, rightX: 12, y: 1_096 }),
+    halfWidth: 12,
     id: "free-style" as const,
-    lengthMeters: 1_040,
+    lengthMeters: 1_000,
     markers: Object.freeze([]),
     name: "FREE STYLE",
-    startGate: Object.freeze({ leftX: -10, rightX: 10, y: 40 }),
+    startGate: Object.freeze({ leftX: -12, rightX: 12, y: 96 }),
   }),
   Object.freeze({
-    centerX: 26,
-    finishGate: Object.freeze({ leftX: 20, rightX: 32, y: 1_040 }),
-    halfWidth: 6,
+    centerX: 34,
+    finishGate: Object.freeze({ leftX: 24, rightX: 44, y: 1_096 }),
+    halfWidth: 10,
     id: "tree-slalom" as const,
-    lengthMeters: 1_040,
-    markers: alternatingMarkers(39, 65, 25, 25, 27),
+    lengthMeters: 1_000,
+    markers: alternatingMarkers(39, 121, 25, 32, 36),
     name: "TREE SLALOM",
-    startGate: Object.freeze({ leftX: 20, rightX: 32, y: 40 }),
+    startGate: Object.freeze({ leftX: 24, rightX: 44, y: 96 }),
   }),
 ]);
 
@@ -95,7 +95,7 @@ const TREE_SLALOM = CLASSIC_COURSES.find(
   (course) => course.id === "tree-slalom",
 )!;
 
-export const TREE_SLALOM_ROUTE_WIDTH_METERS = 3.2;
+export const TREE_SLALOM_ROUTE_WIDTH_METERS = 4.5;
 
 /** Authored weaving centerline: always takes the researched correct marker side. */
 export const TREE_SLALOM_ROUTE = Object.freeze([

@@ -13,7 +13,7 @@ export const YETI_TUNING = Object.freeze({
   repositionDistanceMeters: 86,
   repositionProtectionSeconds: 1.15,
   safeRepositionDistanceMeters: 25,
-  turboEvasionSpeedScale: 0.68,
+  turboEvasionSpeedScale: 0.45,
   turboEvasionWindowSeconds: 1.65,
   windupSeconds: 0.36,
   recoverySeconds: 0.62,
@@ -138,12 +138,34 @@ function boundaryExceeded(
   return player.worldX > WORLD_BOUNDARIES_METERS.rightYeti;
 }
 
-function safeOffset(boundary: WorldBoundary): readonly [number, number] {
+const APPROACH_DIRECTIONS: readonly (readonly [number, number])[] =
+  Object.freeze([
+    Object.freeze([0, -1] as const),
+    Object.freeze([Math.SQRT1_2, -Math.SQRT1_2] as const),
+    Object.freeze([1, 0] as const),
+    Object.freeze([Math.SQRT1_2, Math.SQRT1_2] as const),
+    Object.freeze([0, 1] as const),
+    Object.freeze([-Math.SQRT1_2, Math.SQRT1_2] as const),
+    Object.freeze([-1, 0] as const),
+    Object.freeze([-Math.SQRT1_2, -Math.SQRT1_2] as const),
+  ]);
+
+/** Deterministic perimeter entry so repeated chases can approach from anywhere. */
+export function yetiApproachOffset(
+  player: Readonly<YetiPlayerState>,
+  salt = 0,
+): readonly [number, number] {
   const distance = YETI_TUNING.safeRepositionDistanceMeters;
-  if (boundary === "top") return [6, distance];
-  if (boundary === "bottom") return [-6, -distance];
-  if (boundary === "left") return [distance, 6];
-  return [-distance, -6];
+  const hash =
+    Math.floor(player.worldX * 11) +
+    Math.floor(player.worldY * 7) +
+    Math.floor(player.simulationSeconds * 13) +
+    salt;
+  const index =
+    ((hash % APPROACH_DIRECTIONS.length) + APPROACH_DIRECTIONS.length) %
+    APPROACH_DIRECTIONS.length;
+  const [x, y] = APPROACH_DIRECTIONS[index]!;
+  return Object.freeze([x * distance, y * distance]);
 }
 
 function moveToward(
@@ -241,6 +263,11 @@ export class YetiSimulation {
     if (player.turbo && !this.previousTurbo && this.hasActiveChaser()) {
       this.turboEvasionSeconds = YETI_TUNING.turboEvasionWindowSeconds;
       const active = this.controllers.find((value) => value.active)!;
+      for (const controller of this.controllers) {
+        if (!controller.active || controller.state !== "chasing") continue;
+        controller.velocityX *= -YETI_TUNING.turboEvasionSpeedScale;
+        controller.velocityY *= -YETI_TUNING.turboEvasionSpeedScale;
+      }
       this.emit("turbo-evasion", active, player);
     }
     this.previousTurbo = player.turbo;
@@ -290,7 +317,7 @@ export class YetiSimulation {
     controller: MutableYetiController,
     player: Readonly<YetiPlayerState>,
   ): void {
-    const [offsetX, offsetY] = safeOffset(controller.boundary);
+    const [offsetX, offsetY] = yetiApproachOffset(player, this.eventSequence);
     controller.active = true;
     controller.state = "chasing";
     controller.stateSeconds = 0;
@@ -316,7 +343,10 @@ export class YetiSimulation {
     let deltaY = player.worldY - controller.worldY;
     let distance = Math.hypot(deltaX, deltaY);
     if (distance > YETI_TUNING.repositionDistanceMeters) {
-      const [offsetX, offsetY] = safeOffset(controller.boundary);
+      const [offsetX, offsetY] = yetiApproachOffset(
+        player,
+        this.eventSequence + 1,
+      );
       controller.worldX = player.worldX + offsetX;
       controller.worldY = player.worldY + offsetY;
       controller.velocityX = 0;
@@ -329,12 +359,12 @@ export class YetiSimulation {
     }
     const directionX = distance > 0 ? deltaX / distance : 0;
     const directionY = distance > 0 ? deltaY / distance : 0;
-    const evasionScale =
-      this.turboEvasionSeconds > 0 ? YETI_TUNING.turboEvasionSpeedScale : 1;
+    const evading = this.turboEvasionSeconds > 0;
+    const pursuitScale = evading ? -YETI_TUNING.turboEvasionSpeedScale : 1;
     const targetX =
-      directionX * YETI_TUNING.maximumHorizontalSpeed * evasionScale;
+      directionX * YETI_TUNING.maximumHorizontalSpeed * pursuitScale;
     const targetY =
-      directionY * YETI_TUNING.maximumVerticalSpeed * evasionScale;
+      directionY * YETI_TUNING.maximumVerticalSpeed * pursuitScale;
     const maximumDelta =
       YETI_TUNING.chaseAccelerationMetersPerSecondSquared * deltaSeconds;
     controller.velocityX = moveToward(
