@@ -55,6 +55,35 @@ async function crossMarker(
   );
 }
 
+async function crossCorrectMarkers(
+  page: Page,
+  mode: EventModeId,
+  markers: readonly number[],
+): Promise<void> {
+  const results = await page.evaluate(
+    ({ selectedMarkers, selectedMode }) => {
+      const debug = window.__FREE_SKI_DEBUG__;
+      if (!debug) throw new Error("FreeSki debug bridge is not ready");
+      const staged = debug.stageCourseCrossings(
+        selectedMode,
+        selectedMarkers,
+        "correct",
+      );
+      return selectedMarkers.map((marker) => ({
+        marker,
+        staged,
+        state:
+          window.__FREE_SKI__?.modes.snapshot.courses[selectedMode].markers[
+            marker - 1
+          ]?.state,
+      }));
+    },
+    { selectedMarkers: markers, selectedMode: mode },
+  );
+  for (const result of results)
+    expect(result).toMatchObject({ staged: true, state: "correct" });
+}
+
 async function finishMode(page: Page, mode: EventModeId): Promise<void> {
   await stageCrossing(page, mode, "finish");
   await page.waitForFunction(
@@ -180,8 +209,11 @@ test("crosses real gates to finish all modes and reloads classic records", async
     "MARKER 1 WRONG +5S",
   );
   await screenshot(page, "slalom-wrong-side.png");
-  for (let marker = 2; marker <= 24; marker += 1)
-    await crossMarker(page, "slalom", marker, "correct");
+  await crossCorrectMarkers(
+    page,
+    "slalom",
+    Array.from({ length: 23 }, (_, index) => index + 2),
+  );
   await expect(page.locator("#mode-penalty")).toHaveText("PENALTY +5.0S");
   await screenshot(page, "slalom-penalty.png");
   await finishMode(page, "slalom");
@@ -198,8 +230,11 @@ test("crosses real gates to finish all modes and reloads classic records", async
   );
 
   await startMode(page, "tree-slalom");
-  for (let marker = 1; marker <= 39; marker += 1)
-    await crossMarker(page, "tree-slalom", marker);
+  await crossCorrectMarkers(
+    page,
+    "tree-slalom",
+    Array.from({ length: 39 }, (_, index) => index + 1),
+  );
   await finishMode(page, "tree-slalom");
   const tree = await page.evaluate(
     () => window.__FREE_SKI__!.modes.snapshot.courses["tree-slalom"],

@@ -50,9 +50,9 @@ const GROUNDED_FRAME_FOR_HEADING: Readonly<
   downhill: "player/downhill",
   "traverse-left": "player/carve-right-3",
   "traverse-right": "player/hockey-stop-right",
-  tuck: "player/tuck",
+  tuck: "player/uphill-right",
   "uphill-left": "player/uphill-left",
-  "uphill-right": "player/uphill-right",
+  "uphill-right": "player/hockey-stop-right",
 });
 
 type PlayerPose = Pick<

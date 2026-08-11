@@ -503,6 +503,8 @@ export class AlpineScene extends Phaser.Scene {
         this.stageInteractionScenario(scenario),
       stageCourseCrossing: (mode, target, outcome = "correct") =>
         this.stageCourseCrossing(mode, target, outcome),
+      stageCourseCrossings: (mode, targets, outcome = "correct") =>
+        this.stageCourseCrossings(mode, targets, outcome),
       stageLivingScenario: (scenario) => this.stageLivingScenario(scenario),
       exportReplay: () => this.replay.export(),
       setVisible: (visible) => this.setDebugVisible(visible),
@@ -2131,7 +2133,15 @@ export class AlpineScene extends Phaser.Scene {
 
     if (scenario === "ramp-trick") {
       this.scenarioObjects = [
-        createObject("ramp", "scenario-ramp", player.worldX, player.worldY + 5),
+        {
+          ...createObject(
+            "ramp",
+            "scenario-ramp",
+            player.worldX,
+            player.worldY + 5,
+          ),
+          rampLaunchVelocity: 9.4,
+        },
       ];
     } else if (scenario === "crash-recovery") {
       this.scenarioObjects = [
@@ -2196,6 +2206,7 @@ export class AlpineScene extends Phaser.Scene {
     mode: EventModeId,
     target: CourseCrossingTarget,
     outcome: Exclude<MarkerState, "pending">,
+    publish = true,
   ): boolean {
     const course = CLASSIC_COURSES.find((candidate) => candidate.id === mode);
     if (!course) return false;
@@ -2233,15 +2244,56 @@ export class AlpineScene extends Phaser.Scene {
     this.scenario = "none";
     this.scenarioObjects = [];
     this.courseStagingHold = true;
-    this.simulation.reposition(x, y - 0.15, 0, 6);
-    const player = this.simulation.getSnapshot();
+    this.simulation.reposition(x, y - 0.15, 0, 0);
+    let player = this.simulation.getSnapshot();
     this.modes.syncPosition({
       simulationSeconds: player.simulationSeconds,
       style: this.interactions.getSnapshot().style,
       worldX: player.worldX,
       worldY: player.worldY,
     });
+    this.simulation.reposition(x, y + 0.15, 0, 0);
+    player = this.simulation.getSnapshot();
+    this.modes.step({
+      simulationSeconds: player.simulationSeconds,
+      style: this.interactions.getSnapshot().style,
+      worldX: player.worldX,
+      worldY: player.worldY,
+    });
+    if (publish) this.publishStagedCourseState();
     return true;
+  }
+
+  private stageCourseCrossings(
+    mode: EventModeId,
+    targets: readonly number[],
+    outcome: Exclude<MarkerState, "pending">,
+  ): boolean {
+    if (targets.length === 0) return false;
+    for (const target of targets) {
+      if (!this.stageCourseCrossing(mode, target, outcome, false)) {
+        this.publishStagedCourseState();
+        return false;
+      }
+    }
+    this.publishStagedCourseState();
+    return true;
+  }
+
+  private publishStagedCourseState(): void {
+    this.captureModeEvents();
+  }
+
+  private publishCurrentModeState(): void {
+    const player = this.simulation.getSnapshot();
+    this.renderModeSnapshot = this.modes.getSnapshot();
+    this.updateHud(player);
+    if (this.runtime) {
+      this.runtime.player = player;
+      this.runtime.modes.snapshot = this.renderModeSnapshot;
+      this.runtime.modes.records = this.recordBook;
+      this.runtime.modes.storageAvailable = this.storageAvailable;
+    }
   }
 
   private stageLivingScenario(scenario: GateFiveScenario): boolean {
@@ -2814,6 +2866,7 @@ export class AlpineScene extends Phaser.Scene {
       this.feedbackPriorityUntil,
       this.feedbackVisibleUntil,
     );
+    this.publishCurrentModeState();
   }
 
   private captureLivingEvents(): void {

@@ -93,7 +93,8 @@ describe("production player presentation", () => {
         ...overrides,
       });
 
-    expect(pose({ heading: "tuck" })).toBe("player/tuck");
+    expect(pose({ heading: "tuck" })).toBe("player/uphill-right");
+    expect(pose({ heading: "uphill-right" })).toBe("player/hockey-stop-right");
     expect(pose({ heading: "carve-left-1" })).toBe("player/carve-left-2");
     expect(pose({ heading: "carve-left-3" })).toBe("player/carve-right-1");
     expect(pose({ heading: "carve-right-1" })).toBe("player/carve-left-1");

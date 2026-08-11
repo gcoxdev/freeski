@@ -116,6 +116,20 @@ describe("SlopeInteractionSimulation terrain outcomes", () => {
       { cue: "ramp-launch", kind: "audio" },
     ]);
   });
+
+  it("honors an explicit staged-ramp airtime window", () => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    const launchVelocity = 9.4;
+    contact(
+      interactions,
+      player,
+      atPlayer(player, "ramp", "staged-ramp", { rampLaunchVelocity: 9.4 }),
+    );
+    stepPlayer(player, launchVelocity / 10.4, {}, interactions);
+    expect(player.getSnapshot()).toMatchObject({ motion: "airborne" });
+    expect(player.getSnapshot().airHeight).toBeCloseTo(4.17, 2);
+  });
 });
 
 describe("SlopeInteractionSimulation blocking collisions", () => {

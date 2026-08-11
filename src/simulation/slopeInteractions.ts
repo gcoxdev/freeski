@@ -27,6 +27,8 @@ export const PLAYER_COLLISION_FOOTPRINT = Object.freeze({
 export interface InteractiveWorldObject {
   readonly id: string;
   readonly interaction: InteractionMetadata;
+  /** Optional deterministic airtime interval for explicit staged scenarios. */
+  readonly rampLaunchVelocity?: number;
   readonly type: InteractionObjectKind;
   readonly variant?: GeneratedObjectVariant;
   readonly x: number;
@@ -267,7 +269,7 @@ export class SlopeInteractionSimulation {
 
     if (object.type === "ramp") {
       if (snapshot.motion !== "grounded") return false;
-      const launched = player.launch("ramp", 7.6);
+      const launched = player.launch("ramp", object.rampLaunchVelocity ?? 7.6);
       if (launched) {
         this.award(
           "ramp-takeoff",

@@ -163,7 +163,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     () => window.__FREE_SKI__?.player.heading === "uphill-right",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/uphill-right",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/hockey-stop-right",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.velocityY ?? 1) < 0,
@@ -189,7 +189,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     () => window.__FREE_SKI__?.player.heading === "tuck",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/tuck",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/uphill-right",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.speedMetersPerSecond ?? 0) > 18,

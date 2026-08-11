@@ -209,6 +209,11 @@ declare global {
         target: CourseCrossingTarget,
         outcome?: Exclude<MarkerState, "pending">,
       ) => boolean;
+      stageCourseCrossings: (
+        mode: EventModeId,
+        targets: readonly number[],
+        outcome?: Exclude<MarkerState, "pending">,
+      ) => boolean;
       stageLivingScenario: (scenario: GateFiveScenario) => boolean;
       exportReplay: () => ReplayExport;
       setVisible: (visible: boolean) => void;
