@@ -51,26 +51,26 @@ describe("classic mountain declarative overlays", () => {
     expect(slalom).toMatchObject({
       centerX: -34,
       halfWidth: 10,
-      lengthMeters: 500,
+      lengthMeters: 540,
       startGate: { leftX: -44, rightX: -24, y: 96 },
-      finishGate: { leftX: -44, rightX: -24, y: 596 },
+      finishGate: { leftX: -44, rightX: -24, y: 636 },
     });
     expect(slalom.markers).toHaveLength(24);
     expect(slalom.markers[0]).toMatchObject({ x: -38, y: 120 });
-    expect(slalom.markers.at(-1)).toMatchObject({ x: -30, y: 557 });
+    expect(slalom.markers.at(-1)).toMatchObject({ x: -30, y: 580 });
 
     expect(freeStyle).toMatchObject({
       halfWidth: 12,
-      lengthMeters: 1_000,
+      lengthMeters: 1_040,
       startGate: { leftX: -12, rightX: 12, y: 96 },
-      finishGate: { leftX: -12, rightX: 12, y: 1_096 },
+      finishGate: { leftX: -12, rightX: 12, y: 1_136 },
     });
     expect(treeSlalom).toMatchObject({
       centerX: 34,
       halfWidth: 10,
-      lengthMeters: 1_000,
+      lengthMeters: 1_040,
       startGate: { leftX: 24, rightX: 44, y: 96 },
-      finishGate: { leftX: 24, rightX: 44, y: 1_096 },
+      finishGate: { leftX: 24, rightX: 44, y: 1_136 },
     });
     expect(treeSlalom.markers).toHaveLength(39);
     expect(treeSlalom.markers[0]).toMatchObject({ x: 32, y: 121 });

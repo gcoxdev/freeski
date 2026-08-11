@@ -41,18 +41,18 @@ export type ProductionPlayerFrame = keyof typeof PLAYER_FRAME_TARGET_EXTENTS;
 const GROUNDED_FRAME_FOR_HEADING: Readonly<
   Record<Exclude<PlayerHeading, "brake">, ProductionPlayerFrame>
 > = Object.freeze({
-  "carve-left-1": "player/carve-left-1",
-  "carve-left-2": "player/carve-right-2",
-  "carve-left-3": "player/hockey-stop-left",
-  "carve-right-1": "player/carve-left-2",
-  "carve-right-2": "player/carve-left-3",
-  "carve-right-3": "player/carve-right-1",
+  "carve-left-1": "player/carve-left-2",
+  "carve-left-2": "player/carve-left-3",
+  "carve-left-3": "player/carve-right-1",
+  "carve-right-1": "player/carve-left-1",
+  "carve-right-2": "player/carve-right-2",
+  "carve-right-3": "player/hockey-stop-left",
   downhill: "player/downhill",
-  "traverse-left": "player/carve-right-2",
-  "traverse-right": "player/carve-right-3",
-  tuck: "player/uphill-right",
+  "traverse-left": "player/carve-right-3",
+  "traverse-right": "player/hockey-stop-right",
+  tuck: "player/tuck",
   "uphill-left": "player/uphill-left",
-  "uphill-right": "player/hockey-stop-right",
+  "uphill-right": "player/uphill-right",
 });
 
 type PlayerPose = Pick<
@@ -98,8 +98,8 @@ export function playerAtlasFrame(
   }
   if (player.heading === "brake")
     return player.velocityX < 0
-      ? "player/hockey-stop-left"
-      : "player/carve-right-3";
+      ? "player/carve-right-3"
+      : "player/hockey-stop-right";
   return GROUNDED_FRAME_FOR_HEADING[player.heading];
 }
 

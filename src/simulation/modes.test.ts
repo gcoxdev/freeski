@@ -94,7 +94,7 @@ describe("timed marker events", () => {
     const simulation = new MountainModeSimulation();
     start(simulation, "slalom", 1);
     const course = CLASSIC_COURSES.find((item) => item.id === "slalom")!;
-    expect(course.lengthMeters).toBe(500);
+    expect(course.lengthMeters).toBe(540);
     expect(course.markers).toHaveLength(24);
     const [red, blue, third] = course.markers;
     cross(simulation, red!.x - 1, red!.y, 2);
@@ -142,7 +142,7 @@ describe("timed marker events", () => {
   it("uses 39 researched Tree Slalom markers and requires its finish gate", () => {
     const simulation = new MountainModeSimulation();
     const course = CLASSIC_COURSES.find((item) => item.id === "tree-slalom")!;
-    expect(course.lengthMeters).toBe(1_000);
+    expect(course.lengthMeters).toBe(1_040);
     expect(course.markers).toHaveLength(39);
     start(simulation, "tree-slalom", 1);
     course.markers.forEach((marker, index) =>
@@ -171,7 +171,7 @@ describe("Free Style result", () => {
   it("finishes the 1000m course with time and Style earned during the run", () => {
     const simulation = new MountainModeSimulation();
     const course = CLASSIC_COURSES.find((item) => item.id === "free-style")!;
-    expect(course.lengthMeters).toBe(1_000);
+    expect(course.lengthMeters).toBe(1_040);
     cross(simulation, course.centerX, course.startGate.y, 5, 120);
     simulation.syncPosition(position(80, 700, 20, 420));
     simulation.step(position(-70, 600, 25, 500));

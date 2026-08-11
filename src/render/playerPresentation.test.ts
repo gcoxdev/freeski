@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import type { PlayerHeading } from "../simulation/player";
 import {
   PLAYER_FRAME_TARGET_EXTENTS,
   PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
@@ -92,11 +93,11 @@ describe("production player presentation", () => {
         ...overrides,
       });
 
-    expect(pose({ heading: "tuck" })).toBe("player/uphill-right");
-    expect(pose({ heading: "carve-left-1" })).toBe("player/carve-left-1");
-    expect(pose({ heading: "carve-left-3" })).toBe("player/hockey-stop-left");
-    expect(pose({ heading: "carve-right-1" })).toBe("player/carve-left-2");
-    expect(pose({ heading: "carve-right-3" })).toBe("player/carve-right-1");
+    expect(pose({ heading: "tuck" })).toBe("player/tuck");
+    expect(pose({ heading: "carve-left-1" })).toBe("player/carve-left-2");
+    expect(pose({ heading: "carve-left-3" })).toBe("player/carve-right-1");
+    expect(pose({ heading: "carve-right-1" })).toBe("player/carve-left-1");
+    expect(pose({ heading: "carve-right-3" })).toBe("player/hockey-stop-left");
     expect(pose({ motion: "airborne" })).toBe("player/jump-takeoff");
     expect(pose({ airHeight: 1, motion: "airborne" })).toBe("player/tuck");
     expect(pose({ airSpin: -1, motion: "airborne" })).toBe("player/spin-left");
@@ -107,5 +108,46 @@ describe("production player presentation", () => {
       "player/air-neutral",
     );
     expect(pose({ motion: "crashed" })).toBe("player/wipeout");
+  });
+
+  it("matches every lateral simulation heading to the depicted travel direction", () => {
+    const frame = (heading: PlayerHeading, velocityX: number) =>
+      playerAtlasFrame({
+        airHeight: 0,
+        airPitch: 0,
+        airSpin: 0,
+        heading,
+        motion: "grounded",
+        velocityX,
+      });
+    const depictedLeft = new Set([
+      "player/carve-left-2",
+      "player/carve-left-3",
+      "player/carve-right-1",
+      "player/carve-right-3",
+    ]);
+    const depictedRight = new Set([
+      "player/carve-left-1",
+      "player/carve-right-2",
+      "player/hockey-stop-left",
+      "player/hockey-stop-right",
+    ]);
+
+    for (const heading of [
+      "carve-left-1",
+      "carve-left-2",
+      "carve-left-3",
+      "traverse-left",
+    ] as const)
+      expect(depictedLeft.has(frame(heading, -8))).toBe(true);
+    for (const heading of [
+      "carve-right-1",
+      "carve-right-2",
+      "carve-right-3",
+      "traverse-right",
+    ] as const)
+      expect(depictedRight.has(frame(heading, 8))).toBe(true);
+    expect(depictedLeft.has(frame("brake", -3))).toBe(true);
+    expect(depictedRight.has(frame("brake", 3))).toBe(true);
   });
 });

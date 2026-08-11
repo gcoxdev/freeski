@@ -181,6 +181,7 @@ export class AlpineScene extends Phaser.Scene {
   private trickVisibleUntil = 0;
   private trainingMode = false;
   private courseTestMode = false;
+  private courseStagingHold = false;
   private recordBook: RecordBook = emptyRecordBook();
   private recordStorage?: LocalRecordStorage;
   private storageAvailable = true;
@@ -579,7 +580,9 @@ export class AlpineScene extends Phaser.Scene {
         );
         const playerInput = captureBeforeStep.capturedBy
           ? NEUTRAL_PLAYER_INPUT
-          : actions.player;
+          : this.courseStagingHold
+            ? { ...NEUTRAL_PLAYER_INPUT, brake: true }
+            : actions.player;
         this.simulation.step(playerInput, deltaSeconds);
         if (captureBeforeStep.playerRemoved)
           this.simulation.applySpeedMultiplier(0);
@@ -593,7 +596,7 @@ export class AlpineScene extends Phaser.Scene {
         if (!captureBeforeStep.capturedBy) {
           this.interactions.step(
             this.simulation,
-            actions.player,
+            playerInput,
             this.getInteractiveObjects(),
             deltaSeconds,
           );
@@ -2087,6 +2090,7 @@ export class AlpineScene extends Phaser.Scene {
       "burning-clear",
     ];
     if (!valid.includes(scenario)) return false;
+    this.courseStagingHold = false;
     if (scenario === "none") {
       this.scenario = "none";
       this.scenarioObjects = [];
@@ -2228,7 +2232,8 @@ export class AlpineScene extends Phaser.Scene {
     }
     this.scenario = "none";
     this.scenarioObjects = [];
-    this.simulation.reposition(x, y - 0.7, 0, 6);
+    this.courseStagingHold = true;
+    this.simulation.reposition(x, y - 0.15, 0, 6);
     const player = this.simulation.getSnapshot();
     this.modes.syncPosition({
       simulationSeconds: player.simulationSeconds,
@@ -2250,6 +2255,7 @@ export class AlpineScene extends Phaser.Scene {
       "yeti-contact",
     ];
     if (!valid.includes(scenario)) return false;
+    this.courseStagingHold = false;
     if (scenario === "none") {
       this.livingScenario = "none";
       return true;
@@ -2324,12 +2330,15 @@ export class AlpineScene extends Phaser.Scene {
         (controller) =>
           controller.boundary === "bottom" &&
           controller.active &&
-          controller.state === "chasing" &&
           controller.protectionSeconds <= 0,
       );
       if (!chaser) return false;
-      this.simulation.reposition(chaser.worldX, chaser.worldY, 0, 0);
-      this.syncModesToPlayer();
+      if (chaser.state === "chasing") {
+        this.simulation.reposition(chaser.worldX, chaser.worldY, 0, 0);
+        this.syncModesToPlayer();
+      } else if (chaser.state !== "windup" || yeti.capturedBy !== chaser.id) {
+        return false;
+      }
     }
     this.livingScenario = scenario;
     if (this.runtime) this.runtime.livingSlope.scenario = scenario;
