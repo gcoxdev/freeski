@@ -163,7 +163,19 @@ describe("YetiSimulation", () => {
       recoiling.velocityX * towardX + recoiling.velocityY * towardY,
     ).toBeLessThan(0);
 
-    current = stepFor(simulation, current, 1.2);
+    const distanceBeforeRecoil = Math.hypot(towardX, towardY);
+    current = stepFor(simulation, current, 0.85);
+    const afterRecoil = simulation
+      .getSnapshot(current.worldY)
+      .controllers.find((value) => value.boundary === "bottom")!;
+    expect(
+      Math.hypot(
+        current.worldX - afterRecoil.worldX,
+        current.worldY - afterRecoil.worldY,
+      ),
+    ).toBeGreaterThan(distanceBeforeRecoil + 4);
+
+    current = stepFor(simulation, current, 0.35);
     const controller = simulation
       .getSnapshot(current.worldY)
       .controllers.find((value) => value.boundary === "bottom")!;

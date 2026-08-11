@@ -18,11 +18,8 @@ if (seedLabel) {
 }
 
 if (loadingProgress) loadingProgress.style.width = "18%";
-
-requestAnimationFrame(() => {
-  if (loadingStatus) loadingStatus.textContent = "Starting slope systems…";
-  if (loadingProgress) loadingProgress.style.width = "36%";
-  if (loadingStatus) loadingStatus.textContent = "Loading alpine atlas…";
-  if (loadingProgress) loadingProgress.style.width = "58%";
-  createGame("game-canvas", seed);
-});
+if (loadingStatus) loadingStatus.textContent = "Starting slope systems…";
+if (loadingProgress) loadingProgress.style.width = "36%";
+if (loadingStatus) loadingStatus.textContent = "Loading alpine atlas…";
+if (loadingProgress) loadingProgress.style.width = "58%";
+createGame("game-canvas", seed);

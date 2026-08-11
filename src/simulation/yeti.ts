@@ -13,7 +13,7 @@ export const YETI_TUNING = Object.freeze({
   repositionDistanceMeters: 86,
   repositionProtectionSeconds: 1.15,
   safeRepositionDistanceMeters: 25,
-  turboEvasionSpeedScale: 0.45,
+  turboEvasionSpeedScale: 0.9,
   turboEvasionWindowSeconds: 1.65,
   windupSeconds: 0.36,
   recoverySeconds: 0.62,
