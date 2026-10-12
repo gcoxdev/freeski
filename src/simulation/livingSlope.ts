@@ -1,15 +1,22 @@
 import { createSeededRandom, hashSeed, type SeededRandom } from "../world/seed";
+import { CLASSIC_LIFT } from "../world/classicMountain";
+import {
+  LIFT_ROUTE,
+  liftDistanceOnLane,
+  liftRoutePoint,
+  wrapLiftDistance,
+} from "../world/liftRoute";
 
 export const LIVING_SLOPE_TUNING = Object.freeze({
   actorCullDistanceMeters: 150,
   beginnerFallIntervalSeconds: 3.2,
   chairDropChancePerFixedStep: 1 / 4_096,
-  chairLoopBottomY: 1_472,
-  chairLoopLengthMeters: 1_536,
-  chairLoopTopY: -64,
+  chairLoopBottomY: CLASSIC_LIFT.towers.at(-1)!.y,
+  chairLoopLengthMeters: LIFT_ROUTE.length,
+  chairLoopTopY: CLASSIC_LIFT.towers[0]!.y,
   chairSpeedMetersPerSecond: 2,
   dogContactRadiusMeters: 1.35,
-  maximumActors: 12,
+  maximumActors: 14,
   snowboarderFootprintRadiusMeters: 0.75,
   snowboarderEntryDistanceMeters: 46,
   walkingTreeWakeRadiusMeters: 14,
@@ -93,6 +100,9 @@ export interface LivingSlopeSnapshot {
 
 export interface LivingSlopePlayer {
   readonly simulationSeconds: number;
+  readonly viewportBottomMeters?: number;
+  readonly viewportHalfWidthMeters?: number;
+  readonly viewportTopMeters?: number;
   readonly worldX: number;
   readonly worldY: number;
 }
@@ -105,6 +115,7 @@ export interface LivingSlopeRamp {
 }
 
 interface MutableActor {
+  liftDistance: number;
   active: boolean;
   direction: -1 | 0 | 1;
   id: string;
@@ -123,11 +134,15 @@ interface MutableActor {
 function actor(
   value: Omit<
     MutableActor,
-    "lastRampId" | "stateSeconds" | "velocityX" | "velocityY"
+    "lastRampId" | "stateSeconds" | "velocityX" | "velocityY" | "liftDistance"
   > &
     Partial<Pick<MutableActor, "stateSeconds" | "velocityX" | "velocityY">>,
 ): MutableActor {
   return {
+    liftDistance:
+      value.kind === "chairlift"
+        ? liftDistanceOnLane(value.worldY, value.direction)
+        : 0,
     lastRampId: null,
     stateSeconds: 0,
     velocityX: 0,
@@ -164,33 +179,64 @@ function distanceToSegment(
   );
 }
 
-function wrapChairY(worldY: number): number {
-  const { chairLoopLengthMeters, chairLoopTopY } = LIVING_SLOPE_TUNING;
+const ACTOR_SPAWN_MARGIN_METERS = 5;
+
+function viewportHalfWidth(player: Readonly<LivingSlopePlayer>): number {
+  return player.viewportHalfWidthMeters ?? 55;
+}
+
+function viewportTop(player: Readonly<LivingSlopePlayer>): number {
+  return player.viewportTopMeters ?? 45;
+}
+
+function viewportBottom(player: Readonly<LivingSlopePlayer>): number {
+  return player.viewportBottomMeters ?? 45;
+}
+
+function topSpawnY(player: Readonly<LivingSlopePlayer>): number {
+  return player.worldY - viewportTop(player) - ACTOR_SPAWN_MARGIN_METERS;
+}
+
+function sideSpawnX(
+  player: Readonly<LivingSlopePlayer>,
+  direction: -1 | 1,
+): number {
+  const distance = viewportHalfWidth(player) + ACTOR_SPAWN_MARGIN_METERS;
+  return player.worldX + (direction < 0 ? distance : -distance);
+}
+
+function actorRecycleDistance(player: Readonly<LivingSlopePlayer>): number {
   return (
-    ((((worldY - chairLoopTopY) % chairLoopLengthMeters) +
-      chairLoopLengthMeters) %
-      chairLoopLengthMeters) +
-    chairLoopTopY
+    Math.max(viewportTop(player), viewportBottom(player), 45) +
+    ACTOR_SPAWN_MARGIN_METERS +
+    35
   );
 }
 
 function initialActors(seed: string): MutableActor[] {
-  const random = createSeededRandom(hashSeed(`living-slope:${seed}`));
+  void seed;
+  const uphillLane = CLASSIC_LIFT.chairs.find(
+    (chair) => chair.direction === "uphill",
+  )!.laneX;
+  const downhillLane = CLASSIC_LIFT.chairs.find(
+    (chair) => chair.direction === "downhill",
+  )!.laneX;
   const chairs: MutableActor[] = [];
   for (const direction of [-1, 1] as const) {
-    for (let index = 0; index < 3; index += 1) {
-      const occupied = random.next() < 0.58;
+    for (let index = 0; index < 4; index += 1) {
+      const riderCount = [0, 1, 2, 1][(index + (direction > 0 ? 1 : 0)) % 4] as
+        0 | 1 | 2;
       chairs.push(
         actor({
           active: true,
           direction,
           id: `chair-${direction < 0 ? "up" : "down"}-${index}`,
           kind: "chairlift",
-          riderCount: occupied ? ((random.next() < 0.3 ? 2 : 1) as 1 | 2) : 0,
+          riderCount,
           source: "mountain",
-          state: occupied ? "occupied" : "empty",
-          worldX: direction < 0 ? -7 : -9,
-          worldY: -64 + index * 512 + (direction > 0 ? 256 : 0),
+          state: riderCount > 0 ? "occupied" : "empty",
+          worldX: direction < 0 ? uphillLane : downhillLane,
+          worldY: -64 + index * 384 + (direction > 0 ? 192 : 0),
         }),
       );
     }
@@ -207,6 +253,18 @@ function initialActors(seed: string): MutableActor[] {
       velocityY: 4.2,
       worldX: -18,
       worldY: 14,
+    }),
+    actor({
+      active: true,
+      direction: -1,
+      id: "beginner-1",
+      kind: "beginner",
+      riderCount: 0,
+      source: "mountain",
+      state: "wobble",
+      velocityY: 4.6,
+      worldX: 18,
+      worldY: -22,
     }),
     actor({
       active: true,
@@ -228,7 +286,7 @@ function initialActors(seed: string): MutableActor[] {
       riderCount: 0,
       source: "chairlift",
       state: "jumping",
-      worldX: -9,
+      worldX: downhillLane,
       worldY: -64,
     }),
     actor({
@@ -317,12 +375,52 @@ export class LivingSlopeSimulation {
     this.workUnitsLastStep = 0;
   }
 
+  /** Place every self-propelled mountain actor beyond a real viewport edge. */
+  placeMovingActorsOffscreen(player: Readonly<LivingSlopePlayer>): void {
+    for (const value of this.actors) {
+      if (value.kind === "beginner") {
+        const second = value.id === "beginner-1";
+        value.worldX = player.worldX + (second ? 17 : -17);
+        value.worldY = topSpawnY(player) - (second ? 14 : 0);
+        value.direction = second ? -1 : 1;
+        value.velocityX = 0;
+        value.velocityY = 4.2;
+        this.changeState(value, second ? "wobble" : "cruising");
+      } else if (value.id === "snowboarder-top") {
+        value.worldX = player.worldX + 14;
+        value.worldY = topSpawnY(player) - 4;
+        value.direction = -1;
+        value.velocityX = 0;
+        value.velocityY = 12.5;
+        this.changeState(value, "entering");
+      } else if (value.id === "dog-0") {
+        value.direction = -1;
+        value.worldX = sideSpawnX(player, value.direction);
+        value.worldY =
+          player.worldY + Math.min(18, viewportBottom(player) * 0.35);
+        value.velocityX = -4.8;
+        value.velocityY = 1.2;
+        this.changeState(value, "running-left");
+      } else if (value.id === "walking-tree-0") {
+        value.direction = 1;
+        value.worldX = sideSpawnX(player, value.direction);
+        value.worldY =
+          player.worldY + Math.min(20, viewportBottom(player) * 0.4);
+        value.velocityX = 0;
+        value.velocityY = 0;
+        this.changeState(value, "idle");
+      }
+    }
+  }
+
   repositionActor(id: string, worldX: number, worldY: number): boolean {
     if (![worldX, worldY].every(Number.isFinite)) return false;
     const target = this.actors.find((candidate) => candidate.id === id);
     if (!target) return false;
     target.worldX = worldX;
     target.worldY = worldY;
+    if (target.kind === "chairlift")
+      target.liftDistance = liftDistanceOnLane(worldY, target.direction);
     target.active = true;
     return true;
   }
@@ -391,12 +489,9 @@ export class LivingSlopeSimulation {
     }
     value.worldX += value.velocityX * deltaSeconds;
     value.worldY += value.velocityY * deltaSeconds;
-    if (
-      value.worldY < player.worldY - 90 ||
-      value.worldY > player.worldY + 90
-    ) {
-      value.worldX = player.worldX - 17;
-      value.worldY = player.worldY - 44;
+    if (Math.abs(value.worldY - player.worldY) > actorRecycleDistance(player)) {
+      value.worldX = player.worldX + (value.id === "beginner-1" ? 17 : -17);
+      value.worldY = topSpawnY(player);
     }
   }
 
@@ -499,13 +594,12 @@ export class LivingSlopeSimulation {
     }
     if (
       value.source === "top-entry" &&
-      (value.worldY > player.worldY + 90 ||
+      (Math.abs(value.worldY - player.worldY) > actorRecycleDistance(player) ||
         Math.abs(value.worldX - player.worldX) >
           LIVING_SLOPE_TUNING.actorCullDistanceMeters)
     ) {
       value.worldX = player.worldX + (value.direction < 0 ? 16 : -16);
-      value.worldY =
-        player.worldY - LIVING_SLOPE_TUNING.snowboarderEntryDistanceMeters;
+      value.worldY = topSpawnY(player);
       this.changeState(value, "entering");
     }
     if (value.source === "chairlift" && value.worldY > player.worldY + 100)
@@ -551,9 +645,17 @@ export class LivingSlopeSimulation {
     }
     value.worldX += value.velocityX * deltaSeconds;
     value.worldY += value.velocityY * deltaSeconds;
-    if (Math.abs(value.worldY - player.worldY) > 90) {
-      value.worldX = player.worldX + 11;
-      value.worldY = player.worldY + 18;
+    if (Math.abs(value.worldY - player.worldY) > actorRecycleDistance(player)) {
+      value.direction = value.direction < 0 ? 1 : -1;
+      value.worldX = sideSpawnX(player, value.direction);
+      value.worldY =
+        player.worldY + Math.min(18, viewportBottom(player) * 0.35);
+      value.velocityX = value.direction * 4.8;
+      value.velocityY = 1.2;
+      this.changeState(
+        value,
+        value.direction < 0 ? "running-left" : "running-right",
+      );
     }
   }
 
@@ -592,21 +694,33 @@ export class LivingSlopeSimulation {
         this.emit("walking-tree-moved", value);
       }
     }
-    if (Math.abs(value.worldY - player.worldY) > 90) {
-      value.worldX = player.worldX + 18;
-      value.worldY = player.worldY + 24;
+    if (Math.abs(value.worldY - player.worldY) > actorRecycleDistance(player)) {
+      value.direction = value.direction < 0 ? 1 : -1;
+      value.worldX = sideSpawnX(player, value.direction);
+      value.worldY = player.worldY + Math.min(20, viewportBottom(player) * 0.4);
+      value.velocityX = 0;
       this.changeState(value, "idle");
     }
   }
 
   private stepChair(value: MutableActor, deltaSeconds: number): void {
-    const before = value.worldY;
-    value.velocityY =
-      value.direction * LIVING_SLOPE_TUNING.chairSpeedMetersPerSecond;
-    value.worldY = wrapChairY(value.worldY + value.velocityY * deltaSeconds);
+    const beforeDistance = value.liftDistance;
+    const before = liftRoutePoint(beforeDistance);
+    const speed = LIVING_SLOPE_TUNING.chairSpeedMetersPerSecond;
+    value.liftDistance = wrapLiftDistance(
+      beforeDistance + speed * deltaSeconds,
+    );
+    const next = liftRoutePoint(value.liftDistance);
+    // Apply displacement so debug scenarios can stage chairs beside the player.
+    value.worldX += next.x - before.x;
+    value.worldY += next.y - before.y;
+    value.velocityX = next.tangentX * speed;
+    value.velocityY = next.tangentY * speed;
+    value.direction = next.tangentY >= 0 ? 1 : -1;
     if (
-      (value.direction > 0 && value.worldY < before) ||
-      (value.direction < 0 && value.worldY > before)
+      value.liftDistance < beforeDistance ||
+      (beforeDistance < LIFT_ROUTE.straightLength + LIFT_ROUTE.turnLength &&
+        value.liftDistance >= LIFT_ROUTE.straightLength + LIFT_ROUTE.turnLength)
     )
       this.emit("chair-looped", value);
 
@@ -619,7 +733,7 @@ export class LivingSlopeSimulation {
       return;
     }
 
-    if (value.direction < 0 || value.riderCount === 0) return;
+    if (next.section !== "downhill" || value.riderCount === 0) return;
     if (
       this.forcedChairDrop ||
       this.random.next() < LIVING_SLOPE_TUNING.chairDropChancePerFixedStep

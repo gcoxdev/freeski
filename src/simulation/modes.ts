@@ -6,6 +6,7 @@ import {
 } from "../world/classicMountain";
 
 export type EventModeId = "free-style" | "slalom" | "tree-slalom";
+export type EventMetric = "score" | "time";
 export type ModeLifecycle = "active" | "finished" | "idle";
 export type MarkerState = "correct" | "missed" | "pending" | "wrong-side";
 
@@ -29,6 +30,10 @@ export interface ModeResult {
   readonly penaltySeconds: number;
   readonly rawTimeSeconds: number;
   readonly score: number | null;
+}
+
+export function metricForMode(mode: EventModeId): EventMetric {
+  return mode === "free-style" ? "score" : "time";
 }
 
 export interface ModeSnapshot {
@@ -279,7 +284,10 @@ export class MountainModeSimulation {
     run.elapsedSeconds = rawTimeSeconds;
     run.styleEarned = Math.max(0, current.style - run.styleAtStart);
     run.result = Object.freeze({
-      adjustedTimeSeconds: rawTimeSeconds + run.penaltySeconds,
+      adjustedTimeSeconds:
+        run.definition.id === "free-style"
+          ? null
+          : rawTimeSeconds + run.penaltySeconds,
       finishedAtSeconds: current.simulationSeconds,
       mode: run.definition.id,
       penaltySeconds: run.penaltySeconds,

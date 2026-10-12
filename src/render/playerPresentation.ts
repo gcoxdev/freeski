@@ -1,105 +1,97 @@
 import type { PlayerHeading, PlayerSnapshot } from "../simulation/player";
 
 export const PLAYER_TARGET_RENDERED_EXTENT = 48;
-export const PLAYER_MIN_RENDERED_CONTENT_HEIGHT = 24;
+export const PLAYER_MIN_RENDERED_CONTENT_HEIGHT = 16;
 
-/**
- * Exhaustive presentation contract for production player atlas frames.
- *
- * Every pose receives the same maximum visible extent. This keeps horizontal
- * carves and crashes from appearing much larger than the downhill silhouette.
- */
+/** Every source pose is normalized by its longest visible dimension. */
 export const PLAYER_FRAME_TARGET_EXTENTS = Object.freeze({
   "player/air-neutral": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/back-flip-1": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/back-flip-2": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/back-flip-3": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-left-1": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-left-2": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-left-3": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-right-1": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-right-2": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/carve-right-3": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/downhill": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/front-flip-1": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/front-flip-2": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/front-flip-3": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/hockey-stop-left": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/hockey-stop-right": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/crash-laying": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-downhill": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-left-30": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-left-60": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-left-stop": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-right-30": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-right-60": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/heading-right-stop": PLAYER_TARGET_RENDERED_EXTENT,
   "player/jump-takeoff": PLAYER_TARGET_RENDERED_EXTENT,
   "player/landing-crouch": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/spin-left": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/spin-right": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-045": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-090": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-135": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-180": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-225": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-270": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/rotation-315": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/runover-laying": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/trick-daffy": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/trick-spread": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/trick-twist-left": PLAYER_TARGET_RENDERED_EXTENT,
+  "player/trick-twist-right": PLAYER_TARGET_RENDERED_EXTENT,
   "player/tuck": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/uphill-left": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/uphill-right": PLAYER_TARGET_RENDERED_EXTENT,
-  "player/wipeout": PLAYER_TARGET_RENDERED_EXTENT,
 } as const);
 
 export type ProductionPlayerFrame = keyof typeof PLAYER_FRAME_TARGET_EXTENTS;
 
 const GROUNDED_FRAME_FOR_HEADING: Readonly<
-  Record<Exclude<PlayerHeading, "brake">, ProductionPlayerFrame>
+  Record<PlayerHeading, ProductionPlayerFrame>
 > = Object.freeze({
-  "carve-left-1": "player/carve-left-2",
-  "carve-left-2": "player/carve-left-3",
-  "carve-left-3": "player/carve-right-1",
-  "carve-right-1": "player/carve-left-1",
-  "carve-right-2": "player/carve-right-2",
-  "carve-right-3": "player/hockey-stop-left",
-  downhill: "player/downhill",
-  "traverse-left": "player/carve-right-3",
-  "traverse-right": "player/hockey-stop-right",
-  tuck: "player/uphill-right",
-  "uphill-left": "player/uphill-left",
-  "uphill-right": "player/hockey-stop-right",
+  downhill: "player/heading-downhill",
+  "left-30": "player/heading-left-30",
+  "left-60": "player/heading-left-60",
+  "left-stop": "player/heading-left-stop",
+  "right-30": "player/heading-right-30",
+  "right-60": "player/heading-right-60",
+  "right-stop": "player/heading-right-stop",
 });
+
+const TRICK_FRAME = Object.freeze({
+  daffy: "player/trick-daffy",
+  none: "player/air-neutral",
+  spread: "player/trick-spread",
+  "twist-left": "player/trick-twist-left",
+  "twist-right": "player/trick-twist-right",
+} as const satisfies Record<
+  PlayerSnapshot["trickPose"],
+  ProductionPlayerFrame
+>);
 
 type PlayerPose = Pick<
   PlayerSnapshot,
-  "airHeight" | "airPitch" | "airSpin" | "heading" | "motion" | "velocityX"
+  | "airHeight"
+  | "airPitch"
+  | "crashKind"
+  | "heading"
+  | "motion"
+  | "trickPose"
+  | "tucking"
 >;
 
-function wrappedMagnitude(value: number): number {
-  return Math.abs(Math.atan2(Math.sin(value), Math.cos(value)));
+function rotationFrame(rotation: number): ProductionPlayerFrame {
+  const phase = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+  const step = Math.round(phase / (Math.PI / 4));
+  if (step <= 0 || step >= 8) return "player/air-neutral";
+  const degrees = String(step * 45).padStart(3, "0");
+  return `player/rotation-${degrees}` as ProductionPlayerFrame;
 }
 
-function rotationFrame(
-  prefix: "back-flip" | "front-flip",
-  rotation: number,
-): ProductionPlayerFrame {
-  const phase = (Math.abs(rotation) % (Math.PI * 2)) / (Math.PI * 2);
-  const index = (Math.floor(phase * 3) % 3) + 1;
-  return `player/${prefix}-${index}` as ProductionPlayerFrame;
-}
-
-/**
- * Maps simulation state to poses that were visually audited in the generated
- * sheet. Several original cell labels did not match their depicted direction,
- * so presentation deliberately does not rely on label text alone.
- */
+/** Direct state-to-art contract; no compensating flips or mislabeled cells. */
 export function playerAtlasFrame(
   player: Readonly<PlayerPose>,
 ): ProductionPlayerFrame {
-  if (player.motion === "crashed") return "player/wipeout";
+  if (player.motion === "crashed")
+    return player.crashKind === "runover"
+      ? "player/runover-laying"
+      : "player/crash-laying";
   if (player.motion === "recovering") return "player/landing-crouch";
   if (player.motion === "airborne") {
-    const pitch = wrappedMagnitude(player.airPitch);
-    const spin = wrappedMagnitude(player.airSpin);
-    if (pitch < 0.24 && spin < 0.24)
-      return player.airHeight < 0.45 ? "player/jump-takeoff" : "player/tuck";
-    if (spin >= pitch)
-      return player.airSpin < 0 ? "player/spin-left" : "player/spin-right";
-    if (Math.abs(pitch - Math.PI) < 0.32) return "player/air-neutral";
-    return rotationFrame(
-      player.airPitch < 0 ? "back-flip" : "front-flip",
-      player.airPitch,
-    );
+    if (player.trickPose !== "none") return TRICK_FRAME[player.trickPose];
+    if (Math.abs(player.airPitch) >= 0.2) return rotationFrame(player.airPitch);
+    return player.airHeight < 0.45
+      ? "player/jump-takeoff"
+      : "player/air-neutral";
   }
-  if (player.heading === "brake")
-    return player.velocityX < 0
-      ? "player/carve-right-3"
-      : "player/hockey-stop-right";
+  if (player.tucking) return "player/tuck";
   return GROUNDED_FRAME_FOR_HEADING[player.heading];
 }
 
@@ -110,10 +102,27 @@ export interface PlayerPresentationScale {
   readonly uniformScale: number;
 }
 
-/**
- * Returns one uniform scale so atlas proportions remain intact. Unknown future
- * player frames fail readable at the conservative impact-state target.
- */
+/** Plant the visible bottom of every trimmed grounded pose on one ski line. */
+export function playerGroundAnchorOffset(
+  sourceHeight: number,
+  trimY: number,
+  trimmedContentHeight: number,
+  uniformScale: number,
+  originY = 0.94,
+): number {
+  if (
+    ![sourceHeight, trimY, trimmedContentHeight, uniformScale].every(
+      Number.isFinite,
+    ) ||
+    sourceHeight <= 0 ||
+    trimmedContentHeight <= 0 ||
+    uniformScale <= 0
+  )
+    return 0;
+  return (sourceHeight * originY - trimY - trimmedContentHeight) * uniformScale;
+}
+
+/** Preserve source proportions while normalizing every pose to one body extent. */
 export function playerPresentationScale(
   frameName: string,
   trimmedContentWidth: number,

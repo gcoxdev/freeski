@@ -1,7 +1,7 @@
 {
   "name": "FreeSki preproduction sprite sheets",
-  "version": "0.1.0",
-  "status": "review-concept-atlases",
+  "version": "0.2.0",
+  "status": "direction-and-ramp-revision",
   "runtime_slice_ready": false,
   "background": "transparent",
   "source_chroma_key": "#ff00ff",
@@ -15,30 +15,30 @@
       "columns": 6,
       "rows": 4,
       "cells": [
-        "player/downhill",
-        "player/carve-left-1",
-        "player/carve-left-2",
-        "player/carve-left-3",
-        "player/carve-right-1",
-        "player/carve-right-2",
-        "player/carve-right-3",
-        "player/hockey-stop-left",
-        "player/hockey-stop-right",
-        "player/uphill-left",
-        "player/uphill-right",
+        "player/heading-left-stop",
+        "player/heading-left-60",
+        "player/heading-left-30",
+        "player/heading-downhill",
+        "player/heading-right-30",
+        "player/heading-right-60",
+        "player/heading-right-stop",
         "player/tuck",
         "player/jump-takeoff",
         "player/air-neutral",
-        "player/front-flip-1",
-        "player/front-flip-2",
-        "player/front-flip-3",
-        "player/back-flip-1",
-        "player/back-flip-2",
-        "player/back-flip-3",
-        "player/spin-left",
-        "player/spin-right",
+        "player/rotation-045",
+        "player/rotation-090",
+        "player/rotation-135",
+        "player/rotation-180",
+        "player/rotation-225",
+        "player/rotation-270",
+        "player/rotation-315",
         "player/landing-crouch",
-        "player/wipeout"
+        "player/trick-spread",
+        "player/trick-daffy",
+        "player/trick-twist-left",
+        "player/trick-twist-right",
+        "player/crash-laying",
+        "player/runover-laying"
       ]
     },
     {
@@ -111,7 +111,7 @@
         "terrain/bump-small",
         "terrain/bump-large",
         "terrain/mogul-field",
-        "terrain/rainbow-ramp",
+        "terrain/rainbow-ramp-legacy",
         "secret/mushroom",
         "terrain/burning-tree-a",
         "terrain/burning-tree-b",
@@ -173,6 +173,78 @@
         "vfx/flame-embers",
         "vfx/crash-decal"
       ]
+    },
+    {
+      "file": "07-downhill-ramp.png",
+      "width": 1254,
+      "height": 1254,
+      "columns": 1,
+      "rows": 1,
+      "cells": [
+        "terrain/rainbow-ramp"
+      ]
+    },
+    {
+      "file": "08-yeti-lateral-run.png",
+      "width": 2172,
+      "height": 724,
+      "columns": 4,
+      "rows": 1,
+      "cells": [
+        "yeti/run-side-a",
+        "yeti/run-side-b",
+        "yeti/run-side-c",
+        "yeti/run-side-d"
+      ],
+      "cell_bounds": [
+        [
+          0,
+          0,
+          600,
+          724
+        ],
+        [
+          600,
+          0,
+          1086,
+          724
+        ],
+        [
+          1086,
+          0,
+          1665,
+          724
+        ],
+        [
+          1665,
+          0,
+          2172,
+          724
+        ]
+      ]
+    },
+    {
+      "file": "09-walking-tree-cycle.png",
+      "width": 1228,
+      "height": 256,
+      "columns": 4,
+      "rows": 1,
+      "cells": [
+        "walking-tree/walk-a",
+        "walking-tree/walk-b",
+        "walking-tree/walk-c",
+        "walking-tree/walk-d"
+      ]
+    },
+    {
+      "file": "10-lift-terminal.png",
+      "width": 480,
+      "height": 400,
+      "columns": 1,
+      "rows": 1,
+      "cells": [
+        "lift/terminal"
+      ]
     }
   ],
   "production_requirements": {
@@ -186,4 +258,3 @@
     "recommended_runtime_format": "lossless WebP or PNG atlas plus JSON metadata"
   }
 }
-

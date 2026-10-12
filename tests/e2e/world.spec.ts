@@ -18,10 +18,7 @@ test("streams and renders a deterministic classic mountain", async ({
     "true",
   );
   await expect(page.locator("#world-debug")).toBeVisible();
-  await expect(page.locator("#world-debug-toggle")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(page.locator("#world-debug-toggle")).toHaveCount(0);
 
   const initial = await page.evaluate(() => window.__FREE_SKI__!);
   expect(initial.world).toMatchObject({
@@ -36,6 +33,7 @@ test("streams and renders a deterministic classic mountain", async ({
   );
   expect(initial.world.aheadRows).toEqual([1, 2]);
   expect(initial.world.visibleObjects).toBeGreaterThan(0);
+  expect(initial.world.visibleObjects).toBeLessThanOrEqual(20);
   const contentSignature = initial.world.generatedSignature;
   const overlaySignature = initial.world.overlaySignature;
 
@@ -47,6 +45,7 @@ test("streams and renders a deterministic classic mountain", async ({
   const reloaded = await page.evaluate(() => window.__FREE_SKI__!);
   expect(reloaded.world.generatedSignature).toBe(contentSignature);
   expect(reloaded.world.overlaySignature).toBe(overlaySignature);
+  expect(reloaded.world.visibleObjects).toBeLessThanOrEqual(20);
 
   await page.setViewportSize({ width: 768, height: 600 });
   await page.reload();

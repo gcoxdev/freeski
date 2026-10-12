@@ -5,7 +5,7 @@ import type {
 
 interface AccessibilityControlCallbacks {
   readonly onChange: (settings: AccessibilitySettings) => void;
-  readonly onExportReplay: () => boolean;
+  readonly onRestart: () => void;
   readonly onPanelVisibility: (visible: boolean) => void;
 }
 
@@ -16,10 +16,8 @@ export class AccessibilityControls {
     document.querySelector<HTMLElement>("#settings-panel");
   private readonly closeButton =
     document.querySelector<HTMLButtonElement>("#settings-close");
-  private readonly exportButton =
-    document.querySelector<HTMLButtonElement>("#replay-export");
-  private readonly status =
-    document.querySelector<HTMLElement>("#settings-status");
+  private readonly restartButton =
+    document.querySelector<HTMLButtonElement>("#settings-restart");
   private readonly reducedMotion = document.querySelector<HTMLInputElement>(
     "#setting-reduced-motion",
   );
@@ -44,7 +42,7 @@ export class AccessibilityControls {
     this.openButton?.addEventListener("click", this.open);
     this.closeButton?.addEventListener("click", this.close);
     this.panel?.addEventListener("keydown", this.onPanelKeyDown);
-    this.exportButton?.addEventListener("click", this.exportReplay);
+    this.restartButton?.addEventListener("click", this.restart);
     for (const input of this.inputs())
       input?.addEventListener("change", this.change);
     this.volume?.addEventListener("input", this.change);
@@ -63,7 +61,7 @@ export class AccessibilityControls {
     this.openButton?.removeEventListener("click", this.open);
     this.closeButton?.removeEventListener("click", this.close);
     this.panel?.removeEventListener("keydown", this.onPanelKeyDown);
-    this.exportButton?.removeEventListener("click", this.exportReplay);
+    this.restartButton?.removeEventListener("click", this.restart);
     for (const input of this.inputs())
       input?.removeEventListener("change", this.change);
     this.volume?.removeEventListener("input", this.change);
@@ -131,15 +129,12 @@ export class AccessibilityControls {
     });
     this.sync(next);
     this.callbacks.onChange(next);
-    if (this.status) this.status.textContent = "Settings saved on this device.";
   };
 
-  private readonly exportReplay = (): void => {
-    const exported = this.callbacks.onExportReplay();
-    if (this.status)
-      this.status.textContent = exported
-        ? "Replay export prepared."
-        : "Replay export is not available yet. Start skiing, then try again.";
+  private readonly restart = (): void => {
+    this.close();
+    this.callbacks.onRestart();
+    document.querySelector<HTMLElement>("#game-canvas")?.focus();
   };
 
   private sync(settings: AccessibilitySettings): void {

@@ -58,7 +58,9 @@ test("loads an interactive Phaser baseline without console errors", async ({
     "Alpine systems online",
   );
   await expect(page.locator("#game-canvas canvas")).toBeVisible();
-  await expect(page.locator("#seed-label")).toHaveText("gate-zero-proof");
+  expect(await page.evaluate(() => window.__FREE_SKI__!.seed)).toBe(
+    "gate-zero-proof",
+  );
 
   await page.keyboard.press("ArrowLeft");
   await expect
@@ -68,7 +70,7 @@ test("loads an interactive Phaser baseline without console errors", async ({
   const runtime = await page.evaluate(() => window.__FREE_SKI__);
   expect(runtime).toMatchObject({
     engine: "phaser-3",
-    generatorVersion: "freeski-world-v1",
+    generatorVersion: "freeski-world-v4",
     ready: true,
     seed: "gate-zero-proof",
   });
@@ -78,6 +80,29 @@ test("loads an interactive Phaser baseline without console errors", async ({
   const evidencePath = process.env.FREESKI_GATE0_SCREENSHOT;
   if (evidencePath)
     await page.screenshot({ path: evidencePath, fullPage: true });
+});
+
+test("retires legacy offline caches and keeps the same build on ordinary reload", async ({
+  page,
+}) => {
+  await page.goto("/?seed=cache-refresh-proof");
+  await expect(page.locator("#game-shell")).toHaveAttribute(
+    "data-game-ready",
+    "true",
+  );
+  const before = await page.locator("html").getAttribute("data-build-version");
+  expect(before).toMatch(/^2026-/);
+  await page.reload();
+  await expect(page.locator("#game-shell")).toHaveAttribute(
+    "data-game-ready",
+    "true",
+  );
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-build-version",
+    before!,
+  );
+  const runtime = await runtimeSnapshot(page);
+  expect(runtime.world.visibleObjects).toBeLessThanOrEqual(20);
 });
 
 test("remains playable at the minimum supported viewport", async ({ page }) => {
@@ -90,7 +115,8 @@ test("remains playable at the minimum supported viewport", async ({ page }) => {
   expect(canvasBox?.height).toBeGreaterThan(470);
   await expect(page.locator("#speed-label")).toBeVisible();
   await expect(page.locator("#distance-label")).toBeVisible();
-  await expect(page.locator("#motion-label")).toBeVisible();
+  await page.locator("#settings-toggle").click();
+  await expect(page.locator("#settings-restart")).toBeVisible();
   await expect(page.locator("#pointer-toggle")).toBeVisible();
 });
 
@@ -119,15 +145,15 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
 
   await page.keyboard.down("a");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "carve-left-3",
+    () => window.__FREE_SKI__?.player.heading === "left-stop",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/carve-right-1",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/heading-left-stop",
   );
   const afterLeft = await runtimeSnapshot(page);
-  expect(afterLeft.player.heading).toBe("carve-left-3");
-  expect(afterLeft.player.velocityX).toBeLessThan(0);
-  expect(afterLeft.art.playerFrame).toBe("player/carve-right-1");
+  expect(afterLeft.player.heading).toBe("left-stop");
+  expect(afterLeft.player.speedMetersPerSecond).toBe(0);
+  expect(afterLeft.art.playerFrame).toBe("player/heading-left-stop");
   expect(afterLeft.player.worldX).toBeLessThan(initial.player.worldX);
 
   const evidenceDirectory = process.env.FREESKI_GATE1_EVIDENCE_DIR;
@@ -138,46 +164,52 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     });
   }
   await page.keyboard.up("a");
+  await page.keyboard.down("s");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.heading === "downhill",
+  );
+  await page.keyboard.up("s");
 
   await page.keyboard.down("ArrowRight");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "carve-right-3",
+    () => window.__FREE_SKI__?.player.heading === "right-60",
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/hockey-stop-left",
+    () => window.__FREE_SKI__?.art.playerFrame === "player/heading-right-60",
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.velocityX ?? -1) > 0,
   );
   const rightwardStart = (await runtimeSnapshot(page)).player.worldX;
-  await page.waitForTimeout(260);
+  await page.waitForTimeout(60);
   const afterRight = await runtimeSnapshot(page);
-  expect(afterRight.player.heading).toMatch(/^carve-right-/);
-  expect(afterRight.player.velocityX).toBeGreaterThan(0);
-  expect(afterRight.art.playerFrame).toBe("player/hockey-stop-left");
+  expect(afterRight.player.heading).toMatch(/^right-/);
+  if (afterRight.player.heading === "right-stop") {
+    expect(afterRight.player.speedMetersPerSecond).toBe(0);
+  } else {
+    expect(afterRight.player.velocityX).toBeGreaterThan(0);
+  }
+  expect(afterRight.player.velocityY).toBeGreaterThanOrEqual(0);
+  expect(afterRight.art.playerFrame).toBe(
+    `player/heading-${afterRight.player.heading}`,
+  );
   expect(afterRight.player.worldX).toBeGreaterThan(rightwardStart);
   await page.keyboard.up("ArrowRight");
 
-  await page.keyboard.down("w");
+  await page.keyboard.press("w");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "uphill-right",
+    () => window.__FREE_SKI__?.player.motion === "airborne",
+  );
+  expect((await runtimeSnapshot(page)).player.velocityY).toBeGreaterThanOrEqual(
+    0,
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/hockey-stop-right",
+    () => window.__FREE_SKI__?.player.motion === "grounded",
   );
-  await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.velocityY ?? 1) < 0,
-  );
-  const uphillStartY = (await runtimeSnapshot(page)).player.worldY;
-  await page.waitForTimeout(420);
-  expect((await runtimeSnapshot(page)).player.worldY).toBeLessThan(
-    uphillStartY,
-  );
-  await page.keyboard.up("w");
 
   await page.keyboard.down("b");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "brake",
+    () => window.__FREE_SKI__?.player.heading.endsWith("stop") === true,
   );
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.speedMetersPerSecond ?? 3) < 2,
@@ -186,17 +218,41 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
 
   await page.keyboard.down("s");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "tuck",
+    () =>
+      window.__FREE_SKI__?.player.heading === "downhill" &&
+      window.__FREE_SKI__?.player.tucking === true,
   );
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.art.playerFrame === "player/uphill-right",
+    () =>
+      window.__FREE_SKI__?.art.playerFrame === "player/tuck" &&
+      window.__FREE_SKI__?.player.motion === "grounded",
   );
+  if (evidenceDirectory) {
+    await page.screenshot({
+      path: join(evidenceDirectory, "front-facing-tuck.png"),
+      fullPage: true,
+    });
+  }
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.speedMetersPerSecond ?? 0) > 18,
   );
   const normalTuckSpeed = (await runtimeSnapshot(page)).player
     .speedMetersPerSecond;
   await page.keyboard.up("s");
+  const canvas = await page.locator("#game-canvas canvas").boundingBox();
+  expect(canvas).not.toBeNull();
+  await page.mouse.move(canvas!.x + canvas!.width / 2, canvas!.y + 80);
+  await page.mouse.down({ button: "right" });
+  await page.waitForFunction(
+    () =>
+      window.__FREE_SKI__?.settings.heldActions.includes("tuck") === true &&
+      window.__FREE_SKI__?.player.tucking === true &&
+      window.__FREE_SKI__?.art.playerFrame === "player/tuck",
+  );
+  await page.mouse.up({ button: "right" });
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.settings.heldActions.includes("tuck") === false,
+  );
   await page.keyboard.press("f");
   await expect(page.locator("#game-shell")).toHaveAttribute(
     "data-turbo",
@@ -208,7 +264,7 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   expect(turbo.player.speedMetersPerSecond).toBeGreaterThan(
     normalTuckSpeed + 5,
   );
-  await expect(page.locator("#turbo-indicator")).toHaveText("TURBO ON");
+  await expect(page.locator(".boost-status")).toBeVisible();
   if (evidenceDirectory) {
     await page.screenshot({
       path: join(evidenceDirectory, "turbo-descent.png"),
@@ -236,6 +292,12 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.motion === "airborne",
   );
+  await page.keyboard.press("Space");
+  await page.waitForTimeout(30);
+  await page.keyboard.press("Space");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.art.playerFrame === "player/rotation-180",
+  );
   if (evidenceDirectory) {
     await page.screenshot({
       path: join(evidenceDirectory, "clean-jump.png"),
@@ -243,7 +305,9 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     });
   }
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.lastLanding === "clean",
+    () =>
+      window.__FREE_SKI__?.player.motion === "grounded" &&
+      window.__FREE_SKI__?.player.lastLanding === "clean",
   );
   expect(
     Math.max(
@@ -255,13 +319,15 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
   expect((await runtimeSnapshot(page)).player.motion).toBe("grounded");
 
   const crashCountBefore = (await runtimeSnapshot(page)).player.crashCount;
-  await page.keyboard.down("ArrowLeft");
+  await page.keyboard.press("Space");
+  await page.waitForFunction(
+    () => window.__FREE_SKI__?.player.motion === "airborne",
+  );
   await page.keyboard.press("Space");
   await page.waitForFunction(
     (expected) => (window.__FREE_SKI__?.player.crashCount ?? 0) > expected,
     crashCountBefore,
   );
-  await page.keyboard.up("ArrowLeft");
   if (evidenceDirectory) {
     await page.screenshot({
       path: join(evidenceDirectory, "crash.png"),
@@ -291,16 +357,12 @@ test("plays the full fixed-step skiing control sequence", async ({ page }) => {
     .filter((event) => event.type === "heading-changed")
     .map((event) => event.detail);
   for (const heading of [
-    "carve-left-1",
-    "carve-left-2",
-    "carve-left-3",
-    "carve-right-1",
-    "carve-right-2",
-    "carve-right-3",
-    "traverse-right",
-    "uphill-right",
-    "brake",
-    "tuck",
+    "left-30",
+    "left-60",
+    "left-stop",
+    "downhill",
+    "right-30",
+    "right-60",
   ]) {
     expect(headings).toContain(heading);
   }
@@ -346,24 +408,24 @@ test("keeps default pointer steering, opt-out, and click-to-jump functional", as
   if (!box) throw new Error("Game canvas has no bounds");
   await page.mouse.move(box.x + box.width * 0.83, box.y + box.height * 0.35);
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "carve-right-3",
+    () => window.__FREE_SKI__?.player.heading === "right-stop",
   );
   await page.keyboard.down("a");
   await page.waitForFunction(
-    () =>
-      window.__FREE_SKI__?.player.heading === "carve-left-3" &&
-      (window.__FREE_SKI__?.player.velocityX ?? 1) < 0,
+    () => window.__FREE_SKI__?.player.heading === "left-stop",
   );
   await page.keyboard.up("a");
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "carve-right-3",
+    () => window.__FREE_SKI__?.player.heading === "right-stop",
   );
   await page.mouse.click(box.x + box.width * 0.83, box.y + box.height * 0.35);
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.motion === "airborne",
   );
 
+  await page.locator("#settings-toggle").click();
   await page.locator("#pointer-toggle").click();
+  await page.locator("#settings-close").click();
   await expect(page.locator("#pointer-toggle")).toHaveAttribute(
     "aria-pressed",
     "false",

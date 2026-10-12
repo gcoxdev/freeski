@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   CLASSIC_COURSES,
+  CLASSIC_FREESTYLE_RAMPS,
   CLASSIC_LIFT,
   CLASSIC_YETI_TRIGGERS,
   blocksTreeSlalomRoute,
@@ -49,32 +50,46 @@ describe("classic mountain declarative overlays", () => {
     const freeStyle = CLASSIC_COURSES[1]!;
     const treeSlalom = CLASSIC_COURSES[2]!;
     expect(slalom).toMatchObject({
-      centerX: -34,
-      halfWidth: 10,
+      centerX: -46,
+      halfWidth: 17,
       lengthMeters: 540,
-      startGate: { leftX: -44, rightX: -24, y: 96 },
-      finishGate: { leftX: -44, rightX: -24, y: 636 },
+      startGate: { leftX: -63, rightX: -29, y: 96 },
+      finishGate: { leftX: -63, rightX: -29, y: 636 },
     });
     expect(slalom.markers).toHaveLength(24);
-    expect(slalom.markers[0]).toMatchObject({ x: -38, y: 120 });
-    expect(slalom.markers.at(-1)).toMatchObject({ x: -30, y: 580 });
+    expect(slalom.markers[0]).toMatchObject({ x: -51, y: 120 });
+    expect(slalom.markers.at(-1)).toMatchObject({ x: -41, y: 580 });
 
     expect(freeStyle).toMatchObject({
-      halfWidth: 12,
+      halfWidth: 17,
       lengthMeters: 1_040,
-      startGate: { leftX: -12, rightX: 12, y: 96 },
-      finishGate: { leftX: -12, rightX: 12, y: 1_136 },
+      startGate: { leftX: -17, rightX: 17, y: 96 },
+      finishGate: { leftX: -17, rightX: 17, y: 1_136 },
     });
+    expect(CLASSIC_FREESTYLE_RAMPS).toHaveLength(12);
+    expect(
+      CLASSIC_FREESTYLE_RAMPS.every(
+        (ramp) =>
+          ramp.y > freeStyle.startGate.y &&
+          ramp.y < freeStyle.finishGate.y &&
+          Math.abs(ramp.x - freeStyle.centerX) <= freeStyle.halfWidth - 3,
+      ),
+    ).toBe(true);
+    expect(
+      CLASSIC_FREESTYLE_RAMPS.slice(1).map(
+        (ramp, index) => ramp.y - CLASSIC_FREESTYLE_RAMPS[index]!.y,
+      ),
+    ).toEqual(Array(11).fill(80));
     expect(treeSlalom).toMatchObject({
-      centerX: 34,
-      halfWidth: 10,
+      centerX: 46,
+      halfWidth: 17,
       lengthMeters: 1_040,
-      startGate: { leftX: 24, rightX: 44, y: 96 },
-      finishGate: { leftX: 24, rightX: 44, y: 1_136 },
+      startGate: { leftX: 29, rightX: 63, y: 96 },
+      finishGate: { leftX: 29, rightX: 63, y: 1_136 },
     });
     expect(treeSlalom.markers).toHaveLength(39);
-    expect(treeSlalom.markers[0]).toMatchObject({ x: 32, y: 121 });
-    expect(treeSlalom.markers.at(-1)).toMatchObject({ x: 32, y: 1_071 });
+    expect(treeSlalom.markers[0]).toMatchObject({ x: 41, y: 121 });
+    expect(treeSlalom.markers.at(-1)).toMatchObject({ x: 41, y: 1_071 });
 
     expect(slalom.startGate.rightX).toBeLessThan(freeStyle.startGate.leftX);
     expect(freeStyle.startGate.rightX).toBeLessThan(treeSlalom.startGate.leftX);
@@ -83,9 +98,20 @@ describe("classic mountain declarative overlays", () => {
     ).toBeGreaterThanOrEqual(90);
 
     expect(CLASSIC_LIFT.towers).toHaveLength(13);
-    expect(CLASSIC_LIFT.towers[0]).toEqual({ x: -8, y: -64 });
-    expect(CLASSIC_LIFT.towers.at(-1)).toEqual({ x: -8, y: 1_472 });
-    expect(CLASSIC_LIFT.chairs.map((chair) => chair.laneX)).toEqual([-7, -9]);
+    expect(CLASSIC_LIFT.towers[0]).toEqual({ x: -75.5, y: -64 });
+    expect(CLASSIC_LIFT.towers.at(-1)).toEqual({ x: -75.5, y: 1_472 });
+    expect(CLASSIC_LIFT.chairs.map((chair) => chair.laneX)).toEqual([
+      -70.75, -81.25,
+    ]);
+    expect(
+      CLASSIC_LIFT.chairs.every((chair) =>
+        CLASSIC_COURSES.every(
+          (course) =>
+            chair.laneX < course.centerX - course.halfWidth ||
+            chair.laneX > course.centerX + course.halfWidth,
+        ),
+      ),
+    ).toBe(true);
     expect(CLASSIC_YETI_TRIGGERS.map((trigger) => trigger.value)).toEqual([
       -125, 2_000, -1_000, 1_000,
     ]);
@@ -103,10 +129,10 @@ describe("classic mountain declarative overlays", () => {
     ]);
     expect(SPAWN_PROFILES.slalom).toEqual([{ type: "mogul", weight: 1 }]);
     expect(ZONE_SPAWN_CHANCE).toEqual({
-      "free-style": 0.12,
-      "tree-slalom": 0.08,
-      open: 0.07,
-      slalom: 0.02,
+      "free-style": 0.05,
+      "tree-slalom": 0.04,
+      open: 0.035,
+      slalom: 0.012,
     });
     expect(
       Object.values(SPAWN_PROFILES)
@@ -169,7 +195,7 @@ describe("deterministic chunk generation", () => {
       };
     };
     const generator = new WorldGenerator("injected", factory);
-    expect(generator.generateChunk(0, 0).version).toBe("freeski-world-v1");
+    expect(generator.generateChunk(0, 0).version).toBe("freeski-world-v4");
     expect(requestedSeeds.length).toBeGreaterThan(64);
     expect(new Set(requestedSeeds).size).toBe(requestedSeeds.length);
   });
@@ -211,6 +237,31 @@ describe("deterministic chunk generation", () => {
           object.y <= ramp.y + 18 + object.footprintRadius,
       );
       expect(landingBlockers).toEqual([]);
+    }
+    const allRamps = [
+      ...objects.filter((object) => object.type === "ramp"),
+      ...CLASSIC_FREESTYLE_RAMPS.map((ramp) => ({
+        footprintRadius: 3,
+        id: ramp.id,
+        x: ramp.x,
+        y: ramp.y,
+      })),
+    ];
+    for (let index = 0; index < allRamps.length; index += 1) {
+      for (
+        let otherIndex = index + 1;
+        otherIndex < allRamps.length;
+        otherIndex += 1
+      ) {
+        const ramp = allRamps[index]!;
+        const other = allRamps[otherIndex]!;
+        expect(
+          Math.hypot(ramp.x - other.x, ramp.y - other.y),
+          `${ramp.id}/${other.id}`,
+        ).toBeGreaterThanOrEqual(
+          ramp.footprintRadius + other.footprintRadius + 1,
+        );
+      }
     }
     expect(CORRIDOR_WIDTH_METERS).toBe(PLAYER_FOOTPRINT_WIDTH_METERS * 2.5);
   });
@@ -296,6 +347,23 @@ describe("deterministic chunk generation", () => {
 });
 
 describe("mountain stream continuity", () => {
+  it("preloads tall viewport rows before scenery can enter on-screen", () => {
+    const stream = new MountainStream(new WorldGenerator("tall-viewport"));
+    const snapshot = stream.update({
+      renderBufferMeters: 22,
+      velocityY: 20,
+      viewportBottomMeters: 180,
+      viewportTopMeters: 95,
+      viewportWidthMeters: 192,
+      worldX: 0,
+      worldY: 0,
+    });
+    for (const row of [-2, -1, 0, 1, 2, 3, 4])
+      expect(snapshot.activeKeys.some((key) => key.endsWith(`,${row}`))).toBe(
+        true,
+      );
+  });
+
   it("reuses its immutable window while the streaming signature is unchanged", () => {
     const stream = new MountainStream(new WorldGenerator("stable-window"));
     const firstSnapshot = stream.update({

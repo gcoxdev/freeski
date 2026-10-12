@@ -17,6 +17,7 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 4173,
     strictPort: true,
+    headers: { "Cache-Control": "no-store, max-age=0" },
     warmup: {
       clientFiles: ["./src/main.ts", "./src/render/scenes/AlpineScene.ts"],
     },
@@ -25,6 +26,7 @@ export default defineConfig({
     host: "127.0.0.1",
     port: 4173,
     strictPort: true,
+    headers: { "Cache-Control": "no-store, max-age=0" },
   },
   build: {
     sourcemap: true,

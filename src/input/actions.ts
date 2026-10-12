@@ -13,8 +13,7 @@ export type GameAction =
   | "trick-left"
   | "trick-right"
   | "tuck"
-  | "turbo"
-  | "uphill";
+  | "turbo";
 
 export interface ActionFrame {
   debugPressed: boolean;
@@ -29,18 +28,17 @@ export type KeyBindings = Readonly<Record<GameAction, readonly string[]>>;
 export const KEY_BINDINGS: KeyBindings = Object.freeze({
   brake: ["ShiftLeft", "ShiftRight", "KeyB", "Numpad5"],
   debug: ["KeyG"],
-  jump: ["Space"],
+  jump: ["Space", "ArrowUp", "KeyW", "Numpad8"],
   pause: ["Escape", "F3"],
   reset: ["KeyR", "F2"],
-  "steer-left": ["ArrowLeft", "KeyA", "Numpad4"],
-  "steer-right": ["ArrowRight", "KeyD", "Numpad6"],
+  "steer-left": ["ArrowLeft", "KeyA", "Numpad1", "Numpad4"],
+  "steer-right": ["ArrowRight", "KeyD", "Numpad3", "Numpad6"],
   "trick-back": ["KeyZ"],
   "trick-front": ["KeyX"],
   "trick-left": ["KeyQ"],
   "trick-right": ["KeyE"],
   tuck: ["ArrowDown", "KeyS", "Numpad2"],
   turbo: ["KeyF"],
-  uphill: ["ArrowUp", "KeyW", "Numpad8"],
 });
 
 export interface StandardGamepadBindings {
@@ -62,7 +60,7 @@ export const STANDARD_GAMEPAD_BINDINGS: StandardGamepadBindings = Object.freeze(
       7: "trick-front",
       8: "debug",
       9: "pause",
-      12: "uphill",
+      12: "jump",
       13: "tuck",
       14: "steer-left",
       15: "steer-right",
@@ -123,10 +121,12 @@ export class ActionController {
 
   setSteer(source: string, value: number): boolean {
     const next = clampUnit(value);
+    const hasPrevious = this.steerBySource.has(source);
     const previous = this.steerBySource.get(source) ?? 0;
-    if (Math.abs(next - previous) < 0.001) return false;
-    if (next === 0) this.steerBySource.delete(source);
-    else this.steerBySource.set(source, next);
+    if (hasPrevious && Math.abs(next - previous) < 0.001) return false;
+    // A zero value is still an active absolute aim (straight downhill). The
+    // source is removed explicitly on pointer leave or gamepad disconnect.
+    this.steerBySource.set(source, next);
     return true;
   }
 
@@ -157,9 +157,10 @@ export class ActionController {
       debugPressed: this.consume("debug"),
       pausePressed: this.consume("pause"),
       player: {
+        aiming: this.steerBySource.size > 0,
         brake: this.isHeld("brake"),
         jumpPressed: this.consume("jump"),
-        steer: digitalSteer === 0 ? analogSteer : digitalSteer,
+        steer: analogSteer,
         trickFlip:
           (this.isHeld("trick-front") ? 1 : 0) -
           (this.isHeld("trick-back") ? 1 : 0),
@@ -167,7 +168,7 @@ export class ActionController {
           (this.isHeld("trick-right") ? 1 : 0) -
           (this.isHeld("trick-left") ? 1 : 0),
         tuck: this.isHeld("tuck"),
-        uphill: this.isHeld("uphill"),
+        turn: digitalSteer,
       },
       resetPressed: this.consume("reset"),
       turboPressed: this.consume("turbo"),

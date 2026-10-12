@@ -1,8 +1,9 @@
 import type Phaser from "phaser";
+import { APP_BUILD_VERSION } from "../../buildVersion";
 
 export const PRODUCTION_ATLAS_KEY = "freeski-production-atlas";
-export const PRODUCTION_ATLAS_IMAGE = "/assets/production/freeski-atlas.png";
-export const PRODUCTION_ATLAS_DATA = "/assets/production/freeski-atlas.json";
+export const PRODUCTION_ATLAS_IMAGE = `/assets/production/freeski-atlas.png?v=${APP_BUILD_VERSION}`;
+export const PRODUCTION_ATLAS_DATA = `/assets/production/freeski-atlas.json?v=${APP_BUILD_VERSION}`;
 
 export interface AtlasDrawOptions {
   readonly alpha?: number;

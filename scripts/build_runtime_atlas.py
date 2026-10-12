@@ -21,8 +21,16 @@ MANIFEST_PATH = SOURCE_DIR / "manifest.json"
 ATLAS_WIDTH = 1024
 PADDING = 4
 ALPHA_CROP_THRESHOLD = 8
-PIPELINE_VERSION = "freeski-atlas-v2"
+PIPELINE_VERSION = "freeski-atlas-v3"
 RUNTIME_SCALE = 0.55
+MOGUL_GEOMETRY = json.loads((ROOT / "src/world/mogulPatchGeometry.json").read_text())
+MOGUL_POINTS = [
+    {"x": (x - MOGUL_GEOMETRY["sourceWidth"] / 2) * MOGUL_GEOMETRY["heightMeters"] / MOGUL_GEOMETRY["sourceHeight"],
+     "y": (y - MOGUL_GEOMETRY["sourceHeight"] * MOGUL_GEOMETRY["originY"]) * MOGUL_GEOMETRY["heightMeters"] / MOGUL_GEOMETRY["sourceHeight"] + MOGUL_GEOMETRY["drawOffsetYMeters"]}
+    for x, y in MOGUL_GEOMETRY["outline"]
+]
+MOGUL_RADIUS = max(math.hypot(point["x"], point["y"]) for point in MOGUL_POINTS)
+EDGE_BLEED_MAX_MAIN_FRACTION = 0.12
 
 
 @dataclass
@@ -35,6 +43,7 @@ class Frame:
     trim: tuple[int, int, int, int]
     image: Image.Image
     family: str
+    edge_bleed_components_removed: int = 0
     normalization_scale: float = 1.0
     runtime_source_size: tuple[int, int] = (1, 1)
     runtime_trim: tuple[int, int, int, int] = (0, 0, 1, 1)
@@ -51,6 +60,8 @@ def sha256(path: Path) -> str:
 
 
 def family_for(name: str) -> str:
+    if name.startswith(("yeti/run-side-", "walking-tree/walk-")):
+        return name  # One common source scale preserves the four-frame gait.
     prefix = name.split("/", 1)[0]
     return prefix if prefix in {
         "player",
@@ -108,8 +119,7 @@ def alpha_bounds(image: Image.Image) -> tuple[int, int, int, int]:
     return bounds
 
 
-def remove_specks(image: Image.Image) -> Image.Image:
-    """Remove disconnected generation flecks while preserving real equipment."""
+def opaque_components(image: Image.Image) -> list[list[int]]:
     alpha = image.getchannel("A")
     active = bytearray(1 if value > ALPHA_CROP_THRESHOLD else 0 for value in alpha.get_flattened_data())
     visited = bytearray(len(active))
@@ -134,19 +144,56 @@ def remove_specks(image: Image.Image) -> Image.Image:
                         visited[neighbour] = 1
                         stack.append(neighbour)
         components.append(component)
+    return components
+
+
+def clear_components(image: Image.Image, components: list[list[int]]) -> Image.Image:
     if not components:
         return image
-    largest = max(len(component) for component in components)
-    minimum = max(24, round(largest * 0.0015))
     pixels = list(image.get_flattened_data())
     for component in components:
-        if len(component) >= minimum:
-            continue
         for index in component:
             pixels[index] = (0, 0, 0, 0)
     cleaned = Image.new("RGBA", image.size)
     cleaned.putdata(pixels)
     return cleaned
+
+
+def remove_cell_edge_bleed(image: Image.Image) -> tuple[Image.Image, int]:
+    """Discard small foreign components clipped in from adjacent sheet cells."""
+    components = opaque_components(image)
+    if not components:
+        return image, 0
+    main = max(components, key=len)
+    maximum = max(24, round(len(main) * EDGE_BLEED_MAX_MAIN_FRACTION))
+    width = image.width
+    height = image.height
+    bleed: list[list[int]] = []
+    for component in components:
+        if component is main or len(component) > maximum:
+            continue
+        touches_edge = any(
+            index % width == 0
+            or index % width == width - 1
+            or index // width == 0
+            or index // width == height - 1
+            for index in component
+        )
+        if touches_edge:
+            bleed.append(component)
+    return clear_components(image, bleed), len(bleed)
+
+
+def remove_specks(image: Image.Image) -> Image.Image:
+    """Remove disconnected generation flecks while preserving real equipment."""
+    components = opaque_components(image)
+    if not components:
+        return image
+    largest = max(len(component) for component in components)
+    minimum = max(24, round(largest * 0.0015))
+    return clear_components(
+        image, [component for component in components if len(component) < minimum]
+    )
 
 
 def extract_frames(manifest: dict[str, Any]) -> list[Frame]:
@@ -164,8 +211,16 @@ def extract_frames(manifest: dict[str, Any]) -> list[Frame]:
             right = (column + 1) * source.width // columns
             top = row * source.height // rows
             bottom = (row + 1) * source.height // rows
+            if "cell_bounds" in sheet:
+                # Generated sheets can overrun a nominal grid. Explicit source
+                # regions retain entire feet while sharing the same Y canvas.
+                left, top, right, bottom = sheet["cell_bounds"][index]
+                if not (0 <= left < right <= source.width and 0 <= top < bottom <= source.height):
+                    raise ValueError(f"invalid source region for {name}")
             cell = clean_matte(source.crop((left, top, right, bottom)))
+            edge_bleed_components_removed = 0
             if not name.startswith("vfx/"):
+                cell, edge_bleed_components_removed = remove_cell_edge_bleed(cell)
                 cell = remove_specks(cell)
             trim = alpha_bounds(cell)
             frames.append(
@@ -178,6 +233,7 @@ def extract_frames(manifest: dict[str, Any]) -> list[Frame]:
                     trim=trim,
                     image=cell.crop(trim),
                     family=family_for(name),
+                    edge_bleed_components_removed=edge_bleed_components_removed,
                 )
             )
     return frames
@@ -197,6 +253,10 @@ def normalize_families(frames: list[Frame]) -> None:
             scale = max(0.82, min(1.22, target_extent / max(1, extent)))
             frame.normalization_scale = round(scale, 6)
     for frame in frames:
+        if frame.name.startswith("yeti/run-side-"):
+            frame.normalization_scale = 0.5
+        if frame.name.startswith("walking-tree/walk-"):
+            frame.normalization_scale = 1.0
         scale = frame.normalization_scale * RUNTIME_SCALE
         trim_left, trim_top, trim_right, trim_bottom = frame.trim
         cell_width = frame.cell[2] - frame.cell[0]
@@ -211,6 +271,12 @@ def normalize_families(frames: list[Frame]) -> None:
             runtime_trim_x + runtime_width + runtime_right_margin,
             runtime_trim_y + runtime_height + runtime_bottom_margin,
         )
+        if frame.name.startswith(("yeti/run-side-", "walking-tree/walk-")):
+            # Round the shared canvas once; summing separately rounded margins
+            # can otherwise change body scale by one pixel between phases.
+            frame.runtime_source_size = (
+                round(cell_width * scale), round(cell_height * scale)
+            )
         frame.runtime_trim = (
             runtime_trim_x,
             runtime_trim_y,
@@ -301,7 +367,7 @@ def geometry_for(name: str) -> tuple[float, float, float]:
     }
     radius, clearance, pivot = values.get(prefix, (0.5, 0.5, 0.92))
     if name == "terrain/rainbow-ramp":
-        return (2.0, 0.2, 0.79)
+        return (3.0, 0.2, 0.88)
     if name == "terrain/evergreen-small":
         return (1.45, 2.0, 0.94)
     if name == "terrain/evergreen-medium":
@@ -319,7 +385,7 @@ def geometry_for(name: str) -> tuple[float, float, float]:
     if name == "terrain/bump-large":
         return (1.5, 0.16, 0.78)
     if name == "terrain/mogul-field":
-        return (1.1, 0.18, 0.8)
+        return (MOGUL_RADIUS, 0.18, MOGUL_GEOMETRY["originY"])
     return (radius, clearance, pivot)
 
 
@@ -393,6 +459,7 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
             "padding": PADDING,
             "normalizationFamily": frame.family,
             "normalizationScale": frame.normalization_scale,
+            "edgeBleedComponentsRemoved": frame.edge_bleed_components_removed,
             "runtimeScale": RUNTIME_SCALE,
             "groundPivot": {
                 "normalizedX": 0.5,
@@ -408,6 +475,11 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
             },
             "clearanceHeightMeters": clearance,
         }
+        if frame.name == "terrain/mogul-field":
+            metadata_frames[frame.name]["footprint"] = {
+                "shape": "polygon", "offsetXMeters": 0, "offsetYMeters": 0,
+                "radiusMeters": MOGUL_RADIUS, "pointsMeters": MOGUL_POINTS,
+            }
 
     phaser = {
         "frames": phaser_frames,
@@ -468,6 +540,7 @@ def validate() -> None:
     extrusion_mismatch_pixels = 0
     non_empty_padding_bands = 0
     geometry_mismatches: list[str] = []
+    removed_edge_bleed_components = 0
     padded_rectangles: list[tuple[str, int, int, int, int]] = []
     for name, value in phaser["frames"].items():
         rectangle = value["frame"]
@@ -483,6 +556,9 @@ def validate() -> None:
         ):
             geometry_mismatches.append(name)
         metadata_frame = metadata["frames"][name]
+        removed_edge_bleed_components += metadata_frame.get(
+            "edgeBleedComponentsRemoved", 0
+        )
         runtime_trim = metadata_frame["runtimeTrimBounds"]
         runtime_source = metadata_frame["runtimeSourceSize"]
         if (
@@ -634,6 +710,7 @@ def validate() -> None:
                 "nonEmptyPaddingBands": non_empty_padding_bands,
                 "paddingOverlaps": len(overlaps),
                 "geometryMismatches": len(geometry_mismatches),
+                "removedEdgeBleedComponents": removed_edge_bleed_components,
                 "paddingPixels": PADDING,
                 "transparentCorners": transparent_corners,
             },

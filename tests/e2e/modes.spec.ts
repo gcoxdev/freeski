@@ -3,7 +3,9 @@ import { join } from "node:path";
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import type { EventModeId, MarkerState } from "../../src/simulation/modes";
+import type { PlayerHeading } from "../../src/simulation/player";
 import type { CourseCrossingTarget } from "../../src/render/runtimeBridge";
+import { CLASSIC_COURSES } from "../../src/world/classicMountain";
 
 async function stageCrossing(
   page: Page,
@@ -93,7 +95,9 @@ async function finishMode(page: Page, mode: EventModeId): Promise<void> {
     mode,
   );
   await expect(page.locator("#result-card")).toBeVisible();
-  await expect(page.locator("#result-time")).toContainText("S");
+  await expect(page.locator("#result-time")).toContainText(
+    mode === "free-style" ? "PTS" : "S",
+  );
   await expect(page.locator("#result-record")).toContainText(
     /HIGH SCORE|COURSE BEST/,
   );
@@ -126,27 +130,42 @@ async function loadNaturalCourse(page: Page): Promise<void> {
   );
 }
 
+async function selectKeyboardHeading(
+  page: Page,
+  key: "a" | "d",
+  heading: PlayerHeading,
+): Promise<void> {
+  await page.keyboard.down(key);
+  await page.waitForFunction(
+    (expectedHeading) =>
+      window.__FREE_SKI__?.player.heading === expectedHeading,
+    heading,
+  );
+  await page.keyboard.up(key);
+}
+
 test("starts every course and scores Slalom through normal player controls", async ({
   page,
 }) => {
   test.setTimeout(90_000);
 
   await loadNaturalCourse(page);
-  await page.keyboard.down("a");
+  const slalom = CLASSIC_COURSES.find((course) => course.id === "slalom")!;
+  await selectKeyboardHeading(page, "a", "left-60");
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -29,
+    (targetX) => (window.__FREE_SKI__?.player.worldX ?? 0) < targetX,
+    slalom.centerX + 2,
   );
-  await page.keyboard.up("a");
   await page.keyboard.down("s");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.modes.snapshot.activeMode === "slalom",
   );
   await page.keyboard.up("s");
-  await page.keyboard.down("a");
+  await selectKeyboardHeading(page, "a", "left-30");
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.worldX ?? 0) < -39,
+    (targetX) => (window.__FREE_SKI__?.player.worldX ?? 0) < targetX,
+    slalom.markers[0]!.x - 1,
   );
-  await page.keyboard.up("a");
   await page.keyboard.down("s");
   await page.waitForFunction(
     () =>
@@ -161,11 +180,14 @@ test("starts every course and scores Slalom through normal player controls", asy
   ).toMatchObject({ expectedSide: "left", state: "correct" });
 
   await loadNaturalCourse(page);
-  await page.keyboard.down("d");
+  const treeSlalom = CLASSIC_COURSES.find(
+    (course) => course.id === "tree-slalom",
+  )!;
+  await selectKeyboardHeading(page, "d", "right-60");
   await page.waitForFunction(
-    () => (window.__FREE_SKI__?.player.worldX ?? 0) > 25,
+    (targetX) => (window.__FREE_SKI__?.player.worldX ?? 0) > targetX,
+    treeSlalom.centerX - 2,
   );
-  await page.keyboard.up("d");
   await page.keyboard.down("s");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.modes.snapshot.activeMode === "tree-slalom",
@@ -200,21 +222,30 @@ test("crosses real gates to finish all modes and reloads classic records", async
     "data-game-ready",
     "true",
   );
-  await expect(page.locator("#mode-card")).toBeVisible();
+  await expect(page.locator("#mode-card")).toHaveCount(0);
 
   await startMode(page, "slalom");
-  await expect(page.locator("#mode-name")).toHaveText("SLALOM");
+  expect(
+    await page.evaluate(() => window.__FREE_SKI__!.modes.snapshot.activeMode),
+  ).toBe("slalom");
   await crossMarker(page, "slalom", 1, "wrong-side");
-  await expect(page.locator("#feedback-label")).toHaveText(
-    "MARKER 1 WRONG +5S",
-  );
+  expect(
+    await page.evaluate(
+      () =>
+        window.__FREE_SKI__!.modes.snapshot.courses.slalom.markers[0]!.state,
+    ),
+  ).toBe("wrong-side");
   await screenshot(page, "slalom-wrong-side.png");
   await crossCorrectMarkers(
     page,
     "slalom",
     Array.from({ length: 23 }, (_, index) => index + 2),
   );
-  await expect(page.locator("#mode-penalty")).toHaveText("PENALTY +5.0S");
+  expect(
+    await page.evaluate(
+      () => window.__FREE_SKI__!.modes.snapshot.courses.slalom.penaltySeconds,
+    ),
+  ).toBe(5);
   await screenshot(page, "slalom-penalty.png");
   await finishMode(page, "slalom");
   const slalom = await page.evaluate(
@@ -267,16 +298,20 @@ test("crosses real gates to finish all modes and reloads classic records", async
     () => window.__FREE_SKI__!.modes.snapshot.courses["free-style"],
   );
   expect(freeStyle.result?.score).toBeGreaterThanOrEqual(215);
-  expect(freeStyle.result?.adjustedTimeSeconds).toBe(
-    freeStyle.result?.rawTimeSeconds,
-  );
-  await expect(page.locator("#mode-final")).toContainText(/FINAL .*S/);
+  expect(freeStyle.result?.adjustedTimeSeconds).toBeNull();
+  await expect(page.locator("#result-title")).toHaveText("STYLE SCORE");
   await screenshot(page, "free-style-finish.png");
 
   const beforeReload = await page.evaluate(() => window.__FREE_SKI__!.modes);
   expect(beforeReload.records.buckets.classic.slalom).toHaveLength(1);
   expect(beforeReload.records.buckets.classic["tree-slalom"]).toHaveLength(1);
   expect(beforeReload.records.buckets.classic["free-style"]).toHaveLength(1);
+  expect(beforeReload.records.buckets.classic["free-style"][0]).toMatchObject({
+    metric: "score",
+  });
+  expect(beforeReload.records.buckets.classic.slalom[0]).toMatchObject({
+    metric: "time",
+  });
   expect(beforeReload.records.buckets.seeded.slalom).toHaveLength(0);
   expect(
     beforeReload.events.filter((event) => event.type === "mode-started"),
@@ -293,13 +328,13 @@ test("crosses real gates to finish all modes and reloads classic records", async
   const reloaded = await page.evaluate(() => window.__FREE_SKI__!.modes);
   expect(reloaded.records).toEqual(beforeReload.records);
   expect(reloaded.storageAvailable).toBe(true);
-  await expect(page.locator("#mode-record")).toHaveText(
-    "CLASSIC / 3 RECORDS SAVED",
+  expect(Object.values(reloaded.records.buckets.classic).flat()).toHaveLength(
+    3,
   );
   await page.setViewportSize({ width: 768, height: 600 });
-  await expect(page.locator("#mode-card")).toBeVisible();
-  await expect(page.locator("#pointer-toggle")).toBeVisible();
-  await expect(page.locator("#world-debug-toggle")).toBeVisible();
+  await expect(page.locator("#mode-card")).toHaveCount(0);
+  await expect(page.locator("#settings-toggle")).toBeVisible();
+  await expect(page.locator("#world-debug-toggle")).toHaveCount(0);
   await screenshot(page, "records-reloaded-768x600.png");
 
   const telemetryPath = process.env.FREESKI_GATE4_TELEMETRY;
@@ -322,11 +357,10 @@ test("open skiing can ignore start gates and an active run survives leaving its 
     "data-game-ready",
     "true",
   );
-  await page.keyboard.down("d");
+  await selectKeyboardHeading(page, "d", "right-30");
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.worldX ?? 0) > 14,
   );
-  await page.keyboard.up("d");
   await page.keyboard.down("s");
   await page.waitForFunction(
     () => (window.__FREE_SKI__?.player.worldY ?? 0) > 48,
@@ -335,7 +369,9 @@ test("open skiing can ignore start gates and an active run survives leaving its 
   expect(
     await page.evaluate(() => window.__FREE_SKI__?.modes.snapshot.activeMode),
   ).toBeNull();
-  await expect(page.locator("#mode-name")).toHaveText("OPEN SKIING");
+  expect(
+    await page.evaluate(() => window.__FREE_SKI__!.modes.snapshot.activeMode),
+  ).toBeNull();
 
   await startMode(page, "slalom");
   await crossMarker(page, "slalom", 1, "missed");

@@ -1,7 +1,7 @@
 import { GENERATOR_VERSION } from "../world/generatorVersion";
-import type { EventModeId, ModeResult } from "./modes";
+import { metricForMode, type EventModeId, type ModeResult } from "./modes";
 
-export const RECORD_SCHEMA_VERSION = 2;
+export const RECORD_SCHEMA_VERSION = 3;
 export const RECORD_LIMIT = 10;
 export type RecordBucket = "classic" | "seeded";
 
@@ -48,8 +48,11 @@ export function recordFromResult(
   recordedAtEpochMs: number,
   id: string,
 ): RunRecord {
-  const metric = "time" as const;
-  const value = result.adjustedTimeSeconds ?? result.rawTimeSeconds;
+  const metric = metricForMode(result.mode);
+  const value =
+    metric === "score"
+      ? Math.max(0, result.score ?? 0)
+      : (result.adjustedTimeSeconds ?? result.rawTimeSeconds);
   return Object.freeze({
     bucket: bucketForSeed(seed),
     generatorVersion: GENERATOR_VERSION,
@@ -111,7 +114,7 @@ function isRunRecord(value: unknown): value is RunRecord {
     (record.mode === "free-style" ||
       record.mode === "slalom" ||
       record.mode === "tree-slalom") &&
-    record.metric === "time" &&
+    record.metric === metricForMode(record.mode ?? "slalom") &&
     typeof record.penaltySeconds === "number" &&
     Number.isFinite(record.penaltySeconds) &&
     record.penaltySeconds >= 0 &&

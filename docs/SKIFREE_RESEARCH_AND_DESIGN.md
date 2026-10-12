@@ -44,10 +44,10 @@ The original control surface is broader than most memories of it:
 | Input | Original behavior | FreeSki mapping |
 |---|---|---|
 | Left/right arrows or numpad 4/6 | Step through left/right facing states; while airborne, rotate/spin | Left/right or A/D; left stick |
-| Down or numpad 2 | Point downhill on snow; rotate in the air | Down or S |
-| Up or numpad 8 | Turn/ski uphill when grounded; rotate/flip in the air | Up or W |
-| Numpad 1/3/7/9 | Direct diagonal headings | Optional legacy bindings |
-| Insert or numpad 0 | Manual jump | Space, gamepad south button, click/tap |
+| Down or numpad 2 | Point downhill on snow | Down or S |
+| Up or numpad 8 | Jump; while airborne, advance the rotation stage | Up, W, Space, or gamepad south button |
+| Numpad 1/3 | Direct down-left/down-right headings | Legacy diagonal aliases |
+| Insert or numpad 0 | Manual jump | Optional legacy binding |
 | Mouse movement | Aim relative to the skier | Optional pointer-steering mode |
 | Mouse click | Jump; while airborne, advance trick pose | Pointer/touch action |
 | `F` | Toggle Turbo/Fast mode | Retain `F`; also a settings toggle |
@@ -57,11 +57,11 @@ Turbo is not merely a cosmetic speed modifier in 1.04: the source performs an ex
 
 ### Movement feel
 
-The player is a direction/state-driven kinematic actor rather than a rigid-body skier. Facing determines target downhill speed, turn acceleration, and lateral sign. A straight descent builds the highest normal speed; traversing converts some downhill momentum to lateral movement; uphill poses decelerate and can reverse vertical travel. Hard turns can add an immediate lateral impulse.
+The player is a direction/state-driven kinematic actor rather than a rigid-body skier. Facing determines target downhill speed and lateral sign. The seven legal headings are spaced at 30-degree intervals across the downhill half-plane. Straight descent builds the highest normal speed; the exact left/right endpoints are stationary; player input never produces negative/downhill-axis velocity.
 
 **Recommendation:** reproduce the state targets first and layer presentation on top:
 
-- nine grounded headings: downhill, three left carve angles, three right carve angles, and two uphill/traverse extremes;
+- seven grounded headings: stationary left, 60° and 30° down-left, downhill, 30° and 60° down-right, and stationary right;
 - acceleration toward heading-specific target velocity;
 - speed-dependent steering authority so a fast line has weight without feeling sluggish;
 - short skid/brake states for hockey stops;
@@ -72,7 +72,7 @@ Do not add stamina, gear stats, edge-temperature simulation, or realistic injury
 
 ### Jumping and tricks
 
-Jumps come from manual input, small/large snow bumps, rocks/stumps when cleared, and the rainbow ramp. Airborne directional input cycles between neutral, flips, rotations, and inverted poses. Style accrues while certain trick poses are sustained, not from a large combo system.
+Jumps come from manual input, small/large snow bumps, rocks/stumps when cleared, and the rainbow ramp. A ground click starts a manual jump; each of the next two airborne clicks queues half a somersault, producing one complete rotation across eight readable phases. Separate held inputs select spread, daffy, and left/right twist poses. Style accrues from completed rotations and sustained trick poses, not from a large combo system.
 
 Source-level scoring details worth retaining as tuning anchors:
 
@@ -130,7 +130,7 @@ The three modes are selected diegetically: the player skis through one of three 
 
 #### Open skiing
 
-The player may ignore every start gate, move uphill, traverse laterally, revisit areas, or continue below the formal finishes. This freedom is essential: the mountain is a toybox, while the events are optional score structures layered onto it.
+The player may ignore every start gate, traverse laterally within the seven-heading downhill fan, leave event lanes, or continue below the formal finishes. Player input never creates upward movement. This freedom is essential: the mountain is a toybox, while the events are optional score structures layered onto it.
 
 ### Yeti endgame
 
@@ -266,7 +266,7 @@ This is the parity inventory, in embedded resource order. It is useful as a comp
 
 | IDs | Count | Content |
 |---|---:|---|
-| 1–22 | 22 | Player headings, uphill/tuck poses, jump/flip/spin states, crash and wipeout |
+| 1–22 | 22 | Player headings, tuck, jump/flip/spin states, crash and wipeout |
 | 23–26 | 4 | Red-left marker, blue-right marker, correct/happy marker, missed/sad marker |
 | 27 | 1 | Mogul cluster |
 | 28–32 | 5 | Beginner straight/turn states and two falls |
@@ -293,11 +293,11 @@ The review sheets cover the visual direction. A shippable atlas should be cut an
 
 #### Player
 
-- grounded headings: downhill, shallow/medium/hard left, shallow/medium/hard right, uphill-left, uphill-right;
-- carve animation accents for left/right headings;
-- tuck, hockey-stop left/right, manual jump takeoff;
-- neutral air, front flip phases, back flip phases, spin-left/right phases;
-- clean landing, hard landing, standing crash, airborne wipeout, recovery;
+- grounded headings: stationary left, two down-left angles, downhill, two down-right angles, stationary right;
+- tuck and manual jump takeoff;
+- neutral air and seven intermediate 45° somersault phases;
+- spread, daffy, twist-left and twist-right trick poses;
+- clean landing, prone ordinary crash, distinct prone run-over, and recovery;
 - Yeti grab/eaten silhouette if the interaction is composited rather than Yeti-only;
 - optional outfit color masks or two additional bodies, but only after the core feel is approved.
 
@@ -392,4 +392,3 @@ If another engine is selected later, preserve these boundaries.
 ## Clean-room/IP boundary
 
 Mechanics, broad genre ideas, and independently created art can be studied and reimplemented, but the original bitmap/audio files, exact copied source, logos, and distinctive presentation should not ship in FreeSki. The creator's own history says Microsoft licensed the game from him and that he retained rights. This brief is practical product guidance, not legal advice; obtain counsel before commercial release or marketing that leans heavily on the original name/history.
-

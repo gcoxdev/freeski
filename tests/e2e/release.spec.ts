@@ -160,7 +160,6 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
     );
   expect(touchActions).toEqual([
     "brake",
-    "debug",
     "jump",
     "pause",
     "reset",
@@ -172,7 +171,6 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
     "trick-right",
     "tuck",
     "turbo",
-    "uphill",
   ]);
   await expect(page.getByRole("button", { name: "Jump" })).toBeVisible();
 
@@ -180,7 +178,7 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
   await page.waitForFunction(
     () =>
       window.__FREE_SKI__?.settings.heldActions.includes("steer-left") &&
-      window.__FREE_SKI__?.player.heading === "carve-left-3",
+      window.__FREE_SKI__?.player.heading === "left-stop",
   );
   await page.keyboard.up("ArrowLeft");
   await page.waitForFunction(
@@ -192,7 +190,7 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
   );
   await setGamepadSteer(page, 1);
   await page.waitForFunction(
-    () => window.__FREE_SKI__?.player.heading === "carve-right-3",
+    () => window.__FREE_SKI__?.player.heading === "right-stop",
   );
   await setGamepadSteer(page, 0);
 
@@ -276,8 +274,8 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
   expect(releaseAudit.replay).toMatchObject({
     capacity: 7_200,
     droppedFrames: 0,
-    format: "freeski-replay-v1",
-    generatorVersion: "freeski-world-v1",
+    format: "freeski-replay-v2",
+    generatorVersion: "freeski-world-v4",
     seed: "gate-seven-input",
   });
   expect(releaseAudit.replay.frames.length).toBeGreaterThan(0);
@@ -319,8 +317,8 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
         ).__FREE_SKI_RELEASE_AUDIO_CONTEXTS__,
     ),
   ).toBe(0);
-  await page.getByRole("button", { name: "ACCESS" }).click();
-  const dialog = page.getByRole("dialog", { name: "ACCESSIBILITY" });
+  await page.getByRole("button", { name: "SETTINGS" }).click();
+  const dialog = page.getByRole("dialog", { name: "SETTINGS" });
   await expect(dialog).toBeVisible();
   await expect(page.locator("#settings-close")).toBeFocused();
   await page.waitForFunction(
@@ -374,7 +372,7 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
     () => window.__FREE_SKI__?.player.motion === "grounded",
   );
 
-  await page.getByRole("button", { name: "ACCESS" }).click();
+  await page.getByRole("button", { name: "SETTINGS" }).click();
   await page.getByLabel("Reduced Motion").uncheck();
   await page.getByLabel("Screen Shake").check();
   await page.getByLabel("Impact Flash").check();
@@ -503,7 +501,7 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
     volume: 0.35,
     yetiPresentation: "full",
   });
-  await page.getByRole("button", { name: "ACCESS" }).click();
+  await page.getByRole("button", { name: "SETTINGS" }).click();
   await expect(page.getByLabel("Reduced Motion")).not.toBeChecked();
   await expect(page.getByLabel("Screen Shake")).toBeChecked();
   await expect(page.getByLabel("Impact Flash")).toBeChecked();

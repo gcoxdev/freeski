@@ -31,7 +31,7 @@ export function livingActorPresentation(
               : "chairlift/two-riders";
     return {
       displayHeight: 58,
-      flipX: false,
+      flipX: actor.direction > 0,
       frame,
       originY: 0.52,
       shadowHeight: 7,
@@ -100,13 +100,17 @@ export function livingActorPresentation(
   }
 
   const frame = actor.state.startsWith("walking")
-    ? Math.floor(actor.stateSeconds * 5) % 2 === 0
-      ? "walking-tree/step-left"
-      : "walking-tree/step-right"
+    ? [
+        "walking-tree/walk-a",
+        "walking-tree/walk-b",
+        "walking-tree/walk-c",
+        "walking-tree/walk-d",
+      ][Math.floor(Math.max(0, actor.stateSeconds) * 7) % 4]!
     : "walking-tree/idle";
   return {
     displayHeight: 66,
-    flipX: horizontalDirection(actor) < 0,
+    // Walking-tree source poses face left; mirror only for rightward travel.
+    flipX: horizontalDirection(actor) > 0,
     frame,
     originY: 0.94,
     shadowHeight: 9,

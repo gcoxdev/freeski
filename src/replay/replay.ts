@@ -1,6 +1,6 @@
 import type { ActionFrame } from "../input/actions";
 
-export const REPLAY_FORMAT_VERSION = "freeski-replay-v1";
+export const REPLAY_FORMAT_VERSION = "freeski-replay-v2";
 export const DEFAULT_REPLAY_CAPACITY = 7_200;
 
 export interface ReplayActionFrame {
@@ -47,13 +47,14 @@ export function replayFrame(
     fixedStep: Math.max(0, Math.floor(fixedStep)),
     pausePressed: actions.pausePressed,
     player: Object.freeze({
+      aiming: actions.player.aiming,
       brake: actions.player.brake,
       jumpPressed: actions.player.jumpPressed,
       steer: finiteAction(actions.player.steer),
       trickFlip: finiteAction(actions.player.trickFlip),
       trickSpin: finiteAction(actions.player.trickSpin),
       tuck: actions.player.tuck,
-      uphill: actions.player.uphill,
+      turn: finiteAction(actions.player.turn),
     }),
     resetPressed: actions.resetPressed,
     turboPressed: actions.turboPressed,
@@ -123,13 +124,14 @@ export class ReplayRecorder {
         Number(frame.pausePressed),
         Number(frame.resetPressed),
         Number(frame.turboPressed),
+        Number(frame.player.aiming),
         Number(frame.player.brake),
         Number(frame.player.jumpPressed),
         frame.player.steer,
         frame.player.trickFlip,
         frame.player.trickSpin,
         Number(frame.player.tuck),
-        Number(frame.player.uphill),
+        frame.player.turn,
       ].join(","),
     );
     return hashText(

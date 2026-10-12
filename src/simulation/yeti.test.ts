@@ -126,6 +126,21 @@ describe("YetiSimulation", () => {
       );
   });
 
+  it("uses real viewport edges for every approach side", () => {
+    const viewportPlayer = player({
+      viewportBottomMeters: 60,
+      viewportHalfWidthMeters: 96,
+      viewportTopMeters: 34,
+    });
+    const offsets = Array.from({ length: 4 }, (_, salt) =>
+      yetiApproachOffset(viewportPlayer, salt),
+    );
+    expect(offsets[0]![0]).toBeLessThan(-96);
+    expect(offsets[1]![0]).toBeGreaterThan(96);
+    expect(offsets[2]![1]).toBeGreaterThan(60);
+    expect(offsets[3]![1]).toBeLessThan(-34);
+  });
+
   it("steers toward the skier within directional velocity caps", () => {
     const simulation = new YetiSimulation();
     let current = player({ worldY: 2_001, velocityY: 25 });
@@ -139,7 +154,11 @@ describe("YetiSimulation", () => {
     expect(Math.abs(controller.velocityY)).toBeLessThanOrEqual(
       YETI_TUNING.maximumVerticalSpeed,
     );
-    expect(controller.velocityY).toBeGreaterThan(0);
+    const towardX = current.worldX - controller.worldX;
+    const towardY = current.worldY - controller.worldY;
+    expect(
+      controller.velocityX * towardX + controller.velocityY * towardY,
+    ).toBeGreaterThan(0);
   });
 
   it("opens a measured Turbo evasion window without making contact impossible", () => {

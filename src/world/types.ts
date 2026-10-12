@@ -33,12 +33,17 @@ export type GeneratedObjectVariant =
   | "evergreen-medium"
   | "evergreen-small";
 
-export interface GroundFootprint {
+interface FootprintBounds {
   readonly offsetX: number;
   readonly offsetY: number;
   readonly radius: number;
-  readonly shape: "circle";
 }
+
+export type GroundFootprint = FootprintBounds &
+  (
+    | { readonly shape: "circle" }
+    | { readonly shape: "polygon"; readonly points: readonly WorldPoint[] }
+  );
 
 export interface SpriteBoundsMeters {
   readonly height: number;

@@ -1,16 +1,16 @@
 {
-  "pipelineVersion": "freeski-atlas-v2",
+  "pipelineVersion": "freeski-atlas-v3",
   "sourceManifest": "assets/sprite-sheets/manifest.json",
-  "sourceManifestSha256": "5211102c821cdc36ee5a7464eab16f50666f600a9798173d97513663164e055e",
+  "sourceManifestSha256": "40afc880a28186e193f1fa3bdadaf9855652cd054100c798d185c6e60f8afc36",
   "approvedSourcesPreserved": true,
   "runtimeScale": 0.55,
-  "frameCount": 112,
+  "frameCount": 122,
   "atlas": {
     "image": "freeski-atlas.png",
     "width": 1024,
-    "height": 2048,
+    "height": 4096,
     "extrudedPaddingPixels": 4,
-    "sha256": "45c4307c6618e41ae7823bdcf0330b5c4b2117848f25b5a9f29f33dcbbb6be42"
+    "sha256": "c337fc5e6a80aae8597ba9c38402f2feedcf0f222512599de30fd9bfdebbff30"
   },
   "frames": {
     "beginner/carve-left": {
@@ -31,29 +31,30 @@
       },
       "runtimeTrimBounds": {
         "x": 0,
-        "y": 20,
-        "width": 150,
-        "height": 120
+        "y": 19,
+        "width": 142,
+        "height": 114
       },
       "runtimeSourceSize": {
-        "width": 169,
-        "height": 140
+        "width": 160,
+        "height": 133
       },
       "atlasFrame": {
-        "x": 102,
-        "y": 1071,
-        "w": 150,
-        "h": 120
+        "x": 723,
+        "y": 1536,
+        "w": 142,
+        "h": 114
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 1.0,
+      "normalizationScale": 0.948529,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 84.5,
-        "pixelY": 131.6
+        "pixelX": 80.0,
+        "pixelY": 125.02
       },
       "footprint": {
         "shape": "circle",
@@ -80,30 +81,31 @@
         "height": 214
       },
       "runtimeTrimBounds": {
-        "x": 16,
-        "y": 23,
-        "width": 150,
-        "height": 115
+        "x": 15,
+        "y": 21,
+        "width": 142,
+        "height": 109
       },
       "runtimeSourceSize": {
-        "width": 166,
-        "height": 138
+        "width": 157,
+        "height": 130
       },
       "atlasFrame": {
-        "x": 127,
-        "y": 1200,
-        "w": 150,
-        "h": 115
+        "x": 158,
+        "y": 1662,
+        "w": 142,
+        "h": 109
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 0.978417,
+      "normalizationScale": 0.928058,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 83.0,
-        "pixelY": 129.72
+        "pixelX": 78.5,
+        "pixelY": 122.2
       },
       "footprint": {
         "shape": "circle",
@@ -130,30 +132,31 @@
         "height": 242
       },
       "runtimeTrimBounds": {
-        "x": 51,
-        "y": 9,
-        "width": 99,
-        "height": 150
+        "x": 49,
+        "y": 8,
+        "width": 94,
+        "height": 142
       },
       "runtimeSourceSize": {
-        "width": 190,
-        "height": 159
+        "width": 181,
+        "height": 150
       },
       "atlasFrame": {
-        "x": 197,
-        "y": 189,
-        "w": 99,
-        "h": 150
+        "x": 395,
+        "y": 958,
+        "w": 94,
+        "h": 142
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 1.123967,
+      "normalizationScale": 1.066116,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 95.0,
-        "pixelY": 149.46
+        "pixelX": 90.5,
+        "pixelY": 141.0
       },
       "footprint": {
         "shape": "circle",
@@ -174,36 +177,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 0,
+        "x": 55,
         "y": 72,
-        "width": 292,
+        "width": 237,
         "height": 184
       },
       "runtimeTrimBounds": {
-        "x": 0,
-        "y": 37,
-        "width": 150,
-        "height": 94
+        "x": 33,
+        "y": 43,
+        "width": 142,
+        "height": 110
       },
       "runtimeSourceSize": {
-        "width": 158,
-        "height": 131
+        "width": 184,
+        "height": 153
       },
       "atlasFrame": {
-        "x": 321,
-        "y": 1439,
-        "w": 150,
-        "h": 94
+        "x": 8,
+        "y": 1662,
+        "w": 142,
+        "h": 110
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 0.931507,
+      "normalizationScale": 1.088608,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 79.0,
-        "pixelY": 123.14
+        "pixelX": 92.0,
+        "pixelY": 143.82
       },
       "footprint": {
         "shape": "circle",
@@ -231,29 +235,30 @@
       },
       "runtimeTrimBounds": {
         "x": 5,
-        "y": 95,
-        "width": 150,
-        "height": 54
+        "y": 90,
+        "width": 142,
+        "height": 51
       },
       "runtimeSourceSize": {
-        "width": 179,
-        "height": 149
+        "width": 170,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 626,
-        "y": 1730,
-        "w": 150,
-        "h": 54
+        "x": 361,
+        "y": 2276,
+        "w": 142,
+        "h": 51
       },
       "padding": 4,
       "normalizationFamily": "beginner",
-      "normalizationScale": 1.054264,
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 89.5,
-        "pixelY": 140.06
+        "pixelX": 85.0,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -290,14 +295,15 @@
         "height": 151
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1439,
+        "x": 282,
+        "y": 1893,
         "w": 117,
         "h": 96
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
       "normalizationScale": 1.070352,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -340,14 +346,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 645,
-        "y": 1071,
+        "x": 250,
+        "y": 1536,
         "w": 104,
         "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -390,14 +397,15 @@
         "height": 138
       },
       "atlasFrame": {
-        "x": 757,
-        "y": 1071,
+        "x": 362,
+        "y": 1536,
         "w": 110,
         "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
       "normalizationScale": 0.981567,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -440,14 +448,15 @@
         "height": 150
       },
       "atlasFrame": {
-        "x": 875,
-        "y": 1071,
+        "x": 480,
+        "y": 1536,
         "w": 116,
         "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
       "normalizationScale": 1.065,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -490,14 +499,15 @@
         "height": 140
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1200,
+        "x": 604,
+        "y": 1536,
         "w": 111,
         "h": 117
       },
       "padding": 4,
       "normalizationFamily": "chairlift",
       "normalizationScale": 0.995327,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -515,7 +525,7 @@
     },
     "course/blank-wood-sign": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 19,
       "cellBounds": {
         "x": 1228,
@@ -540,14 +550,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 275,
-        "y": 1325,
+        "x": 8,
+        "y": 1780,
         "w": 61,
         "h": 105
       },
       "padding": 4,
       "normalizationFamily": "course/blank-wood-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -590,14 +601,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 102,
-        "y": 189,
+        "x": 799,
+        "y": 8,
         "w": 87,
         "h": 157
       },
       "padding": 4,
       "normalizationFamily": "course/blue-right-marker",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -625,29 +637,30 @@
       },
       "trimBounds": {
         "x": 32,
-        "y": 0,
+        "y": 54,
         "width": 213,
-        "height": 303
+        "height": 249
       },
       "runtimeTrimBounds": {
         "x": 18,
-        "y": 0,
+        "y": 30,
         "width": 117,
-        "height": 167
+        "height": 137
       },
       "runtimeSourceSize": {
         "width": 173,
         "height": 173
       },
       "atlasFrame": {
-        "x": 513,
-        "y": 8,
+        "x": 587,
+        "y": 958,
         "w": 117,
-        "h": 167
+        "h": 137
       },
       "padding": 4,
       "normalizationFamily": "course/controls-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -690,14 +703,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 304,
-        "y": 189,
+        "x": 894,
+        "y": 8,
         "w": 92,
         "h": 147
       },
       "padding": 4,
       "normalizationFamily": "course/correct-happy-marker",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -725,15 +739,15 @@
       },
       "trimBounds": {
         "x": 60,
-        "y": 0,
+        "y": 47,
         "width": 201,
-        "height": 314
+        "height": 267
       },
       "runtimeTrimBounds": {
         "x": 33,
-        "y": 0,
+        "y": 26,
         "width": 111,
-        "height": 173
+        "height": 147
       },
       "runtimeSourceSize": {
         "width": 173,
@@ -741,13 +755,14 @@
       },
       "atlasFrame": {
         "x": 8,
-        "y": 8,
+        "y": 649,
         "w": 111,
-        "h": 173
+        "h": 147
       },
       "padding": 4,
       "normalizationFamily": "course/finish-left",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -775,15 +790,15 @@
       },
       "trimBounds": {
         "x": 19,
-        "y": 0,
+        "y": 47,
         "width": 220,
-        "height": 314
+        "height": 267
       },
       "runtimeTrimBounds": {
         "x": 10,
-        "y": 0,
+        "y": 26,
         "width": 121,
-        "height": 173
+        "height": 147
       },
       "runtimeSourceSize": {
         "width": 172,
@@ -791,13 +806,14 @@
       },
       "atlasFrame": {
         "x": 127,
-        "y": 8,
+        "y": 649,
         "w": 121,
-        "h": 173
+        "h": 147
       },
       "padding": 4,
       "normalizationFamily": "course/finish-right",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -825,35 +841,36 @@
       },
       "trimBounds": {
         "x": 45,
-        "y": 0,
+        "y": 55,
         "width": 219,
-        "height": 303
+        "height": 248
       },
       "runtimeTrimBounds": {
         "x": 25,
-        "y": 0,
+        "y": 30,
         "width": 120,
-        "height": 167
+        "height": 136
       },
       "runtimeSourceSize": {
         "width": 172,
-        "height": 173
+        "height": 172
       },
       "atlasFrame": {
-        "x": 638,
-        "y": 8,
+        "x": 8,
+        "y": 1112,
         "w": 120,
-        "h": 167
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/free-style-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
         "pixelX": 86.0,
-        "pixelY": 162.62
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -890,14 +907,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 404,
-        "y": 189,
+        "x": 256,
+        "y": 649,
         "w": 92,
         "h": 146
       },
       "padding": 4,
       "normalizationFamily": "course/missed-sad-marker",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -940,14 +958,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 860,
-        "y": 505,
+        "x": 136,
+        "y": 1112,
         "w": 94,
         "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/pause-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -990,14 +1009,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 189,
+        "x": 705,
+        "y": 8,
         "w": 86,
         "h": 158
       },
       "padding": 4,
       "normalizationFamily": "course/red-left-marker",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1040,14 +1060,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 655,
+        "x": 238,
+        "y": 1112,
         "w": 95,
         "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/restart-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1090,14 +1111,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1325,
+        "x": 716,
+        "y": 1662,
         "w": 141,
         "h": 106
       },
       "padding": 4,
       "normalizationFamily": "course/safety-fence",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1125,29 +1147,30 @@
       },
       "trimBounds": {
         "x": 63,
-        "y": 0,
+        "y": 54,
         "width": 217,
-        "height": 302
+        "height": 248
       },
       "runtimeTrimBounds": {
         "x": 35,
-        "y": 0,
+        "y": 30,
         "width": 119,
-        "height": 166
+        "height": 136
       },
       "runtimeSourceSize": {
         "width": 172,
         "height": 172
       },
       "atlasFrame": {
-        "x": 893,
-        "y": 8,
+        "x": 341,
+        "y": 1112,
         "w": 119,
-        "h": 166
+        "h": 136
       },
       "padding": 4,
       "normalizationFamily": "course/slalom-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1175,35 +1198,36 @@
       },
       "trimBounds": {
         "x": 80,
-        "y": 0,
+        "y": 48,
         "width": 213,
-        "height": 314
+        "height": 266
       },
       "runtimeTrimBounds": {
         "x": 44,
-        "y": 0,
+        "y": 26,
         "width": 117,
-        "height": 173
+        "height": 146
       },
       "runtimeSourceSize": {
         "width": 172,
-        "height": 173
+        "height": 172
       },
       "atlasFrame": {
-        "x": 256,
-        "y": 8,
+        "x": 356,
+        "y": 649,
         "w": 117,
-        "h": 173
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "course/start-left",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
         "pixelX": 86.0,
-        "pixelY": 162.62
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -1225,29 +1249,30 @@
       },
       "trimBounds": {
         "x": 38,
-        "y": 0,
-        "width": 226,
-        "height": 314
+        "y": 49,
+        "width": 211,
+        "height": 265
       },
       "runtimeTrimBounds": {
         "x": 21,
-        "y": 0,
-        "width": 124,
-        "height": 173
+        "y": 27,
+        "width": 116,
+        "height": 146
       },
       "runtimeSourceSize": {
         "width": 173,
         "height": 173
       },
       "atlasFrame": {
-        "x": 381,
-        "y": 8,
-        "w": 124,
-        "h": 173
+        "x": 481,
+        "y": 649,
+        "w": 116,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "course/start-right",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1275,29 +1300,30 @@
       },
       "trimBounds": {
         "x": 52,
-        "y": 0,
+        "y": 54,
         "width": 216,
-        "height": 303
+        "height": 249
       },
       "runtimeTrimBounds": {
         "x": 29,
-        "y": 0,
+        "y": 30,
         "width": 119,
-        "height": 167
+        "height": 137
       },
       "runtimeSourceSize": {
         "width": 173,
         "height": 173
       },
       "atlasFrame": {
-        "x": 766,
-        "y": 8,
+        "x": 712,
+        "y": 958,
         "w": 119,
-        "h": 167
+        "h": 137
       },
       "padding": 4,
       "normalizationFamily": "course/tree-slalom-sign",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1327,33 +1353,34 @@
         "x": 60,
         "y": 35,
         "width": 176,
-        "height": 221
+        "height": 148
       },
       "runtimeTrimBounds": {
-        "x": 33,
-        "y": 19,
-        "width": 97,
-        "height": 122
+        "x": 38,
+        "y": 22,
+        "width": 112,
+        "height": 94
       },
       "runtimeSourceSize": {
-        "width": 169,
-        "height": 141
+        "width": 195,
+        "height": 162
       },
       "atlasFrame": {
-        "x": 348,
-        "y": 939,
-        "w": 97,
-        "h": 122
+        "x": 626,
+        "y": 1893,
+        "w": 112,
+        "h": 94
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 1.0,
+      "normalizationScale": 1.153409,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 84.5,
-        "pixelY": 124.08
+        "pixelX": 97.5,
+        "pixelY": 142.56
       },
       "footprint": {
         "shape": "circle",
@@ -1377,33 +1404,34 @@
         "x": 54,
         "y": 30,
         "width": 171,
-        "height": 226
+        "height": 153
       },
       "runtimeTrimBounds": {
-        "x": 29,
-        "y": 16,
-        "width": 92,
-        "height": 122
+        "x": 35,
+        "y": 20,
+        "width": 112,
+        "height": 100
       },
       "runtimeSourceSize": {
-        "width": 165,
-        "height": 138
+        "width": 201,
+        "height": 168
       },
       "atlasFrame": {
-        "x": 453,
-        "y": 939,
-        "w": 92,
-        "h": 122
+        "x": 77,
+        "y": 1780,
+        "w": 112,
+        "h": 100
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 0.977876,
+      "normalizationScale": 1.187135,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 82.5,
-        "pixelY": 121.44
+        "pixelX": 100.5,
+        "pixelY": 147.84
       },
       "footprint": {
         "shape": "circle",
@@ -1427,33 +1455,34 @@
         "x": 32,
         "y": 59,
         "width": 230,
-        "height": 197
+        "height": 111
       },
       "runtimeTrimBounds": {
-        "x": 17,
-        "y": 31,
-        "width": 122,
-        "height": 104
+        "x": 16,
+        "y": 29,
+        "width": 112,
+        "height": 54
       },
       "runtimeSourceSize": {
-        "width": 163,
-        "height": 135
+        "width": 150,
+        "height": 125
       },
       "atlasFrame": {
-        "x": 344,
-        "y": 1325,
-        "w": 122,
-        "h": 104
+        "x": 144,
+        "y": 2276,
+        "w": 112,
+        "h": 54
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 0.96087,
+      "normalizationScale": 0.882609,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 81.5,
-        "pixelY": 118.8
+        "pixelX": 75.0,
+        "pixelY": 110.0
       },
       "footprint": {
         "shape": "circle",
@@ -1477,33 +1506,34 @@
         "x": 63,
         "y": 39,
         "width": 203,
-        "height": 217
+        "height": 139
       },
       "runtimeTrimBounds": {
         "x": 35,
-        "y": 22,
-        "width": 114,
-        "height": 122
+        "y": 21,
+        "width": 112,
+        "height": 76
       },
       "runtimeSourceSize": {
-        "width": 172,
-        "height": 144
+        "width": 170,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 553,
-        "y": 939,
-        "w": 114,
-        "h": 122
+        "x": 811,
+        "y": 2098,
+        "w": 112,
+        "h": 76
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 1.018433,
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 86.0,
-        "pixelY": 126.72
+        "pixelX": 85.0,
+        "pixelY": 123.2
       },
       "footprint": {
         "shape": "circle",
@@ -1527,33 +1557,34 @@
         "x": 43,
         "y": 42,
         "width": 212,
-        "height": 214
+        "height": 136
       },
       "runtimeTrimBounds": {
-        "x": 24,
-        "y": 24,
-        "width": 120,
-        "height": 122
+        "x": 23,
+        "y": 22,
+        "width": 112,
+        "height": 72
       },
       "runtimeSourceSize": {
-        "width": 174,
-        "height": 146
+        "width": 162,
+        "height": 135
       },
       "atlasFrame": {
-        "x": 675,
-        "y": 939,
-        "w": 120,
-        "h": 122
+        "x": 430,
+        "y": 2193,
+        "w": 112,
+        "h": 72
       },
       "padding": 4,
       "normalizationFamily": "dog",
-      "normalizationScale": 1.03271,
+      "normalizationScale": 0.957547,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
-        "pixelX": 87.0,
-        "pixelY": 128.48
+        "pixelX": 81.0,
+        "pixelY": 118.8
       },
       "footprint": {
         "shape": "circle",
@@ -1590,14 +1621,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 726,
-        "y": 655,
+        "x": 8,
+        "y": 1256,
         "w": 147,
         "h": 134
       },
       "padding": 4,
       "normalizationFamily": "lift/cable-connector",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1613,9 +1645,60 @@
       },
       "clearanceHeightMeters": 2.6
     },
+    "lift/terminal": {
+      "sourceSheet": "10-lift-terminal.png",
+      "sourceSha256": "69c4d5e8f8b933301a32158a7b2ef5801200ae3a96ffcfe86720f7a6dab6e7a7",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 480,
+        "height": 400
+      },
+      "trimBounds": {
+        "x": 48,
+        "y": 18,
+        "width": 397,
+        "height": 358
+      },
+      "runtimeTrimBounds": {
+        "x": 26,
+        "y": 10,
+        "width": 218,
+        "height": 197
+      },
+      "runtimeSourceSize": {
+        "width": 263,
+        "height": 220
+      },
+      "atlasFrame": {
+        "x": 479,
+        "y": 8,
+        "w": 218,
+        "h": 197
+      },
+      "padding": 4,
+      "normalizationFamily": "lift/terminal",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.92,
+        "pixelX": 131.5,
+        "pixelY": 202.4
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.4
+      },
+      "clearanceHeightMeters": 2.6
+    },
     "lift/tower": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 18,
       "cellBounds": {
         "x": 921,
@@ -1640,14 +1723,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 403,
-        "y": 1071,
+        "x": 8,
+        "y": 1536,
         "w": 109,
         "h": 118
       },
       "padding": 4,
       "normalizationFamily": "lift/tower",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -1665,145 +1749,46 @@
     },
     "player/air-neutral": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 13,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 9,
       "cellBounds": {
-        "x": 256,
-        "y": 512,
+        "x": 768,
+        "y": 256,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 51,
-        "y": 46,
-        "width": 170,
-        "height": 164
-      },
-      "runtimeTrimBounds": {
-        "x": 33,
-        "y": 30,
-        "width": 110,
-        "height": 106
-      },
-      "runtimeSourceSize": {
-        "width": 166,
-        "height": 166
-      },
-      "atlasFrame": {
-        "x": 157,
-        "y": 1325,
-        "w": 110,
-        "h": 106
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.173529,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 83.0,
-        "pixelY": 156.04
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/back-flip-1": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 17,
-      "cellBounds": {
-        "x": 1280,
-        "y": 512,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 31,
-        "y": 76,
-        "width": 179,
-        "height": 150
+        "x": 43,
+        "y": 40,
+        "width": 131,
+        "height": 216
       },
       "runtimeTrimBounds": {
         "x": 19,
-        "y": 47,
-        "width": 110,
-        "height": 92
-      },
-      "runtimeSourceSize": {
-        "width": 157,
-        "height": 157
-      },
-      "atlasFrame": {
-        "x": 597,
-        "y": 1439,
-        "w": 110,
-        "h": 92
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.114525,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 78.5,
-        "pixelY": 147.58
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/back-flip-2": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 18,
-      "cellBounds": {
-        "x": 0,
-        "y": 768,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 56,
-        "y": 47,
-        "width": 133,
-        "height": 145
-      },
-      "runtimeTrimBounds": {
-        "x": 38,
-        "y": 32,
-        "width": 89,
+        "y": 18,
+        "width": 59,
         "height": 97
       },
       "runtimeSourceSize": {
-        "width": 172,
-        "height": 172
+        "width": 115,
+        "height": 115
       },
       "atlasFrame": {
-        "x": 816,
-        "y": 1325,
-        "w": 89,
+        "x": 314,
+        "y": 1780,
+        "w": 59,
         "h": 97
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.22,
+      "normalizationScale": 0.82,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 86.0,
-        "pixelY": 161.68
+        "pixelX": 57.5,
+        "pixelY": 108.1
       },
       "footprint": {
         "shape": "circle",
@@ -1813,47 +1798,48 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/back-flip-3": {
+    "player/crash-laying": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 19,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 22,
       "cellBounds": {
-        "x": 256,
+        "x": 1024,
         "y": 768,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 22,
-        "y": 23,
-        "width": 148,
-        "height": 153
+        "x": 0,
+        "y": 110,
+        "width": 200,
+        "height": 90
       },
       "runtimeTrimBounds": {
-        "x": 15,
-        "y": 15,
-        "width": 99,
-        "height": 103
+        "x": 0,
+        "y": 53,
+        "width": 97,
+        "height": 44
       },
       "runtimeSourceSize": {
-        "width": 172,
-        "height": 172
+        "width": 124,
+        "height": 124
       },
       "atlasFrame": {
-        "x": 474,
-        "y": 1325,
-        "w": 99,
-        "h": 103
+        "x": 734,
+        "y": 2276,
+        "w": 97,
+        "h": 44
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.22,
+      "normalizationScale": 0.8825,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 86.0,
-        "pixelY": 161.68
+        "pixelX": 62.0,
+        "pixelY": 116.56
       },
       "footprint": {
         "shape": "circle",
@@ -1863,9 +1849,111 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/carve-left-1": {
+    "player/heading-downhill": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 768,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 62,
+        "y": 70,
+        "width": 102,
+        "height": 186
+      },
+      "runtimeTrimBounds": {
+        "x": 32,
+        "y": 37,
+        "width": 53,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 133,
+        "height": 134
+      },
+      "atlasFrame": {
+        "x": 381,
+        "y": 1780,
+        "w": 53,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.948925,
+      "edgeBleedComponentsRemoved": 2,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 66.5,
+        "pixelY": 125.96
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/heading-left-30": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 512,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 18,
+        "y": 30,
+        "width": 220,
+        "height": 195
+      },
+      "runtimeTrimBounds": {
+        "x": 8,
+        "y": 14,
+        "width": 99,
+        "height": 88
+      },
+      "runtimeSourceSize": {
+        "width": 115,
+        "height": 116
+      },
+      "atlasFrame": {
+        "x": 700,
+        "y": 1998,
+        "w": 99,
+        "h": 88
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.82,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 57.5,
+        "pixelY": 109.04
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/heading-left-60": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
       "cellIndex": 1,
       "cellBounds": {
         "x": 256,
@@ -1874,35 +1962,87 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 19,
-        "y": 60,
-        "width": 237,
-        "height": 186
+        "x": 69,
+        "y": 82,
+        "width": 164,
+        "height": 174
       },
       "runtimeTrimBounds": {
-        "x": 9,
-        "y": 28,
-        "width": 110,
-        "height": 86
+        "x": 38,
+        "y": 46,
+        "width": 91,
+        "height": 97
       },
       "runtimeSourceSize": {
-        "width": 119,
-        "height": 119
+        "width": 142,
+        "height": 143
       },
       "atlasFrame": {
-        "x": 689,
-        "y": 1543,
-        "w": 110,
-        "h": 86
+        "x": 442,
+        "y": 1780,
+        "w": 91,
+        "h": 97
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.841772,
+      "normalizationScale": 1.014368,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 59.5,
+        "pixelX": 71.0,
+        "pixelY": 134.42
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/heading-left-stop": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 39,
+        "y": 23,
+        "width": 184,
+        "height": 210
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 11,
+        "width": 85,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 118,
+        "height": 119
+      },
+      "atlasFrame": {
+        "x": 541,
+        "y": 1780,
+        "w": 85,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.840476,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 59.0,
         "pixelY": 111.86
       },
       "footprint": {
@@ -1913,109 +2053,9 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/carve-left-2": {
+    "player/heading-right-30": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 2,
-      "cellBounds": {
-        "x": 512,
-        "y": 0,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 0,
-        "y": 70,
-        "width": 206,
-        "height": 170
-      },
-      "runtimeTrimBounds": {
-        "x": 0,
-        "y": 37,
-        "width": 110,
-        "height": 91
-      },
-      "runtimeSourceSize": {
-        "width": 137,
-        "height": 137
-      },
-      "atlasFrame": {
-        "x": 853,
-        "y": 1439,
-        "w": 110,
-        "h": 91
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.968447,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 68.5,
-        "pixelY": 128.78
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/carve-left-3": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 3,
-      "cellBounds": {
-        "x": 768,
-        "y": 0,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 0,
-        "y": 87,
-        "width": 211,
-        "height": 153
-      },
-      "runtimeTrimBounds": {
-        "x": 0,
-        "y": 45,
-        "width": 110,
-        "height": 80
-      },
-      "runtimeSourceSize": {
-        "width": 133,
-        "height": 133
-      },
-      "atlasFrame": {
-        "x": 8,
-        "y": 1642,
-        "w": 110,
-        "h": 80
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.945498,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 66.5,
-        "pixelY": 125.02
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/carve-right-1": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
       "cellIndex": 4,
       "cellBounds": {
         "x": 1024,
@@ -2024,36 +2064,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 2,
-        "y": 72,
-        "width": 206,
-        "height": 171
+        "x": 0,
+        "y": 90,
+        "width": 172,
+        "height": 166
       },
       "runtimeTrimBounds": {
-        "x": 1,
-        "y": 38,
-        "width": 110,
-        "height": 91
+        "x": 0,
+        "y": 51,
+        "width": 97,
+        "height": 94
       },
       "runtimeSourceSize": {
-        "width": 137,
-        "height": 136
+        "width": 144,
+        "height": 145
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1543,
-        "w": 110,
-        "h": 91
+        "x": 746,
+        "y": 1893,
+        "w": 97,
+        "h": 94
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.968447,
+      "normalizationScale": 1.026163,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 68.5,
-        "pixelY": 127.84
+        "pixelX": 72.0,
+        "pixelY": 136.3
       },
       "footprint": {
         "shape": "circle",
@@ -2063,9 +2104,9 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/carve-right-2": {
+    "player/heading-right-60": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
       "cellIndex": 5,
       "cellBounds": {
         "x": 1280,
@@ -2074,36 +2115,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 6,
-        "y": 88,
-        "width": 228,
-        "height": 159
+        "x": 0,
+        "y": 98,
+        "width": 179,
+        "height": 158
       },
       "runtimeTrimBounds": {
-        "x": 3,
-        "y": 42,
-        "width": 110,
-        "height": 77
+        "x": 0,
+        "y": 53,
+        "width": 97,
+        "height": 86
       },
       "runtimeSourceSize": {
-        "width": 124,
-        "height": 123
+        "width": 139,
+        "height": 139
       },
       "atlasFrame": {
-        "x": 244,
-        "y": 1642,
-        "w": 110,
-        "h": 77
+        "x": 113,
+        "y": 2098,
+        "w": 97,
+        "h": 86
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.875,
+      "normalizationScale": 0.986034,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 62.0,
-        "pixelY": 115.62
+        "pixelX": 69.5,
+        "pixelY": 130.66
       },
       "footprint": {
         "shape": "circle",
@@ -2113,9 +2155,9 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/carve-right-3": {
+    "player/heading-right-stop": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
       "cellIndex": 6,
       "cellBounds": {
         "x": 0,
@@ -2124,336 +2166,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 22,
-        "y": 92,
-        "width": 206,
-        "height": 148
+        "x": 41,
+        "y": 23,
+        "width": 174,
+        "height": 210
       },
       "runtimeTrimBounds": {
-        "x": 12,
-        "y": 49,
-        "width": 110,
-        "height": 79
+        "x": 19,
+        "y": 11,
+        "width": 80,
+        "height": 97
       },
       "runtimeSourceSize": {
-        "width": 137,
-        "height": 137
+        "width": 118,
+        "height": 119
       },
       "atlasFrame": {
-        "x": 126,
-        "y": 1642,
-        "w": 110,
-        "h": 79
+        "x": 634,
+        "y": 1780,
+        "w": 80,
+        "h": 97
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.968447,
+      "normalizationScale": 0.840476,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 68.5,
-        "pixelY": 128.78
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/downhill": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 0,
-      "cellBounds": {
-        "x": 0,
-        "y": 0,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 71,
-        "y": 32,
-        "width": 121,
-        "height": 224
-      },
-      "runtimeTrimBounds": {
-        "x": 35,
-        "y": 16,
-        "width": 59,
-        "height": 110
-      },
-      "runtimeSourceSize": {
-        "width": 125,
-        "height": 126
-      },
-      "atlasFrame": {
-        "x": 595,
-        "y": 1200,
-        "w": 59,
-        "h": 110
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.890625,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 62.5,
-        "pixelY": 118.44
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/front-flip-1": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 14,
-      "cellBounds": {
-        "x": 512,
-        "y": 512,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 34,
-        "y": 53,
-        "width": 177,
-        "height": 141
-      },
-      "runtimeTrimBounds": {
-        "x": 21,
-        "y": 33,
-        "width": 110,
-        "height": 87
-      },
-      "runtimeSourceSize": {
-        "width": 159,
-        "height": 158
-      },
-      "atlasFrame": {
-        "x": 571,
-        "y": 1543,
-        "w": 110,
-        "h": 87
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.127119,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 79.5,
-        "pixelY": 148.52
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/front-flip-2": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 15,
-      "cellBounds": {
-        "x": 768,
-        "y": 512,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 57,
-        "y": 80,
-        "width": 133,
-        "height": 136
-      },
-      "runtimeTrimBounds": {
-        "x": 38,
-        "y": 54,
-        "width": 89,
-        "height": 91
-      },
-      "runtimeSourceSize": {
-        "width": 171,
-        "height": 172
-      },
-      "atlasFrame": {
-        "x": 126,
-        "y": 1543,
-        "w": 89,
-        "h": 91
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.22,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 85.5,
-        "pixelY": 161.68
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/front-flip-3": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 16,
-      "cellBounds": {
-        "x": 1024,
-        "y": 512,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 34,
-        "y": 98,
-        "width": 172,
-        "height": 106
-      },
-      "runtimeTrimBounds": {
-        "x": 22,
-        "y": 63,
-        "width": 110,
-        "height": 68
-      },
-      "runtimeSourceSize": {
-        "width": 164,
-        "height": 164
-      },
-      "atlasFrame": {
-        "x": 8,
-        "y": 1730,
-        "w": 110,
-        "h": 68
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.159884,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 82.0,
-        "pixelY": 154.16
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/hockey-stop-left": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 7,
-      "cellBounds": {
-        "x": 256,
-        "y": 256,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 5,
-        "y": 92,
-        "width": 222,
-        "height": 148
-      },
-      "runtimeTrimBounds": {
-        "x": 2,
-        "y": 45,
-        "width": 110,
-        "height": 73
-      },
-      "runtimeSourceSize": {
-        "width": 126,
-        "height": 126
-      },
-      "atlasFrame": {
-        "x": 641,
-        "y": 1642,
-        "w": 110,
-        "h": 73
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.898649,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 63.0,
-        "pixelY": 118.44
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/hockey-stop-right": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 8,
-      "cellBounds": {
-        "x": 512,
-        "y": 256,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 17,
-        "y": 61,
-        "width": 193,
-        "height": 178
-      },
-      "runtimeTrimBounds": {
-        "x": 10,
-        "y": 35,
-        "width": 110,
-        "height": 101
-      },
-      "runtimeSourceSize": {
-        "width": 146,
-        "height": 146
-      },
-      "atlasFrame": {
-        "x": 581,
-        "y": 1325,
-        "w": 110,
-        "h": 101
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 1.033679,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 73.0,
-        "pixelY": 137.24
+        "pixelX": 59.0,
+        "pixelY": 111.86
       },
       "footprint": {
         "shape": "circle",
@@ -2465,45 +2208,46 @@
     },
     "player/jump-takeoff": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 12,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 8,
       "cellBounds": {
-        "x": 0,
-        "y": 512,
+        "x": 512,
+        "y": 256,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 76,
-        "y": 56,
-        "width": 100,
-        "height": 163
+        "x": 22,
+        "y": 103,
+        "width": 147,
+        "height": 134
       },
       "runtimeTrimBounds": {
-        "x": 51,
-        "y": 38,
-        "width": 67,
-        "height": 109
+        "x": 15,
+        "y": 68,
+        "width": 97,
+        "height": 88
       },
       "runtimeSourceSize": {
-        "width": 172,
-        "height": 172
+        "width": 169,
+        "height": 169
       },
       "atlasFrame": {
-        "x": 779,
-        "y": 1200,
-        "w": 67,
-        "h": 109
+        "x": 807,
+        "y": 1998,
+        "w": 97,
+        "h": 88
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.22,
+      "normalizationScale": 1.20068,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 86.0,
-        "pixelY": 161.68
+        "pixelX": 84.5,
+        "pixelY": 158.86
       },
       "footprint": {
         "shape": "circle",
@@ -2515,189 +2259,91 @@
     },
     "player/landing-crouch": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 22,
-      "cellBounds": {
-        "x": 1024,
-        "y": 768,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 0,
-        "y": 91,
-        "width": 225,
-        "height": 121
-      },
-      "runtimeTrimBounds": {
-        "x": 0,
-        "y": 44,
-        "width": 110,
-        "height": 59
-      },
-      "runtimeSourceSize": {
-        "width": 125,
-        "height": 124
-      },
-      "atlasFrame": {
-        "x": 249,
-        "y": 1730,
-        "w": 110,
-        "h": 59
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.886667,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 62.5,
-        "pixelY": 116.56
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/spin-left": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 20,
-      "cellBounds": {
-        "x": 512,
-        "y": 768,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 1,
-        "y": 61,
-        "width": 255,
-        "height": 130
-      },
-      "runtimeTrimBounds": {
-        "x": 0,
-        "y": 28,
-        "width": 115,
-        "height": 59
-      },
-      "runtimeSourceSize": {
-        "width": 115,
-        "height": 116
-      },
-      "atlasFrame": {
-        "x": 367,
-        "y": 1730,
-        "w": 115,
-        "h": 59
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.82,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 57.5,
-        "pixelY": 109.04
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/spin-right": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 21,
-      "cellBounds": {
-        "x": 768,
-        "y": 768,
-        "width": 256,
-        "height": 256
-      },
-      "trimBounds": {
-        "x": 0,
-        "y": 75,
-        "width": 256,
-        "height": 139
-      },
-      "runtimeTrimBounds": {
-        "x": 0,
-        "y": 34,
-        "width": 115,
-        "height": 63
-      },
-      "runtimeSourceSize": {
-        "width": 115,
-        "height": 116
-      },
-      "atlasFrame": {
-        "x": 126,
-        "y": 1730,
-        "w": 115,
-        "h": 63
-      },
-      "padding": 4,
-      "normalizationFamily": "player",
-      "normalizationScale": 0.82,
-      "runtimeScale": 0.55,
-      "groundPivot": {
-        "normalizedX": 0.5,
-        "normalizedY": 0.94,
-        "pixelX": 57.5,
-        "pixelY": 109.04
-      },
-      "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.65
-      },
-      "clearanceHeightMeters": 1.8
-    },
-    "player/tuck": {
-      "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 11,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 17,
       "cellBounds": {
         "x": 1280,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 16,
+        "y": 91,
+        "width": 148,
+        "height": 133
+      },
+      "runtimeTrimBounds": {
+        "x": 10,
+        "y": 60,
+        "width": 97,
+        "height": 87
+      },
+      "runtimeSourceSize": {
+        "width": 167,
+        "height": 168
+      },
+      "atlasFrame": {
+        "x": 912,
+        "y": 1998,
+        "w": 97,
+        "h": 87
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.192568,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 83.5,
+        "pixelY": 157.92
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/rotation-045": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 10,
+      "cellBounds": {
+        "x": 1024,
         "y": 256,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 22,
-        "y": 63,
-        "width": 193,
-        "height": 166
+        "x": 17,
+        "y": 104,
+        "width": 170,
+        "height": 139
       },
       "runtimeTrimBounds": {
-        "x": 13,
-        "y": 36,
-        "width": 110,
-        "height": 94
+        "x": 10,
+        "y": 59,
+        "width": 97,
+        "height": 79
       },
       "runtimeSourceSize": {
         "width": 146,
         "height": 145
       },
       "atlasFrame": {
-        "x": 479,
-        "y": 1439,
-        "w": 110,
-        "h": 94
+        "x": 706,
+        "y": 2098,
+        "w": 97,
+        "h": 79
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.033679,
+      "normalizationScale": 1.038235,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -2713,47 +2359,48 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/uphill-left": {
+    "player/rotation-090": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 9,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 11,
       "cellBounds": {
-        "x": 768,
+        "x": 1280,
         "y": 256,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 44,
-        "y": 63,
-        "width": 182,
+        "x": 35,
+        "y": 65,
+        "width": 153,
         "height": 183
       },
       "runtimeTrimBounds": {
-        "x": 26,
-        "y": 38,
-        "width": 109,
-        "height": 110
+        "x": 19,
+        "y": 34,
+        "width": 81,
+        "height": 97
       },
       "runtimeSourceSize": {
-        "width": 153,
-        "height": 154
+        "width": 136,
+        "height": 135
       },
       "atlasFrame": {
-        "x": 662,
-        "y": 1200,
-        "w": 109,
-        "h": 110
+        "x": 722,
+        "y": 1780,
+        "w": 81,
+        "h": 97
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 1.090164,
+      "normalizationScale": 0.964481,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 76.5,
-        "pixelY": 144.76
+        "pixelX": 68.0,
+        "pixelY": 126.9
       },
       "footprint": {
         "shape": "circle",
@@ -2763,47 +2410,201 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/uphill-right": {
+    "player/rotation-135": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
-      "cellIndex": 10,
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 12,
       "cellBounds": {
-        "x": 1024,
-        "y": 256,
+        "x": 0,
+        "y": 512,
         "width": 256,
         "height": 256
       },
       "trimBounds": {
-        "x": 74,
-        "y": 93,
-        "width": 84,
-        "height": 143
+        "x": 85,
+        "y": 73,
+        "width": 126,
+        "height": 148
       },
       "runtimeTrimBounds": {
-        "x": 50,
-        "y": 62,
-        "width": 56,
-        "height": 96
+        "x": 56,
+        "y": 48,
+        "width": 83,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 168
+      },
+      "atlasFrame": {
+        "x": 811,
+        "y": 1780,
+        "w": 83,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.192568,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 84.5,
+        "pixelY": 157.92
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/rotation-180": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 13,
+      "cellBounds": {
+        "x": 256,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 70,
+        "y": 32,
+        "width": 117,
+        "height": 194
+      },
+      "runtimeTrimBounds": {
+        "x": 35,
+        "y": 16,
+        "width": 59,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 129,
+        "height": 128
+      },
+      "atlasFrame": {
+        "x": 902,
+        "y": 1780,
+        "w": 59,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.909794,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 64.5,
+        "pixelY": 120.32
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/rotation-225": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 14,
+      "cellBounds": {
+        "x": 512,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 33,
+        "y": 55,
+        "width": 171,
+        "height": 154
+      },
+      "runtimeTrimBounds": {
+        "x": 19,
+        "y": 31,
+        "width": 97,
+        "height": 87
+      },
+      "runtimeSourceSize": {
+        "width": 146,
+        "height": 145
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 2098,
+        "w": 97,
+        "h": 87
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.032164,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 73.0,
+        "pixelY": 136.3
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/rotation-270": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 15,
+      "cellBounds": {
+        "x": 768,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 26,
+        "y": 75,
+        "width": 123,
+        "height": 137
+      },
+      "runtimeTrimBounds": {
+        "x": 17,
+        "y": 50,
+        "width": 83,
+        "height": 92
       },
       "runtimeSourceSize": {
         "width": 172,
-        "height": 171
+        "height": 172
       },
       "atlasFrame": {
-        "x": 133,
-        "y": 1439,
-        "w": 56,
-        "h": 96
+        "x": 8,
+        "y": 1998,
+        "w": 83,
+        "h": 92
       },
       "padding": 4,
       "normalizationFamily": "player",
       "normalizationScale": 1.22,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
         "pixelX": 86.0,
-        "pixelY": 160.74
+        "pixelY": 161.68
       },
       "footprint": {
         "shape": "circle",
@@ -2813,9 +2614,60 @@
       },
       "clearanceHeightMeters": 1.8
     },
-    "player/wipeout": {
+    "player/rotation-315": {
       "sourceSheet": "01-player-skier.png",
-      "sourceSha256": "323815ae23a5a03961ef24ee73d6b4730964f1046c8f18583971f058ae4fdabc",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 16,
+      "cellBounds": {
+        "x": 1024,
+        "y": 512,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 26,
+        "y": 91,
+        "width": 154,
+        "height": 129
+      },
+      "runtimeTrimBounds": {
+        "x": 16,
+        "y": 57,
+        "width": 97,
+        "height": 81
+      },
+      "runtimeSourceSize": {
+        "width": 161,
+        "height": 161
+      },
+      "atlasFrame": {
+        "x": 368,
+        "y": 2098,
+        "w": 97,
+        "h": 81
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.146104,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 80.5,
+        "pixelY": 151.34
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/runover-laying": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
       "cellIndex": 23,
       "cellBounds": {
         "x": 1280,
@@ -2825,35 +2677,291 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 42,
-        "width": 220,
-        "height": 154
+        "y": 127,
+        "width": 236,
+        "height": 73
       },
       "runtimeTrimBounds": {
         "x": 0,
-        "y": 21,
-        "width": 110,
-        "height": 77
+        "y": 57,
+        "width": 106,
+        "height": 33
       },
       "runtimeSourceSize": {
-        "width": 128,
-        "height": 128
+        "width": 115,
+        "height": 115
       },
       "atlasFrame": {
-        "x": 362,
-        "y": 1642,
-        "w": 110,
-        "h": 77
+        "x": 839,
+        "y": 2276,
+        "w": 106,
+        "h": 33
       },
       "padding": 4,
       "normalizationFamily": "player",
-      "normalizationScale": 0.906818,
+      "normalizationScale": 0.82,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 64.0,
-        "pixelY": 120.32
+        "pixelX": 57.5,
+        "pixelY": 108.1
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/trick-daffy": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 19,
+      "cellBounds": {
+        "x": 256,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 45,
+        "y": 32,
+        "width": 180,
+        "height": 174
+      },
+      "runtimeTrimBounds": {
+        "x": 24,
+        "y": 17,
+        "width": 97,
+        "height": 94
+      },
+      "runtimeSourceSize": {
+        "width": 138,
+        "height": 138
+      },
+      "atlasFrame": {
+        "x": 851,
+        "y": 1893,
+        "w": 97,
+        "h": 94
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.980556,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 69.0,
+        "pixelY": 129.72
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/trick-spread": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 18,
+      "cellBounds": {
+        "x": 0,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 39,
+        "y": 47,
+        "width": 217,
+        "height": 160
+      },
+      "runtimeTrimBounds": {
+        "x": 18,
+        "y": 21,
+        "width": 98,
+        "height": 72
+      },
+      "runtimeSourceSize": {
+        "width": 116,
+        "height": 115
+      },
+      "atlasFrame": {
+        "x": 550,
+        "y": 2193,
+        "w": 98,
+        "h": 72
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 0.82,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 58.0,
+        "pixelY": 108.1
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/trick-twist-left": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 20,
+      "cellBounds": {
+        "x": 512,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 56,
+        "y": 32,
+        "width": 138,
+        "height": 162
+      },
+      "runtimeTrimBounds": {
+        "x": 34,
+        "y": 19,
+        "width": 83,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 154,
+        "height": 153
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1893,
+        "w": 83,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.089506,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 77.0,
+        "pixelY": 143.82
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/trick-twist-right": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 21,
+      "cellBounds": {
+        "x": 768,
+        "y": 768,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 24,
+        "y": 53,
+        "width": 129,
+        "height": 143
+      },
+      "runtimeTrimBounds": {
+        "x": 16,
+        "y": 36,
+        "width": 87,
+        "height": 96
+      },
+      "runtimeSourceSize": {
+        "width": 172,
+        "height": 172
+      },
+      "atlasFrame": {
+        "x": 407,
+        "y": 1893,
+        "w": 87,
+        "h": 96
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.22,
+      "edgeBleedComponentsRemoved": 1,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 86.0,
+        "pixelY": 161.68
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 0.65
+      },
+      "clearanceHeightMeters": 1.8
+    },
+    "player/tuck": {
+      "sourceSheet": "01-player-skier.png",
+      "sourceSha256": "a518e0a45596ebe8c922a832464413d8b12b2a330ce2c7d1442e8b31c2426926",
+      "cellIndex": 7,
+      "cellBounds": {
+        "x": 256,
+        "y": 256,
+        "width": 256,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 75,
+        "y": 41,
+        "width": 106,
+        "height": 171
+      },
+      "runtimeTrimBounds": {
+        "x": 43,
+        "y": 23,
+        "width": 60,
+        "height": 97
+      },
+      "runtimeSourceSize": {
+        "width": 146,
+        "height": 145
+      },
+      "atlasFrame": {
+        "x": 99,
+        "y": 1893,
+        "w": 60,
+        "h": 97
+      },
+      "padding": 4,
+      "normalizationFamily": "player",
+      "normalizationScale": 1.032164,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 73.0,
+        "pixelY": 136.3
       },
       "footprint": {
         "shape": "circle",
@@ -2865,7 +2973,7 @@
     },
     "secret/mushroom": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 10,
       "cellBounds": {
         "x": 0,
@@ -2877,33 +2985,34 @@
         "x": 93,
         "y": 53,
         "width": 150,
-        "height": 203
+        "height": 148
       },
       "runtimeTrimBounds": {
         "x": 51,
         "y": 29,
         "width": 82,
-        "height": 112
+        "height": 81
       },
       "runtimeSourceSize": {
         "width": 168,
-        "height": 141
+        "height": 140
       },
       "atlasFrame": {
-        "x": 505,
-        "y": 1200,
+        "x": 473,
+        "y": 2098,
         "w": 82,
-        "h": 112
+        "h": 81
       },
       "padding": 4,
       "normalizationFamily": "secret/mushroom",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.88,
         "pixelX": 84.0,
-        "pixelY": 124.08
+        "pixelY": 123.2
       },
       "footprint": {
         "shape": "circle",
@@ -2915,7 +3024,7 @@
     },
     "secret/yellow-snow": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 14,
       "cellBounds": {
         "x": 1228,
@@ -2940,14 +3049,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 490,
-        "y": 1730,
+        "x": 8,
+        "y": 2276,
         "w": 128,
         "h": 56
       },
       "padding": 4,
       "normalizationFamily": "secret/yellow-snow",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -2975,35 +3085,36 @@
       },
       "trimBounds": {
         "x": 39,
-        "y": 0,
+        "y": 54,
         "width": 189,
-        "height": 249
+        "height": 195
       },
       "runtimeTrimBounds": {
         "x": 21,
-        "y": 0,
-        "width": 103,
-        "height": 136
+        "y": 30,
+        "width": 104,
+        "height": 107
       },
       "runtimeSourceSize": {
-        "width": 167,
-        "height": 140
+        "width": 168,
+        "height": 141
       },
       "atlasFrame": {
-        "x": 111,
-        "y": 655,
-        "w": 103,
-        "h": 136
+        "x": 308,
+        "y": 1662,
+        "w": 104,
+        "h": 107
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 0.991968,
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 83.5,
-        "pixelY": 131.6
+        "pixelX": 84.0,
+        "pixelY": 132.54
       },
       "footprint": {
         "shape": "circle",
@@ -3025,35 +3136,36 @@
       },
       "trimBounds": {
         "x": 33,
-        "y": 0,
+        "y": 58,
         "width": 210,
-        "height": 247
+        "height": 189
       },
       "runtimeTrimBounds": {
-        "x": 18,
-        "y": 0,
-        "width": 116,
-        "height": 136
+        "x": 17,
+        "y": 30,
+        "width": 107,
+        "height": 97
       },
       "runtimeSourceSize": {
-        "width": 169,
-        "height": 141
+        "width": 157,
+        "height": 132
       },
       "atlasFrame": {
-        "x": 222,
-        "y": 655,
-        "w": 116,
-        "h": 136
+        "x": 167,
+        "y": 1893,
+        "w": 107,
+        "h": 97
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 1.0,
+      "normalizationScale": 0.928571,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 84.5,
-        "pixelY": 132.54
+        "pixelX": 78.5,
+        "pixelY": 124.08
       },
       "footprint": {
         "shape": "circle",
@@ -3075,35 +3187,36 @@
       },
       "trimBounds": {
         "x": 37,
-        "y": 0,
+        "y": 44,
         "width": 189,
-        "height": 239
+        "height": 195
       },
       "runtimeTrimBounds": {
-        "x": 21,
-        "y": 0,
-        "width": 107,
-        "height": 136
+        "x": 20,
+        "y": 24,
+        "width": 104,
+        "height": 107
       },
       "runtimeSourceSize": {
-        "width": 174,
-        "height": 146
+        "width": 169,
+        "height": 140
       },
       "atlasFrame": {
-        "x": 346,
-        "y": 655,
-        "w": 107,
-        "h": 136
+        "x": 420,
+        "y": 1662,
+        "w": 104,
+        "h": 107
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 1.033473,
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 87.0,
-        "pixelY": 137.24
+        "pixelX": 84.5,
+        "pixelY": 131.6
       },
       "footprint": {
         "shape": "circle",
@@ -3125,35 +3238,36 @@
       },
       "trimBounds": {
         "x": 106,
-        "y": 0,
-        "width": 162,
-        "height": 242
+        "y": 76,
+        "width": 84,
+        "height": 166
       },
       "runtimeTrimBounds": {
-        "x": 60,
-        "y": 0,
-        "width": 91,
-        "height": 136
+        "x": 68,
+        "y": 49,
+        "width": 54,
+        "height": 107
       },
       "runtimeSourceSize": {
-        "width": 173,
-        "height": 144
+        "width": 198,
+        "height": 165
       },
       "atlasFrame": {
-        "x": 461,
-        "y": 655,
-        "w": 91,
-        "h": 136
+        "x": 532,
+        "y": 1662,
+        "w": 54,
+        "h": 107
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 1.020661,
+      "normalizationScale": 1.174699,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 86.5,
-        "pixelY": 135.36
+        "pixelX": 99.0,
+        "pixelY": 155.1
       },
       "footprint": {
         "shape": "circle",
@@ -3174,36 +3288,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 2,
-        "y": 0,
-        "width": 289,
-        "height": 243
+        "x": 50,
+        "y": 75,
+        "width": 202,
+        "height": 168
       },
       "runtimeTrimBounds": {
-        "x": 1,
-        "y": 0,
-        "width": 136,
-        "height": 114
+        "x": 27,
+        "y": 40,
+        "width": 107,
+        "height": 89
       },
       "runtimeSourceSize": {
-        "width": 145,
-        "height": 120
+        "width": 164,
+        "height": 136
       },
       "atlasFrame": {
-        "x": 285,
-        "y": 1200,
-        "w": 136,
-        "h": 114
+        "x": 302,
+        "y": 1998,
+        "w": 107,
+        "h": 89
       },
       "padding": 4,
       "normalizationFamily": "snowboarder",
-      "normalizationScale": 0.854671,
+      "normalizationScale": 0.965347,
+      "edgeBleedComponentsRemoved": 3,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 72.5,
-        "pixelY": 112.8
+        "pixelX": 82.0,
+        "pixelY": 127.84
       },
       "footprint": {
         "shape": "circle",
@@ -3215,7 +3330,7 @@
     },
     "terrain/bump-large": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 7,
       "cellBounds": {
         "x": 614,
@@ -3225,29 +3340,30 @@
       },
       "trimBounds": {
         "x": 9,
-        "y": 0,
+        "y": 71,
         "width": 245,
-        "height": 219
+        "height": 148
       },
       "runtimeTrimBounds": {
         "x": 5,
-        "y": 0,
+        "y": 39,
         "width": 135,
-        "height": 120
+        "height": 81
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 140
       },
       "atlasFrame": {
-        "x": 260,
-        "y": 1071,
+        "x": 563,
+        "y": 2098,
         "w": 135,
-        "h": 120
+        "h": 81
       },
       "padding": 4,
       "normalizationFamily": "terrain/bump-large",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 4,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3265,7 +3381,7 @@
     },
     "terrain/bump-small": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 6,
       "cellBounds": {
         "x": 307,
@@ -3275,29 +3391,30 @@
       },
       "trimBounds": {
         "x": 57,
-        "y": 0,
+        "y": 113,
         "width": 152,
-        "height": 256
+        "height": 83
       },
       "runtimeTrimBounds": {
         "x": 31,
-        "y": 0,
+        "y": 62,
         "width": 84,
-        "height": 141
+        "height": 46
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 515,
-        "y": 505,
+        "x": 511,
+        "y": 2276,
         "w": 84,
-        "h": 141
+        "h": 46
       },
       "padding": 4,
       "normalizationFamily": "terrain/bump-small",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 7,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3315,7 +3432,7 @@
     },
     "terrain/burning-tree-a": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 11,
       "cellBounds": {
         "x": 307,
@@ -3324,35 +3441,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 71,
-        "y": 0,
-        "width": 137,
-        "height": 256
+        "x": 54,
+        "y": 11,
+        "width": 150,
+        "height": 245
       },
       "runtimeTrimBounds": {
-        "x": 39,
-        "y": 0,
-        "width": 75,
-        "height": 141
+        "x": 30,
+        "y": 6,
+        "width": 82,
+        "height": 135
       },
       "runtimeSourceSize": {
-        "width": 168,
+        "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 607,
-        "y": 505,
-        "w": 75,
-        "h": 141
+        "x": 726,
+        "y": 1112,
+        "w": 82,
+        "h": 135
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-a",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 84.0,
+        "pixelX": 84.5,
         "pixelY": 129.72
       },
       "footprint": {
@@ -3365,7 +3483,7 @@
     },
     "terrain/burning-tree-b": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 12,
       "cellBounds": {
         "x": 614,
@@ -3374,35 +3492,36 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 64,
-        "y": 0,
-        "width": 137,
-        "height": 256
+        "x": 54,
+        "y": 2,
+        "width": 150,
+        "height": 254
       },
       "runtimeTrimBounds": {
-        "x": 35,
-        "y": 0,
-        "width": 75,
-        "height": 141
+        "x": 30,
+        "y": 1,
+        "width": 82,
+        "height": 140
       },
       "runtimeSourceSize": {
-        "width": 168,
+        "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 690,
-        "y": 505,
-        "w": 75,
-        "h": 141
+        "x": 497,
+        "y": 958,
+        "w": 82,
+        "h": 140
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-b",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.92,
-        "pixelX": 84.0,
+        "pixelX": 84.5,
         "pixelY": 129.72
       },
       "footprint": {
@@ -3415,7 +3534,7 @@
     },
     "terrain/burning-tree-c": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 13,
       "cellBounds": {
         "x": 921,
@@ -3424,30 +3543,31 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 41,
-        "y": 0,
-        "width": 144,
-        "height": 256
+        "x": 54,
+        "y": 12,
+        "width": 150,
+        "height": 244
       },
       "runtimeTrimBounds": {
-        "x": 23,
-        "y": 0,
-        "width": 79,
-        "height": 141
+        "x": 30,
+        "y": 7,
+        "width": 82,
+        "height": 134
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 773,
-        "y": 505,
-        "w": 79,
-        "h": 141
+        "x": 163,
+        "y": 1256,
+        "w": 82,
+        "h": 134
       },
       "padding": 4,
       "normalizationFamily": "terrain/burning-tree-c",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3465,7 +3585,7 @@
     },
     "terrain/dead-tree": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 3,
       "cellBounds": {
         "x": 921,
@@ -3490,14 +3610,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 414,
-        "y": 799,
+        "x": 425,
+        "y": 1398,
         "w": 82,
         "h": 129
       },
       "padding": 4,
       "normalizationFamily": "terrain/dead-tree",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3515,7 +3636,7 @@
     },
     "terrain/evergreen-large": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 2,
       "cellBounds": {
         "x": 614,
@@ -3540,14 +3661,15 @@
         "height": 140
       },
       "atlasFrame": {
-        "x": 162,
-        "y": 799,
+        "x": 561,
+        "y": 1256,
         "w": 94,
         "h": 131
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-large",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3565,7 +3687,7 @@
     },
     "terrain/evergreen-medium": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 1,
       "cellBounds": {
         "x": 307,
@@ -3590,14 +3712,15 @@
         "height": 140
       },
       "atlasFrame": {
-        "x": 429,
-        "y": 1200,
+        "x": 873,
+        "y": 1536,
         "w": 68,
         "h": 114
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-medium",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3615,7 +3738,7 @@
     },
     "terrain/evergreen-small": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 0,
       "cellBounds": {
         "x": 0,
@@ -3640,14 +3763,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 223,
-        "y": 1543,
+        "x": 237,
+        "y": 1998,
         "w": 57,
         "h": 91
       },
       "padding": 4,
       "normalizationFamily": "terrain/evergreen-small",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3665,7 +3789,7 @@
     },
     "terrain/mogul-field": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 8,
       "cellBounds": {
         "x": 921,
@@ -3675,47 +3799,209 @@
       },
       "trimBounds": {
         "x": 12,
-        "y": 0,
-        "width": 295,
-        "height": 223
+        "y": 94,
+        "width": 222,
+        "height": 129
       },
       "runtimeTrimBounds": {
         "x": 7,
-        "y": 0,
-        "width": 162,
-        "height": 123
+        "y": 52,
+        "width": 122,
+        "height": 71
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 178,
-        "y": 939,
-        "w": 162,
-        "h": 123
+        "x": 822,
+        "y": 2193,
+        "w": 122,
+        "h": 71
       },
       "padding": 4,
       "normalizationFamily": "terrain/mogul-field",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 4,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
-        "normalizedY": 0.8,
+        "normalizedY": 0.94,
         "pixelX": 84.5,
-        "pixelY": 112.8
+        "pixelY": 132.54
+      },
+      "footprint": {
+        "shape": "polygon",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0,
+        "radiusMeters": 7.207969539921889,
+        "pointsMeters": [
+          {
+            "x": -6.449172576832151,
+            "y": -3.0227139479905425
+          },
+          {
+            "x": -5.866666666666666,
+            "y": -4.187725768321512
+          },
+          {
+            "x": -5.700236406619385,
+            "y": -4.354156028368793
+          },
+          {
+            "x": -4.701654846335697,
+            "y": -5.269522458628841
+          },
+          {
+            "x": -4.5352245862884155,
+            "y": -5.352737588652482
+          },
+          {
+            "x": -4.285579196217494,
+            "y": -5.435952718676122
+          },
+          {
+            "x": -2.2052009456264776,
+            "y": -5.768813238770685
+          },
+          {
+            "x": -1.6226950354609928,
+            "y": -5.768813238770685
+          },
+          {
+            "x": 0.12482269503546098,
+            "y": -5.435952718676122
+          },
+          {
+            "x": 2.121985815602837,
+            "y": -5.019877068557919
+          },
+          {
+            "x": 2.53806146572104,
+            "y": -4.853446808510637
+          },
+          {
+            "x": 2.7044917257683214,
+            "y": -4.770231678486997
+          },
+          {
+            "x": 2.9541371158392433,
+            "y": -4.603801418439716
+          },
+          {
+            "x": 3.6198581560283687,
+            "y": -3.7716501182033086
+          },
+          {
+            "x": 3.6198581560283687,
+            "y": -3.688434988179668
+          },
+          {
+            "x": 3.286997635933806,
+            "y": -2.1905626477541364
+          },
+          {
+            "x": 2.3716312056737587,
+            "y": -0.6094751773049638
+          },
+          {
+            "x": 2.121985815602837,
+            "y": -0.19339952718676057
+          },
+          {
+            "x": 1.5394799054373522,
+            "y": -0.026969267139479114
+          },
+          {
+            "x": 0.7905437352245862,
+            "y": 0.05624586288416156
+          },
+          {
+            "x": -0.12482269503546098,
+            "y": 0.05624586288416156
+          },
+          {
+            "x": -2.9541371158392433,
+            "y": -0.3598297872340419
+          },
+          {
+            "x": -5.3673758865248224,
+            "y": -0.9423356973995265
+          },
+          {
+            "x": -5.700236406619385,
+            "y": -1.0255508274231673
+          },
+          {
+            "x": -5.949881796690307,
+            "y": -1.1087659574468074
+          },
+          {
+            "x": -6.116312056737589,
+            "y": -1.1919810874704482
+          },
+          {
+            "x": -6.449172576832151,
+            "y": -1.6080567375886516
+          }
+        ]
+      },
+      "clearanceHeightMeters": 0.18
+    },
+    "terrain/rainbow-ramp": {
+      "sourceSheet": "07-downhill-ramp.png",
+      "sourceSha256": "57a5f1b9a32885cced6d3e766d9289f8223880265a31c555b09d002c50ae9b10",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 1254,
+        "height": 1254
+      },
+      "trimBounds": {
+        "x": 204,
+        "y": 51,
+        "width": 842,
+        "height": 1151
+      },
+      "runtimeTrimBounds": {
+        "x": 112,
+        "y": 28,
+        "width": 463,
+        "height": 633
+      },
+      "runtimeSourceSize": {
+        "width": 689,
+        "height": 690
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 8,
+        "w": 463,
+        "h": 633
+      },
+      "padding": 4,
+      "normalizationFamily": "terrain/rainbow-ramp",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.88,
+        "pixelX": 344.5,
+        "pixelY": 607.2
       },
       "footprint": {
         "shape": "circle",
         "offsetXMeters": 0,
         "offsetYMeters": 0.15,
-        "radiusMeters": 1.1
+        "radiusMeters": 3.0
       },
-      "clearanceHeightMeters": 0.18
+      "clearanceHeightMeters": 0.2
     },
-    "terrain/rainbow-ramp": {
+    "terrain/rainbow-ramp-legacy": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 9,
       "cellBounds": {
         "x": 1228,
@@ -3725,47 +4011,48 @@
       },
       "trimBounds": {
         "x": 0,
-        "y": 0,
+        "y": 95,
         "width": 262,
-        "height": 231
+        "height": 136
       },
       "runtimeTrimBounds": {
         "x": 0,
-        "y": 0,
+        "y": 52,
         "width": 144,
-        "height": 127
+        "height": 75
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 671,
-        "y": 799,
+        "x": 8,
+        "y": 2193,
         "w": 144,
-        "h": 127
+        "h": 75
       },
       "padding": 4,
-      "normalizationFamily": "terrain/rainbow-ramp",
+      "normalizationFamily": "terrain/rainbow-ramp-legacy",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 5,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
-        "normalizedY": 0.79,
+        "normalizedY": 0.92,
         "pixelX": 84.5,
-        "pixelY": 111.39
+        "pixelY": 129.72
       },
       "footprint": {
         "shape": "circle",
         "offsetXMeters": 0,
         "offsetYMeters": 0.15,
-        "radiusMeters": 2.0
+        "radiusMeters": 1.0
       },
-      "clearanceHeightMeters": 0.2
+      "clearanceHeightMeters": 0.7
     },
     "terrain/rock": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 5,
       "cellBounds": {
         "x": 0,
@@ -3775,29 +4062,30 @@
       },
       "trimBounds": {
         "x": 71,
-        "y": 0,
+        "y": 93,
         "width": 183,
-        "height": 225
+        "height": 132
       },
       "runtimeTrimBounds": {
         "x": 39,
-        "y": 0,
+        "y": 51,
         "width": 101,
-        "height": 124
+        "height": 73
       },
       "runtimeSourceSize": {
         "width": 169,
         "height": 141
       },
       "atlasFrame": {
-        "x": 823,
-        "y": 799,
+        "x": 321,
+        "y": 2193,
         "w": 101,
-        "h": 124
+        "h": 73
       },
       "padding": 4,
       "normalizationFamily": "terrain/rock",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3815,7 +4103,7 @@
     },
     "terrain/stump": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 4,
       "cellBounds": {
         "x": 1228,
@@ -3840,14 +4128,15 @@
         "height": 141
       },
       "atlasFrame": {
-        "x": 784,
-        "y": 1730,
+        "x": 264,
+        "y": 2276,
         "w": 89,
         "h": 52
       },
       "padding": 4,
       "normalizationFamily": "terrain/stump",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3890,14 +4179,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 699,
-        "y": 1325,
+        "x": 197,
+        "y": 1780,
         "w": 109,
         "h": 98
       },
       "padding": 4,
       "normalizationFamily": "vfx/breath-mist",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3940,14 +4230,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 288,
-        "y": 1543,
+        "x": 417,
+        "y": 1998,
         "w": 130,
         "h": 89
       },
       "padding": 4,
       "normalizationFamily": "vfx/carve-fan-left",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -3990,14 +4281,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 715,
-        "y": 1439,
+        "x": 99,
+        "y": 1998,
         "w": 130,
         "h": 92
       },
       "padding": 4,
       "normalizationFamily": "vfx/carve-fan-right",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4040,14 +4332,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 504,
-        "y": 799,
+        "x": 515,
+        "y": 1398,
         "w": 159,
         "h": 128
       },
       "padding": 4,
       "normalizationFamily": "vfx/crash-burst",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4090,14 +4383,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 480,
-        "y": 1642,
+        "x": 160,
+        "y": 2193,
         "w": 153,
         "h": 75
       },
       "padding": 4,
       "normalizationFamily": "vfx/crash-decal",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4140,14 +4434,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 560,
-        "y": 655,
+        "x": 816,
+        "y": 1112,
         "w": 158,
         "h": 135
       },
       "padding": 4,
       "normalizationFamily": "vfx/flame-embers",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4191,13 +4486,14 @@
       },
       "atlasFrame": {
         "x": 8,
-        "y": 1806,
+        "y": 2340,
         "w": 122,
         "h": 26
       },
       "padding": 4,
       "normalizationFamily": "vfx/ground-shadow",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4240,14 +4536,15 @@
         "height": 171
       },
       "atlasFrame": {
-        "x": 854,
-        "y": 1200,
+        "x": 594,
+        "y": 1662,
         "w": 114,
         "h": 107
       },
       "padding": 4,
       "normalizationFamily": "vfx/ice-impact",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4290,14 +4587,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 939,
+        "x": 682,
+        "y": 1398,
         "w": 162,
         "h": 124
       },
       "padding": 4,
       "normalizationFamily": "vfx/landing-plume",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4340,14 +4638,15 @@
         "height": 171
       },
       "atlasFrame": {
-        "x": 807,
-        "y": 1543,
+        "x": 218,
+        "y": 2098,
         "w": 142,
         "h": 85
       },
       "padding": 4,
       "normalizationFamily": "vfx/powder-medium",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4390,14 +4689,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 881,
-        "y": 1730,
+        "x": 603,
+        "y": 2276,
         "w": 123,
         "h": 46
       },
       "padding": 4,
       "normalizationFamily": "vfx/powder-tiny",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4440,14 +4740,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 197,
-        "y": 1439,
+        "x": 502,
+        "y": 1893,
         "w": 116,
         "h": 96
       },
       "padding": 4,
       "normalizationFamily": "vfx/ramp-glint",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4490,14 +4791,15 @@
         "height": 172
       },
       "atlasFrame": {
-        "x": 426,
-        "y": 1543,
+        "x": 555,
+        "y": 1998,
         "w": 137,
         "h": 89
       },
       "padding": 4,
       "normalizationFamily": "vfx/speed-streaks",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4540,14 +4842,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 799,
+        "x": 407,
+        "y": 1256,
         "w": 146,
         "h": 132
       },
       "padding": 4,
       "normalizationFamily": "vfx/tracks-long",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4590,14 +4893,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 759,
-        "y": 1642,
+        "x": 656,
+        "y": 2193,
         "w": 158,
         "h": 72
       },
       "padding": 4,
       "normalizationFamily": "vfx/tracks-short",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4640,14 +4944,15 @@
         "height": 173
       },
       "atlasFrame": {
-        "x": 520,
-        "y": 1071,
+        "x": 125,
+        "y": 1536,
         "w": 117,
         "h": 118
       },
       "padding": 4,
       "normalizationFamily": "vfx/trick-sparkle",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
@@ -4665,7 +4970,7 @@
     },
     "walking-tree/idle": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 15,
       "cellBounds": {
         "x": 0,
@@ -4680,30 +4985,31 @@
         "height": 217
       },
       "runtimeTrimBounds": {
-        "x": 51,
+        "x": 55,
         "y": 0,
-        "width": 87,
-        "height": 121
+        "width": 93,
+        "height": 130
       },
       "runtimeSourceSize": {
-        "width": 171,
-        "height": 143
+        "width": 183,
+        "height": 153
       },
       "atlasFrame": {
-        "x": 803,
-        "y": 939,
-        "w": 87,
-        "h": 121
+        "x": 663,
+        "y": 1256,
+        "w": 93,
+        "h": 130
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
-      "normalizationScale": 1.013825,
+      "normalizationScale": 1.087558,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 85.5,
-        "pixelY": 134.42
+        "pixelX": 91.5,
+        "pixelY": 143.82
       },
       "footprint": {
         "shape": "circle",
@@ -4715,7 +5021,7 @@
     },
     "walking-tree/step-left": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 16,
       "cellBounds": {
         "x": 307,
@@ -4724,36 +5030,37 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 61,
-        "y": 0,
-        "width": 172,
-        "height": 222
+        "x": 57,
+        "y": 10,
+        "width": 192,
+        "height": 236
       },
       "runtimeTrimBounds": {
-        "x": 33,
-        "y": 0,
-        "width": 94,
-        "height": 121
+        "x": 31,
+        "y": 6,
+        "width": 106,
+        "height": 130
       },
       "runtimeSourceSize": {
-        "width": 167,
-        "height": 140
+        "width": 169,
+        "height": 142
       },
       "atlasFrame": {
-        "x": 898,
-        "y": 939,
-        "w": 94,
-        "h": 121
+        "x": 764,
+        "y": 1256,
+        "w": 106,
+        "h": 130
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
-      "normalizationScale": 0.990991,
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 83.5,
-        "pixelY": 131.6
+        "pixelX": 84.5,
+        "pixelY": 133.48
       },
       "footprint": {
         "shape": "circle",
@@ -4765,7 +5072,7 @@
     },
     "walking-tree/step-right": {
       "sourceSheet": "04-terrain.png",
-      "sourceSha256": "27cb9478ad1e96044a919b6813618c39ac3641bcd813fa1269976ca429dd8c65",
+      "sourceSha256": "34ad5227d453ac230cf0daa74be0f0212d5746d84b366ff87f9baa2e964c7c25",
       "cellIndex": 17,
       "cellBounds": {
         "x": 614,
@@ -4774,35 +5081,240 @@
         "height": 256
       },
       "trimBounds": {
-        "x": 55,
-        "y": 0,
-        "width": 157,
-        "height": 220
+        "x": 62,
+        "y": 10,
+        "width": 183,
+        "height": 236
       },
       "runtimeTrimBounds": {
-        "x": 30,
-        "y": 0,
-        "width": 86,
-        "height": 121
+        "x": 34,
+        "y": 6,
+        "width": 101,
+        "height": 130
       },
       "runtimeSourceSize": {
-        "width": 168,
-        "height": 141
+        "width": 169,
+        "height": 142
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 1071,
-        "w": 86,
-        "h": 121
+        "x": 878,
+        "y": 1256,
+        "w": 101,
+        "h": 130
       },
       "padding": 4,
       "normalizationFamily": "walking-tree",
       "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.94,
-        "pixelX": 84.0,
+        "pixelX": 84.5,
+        "pixelY": 133.48
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/walk-a": {
+      "sourceSheet": "09-walking-tree-cycle.png",
+      "sourceSha256": "20ab5773812a54a3482460d83667e8f356021c7764fad4160398a88687c5018c",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 47,
+        "y": 10,
+        "width": 185,
+        "height": 236
+      },
+      "runtimeTrimBounds": {
+        "x": 26,
+        "y": 6,
+        "width": 102,
+        "height": 130
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
+      "atlasFrame": {
+        "x": 8,
+        "y": 1398,
+        "w": 102,
+        "h": 130
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree/walk-a",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 84.5,
+        "pixelY": 132.54
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/walk-b": {
+      "sourceSheet": "09-walking-tree-cycle.png",
+      "sourceSha256": "20ab5773812a54a3482460d83667e8f356021c7764fad4160398a88687c5018c",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 307,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 68,
+        "y": 10,
+        "width": 162,
+        "height": 236
+      },
+      "runtimeTrimBounds": {
+        "x": 37,
+        "y": 6,
+        "width": 89,
+        "height": 130
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
+      "atlasFrame": {
+        "x": 118,
+        "y": 1398,
+        "w": 89,
+        "h": 130
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree/walk-b",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 84.5,
+        "pixelY": 132.54
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/walk-c": {
+      "sourceSheet": "09-walking-tree-cycle.png",
+      "sourceSha256": "20ab5773812a54a3482460d83667e8f356021c7764fad4160398a88687c5018c",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 614,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 41,
+        "y": 10,
+        "width": 190,
+        "height": 236
+      },
+      "runtimeTrimBounds": {
+        "x": 23,
+        "y": 6,
+        "width": 105,
+        "height": 130
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
+      "atlasFrame": {
+        "x": 215,
+        "y": 1398,
+        "w": 105,
+        "h": 130
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree/walk-c",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 84.5,
+        "pixelY": 132.54
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 2.2
+      },
+      "clearanceHeightMeters": 2.35
+    },
+    "walking-tree/walk-d": {
+      "sourceSheet": "09-walking-tree-cycle.png",
+      "sourceSha256": "20ab5773812a54a3482460d83667e8f356021c7764fad4160398a88687c5018c",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 921,
+        "y": 0,
+        "width": 307,
+        "height": 256
+      },
+      "trimBounds": {
+        "x": 67,
+        "y": 10,
+        "width": 161,
+        "height": 236
+      },
+      "runtimeTrimBounds": {
+        "x": 37,
+        "y": 6,
+        "width": 89,
+        "height": 130
+      },
+      "runtimeSourceSize": {
+        "width": 169,
+        "height": 141
+      },
+      "atlasFrame": {
+        "x": 328,
+        "y": 1398,
+        "w": 89,
+        "h": 130
+      },
+      "padding": 4,
+      "normalizationFamily": "walking-tree/walk-d",
+      "normalizationScale": 1.0,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.94,
+        "pixelX": 84.5,
         "pixelY": 132.54
       },
       "footprint": {
@@ -4815,7 +5327,7 @@
     },
     "yeti/belly-pat": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 13,
       "cellBounds": {
         "x": 313,
@@ -4830,30 +5342,31 @@
         "height": 268
       },
       "runtimeTrimBounds": {
-        "x": 21,
+        "x": 22,
         "y": 0,
-        "width": 111,
-        "height": 142
+        "width": 113,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 167,
-        "height": 166
+        "width": 171,
+        "height": 171
       },
       "atlasFrame": {
-        "x": 504,
-        "y": 189,
-        "w": 111,
-        "h": 142
+        "x": 605,
+        "y": 649,
+        "w": 113,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.966418,
+      "normalizationScale": 0.990672,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 83.5,
-        "pixelY": 157.7
+        "pixelX": 85.5,
+        "pixelY": 162.45
       },
       "footprint": {
         "shape": "circle",
@@ -4865,7 +5378,7 @@
     },
     "yeti/chew-a": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 11,
       "cellBounds": {
         "x": 940,
@@ -4881,29 +5394,30 @@
       },
       "runtimeTrimBounds": {
         "x": 17,
-        "y": 7,
-        "width": 110,
-        "height": 142
+        "y": 8,
+        "width": 113,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 177,
-        "height": 175
+        "width": 181,
+        "height": 181
       },
       "atlasFrame": {
-        "x": 623,
-        "y": 189,
-        "w": 110,
-        "h": 142
+        "x": 726,
+        "y": 649,
+        "w": 113,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.023715,
+      "normalizationScale": 1.049407,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 88.5,
-        "pixelY": 166.25
+        "pixelX": 90.5,
+        "pixelY": 171.95
       },
       "footprint": {
         "shape": "circle",
@@ -4915,7 +5429,7 @@
     },
     "yeti/chew-b": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 12,
       "cellBounds": {
         "x": 0,
@@ -4930,30 +5444,31 @@
         "height": 266
       },
       "runtimeTrimBounds": {
-        "x": 37,
+        "x": 38,
         "y": 0,
-        "width": 96,
-        "height": 142
+        "width": 99,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 167,
-        "height": 168
+        "width": 172,
+        "height": 172
       },
       "atlasFrame": {
-        "x": 741,
-        "y": 189,
-        "w": 96,
-        "h": 142
+        "x": 847,
+        "y": 649,
+        "w": 99,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.973684,
+      "normalizationScale": 0.99812,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 83.5,
-        "pixelY": 159.6
+        "pixelX": 86.0,
+        "pixelY": 163.4
       },
       "footprint": {
         "shape": "circle",
@@ -4965,7 +5480,7 @@
     },
     "yeti/grab": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 10,
       "cellBounds": {
         "x": 627,
@@ -4974,36 +5489,37 @@
         "height": 313
       },
       "trimBounds": {
-        "x": 38,
+        "x": 48,
         "y": 14,
-        "width": 199,
-        "height": 299
+        "width": 189,
+        "height": 247
       },
       "runtimeTrimBounds": {
-        "x": 18,
-        "y": 7,
-        "width": 95,
-        "height": 142
+        "x": 28,
+        "y": 8,
+        "width": 112,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 149,
-        "height": 149
+        "width": 185,
+        "height": 185
       },
       "atlasFrame": {
-        "x": 845,
-        "y": 189,
-        "w": 95,
-        "h": 142
+        "x": 8,
+        "y": 804,
+        "w": 112,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.866221,
+      "normalizationScale": 1.074899,
+      "edgeBleedComponentsRemoved": 2,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 74.5,
-        "pixelY": 141.55
+        "pixelX": 92.5,
+        "pixelY": 175.75
       },
       "footprint": {
         "shape": "circle",
@@ -5015,7 +5531,7 @@
     },
     "yeti/idle-recovery": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 15,
       "cellBounds": {
         "x": 940,
@@ -5030,30 +5546,31 @@
         "height": 266
       },
       "runtimeTrimBounds": {
-        "x": 27,
+        "x": 28,
         "y": 3,
-        "width": 99,
-        "height": 142
+        "width": 102,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 168,
-        "height": 168
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 355,
-        "w": 99,
-        "h": 142
+        "x": 128,
+        "y": 804,
+        "w": 102,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.973684,
+      "normalizationScale": 0.99812,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 84.0,
-        "pixelY": 159.6
+        "pixelX": 86.5,
+        "pixelY": 164.35
       },
       "footprint": {
         "shape": "circle",
@@ -5065,7 +5582,7 @@
     },
     "yeti/pounce-air": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 9,
       "cellBounds": {
         "x": 313,
@@ -5077,33 +5594,34 @@
         "x": 10,
         "y": 21,
         "width": 265,
-        "height": 292
+        "height": 193
       },
       "runtimeTrimBounds": {
-        "x": 5,
-        "y": 10,
-        "width": 129,
-        "height": 142
+        "x": 6,
+        "y": 12,
+        "width": 146,
+        "height": 106
       },
       "runtimeSourceSize": {
-        "width": 153,
-        "height": 152
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 115,
-        "y": 355,
-        "w": 129,
-        "h": 142
+        "x": 865,
+        "y": 1662,
+        "w": 146,
+        "h": 106
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.886986,
+      "normalizationScale": 1.001887,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 76.5,
-        "pixelY": 144.4
+        "pixelX": 86.5,
+        "pixelY": 164.35
       },
       "footprint": {
         "shape": "circle",
@@ -5115,7 +5633,7 @@
     },
     "yeti/pounce-windup": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 8,
       "cellBounds": {
         "x": 0,
@@ -5130,30 +5648,31 @@
         "height": 204
       },
       "runtimeTrimBounds": {
-        "x": 31,
-        "y": 30,
-        "width": 142,
-        "height": 131
+        "x": 32,
+        "y": 31,
+        "width": 146,
+        "height": 134
       },
       "runtimeSourceSize": {
-        "width": 200,
-        "height": 201
+        "width": 206,
+        "height": 206
       },
       "atlasFrame": {
-        "x": 264,
-        "y": 799,
-        "w": 142,
-        "h": 131
+        "x": 253,
+        "y": 1256,
+        "w": 146,
+        "h": 134
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.166667,
+      "normalizationScale": 1.195946,
+      "edgeBleedComponentsRemoved": 1,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 100.0,
-        "pixelY": 190.95
+        "pixelX": 103.0,
+        "pixelY": 195.7
       },
       "footprint": {
         "shape": "circle",
@@ -5165,7 +5684,7 @@
     },
     "yeti/roar": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 14,
       "cellBounds": {
         "x": 627,
@@ -5182,28 +5701,29 @@
       "runtimeTrimBounds": {
         "x": 13,
         "y": 0,
-        "width": 135,
-        "height": 142
+        "width": 138,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 165,
-        "height": 165
+        "width": 168,
+        "height": 169
       },
       "atlasFrame": {
-        "x": 252,
-        "y": 355,
-        "w": 135,
-        "h": 142
+        "x": 238,
+        "y": 804,
+        "w": 138,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.95572,
+      "normalizationScale": 0.979705,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 82.5,
-        "pixelY": 156.75
+        "pixelX": 84.0,
+        "pixelY": 160.55
       },
       "footprint": {
         "shape": "circle",
@@ -5215,7 +5735,7 @@
     },
     "yeti/run-away-a": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 2,
       "cellBounds": {
         "x": 627,
@@ -5230,30 +5750,31 @@
         "height": 254
       },
       "runtimeTrimBounds": {
-        "x": 24,
-        "y": 19,
-        "width": 126,
-        "height": 142
+        "x": 25,
+        "y": 20,
+        "width": 129,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 176,
-        "height": 175
+        "width": 180,
+        "height": 180
       },
       "atlasFrame": {
-        "x": 395,
-        "y": 355,
-        "w": 126,
-        "h": 142
+        "x": 384,
+        "y": 804,
+        "w": 129,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.019685,
+      "normalizationScale": 1.045276,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 88.0,
-        "pixelY": 166.25
+        "pixelX": 90.0,
+        "pixelY": 171.0
       },
       "footprint": {
         "shape": "circle",
@@ -5265,7 +5786,7 @@
     },
     "yeti/run-away-b": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 3,
       "cellBounds": {
         "x": 940,
@@ -5282,28 +5803,29 @@
       "runtimeTrimBounds": {
         "x": 24,
         "y": 21,
-        "width": 117,
-        "height": 142
+        "width": 120,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 177,
-        "height": 176
+        "width": 181,
+        "height": 180
       },
       "atlasFrame": {
-        "x": 529,
-        "y": 355,
-        "w": 117,
-        "h": 142
+        "x": 521,
+        "y": 804,
+        "w": 120,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.023715,
+      "normalizationScale": 1.049407,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 88.5,
-        "pixelY": 167.2
+        "pixelX": 90.5,
+        "pixelY": 171.0
       },
       "footprint": {
         "shape": "circle",
@@ -5315,7 +5837,7 @@
     },
     "yeti/run-left-a": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 4,
       "cellBounds": {
         "x": 0,
@@ -5324,36 +5846,37 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 70,
-        "y": 30,
-        "width": 184,
-        "height": 245
+        "x": 43,
+        "y": 14,
+        "width": 226,
+        "height": 286
       },
       "runtimeTrimBounds": {
-        "x": 41,
-        "y": 17,
-        "width": 107,
-        "height": 142
+        "x": 22,
+        "y": 7,
+        "width": 115,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 182,
-        "height": 182
+        "width": 159,
+        "height": 160
       },
       "atlasFrame": {
-        "x": 654,
-        "y": 355,
-        "w": 107,
-        "h": 142
+        "x": 649,
+        "y": 804,
+        "w": 115,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.057143,
+      "normalizationScale": 0.928322,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 91.0,
-        "pixelY": 172.9
+        "pixelX": 79.5,
+        "pixelY": 152.0
       },
       "footprint": {
         "shape": "circle",
@@ -5365,7 +5888,7 @@
     },
     "yeti/run-left-b": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 5,
       "cellBounds": {
         "x": 313,
@@ -5374,36 +5897,37 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 38,
-        "y": 29,
-        "width": 220,
-        "height": 246
+        "x": 40,
+        "y": 14,
+        "width": 234,
+        "height": 286
       },
       "runtimeTrimBounds": {
-        "x": 22,
-        "y": 17,
-        "width": 127,
-        "height": 142
+        "x": 20,
+        "y": 7,
+        "width": 119,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 181,
-        "height": 182
+        "width": 159,
+        "height": 160
       },
       "atlasFrame": {
-        "x": 769,
-        "y": 355,
-        "w": 127,
-        "h": 142
+        "x": 772,
+        "y": 804,
+        "w": 119,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.052846,
+      "normalizationScale": 0.928322,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 90.5,
-        "pixelY": 172.9
+        "pixelX": 79.5,
+        "pixelY": 152.0
       },
       "footprint": {
         "shape": "circle",
@@ -5415,7 +5939,7 @@
     },
     "yeti/run-right-a": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 6,
       "cellBounds": {
         "x": 627,
@@ -5424,36 +5948,37 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 49,
-        "y": 25,
-        "width": 202,
-        "height": 250
+        "x": 44,
+        "y": 14,
+        "width": 226,
+        "height": 286
       },
       "runtimeTrimBounds": {
-        "x": 28,
-        "y": 14,
+        "x": 22,
+        "y": 7,
         "width": 115,
-        "height": 142
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 178,
-        "height": 178
+        "width": 159,
+        "height": 160
       },
       "atlasFrame": {
-        "x": 8,
-        "y": 505,
+        "x": 899,
+        "y": 804,
         "w": 115,
-        "h": 142
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.036,
+      "normalizationScale": 0.928322,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 89.0,
-        "pixelY": 169.1
+        "pixelX": 79.5,
+        "pixelY": 152.0
       },
       "footprint": {
         "shape": "circle",
@@ -5465,7 +5990,7 @@
     },
     "yeti/run-right-b": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 7,
       "cellBounds": {
         "x": 940,
@@ -5474,36 +5999,241 @@
         "height": 314
       },
       "trimBounds": {
-        "x": 31,
-        "y": 29,
-        "width": 209,
-        "height": 246
+        "x": 40,
+        "y": 14,
+        "width": 234,
+        "height": 286
       },
       "runtimeTrimBounds": {
-        "x": 18,
-        "y": 17,
-        "width": 121,
-        "height": 142
+        "x": 20,
+        "y": 7,
+        "width": 119,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 182,
-        "height": 182
+        "width": 159,
+        "height": 160
       },
       "atlasFrame": {
-        "x": 131,
-        "y": 505,
-        "w": 121,
-        "h": 142
+        "x": 8,
+        "y": 958,
+        "w": 119,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 1.052846,
+      "normalizationScale": 0.928322,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 91.0,
-        "pixelY": 172.9
+        "pixelX": 79.5,
+        "pixelY": 152.0
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-side-a": {
+      "sourceSheet": "08-yeti-lateral-run.png",
+      "sourceSha256": "fb0e7fd47ca914c4951df04c4d6ff12bcb36d4e03b65d656a48c5d76051e7937",
+      "cellIndex": 0,
+      "cellBounds": {
+        "x": 0,
+        "y": 0,
+        "width": 600,
+        "height": 724
+      },
+      "trimBounds": {
+        "x": 28,
+        "y": 115,
+        "width": 550,
+        "height": 498
+      },
+      "runtimeTrimBounds": {
+        "x": 8,
+        "y": 32,
+        "width": 151,
+        "height": 137
+      },
+      "runtimeSourceSize": {
+        "width": 165,
+        "height": 199
+      },
+      "atlasFrame": {
+        "x": 839,
+        "y": 958,
+        "w": 151,
+        "h": 137
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti/run-side-a",
+      "normalizationScale": 0.5,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 82.5,
+        "pixelY": 189.05
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-side-b": {
+      "sourceSheet": "08-yeti-lateral-run.png",
+      "sourceSha256": "fb0e7fd47ca914c4951df04c4d6ff12bcb36d4e03b65d656a48c5d76051e7937",
+      "cellIndex": 1,
+      "cellBounds": {
+        "x": 600,
+        "y": 0,
+        "width": 486,
+        "height": 724
+      },
+      "trimBounds": {
+        "x": 53,
+        "y": 116,
+        "width": 370,
+        "height": 495
+      },
+      "runtimeTrimBounds": {
+        "x": 15,
+        "y": 32,
+        "width": 102,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 134,
+        "height": 199
+      },
+      "atlasFrame": {
+        "x": 468,
+        "y": 1112,
+        "w": 102,
+        "h": 136
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti/run-side-b",
+      "normalizationScale": 0.5,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 67.0,
+        "pixelY": 189.05
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-side-c": {
+      "sourceSheet": "08-yeti-lateral-run.png",
+      "sourceSha256": "fb0e7fd47ca914c4951df04c4d6ff12bcb36d4e03b65d656a48c5d76051e7937",
+      "cellIndex": 2,
+      "cellBounds": {
+        "x": 1086,
+        "y": 0,
+        "width": 579,
+        "height": 724
+      },
+      "trimBounds": {
+        "x": 35,
+        "y": 117,
+        "width": 509,
+        "height": 493
+      },
+      "runtimeTrimBounds": {
+        "x": 10,
+        "y": 32,
+        "width": 140,
+        "height": 136
+      },
+      "runtimeSourceSize": {
+        "width": 159,
+        "height": 199
+      },
+      "atlasFrame": {
+        "x": 578,
+        "y": 1112,
+        "w": 140,
+        "h": 136
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti/run-side-c",
+      "normalizationScale": 0.5,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 79.5,
+        "pixelY": 189.05
+      },
+      "footprint": {
+        "shape": "circle",
+        "offsetXMeters": 0,
+        "offsetYMeters": 0.15,
+        "radiusMeters": 1.35
+      },
+      "clearanceHeightMeters": 2.7
+    },
+    "yeti/run-side-d": {
+      "sourceSheet": "08-yeti-lateral-run.png",
+      "sourceSha256": "fb0e7fd47ca914c4951df04c4d6ff12bcb36d4e03b65d656a48c5d76051e7937",
+      "cellIndex": 3,
+      "cellBounds": {
+        "x": 1665,
+        "y": 0,
+        "width": 507,
+        "height": 724
+      },
+      "trimBounds": {
+        "x": 80,
+        "y": 116,
+        "width": 367,
+        "height": 442
+      },
+      "runtimeTrimBounds": {
+        "x": 22,
+        "y": 32,
+        "width": 101,
+        "height": 122
+      },
+      "runtimeSourceSize": {
+        "width": 139,
+        "height": 199
+      },
+      "atlasFrame": {
+        "x": 852,
+        "y": 1398,
+        "w": 101,
+        "h": 122
+      },
+      "padding": 4,
+      "normalizationFamily": "yeti/run-side-d",
+      "normalizationScale": 0.5,
+      "edgeBleedComponentsRemoved": 0,
+      "runtimeScale": 0.55,
+      "groundPivot": {
+        "normalizedX": 0.5,
+        "normalizedY": 0.95,
+        "pixelX": 69.5,
+        "pixelY": 189.05
       },
       "footprint": {
         "shape": "circle",
@@ -5515,7 +6245,7 @@
     },
     "yeti/run-toward-a": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 0,
       "cellBounds": {
         "x": 0,
@@ -5530,30 +6260,31 @@
         "height": 264
       },
       "runtimeTrimBounds": {
-        "x": 30,
+        "x": 31,
         "y": 16,
-        "width": 117,
-        "height": 142
+        "width": 119,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 169,
-        "height": 169
+        "width": 173,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 260,
-        "y": 505,
-        "w": 117,
-        "h": 142
+        "x": 135,
+        "y": 958,
+        "w": 119,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.981061,
+      "normalizationScale": 1.005682,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 84.5,
-        "pixelY": 160.55
+        "pixelX": 86.5,
+        "pixelY": 164.35
       },
       "footprint": {
         "shape": "circle",
@@ -5565,7 +6296,7 @@
     },
     "yeti/run-toward-b": {
       "sourceSheet": "03-yeti.png",
-      "sourceSha256": "4cb4fb71343b2a03df93d62f254aea715743ba215de9e2a20069ab3511a7a76f",
+      "sourceSha256": "fbb2ccb20e118f89af1dd64bb0836e259ec8b0e5bcb3824141ce8d0eec8568d4",
       "cellIndex": 1,
       "cellBounds": {
         "x": 313,
@@ -5580,30 +6311,31 @@
         "height": 264
       },
       "runtimeTrimBounds": {
-        "x": 23,
+        "x": 24,
         "y": 15,
-        "width": 122,
-        "height": 142
+        "width": 125,
+        "height": 146
       },
       "runtimeSourceSize": {
-        "width": 169,
-        "height": 168
+        "width": 174,
+        "height": 173
       },
       "atlasFrame": {
-        "x": 385,
-        "y": 505,
-        "w": 122,
-        "h": 142
+        "x": 262,
+        "y": 958,
+        "w": 125,
+        "h": 146
       },
       "padding": 4,
       "normalizationFamily": "yeti",
-      "normalizationScale": 0.981061,
+      "normalizationScale": 1.005682,
+      "edgeBleedComponentsRemoved": 0,
       "runtimeScale": 0.55,
       "groundPivot": {
         "normalizedX": 0.5,
         "normalizedY": 0.95,
-        "pixelX": 84.5,
-        "pixelY": 159.6
+        "pixelX": 87.0,
+        "pixelY": 164.35
       },
       "footprint": {
         "shape": "circle",
@@ -5614,5 +6346,5 @@
       "clearanceHeightMeters": 2.7
     }
   },
-  "sourceStatus": "review-concept-atlases"
+  "sourceStatus": "direction-and-ramp-revision"
 }

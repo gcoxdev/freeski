@@ -24,6 +24,10 @@ export interface ClassicCourse {
   readonly startGate: CourseGate;
 }
 
+export interface ClassicFreestyleRamp extends WorldPoint {
+  readonly id: string;
+}
+
 export function markerExpectedSide(
   marker: Pick<CourseMarker, "color">,
 ): "left" | "right" {
@@ -60,42 +64,66 @@ function alternatingMarkers(
 
 export const CLASSIC_COURSES: readonly ClassicCourse[] = Object.freeze([
   Object.freeze({
-    centerX: -34,
-    finishGate: Object.freeze({ leftX: -44, rightX: -24, y: 636 }),
-    halfWidth: 10,
+    centerX: -46,
+    finishGate: Object.freeze({ leftX: -63, rightX: -29, y: 636 }),
+    halfWidth: 17,
     id: "slalom" as const,
     lengthMeters: 540,
-    markers: alternatingMarkers(24, 120, 20, -38, -30),
+    markers: alternatingMarkers(24, 120, 20, -51, -41),
     name: "SLALOM",
-    startGate: Object.freeze({ leftX: -44, rightX: -24, y: 96 }),
+    startGate: Object.freeze({ leftX: -63, rightX: -29, y: 96 }),
   }),
   Object.freeze({
     centerX: 0,
-    finishGate: Object.freeze({ leftX: -12, rightX: 12, y: 1_136 }),
-    halfWidth: 12,
+    finishGate: Object.freeze({ leftX: -17, rightX: 17, y: 1_136 }),
+    halfWidth: 17,
     id: "free-style" as const,
     lengthMeters: 1_040,
     markers: Object.freeze([]),
     name: "FREE STYLE",
-    startGate: Object.freeze({ leftX: -12, rightX: 12, y: 96 }),
+    startGate: Object.freeze({ leftX: -17, rightX: 17, y: 96 }),
   }),
   Object.freeze({
-    centerX: 34,
-    finishGate: Object.freeze({ leftX: 24, rightX: 44, y: 1_136 }),
-    halfWidth: 10,
+    centerX: 46,
+    finishGate: Object.freeze({ leftX: 29, rightX: 63, y: 1_136 }),
+    halfWidth: 17,
     id: "tree-slalom" as const,
     lengthMeters: 1_040,
-    markers: alternatingMarkers(39, 121, 25, 32, 36),
+    markers: alternatingMarkers(39, 121, 25, 41, 51),
     name: "TREE SLALOM",
-    startGate: Object.freeze({ leftX: 24, rightX: 44, y: 96 }),
+    startGate: Object.freeze({ leftX: 29, rightX: 63, y: 96 }),
   }),
 ]);
+
+/**
+ * Authored freestyle line. Procedural ramps still vary with the seed, while
+ * these guarantee that every run offers a steady series of trick launches.
+ */
+export const CLASSIC_FREESTYLE_RAMPS: readonly ClassicFreestyleRamp[] =
+  Object.freeze(
+    [
+      [-9, 176],
+      [6, 256],
+      [0, 336],
+      [-8, 416],
+      [9, 496],
+      [-2, 576],
+      [8, 656],
+      [-9, 736],
+      [1, 816],
+      [9, 896],
+      [-8, 976],
+      [3, 1_056],
+    ].map(([x, y], index) =>
+      Object.freeze({ id: `classic-freestyle-ramp:${index}`, x: x!, y: y! }),
+    ),
+  );
 
 const TREE_SLALOM = CLASSIC_COURSES.find(
   (course) => course.id === "tree-slalom",
 )!;
 
-export const TREE_SLALOM_ROUTE_WIDTH_METERS = 4.5;
+export const TREE_SLALOM_ROUTE_WIDTH_METERS = 6.5;
 
 /** Authored weaving centerline: always takes the researched correct marker side. */
 export const TREE_SLALOM_ROUTE = Object.freeze([
@@ -137,16 +165,20 @@ export function blocksTreeSlalomRoute(
 
 export const CLASSIC_LIFT = Object.freeze({
   chairs: Object.freeze([
-    Object.freeze({ direction: "uphill" as const, laneX: -7, phaseY: 0 }),
-    Object.freeze({ direction: "downhill" as const, laneX: -9, phaseY: 64 }),
+    Object.freeze({ direction: "uphill" as const, laneX: -70.75, phaseY: 0 }),
+    Object.freeze({
+      direction: "downhill" as const,
+      laneX: -81.25,
+      phaseY: 64,
+    }),
   ]),
   loopLengthMeters: 1_536,
   chairInteraction: interactionFor("chairlift"),
   towerInteraction: interactionFor("lift-tower"),
-  towerX: -8,
+  towerX: -75.5,
   towers: Object.freeze(
     Array.from({ length: 13 }, (_, index) =>
-      Object.freeze({ x: -8, y: -64 + index * 128 }),
+      Object.freeze({ x: -75.5, y: -64 + index * 128 }),
     ),
   ),
 });
@@ -183,6 +215,14 @@ export const CLASSIC_EXCLUSIONS: readonly WorldBounds[] = Object.freeze([
       }),
     ),
   ),
+  ...CLASSIC_FREESTYLE_RAMPS.map((ramp) =>
+    Object.freeze({
+      minX: ramp.x - 4.5,
+      maxX: ramp.x + 4.5,
+      minY: ramp.y - 5,
+      maxY: ramp.y + 5,
+    }),
+  ),
   ...CLASSIC_LIFT.towers.map((tower) =>
     Object.freeze({
       minX: tower.x - 3,
@@ -197,6 +237,7 @@ export function classicOverlaySignature(): string {
   return JSON.stringify({
     boundaries: WORLD_BOUNDARIES_METERS,
     courses: CLASSIC_COURSES,
+    freestyleRamps: CLASSIC_FREESTYLE_RAMPS,
     lift: CLASSIC_LIFT,
     yeti: CLASSIC_YETI_TRIGGERS,
   });

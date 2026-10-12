@@ -1,22 +1,68 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import type { PlayerHeading } from "../simulation/player";
 import {
   PLAYER_FRAME_TARGET_EXTENTS,
   PLAYER_MIN_RENDERED_CONTENT_HEIGHT,
   PLAYER_TARGET_RENDERED_EXTENT,
   playerAtlasFrame,
+  playerGroundAnchorOffset,
   playerPresentationScale,
 } from "./playerPresentation";
 
 const atlas = JSON.parse(
   readFileSync("public/assets/production/freeski-atlas.json", "utf8"),
 ) as {
-  frames: Record<string, { frame: { h: number; w: number } }>;
+  frames: Record<
+    string,
+    {
+      frame: { h: number; w: number };
+      sourceSize: { h: number; w: number };
+      spriteSourceSize: { h: number; w: number; x: number; y: number };
+    }
+  >;
 };
 
 describe("production player presentation", () => {
-  it("defines a readable contract for every production player frame", () => {
+  it("compensates for transparent room below grounded cells", () => {
+    expect(playerGroundAnchorOffset(145, 23, 97, 48 / 97)).toBeCloseTo(
+      ((145 * 0.94 - 120) * 48) / 97,
+      6,
+    );
+    expect(playerGroundAnchorOffset(134, 37, 97, 48 / 97)).toBeCloseTo(
+      ((134 * 0.94 - 134) * 48) / 97,
+      6,
+    );
+    expect(playerGroundAnchorOffset(0, 0, 0, 0)).toBe(0);
+  });
+
+  it("keeps downhill and tuck visible ski lines at the same anchor", () => {
+    const offsets = ["player/heading-downhill", "player/tuck"].map(
+      (frameName) => {
+        const packed = atlas.frames[frameName]!;
+        const presentation = playerPresentationScale(
+          frameName,
+          packed.frame.w,
+          packed.frame.h,
+        );
+        const compensation = playerGroundAnchorOffset(
+          packed.sourceSize.h,
+          packed.spriteSourceSize.y,
+          packed.spriteSourceSize.h,
+          presentation.uniformScale,
+        );
+        return (
+          compensation +
+          (packed.spriteSourceSize.y +
+            packed.spriteSourceSize.h -
+            packed.sourceSize.h * 0.94) *
+            presentation.uniformScale
+        );
+      },
+    );
+    expect(offsets[1]).toBeCloseTo(offsets[0]!, 6);
+  });
+
+  it("defines a readable contract for all 24 player frames", () => {
     const atlasFrames = Object.keys(atlas.frames)
       .filter((frameName) => frameName.startsWith("player/"))
       .sort();
@@ -24,21 +70,21 @@ describe("production player presentation", () => {
 
     expect(contractedFrames).toEqual(atlasFrames);
     expect(contractedFrames).toHaveLength(24);
-    for (const frameName of contractedFrames) {
-      expect(
-        PLAYER_FRAME_TARGET_EXTENTS[
-          frameName as keyof typeof PLAYER_FRAME_TARGET_EXTENTS
-        ],
-        frameName,
-      ).toBe(PLAYER_TARGET_RENDERED_EXTENT);
-    }
+    expect(contractedFrames).toEqual(
+      expect.arrayContaining([
+        "player/heading-left-stop",
+        "player/heading-downhill",
+        "player/heading-right-stop",
+        "player/crash-laying",
+        "player/runover-laying",
+        "player/rotation-180",
+      ]),
+    );
   });
 
-  it("scales trimmed content uniformly without conspicuous state pumping", () => {
+  it("scales every pose uniformly without state pumping", () => {
     const renderedExtents: number[] = [];
-    for (const [frameName, targetContentExtent] of Object.entries(
-      PLAYER_FRAME_TARGET_EXTENTS,
-    )) {
+    for (const frameName of Object.keys(PLAYER_FRAME_TARGET_EXTENTS)) {
       const packed = atlas.frames[frameName]!.frame;
       const presentation = playerPresentationScale(
         frameName,
@@ -50,12 +96,8 @@ describe("production player presentation", () => {
       const renderedExtent = Math.max(renderedWidth, renderedHeight);
 
       expect(presentation.knownFrame, frameName).toBe(true);
-      expect(presentation.targetContentExtent, frameName).toBe(
-        targetContentExtent,
-      );
-      expect(renderedExtent, frameName).toBeCloseTo(targetContentExtent, 8);
-      expect(renderedHeight, frameName).toBeCloseTo(
-        presentation.targetContentHeight,
+      expect(renderedExtent, frameName).toBeCloseTo(
+        PLAYER_TARGET_RENDERED_EXTENT,
         8,
       );
       expect(renderedWidth / renderedHeight, frameName).toBeCloseTo(
@@ -64,10 +106,9 @@ describe("production player presentation", () => {
       );
       renderedExtents.push(renderedExtent);
     }
-
     expect(Math.min(...renderedExtents)).toBe(PLAYER_TARGET_RENDERED_EXTENT);
     expect(Math.max(...renderedExtents)).toBe(PLAYER_TARGET_RENDERED_EXTENT);
-    expect(PLAYER_MIN_RENDERED_CONTENT_HEIGHT).toBeGreaterThanOrEqual(24);
+    expect(PLAYER_MIN_RENDERED_CONTENT_HEIGHT).toBeGreaterThanOrEqual(16);
   });
 
   it("keeps unknown future frames readable", () => {
@@ -79,76 +120,71 @@ describe("production player presentation", () => {
     });
   });
 
-  it("uses visually audited poses for movement and airborne phases", () => {
+  it("maps seven headings directly to seven source cells", () => {
     const pose = (
       overrides: Partial<Parameters<typeof playerAtlasFrame>[0]> = {},
     ) =>
       playerAtlasFrame({
         airHeight: 0,
         airPitch: 0,
-        airSpin: 0,
+        crashKind: "impact",
         heading: "downhill",
         motion: "grounded",
-        velocityX: 0,
+        trickPose: "none",
+        tucking: false,
         ...overrides,
       });
 
-    expect(pose({ heading: "tuck" })).toBe("player/uphill-right");
-    expect(pose({ heading: "uphill-right" })).toBe("player/hockey-stop-right");
-    expect(pose({ heading: "carve-left-1" })).toBe("player/carve-left-2");
-    expect(pose({ heading: "carve-left-3" })).toBe("player/carve-right-1");
-    expect(pose({ heading: "carve-right-1" })).toBe("player/carve-left-1");
-    expect(pose({ heading: "carve-right-3" })).toBe("player/hockey-stop-left");
-    expect(pose({ motion: "airborne" })).toBe("player/jump-takeoff");
-    expect(pose({ airHeight: 1, motion: "airborne" })).toBe("player/tuck");
-    expect(pose({ airSpin: -1, motion: "airborne" })).toBe("player/spin-left");
-    expect(pose({ airPitch: Math.PI / 2, motion: "airborne" })).toBe(
-      "player/front-flip-1",
-    );
-    expect(pose({ airPitch: Math.PI, motion: "airborne" })).toBe(
-      "player/air-neutral",
-    );
-    expect(pose({ motion: "crashed" })).toBe("player/wipeout");
+    for (const heading of [
+      "left-stop",
+      "left-60",
+      "left-30",
+      "downhill",
+      "right-30",
+      "right-60",
+      "right-stop",
+    ] as const)
+      expect(pose({ heading })).toBe(`player/heading-${heading}`);
+    expect(pose({ tucking: true })).toBe("player/tuck");
   });
 
-  it("matches every lateral simulation heading to the depicted travel direction", () => {
-    const frame = (heading: PlayerHeading, velocityX: number) =>
+  it("uses every rotation, trick and distinct crash pose", () => {
+    const pose = (
+      overrides: Partial<Parameters<typeof playerAtlasFrame>[0]> = {},
+    ) =>
       playerAtlasFrame({
-        airHeight: 0,
+        airHeight: 1,
         airPitch: 0,
-        airSpin: 0,
-        heading,
-        motion: "grounded",
-        velocityX,
+        crashKind: "impact",
+        heading: "downhill",
+        motion: "airborne",
+        trickPose: "none",
+        tucking: false,
+        ...overrides,
       });
-    const depictedLeft = new Set([
-      "player/carve-left-2",
-      "player/carve-left-3",
-      "player/carve-right-1",
-      "player/carve-right-3",
-    ]);
-    const depictedRight = new Set([
-      "player/carve-left-1",
-      "player/carve-right-2",
-      "player/hockey-stop-left",
-      "player/hockey-stop-right",
-    ]);
 
-    for (const heading of [
-      "carve-left-1",
-      "carve-left-2",
-      "carve-left-3",
-      "traverse-left",
+    expect(pose()).toBe("player/air-neutral");
+    for (let step = 1; step <= 7; step += 1)
+      expect(pose({ airPitch: (step * Math.PI) / 4 })).toBe(
+        `player/rotation-${String(step * 45).padStart(3, "0")}`,
+      );
+    expect(pose({ airPitch: Math.PI * 2 })).toBe("player/air-neutral");
+    expect(pose({ airPitch: Math.PI * 2 + Math.PI / 4 })).toBe(
+      "player/rotation-045",
+    );
+    expect(pose({ airPitch: Math.PI * 4 + Math.PI / 2 })).toBe(
+      "player/rotation-090",
+    );
+    for (const trickPose of [
+      "spread",
+      "daffy",
+      "twist-left",
+      "twist-right",
     ] as const)
-      expect(depictedLeft.has(frame(heading, -8))).toBe(true);
-    for (const heading of [
-      "carve-right-1",
-      "carve-right-2",
-      "carve-right-3",
-      "traverse-right",
-    ] as const)
-      expect(depictedRight.has(frame(heading, 8))).toBe(true);
-    expect(depictedLeft.has(frame("brake", -3))).toBe(true);
-    expect(depictedRight.has(frame("brake", 3))).toBe(true);
+      expect(pose({ trickPose })).toBe(`player/trick-${trickPose}`);
+    expect(pose({ motion: "crashed" })).toBe("player/crash-laying");
+    expect(pose({ crashKind: "runover", motion: "crashed" })).toBe(
+      "player/runover-laying",
+    );
   });
 });

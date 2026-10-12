@@ -65,10 +65,27 @@ test("demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequen
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.motion === "airborne",
   );
+  const canvas = await page.locator("#game-canvas canvas").boundingBox();
+  if (!canvas) throw new Error("Game canvas is not visible");
+  for (let click = 0; click < 4; click += 1) {
+    await page.mouse.click(
+      canvas.x + canvas.width * 0.5,
+      canvas.y + canvas.height * 0.35,
+    );
+    await page.waitForTimeout(80);
+  }
+  await page.waitForFunction(() =>
+    window.__FREE_SKI__?.telemetry.playerEvents.some(
+      (event) => event.type === "rotation-clicked" && event.detail === "4-of-4",
+    ),
+  );
   await page.keyboard.down("e");
-  await waitForInteraction(page, "trick-completed");
+  await page.waitForFunction(() =>
+    window.__FREE_SKI__?.interactions.styleEvents.some(
+      (event) => event.type === "spin-right-360",
+    ),
+  );
   await page.keyboard.up("e");
-  await expect(page.locator("#trick-label")).toContainText("SPIN RIGHT 360");
   await evidenceScreenshot(page, "ramp-trick.png");
   await page.waitForFunction(
     () =>
@@ -79,6 +96,11 @@ test("demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequen
   expect(ramp.interactions.styleEvents.map((event) => event.type)).toEqual(
     expect.arrayContaining(["ramp-takeoff", "spin-right-360", "clean-landing"]),
   );
+  expect(
+    ramp.interactions.styleEvents.filter(
+      (event) => event.type === "front-flip",
+    ),
+  ).toHaveLength(2);
 
   await stage(page, "crash-recovery");
   await waitForInteraction(page, "crash");
@@ -99,15 +121,19 @@ test("demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequen
   );
 
   await stage(page, "mushroom");
-  await page.keyboard.down("w");
   await waitForInteraction(page, "mushroom-created");
-  await page.keyboard.up("w");
   expect(
     (await runtimeSnapshot(page)).interactions.deltas["scenario-stump"],
   ).toMatchObject({ form: "mushroom" });
   await stage(page, "mushroom");
   await waitForInteraction(page, "mushroom-jumped");
-  await expect(page.locator("#feedback-label")).toContainText("MUSHROOM +100");
+  expect(
+    await page.evaluate(() =>
+      window.__FREE_SKI__!.interactions.feedbackEvents.map(
+        (event) => event.label,
+      ),
+    ),
+  ).toContain("MUSHROOM +100");
   await evidenceScreenshot(page, "mushroom-secret.png");
   const mushroom = await runtimeSnapshot(page);
   expect(mushroom.interactions.snapshot.style).toBe(100);
@@ -119,7 +145,13 @@ test("demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequen
   await stage(page, "burning-ignite");
   await page.keyboard.press("Space");
   await waitForInteraction(page, "dead-tree-ignited");
-  await expect(page.locator("#feedback-label")).toContainText("DEAD TREE LIT");
+  expect(
+    await page.evaluate(() =>
+      window.__FREE_SKI__!.interactions.feedbackEvents.map(
+        (event) => event.label,
+      ),
+    ),
+  ).toContain("DEAD TREE LIT");
   await evidenceScreenshot(page, "burning-tree-ignited.png");
   await page.waitForFunction(
     () => window.__FREE_SKI__?.player.motion === "grounded",
@@ -127,9 +159,13 @@ test("demonstrates ramp trick, crash recovery, mushroom, and burning-tree sequen
   await stage(page, "burning-clear");
   await waitForInteraction(page, "ramp-launch");
   await waitForInteraction(page, "burning-tree-cleared");
-  await expect(page.locator("#feedback-label")).toContainText(
-    "FIRE LINE +1000",
-  );
+  expect(
+    await page.evaluate(() =>
+      window.__FREE_SKI__!.interactions.feedbackEvents.map(
+        (event) => event.label,
+      ),
+    ),
+  ).toContain("FIRE LINE +1000");
   await evidenceScreenshot(page, "burning-tree-cleared.png");
   const burning = await runtimeSnapshot(page);
   expect(burning.interactions.snapshot.style).toBeGreaterThanOrEqual(1_025);

@@ -136,12 +136,12 @@ GATE 0 — REPOSITORY BASELINE
 
 GATE 1 — SKIING VERTICAL SLICE
 
-- G1.1 — Implement fixed-step player simulation with downhill acceleration, three left and three right carve intensities, uphill/traverse states, lateral momentum, tuck, braking and Turbo.
-- G1.2 — Implement keyboard actions for arrows/WASD, Space jump, F Turbo, Escape/F3 pause and R/F2 reset. Add pointer steering behind an option.
+- G1.1 — Implement fixed-step player simulation with exactly seven 30-degree headings from stationary left through downhill to stationary right, no player-produced uphill velocity, lateral momentum between headings, tuck, braking and Turbo. Exact left/right headings stop immediately.
+- G1.2 — Implement simultaneous keyboard actions for arrows/WASD/keypad, Space/W/Up/click jump, F Turbo, Escape/F3 pause and R/F2 reset. Enable pointer steering by default with an opt-out.
 - G1.3 — Keep the player near 35% viewport height while world coordinates advance continuously.
 - G1.4 — Render a temporary snow field, player, speed, meters and pause/Turbo state.
-- G1.5 — Add manual jump, air state, clean landing and crash/recovery.
-- G1.6 — An automated playthrough can start, carve both ways, ski uphill briefly, jump, land, toggle Turbo, pause and reset; movement is frame-rate-independent; direct play feels responsive at normal and Turbo speed.
+- G1.5 — Add manual jump, air state, two additional airborne jump clicks that drive one complete eight-pose rotation, clean landing, separate ordinary/run-over prone states, and crash/recovery.
+- G1.6 — An automated playthrough can start, exercise all seven headings without upward travel, jump, complete a two-click rotation, crash, land, toggle Turbo, pause and reset; movement is frame-rate-independent; direct play feels responsive at normal and Turbo speed.
 
 GATE 2 — DETERMINISTIC MOUNTAIN
 
@@ -158,7 +158,7 @@ GATE 3 — COLLISIONS, AIR AND STYLE
 - G3.1 — Give every blocking object a ground footprint and clearance height independent of sprite bounds.
 - G3.2 — Implement bump hops, mogul slowdown, rock/stump/tree/lift crashes, airborne clears, ramp jumps and forgiving landings.
 - G3.3 — Implement named tricks/rotations and the approved score preset.
-- G3.4 — Implement secrets: reverse-into-stump mushroom, mushroom jump, dead-tree ignition/burning-tree clear, yellow snow, walking tree.
+- G3.4 — Implement secrets: stationary side-hit stump mushroom, mushroom jump, dead-tree ignition/burning-tree clear, yellow snow, walking tree.
 - G3.5 — Provide visual/audio feedback events even if final audio is not yet present.
 - G3.6 — Add recovery invulnerability/input grace to prevent unavoidable chain crashes.
 - G3.7 — Unit tests cover every collision outcome and secret; browser playthrough demonstrates at least one ramp trick, one crash/recovery, one mushroom sequence and one burning-tree sequence; no collision relies on full image rectangles.
@@ -169,7 +169,7 @@ GATE 4 — EVENT MODES AND RECORDS
 - G4.2 — Slalom: 540 m, 24 alternating markers at researched spacing, five-second wrong-side penalty, correct/missed visual states, final time.
 - G4.3 — Tree Slalom: 1,040 m, 39 markers at researched spacing, dense trees with validated passable route, five-second penalty, final time.
 - G4.4 — Free Style: 1,040 m, score-focused ramp/bump population, final Style score.
-- G4.5 — Let the player ignore, leave or backtrack out of event lanes without corrupting state.
+- G4.5 — Let the player ignore or leave event lanes without corrupting state.
 - G4.6 — Store local top-ten records with seed, generator version, score/time and mode. Clearly separate classic fixed-seed records from seeded-run records.
 - G4.7 — Automated playthroughs start and finish all three modes, intentionally hit one marker penalty, verify final metrics and reload persisted records.
 
@@ -186,7 +186,7 @@ GATE 5 — LIVING SLOPE AND YETI
 GATE 6 — ART, VFX, UI AND AUDIO PASS
 
 - G6.1 — Non-destructively slice approved concept sheets; normalize family scale; retouch obvious matte/fringe defects; add pivots, trim bounds, footprints, clearance heights and 4 px extruded atlas padding.
-- G6.2 — Keep source sheets and generated metadata. Do not overwrite them.
+- G6.2 — Keep source sheets and generated metadata. Include direct player frames for all seven headings, eight rotation points, named tricks, ordinary crash and run-over, plus a large vertically aligned downhill ramp.
 - G6.3 — Add scalable shadows, powder, carve fans, tracks, landing/crash plumes, impact sparks, mist, ramp/trick glints, flames and crash decals.
 - G6.4 — Use code-rendered/SDF text for HUD and localizable sign copy where practical.
 - G6.5 — Build a compact readable HUD for time, distance, speed, Style, Turbo, mode, seed and pause. Avoid large opaque panels over play.

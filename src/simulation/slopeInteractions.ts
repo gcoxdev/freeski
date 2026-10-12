@@ -3,6 +3,7 @@ import type {
   PlayerMotion,
   PlayerSimulation,
 } from "./player";
+import { touchesFootprint } from "./footprintContact";
 import {
   StyleScoring,
   type ScorePresetName,
@@ -18,6 +19,7 @@ import type {
 } from "../world/types";
 
 const FULL_ROTATION = Math.PI * 2;
+export const RAMP_LAUNCH_VELOCITY = 12.8;
 
 export const PLAYER_COLLISION_FOOTPRINT = Object.freeze({
   radius: 0.65,
@@ -94,6 +96,10 @@ export class SlopeInteractionSimulation {
   private awardedSpinRotations = 0;
   private awardedPitchRotations = 0;
   private activeTrickValue = "none";
+  private readonly pendingLandedTricks: Array<{
+    readonly id: string;
+    readonly type: StyleEventType;
+  }> = [];
   private collisionChecksValue = 0;
   private footprintHitsValue = 0;
   private eventSequence = 0;
@@ -166,6 +172,7 @@ export class SlopeInteractionSimulation {
     this.awardedSpinRotations = 0;
     this.awardedPitchRotations = 0;
     this.activeTrickValue = "none";
+    this.pendingLandedTricks.length = 0;
     this.collisionChecksValue = 0;
     this.footprintHitsValue = 0;
     this.eventSequence = 0;
@@ -180,13 +187,16 @@ export class SlopeInteractionSimulation {
   ): boolean {
     const snapshot = player.getSnapshot();
     const footprint = object.interaction.footprint;
+    // Airborne crossings do not consume entry; landing on snow still slows.
+    if (object.type === "mogul" && snapshot.motion !== "grounded") return false;
     const objectX = object.x + (delta?.offsetX ?? 0) + footprint.offsetX;
     const objectY = object.y + footprint.offsetY;
-    const distance = Math.hypot(
+    return touchesFootprint(
       snapshot.worldX - objectX,
       snapshot.worldY - objectY,
+      PLAYER_COLLISION_FOOTPRINT.radius,
+      footprint,
     );
-    return distance <= PLAYER_COLLISION_FOOTPRINT.radius + footprint.radius;
   }
 
   private handleContact(
@@ -269,7 +279,10 @@ export class SlopeInteractionSimulation {
 
     if (object.type === "ramp") {
       if (snapshot.motion !== "grounded") return false;
-      const launched = player.launch("ramp", object.rampLaunchVelocity ?? 7.6);
+      const launched = player.launch(
+        "ramp",
+        object.rampLaunchVelocity ?? RAMP_LAUNCH_VELOCITY,
+      );
       if (launched) {
         this.award(
           "ramp-takeoff",
@@ -379,7 +392,7 @@ export class SlopeInteractionSimulation {
     if (
       object.type === "stump" &&
       snapshot.motion === "grounded" &&
-      snapshot.velocityY < -0.5
+      snapshot.heading.endsWith("stop")
     ) {
       this.deltas.patch(object.id, { form: "mushroom" });
       this.emit(
@@ -409,6 +422,7 @@ export class SlopeInteractionSimulation {
     snapshot = player.getSnapshot();
     if (player.tryCrash(`${object.type}:${object.id}`)) {
       this.activeTrickValue = "none";
+      this.pendingLandedTricks.length = 0;
       this.award(
         "obstacle-crash",
         `crash:${object.id}:${snapshot.crashCount + 1}`,
@@ -442,6 +456,7 @@ export class SlopeInteractionSimulation {
         this.activeJump = snapshot.jumpCount;
         this.awardedSpinRotations = 0;
         this.awardedPitchRotations = 0;
+        this.pendingLandedTricks.length = 0;
         this.activeTrickValue = "airborne";
       }
       this.captureRotations(
@@ -456,6 +471,9 @@ export class SlopeInteractionSimulation {
       );
     }
     if (this.previousMotion === "airborne" && snapshot.motion === "grounded") {
+      for (const trick of this.pendingLandedTricks)
+        this.award(trick.type, trick.id, snapshot.simulationSeconds);
+      this.pendingLandedTricks.length = 0;
       this.award(
         "clean-landing",
         `landing:${snapshot.jumpCount}`,
@@ -474,6 +492,7 @@ export class SlopeInteractionSimulation {
       this.previousMotion === "airborne" &&
       snapshot.motion === "crashed"
     ) {
+      this.pendingLandedTricks.length = 0;
       this.award(
         "failed-landing",
         `failed-landing:${snapshot.jumpCount}`,
@@ -508,11 +527,10 @@ export class SlopeInteractionSimulation {
           : angle < 0
             ? "back-flip"
             : "front-flip";
-      this.award(
+      this.pendingLandedTricks.push({
+        id: `trick:${this.activeJump}:${axis}:${rotation}`,
         type,
-        `trick:${this.activeJump}:${axis}:${rotation}`,
-        atSeconds,
-      );
+      });
       this.activeTrickValue = type;
       this.emitPlayer(
         "trick-completed",

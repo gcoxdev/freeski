@@ -105,7 +105,10 @@ export class BrowserInputAdapter {
     window.addEventListener("keyup", this.onKeyUp);
     target.addEventListener("pointermove", this.onPointerMove);
     target.addEventListener("pointerdown", this.onPointerDown);
+    target.addEventListener("pointerup", this.onPointerUp);
+    target.addEventListener("pointercancel", this.onPointerUp);
     target.addEventListener("pointerleave", this.onPointerLeave);
+    target.addEventListener("contextmenu", this.onContextMenu);
     for (const button of this.touchButtons) {
       button.addEventListener("pointerdown", this.onTouchDown);
       button.addEventListener("pointerup", this.onTouchEnd);
@@ -170,7 +173,10 @@ export class BrowserInputAdapter {
     window.removeEventListener("keyup", this.onKeyUp);
     this.target.removeEventListener("pointermove", this.onPointerMove);
     this.target.removeEventListener("pointerdown", this.onPointerDown);
+    this.target.removeEventListener("pointerup", this.onPointerUp);
+    this.target.removeEventListener("pointercancel", this.onPointerUp);
     this.target.removeEventListener("pointerleave", this.onPointerLeave);
+    this.target.removeEventListener("contextmenu", this.onContextMenu);
     for (const button of this.touchButtons) {
       button.removeEventListener("pointerdown", this.onTouchDown);
       button.removeEventListener("pointerup", this.onTouchEnd);
@@ -222,22 +228,38 @@ export class BrowserInputAdapter {
     const player = this.getPlayerScreenPoint();
     const localX = event.clientX - bounds.left;
     const localY = event.clientY - bounds.top;
+    const deltaX = localX - player.x;
+    const downhillDistance = Math.max(0, localY - player.y);
     const steer = Math.max(
       -1,
-      Math.min(1, (localX - player.x) / Math.max(120, bounds.width * 0.24)),
+      Math.min(1, Math.atan2(deltaX, downhillDistance) / (Math.PI / 2)),
     );
     this.actions.setSteer("pointer:aim", steer);
-    this.actions.setDigital("uphill", "pointer:uphill", localY < player.y - 70);
-    this.actions.setDigital("tuck", "pointer:tuck", localY > player.y + 90);
     this.emit("pointer-aim", "PointerMove", "move", "pointer");
   };
 
   private readonly onPointerDown = (event: PointerEvent): void => {
-    if (!this.pointerEnabled || event.button !== 0) return;
+    if (!this.pointerEnabled || (event.button !== 0 && event.button !== 2))
+      return;
     event.preventDefault();
+    if (event.button === 2) {
+      this.actions.setDigital("tuck", "pointer:secondary", true);
+      this.emit("tuck", "PointerSecondary", "down", "pointer");
+      return;
+    }
     this.actions.setDigital("jump", "pointer:primary", true);
     this.actions.setDigital("jump", "pointer:primary", false);
     this.emit("jump", "PointerPrimary", "down", "pointer");
+  };
+
+  private readonly onPointerUp = (event: PointerEvent): void => {
+    if (event.button !== 2) return;
+    const changed = this.actions.setDigital("tuck", "pointer:secondary", false);
+    if (changed) this.emit("tuck", "PointerSecondary", "up", "pointer");
+  };
+
+  private readonly onContextMenu = (event: MouseEvent): void => {
+    if (this.pointerEnabled) event.preventDefault();
   };
 
   private readonly onPointerLeave = (): void => this.resetPointer();

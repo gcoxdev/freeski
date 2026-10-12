@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { FixedStepClock } from "./fixedStep";
 import {
   NEUTRAL_PLAYER_INPUT,
+  PLAYER_HEADINGS,
   PlayerSimulation,
   type PlayerInputFrame,
 } from "./player";
@@ -19,42 +20,70 @@ function run(
 }
 
 describe("PlayerSimulation", () => {
-  it("accelerates downhill and preserves lateral momentum through three carve intensities", () => {
-    const simulation = new PlayerSimulation();
-    run(simulation, 0.08, { steer: -1 });
-    expect(simulation.getSnapshot().heading).toBe("carve-left-1");
-    run(simulation, 0.12, { steer: -1 });
-    expect(simulation.getSnapshot().heading).toBe("carve-left-2");
-    run(simulation, 0.2, { steer: -1 });
-    const hardCarve = simulation.getSnapshot();
-    expect(hardCarve.heading).toBe("carve-left-3");
-    expect(hardCarve.velocityX).toBeLessThan(0);
-
-    simulation.step(NEUTRAL_PLAYER_INPUT, STEP);
-    expect(simulation.getSnapshot().velocityX).toBeLessThan(0);
-    run(simulation, 1, { steer: 1 });
-    expect(simulation.getSnapshot().velocityX).toBeGreaterThan(0);
+  it("quantizes aim to seven 30-degree headings without upward travel", () => {
+    const aims = [-1, -2 / 3, -1 / 3, 0, 1 / 3, 2 / 3, 1];
+    expect(PLAYER_HEADINGS).toHaveLength(7);
+    for (const [index, steer] of aims.entries()) {
+      const simulation = new PlayerSimulation();
+      run(simulation, 1.2, { aiming: true, steer });
+      const snapshot = simulation.getSnapshot();
+      expect(snapshot.heading).toBe(PLAYER_HEADINGS[index]);
+      expect(snapshot.velocityY).toBeGreaterThanOrEqual(0);
+      if (snapshot.heading.endsWith("stop"))
+        expect(snapshot.speedMetersPerSecond).toBeLessThan(0.01);
+    }
   });
 
-  it("supports traverse, uphill, tuck, braking and Turbo", () => {
+  it("steps keyboard steering through the same seven headings", () => {
     const simulation = new PlayerSimulation();
-    run(simulation, 0.12, { steer: -1, uphill: true });
-    expect(simulation.getSnapshot().heading).toBe("traverse-left");
-    run(simulation, 1.2, { steer: -1, uphill: true });
-    expect(simulation.getSnapshot()).toMatchObject({ heading: "uphill-left" });
-    expect(simulation.getSnapshot().velocityY).toBeLessThan(0);
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, turn: -1 }, STEP);
+    expect(simulation.getSnapshot().heading).toBe("left-30");
+    run(simulation, 0.16, { turn: -1 });
+    expect(simulation.getSnapshot().heading).toBe("left-60");
+    run(simulation, 0.16, { turn: -1 });
+    expect(simulation.getSnapshot().heading).toBe("left-stop");
+    run(simulation, 1, { turn: -1 });
+    expect(simulation.getSnapshot().speedMetersPerSecond).toBeLessThan(0.01);
 
-    simulation.reset();
+    simulation.step(NEUTRAL_PLAYER_INPUT, STEP);
+    expect(simulation.getSnapshot().heading).toBe("left-stop");
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, turn: 1 }, STEP);
+    expect(simulation.getSnapshot().heading).toBe("left-60");
+
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, aiming: true, steer: 0 }, STEP);
+    expect(simulation.getSnapshot().heading).toBe("downhill");
+  });
+
+  it("stops immediately at either exact side-facing heading", () => {
+    for (const steer of [-1, 1]) {
+      const simulation = new PlayerSimulation();
+      run(simulation, 0.5, { tuck: true });
+      simulation.step({ ...NEUTRAL_PLAYER_INPUT, aiming: true, steer }, STEP);
+      expect(simulation.getSnapshot()).toMatchObject({
+        heading: steer < 0 ? "left-stop" : "right-stop",
+        speedMetersPerSecond: 0,
+        velocityX: 0,
+        velocityY: 0,
+      });
+    }
+  });
+
+  it("supports downhill tuck, braking and Turbo without uphill movement", () => {
+    const simulation = new PlayerSimulation();
     run(simulation, 1.5, { tuck: true });
-    const normalTuckSpeed = simulation.getSnapshot().speedMetersPerSecond;
+    const normalTuck = simulation.getSnapshot();
+    expect(normalTuck).toMatchObject({ heading: "downhill", tucking: true });
+    expect(normalTuck.velocityY).toBeGreaterThan(0);
+
     simulation.toggleTurbo();
     run(simulation, 1, { tuck: true });
     expect(simulation.getSnapshot().speedMetersPerSecond).toBeGreaterThan(
-      normalTuckSpeed,
+      normalTuck.speedMetersPerSecond,
     );
 
-    run(simulation, 1, { brake: true });
-    expect(simulation.getSnapshot().speedMetersPerSecond).toBeLessThan(2);
+    run(simulation, 1.5, { brake: true });
+    expect(simulation.getSnapshot().heading).toBe("left-stop");
+    expect(simulation.getSnapshot().speedMetersPerSecond).toBeLessThan(0.01);
   });
 
   it("lands a neutral jump cleanly", () => {
@@ -69,19 +98,96 @@ describe("PlayerSimulation", () => {
     });
   });
 
-  it("crashes an off-axis landing and recovers", () => {
+  it("turns two airborne jump clicks into one complete rotation", () => {
     const simulation = new PlayerSimulation();
     simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
-    let sawCrash = false;
-    for (let index = 0; index < 160; index += 1) {
-      simulation.step({ ...NEUTRAL_PLAYER_INPUT, steer: -1 }, STEP);
-      if (simulation.getSnapshot().motion === "crashed") sawCrash = true;
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
+    simulation.step(NEUTRAL_PLAYER_INPUT, STEP);
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
+    run(simulation, 1.3);
+    expect(simulation.getSnapshot()).toMatchObject({
+      lastLanding: "clean",
+      motion: "grounded",
+    });
+    expect(
+      simulation
+        .drainEvents()
+        .filter((event) => event.type === "rotation-clicked")
+        .map((event) => event.detail),
+    ).toEqual(["1-of-2", "2-of-2"]);
+  });
+
+  it("accepts repeated airborne clicks for multiple complete flips", () => {
+    const simulation = new PlayerSimulation();
+    expect(simulation.launch("ramp", 12.8)).toBe(true);
+    for (let click = 0; click < 4; click += 1) {
+      simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
+      simulation.step(NEUTRAL_PLAYER_INPUT, STEP);
     }
-    expect(sawCrash).toBe(true);
+    run(simulation, 2.8);
+    expect(simulation.getSnapshot()).toMatchObject({
+      lastLanding: "clean",
+      motion: "grounded",
+    });
+    expect(
+      simulation
+        .drainEvents()
+        .filter((event) => event.type === "rotation-clicked")
+        .map((event) => event.detail),
+    ).toEqual(["1-of-2", "2-of-2", "3-of-4", "4-of-4"]);
+  });
+
+  it("keeps pointer steering from turning a completed ramp flip into a crash", () => {
+    const simulation = new PlayerSimulation();
+    expect(simulation.launch("ramp", 12.8)).toBe(true);
+    for (let click = 0; click < 2; click += 1) {
+      simulation.step(
+        {
+          ...NEUTRAL_PLAYER_INPUT,
+          aiming: true,
+          jumpPressed: true,
+          steer: 0.85,
+        },
+        STEP,
+      );
+      simulation.step(
+        { ...NEUTRAL_PLAYER_INPUT, aiming: true, steer: 0.85 },
+        STEP,
+      );
+    }
+    run(simulation, 2.8, { aiming: true, steer: 0.85 });
+    expect(simulation.getSnapshot()).toMatchObject({
+      airTilt: 0,
+      lastLanding: "clean",
+      motion: "grounded",
+    });
+  });
+
+  it("crashes an incomplete half rotation and records its crash kind", () => {
+    const simulation = new PlayerSimulation();
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
+    simulation.step({ ...NEUTRAL_PLAYER_INPUT, jumpPressed: true }, STEP);
+    let crash = simulation.getSnapshot();
+    for (let index = 0; index < 160 && crash.motion !== "crashed"; index += 1) {
+      simulation.step(NEUTRAL_PLAYER_INPUT, STEP);
+      crash = simulation.getSnapshot();
+    }
+    expect(crash).toMatchObject({ crashKind: "landing", motion: "crashed" });
+
+    run(simulation, 2);
     expect(simulation.getSnapshot()).toMatchObject({
       crashCount: 1,
       lastLanding: "crash",
       motion: "grounded",
+    });
+  });
+
+  it("distinguishes a run-over from an ordinary impact", () => {
+    const simulation = new PlayerSimulation();
+    expect(simulation.tryCrash("snowboarder:test", "runover")).toBe(true);
+    expect(simulation.getSnapshot()).toMatchObject({
+      crashKind: "runover",
+      motion: "crashed",
     });
   });
 
@@ -111,7 +217,11 @@ describe("PlayerSimulation", () => {
       for (let frame = 0; frame < renderHz * 5; frame += 1) {
         clock.advance(1 / renderHz, (delta) =>
           simulation.step(
-            { ...NEUTRAL_PLAYER_INPUT, steer: frame < renderHz * 2.5 ? -1 : 1 },
+            {
+              ...NEUTRAL_PLAYER_INPUT,
+              aiming: true,
+              steer: frame < renderHz * 2.5 ? -1 / 3 : 1 / 3,
+            },
             delta,
           ),
         );

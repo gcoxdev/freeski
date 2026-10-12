@@ -1,29 +1,27 @@
 export type PlayerHeading =
+  | "left-stop"
+  | "left-60"
+  | "left-30"
   | "downhill"
-  | "tuck"
-  | "brake"
-  | "carve-left-1"
-  | "carve-left-2"
-  | "carve-left-3"
-  | "carve-right-1"
-  | "carve-right-2"
-  | "carve-right-3"
-  | "traverse-left"
-  | "traverse-right"
-  | "uphill-left"
-  | "uphill-right";
+  | "right-30"
+  | "right-60"
+  | "right-stop";
 
 export type PlayerMotion = "grounded" | "airborne" | "crashed" | "recovering";
 export type LandingResult = "none" | "clean" | "crash";
+export type PlayerCrashKind = "impact" | "landing" | "runover";
+export type PlayerTrickPose =
+  "none" | "spread" | "daffy" | "twist-left" | "twist-right";
 
 export interface PlayerInputFrame {
+  aiming: boolean;
   brake: boolean;
   jumpPressed: boolean;
   steer: number;
   trickFlip: number;
   trickSpin: number;
   tuck: boolean;
-  uphill: boolean;
+  turn: number;
 }
 
 export interface PlayerSnapshot {
@@ -31,6 +29,7 @@ export interface PlayerSnapshot {
   airPitch: number;
   airSpin: number;
   airTilt: number;
+  crashKind: PlayerCrashKind;
   crashCount: number;
   heading: PlayerHeading;
   jumpCount: number;
@@ -41,6 +40,8 @@ export interface PlayerSnapshot {
   runNumber: number;
   simulationSeconds: number;
   speedMetersPerSecond: number;
+  trickPose: PlayerTrickPose;
+  tucking: boolean;
   turbo: boolean;
   velocityX: number;
   velocityY: number;
@@ -58,6 +59,7 @@ export type PlayerEventType =
   | "recovered"
   | "recovery-started"
   | "reset"
+  | "rotation-clicked"
   | "resumed"
   | "turbo-off"
   | "turbo-on";
@@ -69,34 +71,36 @@ export interface PlayerEvent {
 }
 
 export const NEUTRAL_PLAYER_INPUT: Readonly<PlayerInputFrame> = Object.freeze({
+  aiming: false,
   brake: false,
   jumpPressed: false,
   steer: 0,
   trickFlip: 0,
   trickSpin: 0,
   tuck: false,
-  uphill: false,
+  turn: 0,
 });
 
 export const PLAYER_TUNING = Object.freeze({
   airControlAcceleration: 7,
+  airClickRotationRate: 8.4,
   airGravity: 10.4,
   airTiltRate: 3.35,
   airTrickRotationRate: 6.45,
   cleanLandingTilt: 0.48,
   crashDuration: 0.68,
   crashFriction: 25,
-  initialDownhillSpeed: 3.5,
+  downhillSpeed: 21,
+  initialDownhillSpeed: 4.2,
   jumpVelocity: 5.35,
   lateralAcceleration: 34,
   longitudinalAcceleration: 21,
   recoveryDuration: 0.42,
   recoveryGraceSeconds: 0.32,
-  steerLevelOneSeconds: 0.12,
-  steerLevelTwoSeconds: 0.3,
+  turnRepeatSeconds: 0.14,
   turboAccelerationMultiplier: 1.3,
   turboSpeedMultiplier: 1.72,
-  uphillTransitionSeconds: 0.28,
+  tuckSpeed: 27.5,
 });
 
 const FULL_TRICK_ROTATION = Math.PI * 2;
@@ -105,12 +109,13 @@ interface MutablePlayerState extends Omit<
   PlayerSnapshot,
   "speedMetersPerSecond"
 > {
+  airPitchTarget: number;
+  airRotationClicks: number;
   airVelocity: number;
   crashRemaining: number;
   lastSteerDirection: -1 | 1;
   recoveryRemaining: number;
-  steerChargeSeconds: number;
-  uphillChargeSeconds: number;
+  turnChargeSeconds: number;
 }
 
 interface TargetVelocity {
@@ -122,9 +127,12 @@ function initialState(runNumber: number): MutablePlayerState {
   return {
     airHeight: 0,
     airPitch: 0,
+    airPitchTarget: 0,
+    airRotationClicks: 0,
     airSpin: 0,
     airTilt: 0,
     airVelocity: 0,
+    crashKind: "impact",
     crashCount: 0,
     crashRemaining: 0,
     heading: "downhill",
@@ -137,9 +145,10 @@ function initialState(runNumber: number): MutablePlayerState {
     recoveryRemaining: 0,
     runNumber,
     simulationSeconds: 0,
-    steerChargeSeconds: 0,
+    trickPose: "none",
+    tucking: false,
     turbo: false,
-    uphillChargeSeconds: 0,
+    turnChargeSeconds: 0,
     velocityX: 0,
     velocityY: PLAYER_TUNING.initialDownhillSpeed,
     worldX: 0,
@@ -161,19 +170,40 @@ function clampSteer(steer: number): number {
   return Math.max(-1, Math.min(1, steer));
 }
 
-function targetForHeading(heading: PlayerHeading): TargetVelocity {
-  const direction = heading.includes("left") ? -1 : 1;
-  if (heading === "downhill") return { x: 0, y: 19 };
-  if (heading === "tuck") return { x: 0, y: 25 };
-  if (heading === "brake") return { x: 0, y: 0 };
-  if (heading.includes("carve") && heading.endsWith("1"))
-    return { x: 6.5 * direction, y: 18 };
-  if (heading.includes("carve") && heading.endsWith("2"))
-    return { x: 10.5 * direction, y: 15 };
-  if (heading.includes("carve") && heading.endsWith("3"))
-    return { x: 14.5 * direction, y: 11 };
-  if (heading.startsWith("traverse")) return { x: 16 * direction, y: 3.5 };
-  return { x: 8 * direction, y: -6.5 };
+export const PLAYER_HEADINGS = Object.freeze([
+  "left-stop",
+  "left-60",
+  "left-30",
+  "downhill",
+  "right-30",
+  "right-60",
+  "right-stop",
+] as const satisfies readonly PlayerHeading[]);
+
+function headingIndex(heading: PlayerHeading): number {
+  return PLAYER_HEADINGS.indexOf(heading);
+}
+
+function headingForAim(steer: number): PlayerHeading {
+  const normalized = (clampSteer(steer) + 1) * 0.5;
+  return PLAYER_HEADINGS[Math.round(normalized * 6)]!;
+}
+
+function targetForHeading(
+  heading: PlayerHeading,
+  tucking: boolean,
+): TargetVelocity {
+  const index = headingIndex(heading);
+  if (index === 0 || index === 6) return { x: 0, y: 0 };
+  const angleFromDownhill = ((index - 3) * 30 * Math.PI) / 180;
+  const speed =
+    tucking && heading === "downhill"
+      ? PLAYER_TUNING.tuckSpeed
+      : PLAYER_TUNING.downhillSpeed;
+  return {
+    x: Math.sin(angleFromDownhill) * speed,
+    y: Math.cos(angleFromDownhill) * speed,
+  };
 }
 
 /** Deterministic, engine-independent skier state machine. World values are meters. */
@@ -187,6 +217,7 @@ export class PlayerSimulation {
       airPitch: this.state.airPitch,
       airSpin: this.state.airSpin,
       airTilt: this.state.airTilt,
+      crashKind: this.state.crashKind,
       crashCount: this.state.crashCount,
       heading: this.state.heading,
       jumpCount: this.state.jumpCount,
@@ -200,6 +231,8 @@ export class PlayerSimulation {
         this.state.velocityX,
         this.state.velocityY,
       ),
+      trickPose: this.state.trickPose,
+      tucking: this.state.tucking,
       turbo: this.state.turbo,
       velocityX: this.state.velocityX,
       velocityY: this.state.velocityY,
@@ -250,8 +283,12 @@ export class PlayerSimulation {
     this.state.airHeight = 0;
     this.state.airVelocity = 0;
     this.state.airPitch = 0;
+    this.state.airPitchTarget = 0;
+    this.state.airRotationClicks = 0;
     this.state.airSpin = 0;
     this.state.airTilt = 0;
+    this.state.trickPose = "none";
+    this.state.tucking = false;
     this.state.lastLanding = "none";
     this.state.recoveryGraceSeconds = 0;
     this.emit("repositioned", `${worldX.toFixed(2)},${worldY.toFixed(2)}`);
@@ -269,7 +306,7 @@ export class PlayerSimulation {
     return true;
   }
 
-  tryCrash(reason: string): boolean {
+  tryCrash(reason: string, kind: PlayerCrashKind = "impact"): boolean {
     if (
       this.state.motion === "crashed" ||
       this.state.motion === "recovering" ||
@@ -278,6 +315,7 @@ export class PlayerSimulation {
       return false;
     }
     this.state.motion = "crashed";
+    this.state.crashKind = kind;
     this.state.lastLanding = "crash";
     this.state.crashCount += 1;
     this.state.crashRemaining = PLAYER_TUNING.crashDuration;
@@ -322,7 +360,7 @@ export class PlayerSimulation {
     this.updateHeading(input, deltaSeconds);
     if (input.jumpPressed) {
       this.beginJump(PLAYER_TUNING.jumpVelocity, "manual");
-      this.stepAir(input, deltaSeconds);
+      this.stepAir({ ...input, jumpPressed: false }, deltaSeconds);
       return;
     }
     this.stepGround(deltaSeconds);
@@ -332,45 +370,45 @@ export class PlayerSimulation {
     input: Readonly<PlayerInputFrame>,
     deltaSeconds: number,
   ): void {
-    const steer = clampSteer(input.steer);
-    const direction =
-      steer < 0 ? -1 : steer > 0 ? 1 : this.state.lastSteerDirection;
-    let nextHeading: PlayerHeading;
+    const turn = Math.sign(clampSteer(input.turn)) as -1 | 0 | 1;
+    let nextHeading = this.state.heading;
+    this.state.tucking = input.tuck;
 
     if (input.brake) {
-      nextHeading = "brake";
-      this.state.steerChargeSeconds = 0;
-      this.state.uphillChargeSeconds = 0;
-    } else if (input.uphill) {
-      this.state.uphillChargeSeconds += deltaSeconds;
-      this.state.steerChargeSeconds = 0;
-      if (steer !== 0) this.state.lastSteerDirection = direction;
-      const prefix =
-        this.state.uphillChargeSeconds < PLAYER_TUNING.uphillTransitionSeconds
-          ? "traverse"
-          : "uphill";
-      nextHeading = `${prefix}-${direction < 0 ? "left" : "right"}`;
+      nextHeading =
+        this.state.lastSteerDirection < 0 ? "left-stop" : "right-stop";
+      this.state.tucking = false;
+      this.state.turnChargeSeconds = 0;
     } else if (input.tuck) {
-      nextHeading = "tuck";
-      this.state.steerChargeSeconds = 0;
-      this.state.uphillChargeSeconds = 0;
-    } else if (steer !== 0) {
-      if (direction !== this.state.lastSteerDirection)
-        this.state.steerChargeSeconds = 0;
-      this.state.lastSteerDirection = direction;
-      this.state.steerChargeSeconds += deltaSeconds;
-      this.state.uphillChargeSeconds = 0;
-      const level =
-        this.state.steerChargeSeconds < PLAYER_TUNING.steerLevelOneSeconds
-          ? 1
-          : this.state.steerChargeSeconds < PLAYER_TUNING.steerLevelTwoSeconds
-            ? 2
-            : 3;
-      nextHeading = `carve-${direction < 0 ? "left" : "right"}-${level}`;
-    } else {
       nextHeading = "downhill";
-      this.state.steerChargeSeconds = 0;
-      this.state.uphillChargeSeconds = 0;
+      this.state.turnChargeSeconds = 0;
+    } else if (turn !== 0) {
+      const changedDirection = turn !== this.state.lastSteerDirection;
+      const turnStarted = this.state.turnChargeSeconds === 0;
+      if (changedDirection) this.state.turnChargeSeconds = 0;
+      this.state.lastSteerDirection = turn;
+      this.state.turnChargeSeconds += deltaSeconds;
+      if (
+        turnStarted ||
+        changedDirection ||
+        this.state.turnChargeSeconds >= PLAYER_TUNING.turnRepeatSeconds
+      ) {
+        const nextIndex = Math.max(
+          0,
+          Math.min(6, headingIndex(this.state.heading) + turn),
+        );
+        nextHeading = PLAYER_HEADINGS[nextIndex]!;
+        this.state.turnChargeSeconds = Number.EPSILON;
+      }
+    } else if (input.aiming) {
+      nextHeading = headingForAim(input.steer);
+      if (input.steer !== 0)
+        this.state.lastSteerDirection = input.steer < 0 ? -1 : 1;
+      this.state.turnChargeSeconds = 0;
+    } else {
+      // Digital steering selects a discrete heading. Keep that heading after
+      // release until another key or an active absolute-aim source changes it.
+      this.state.turnChargeSeconds = 0;
     }
 
     if (nextHeading !== this.state.heading) {
@@ -380,29 +418,27 @@ export class PlayerSimulation {
   }
 
   private stepGround(deltaSeconds: number): void {
-    const target = targetForHeading(this.state.heading);
+    if (this.state.heading.endsWith("stop")) {
+      this.state.velocityX = 0;
+      this.state.velocityY = 0;
+      return;
+    }
+    const target = targetForHeading(this.state.heading, this.state.tucking);
     const speedScale = this.state.turbo
       ? PLAYER_TUNING.turboSpeedMultiplier
       : 1;
     const accelerationScale = this.state.turbo
       ? PLAYER_TUNING.turboAccelerationMultiplier
       : 1;
-    const braking = this.state.heading === "brake" ? 1.7 : 1;
     this.state.velocityX = moveToward(
       this.state.velocityX,
       target.x * speedScale,
-      PLAYER_TUNING.lateralAcceleration *
-        accelerationScale *
-        braking *
-        deltaSeconds,
+      PLAYER_TUNING.lateralAcceleration * accelerationScale * deltaSeconds,
     );
     this.state.velocityY = moveToward(
       this.state.velocityY,
       target.y * speedScale,
-      PLAYER_TUNING.longitudinalAcceleration *
-        accelerationScale *
-        braking *
-        deltaSeconds,
+      PLAYER_TUNING.longitudinalAcceleration * accelerationScale * deltaSeconds,
     );
     this.integrateWorld(deltaSeconds);
   }
@@ -411,8 +447,12 @@ export class PlayerSimulation {
     this.state.motion = "airborne";
     this.state.airHeight = 0;
     this.state.airPitch = 0;
+    this.state.airPitchTarget = 0;
+    this.state.airRotationClicks = 0;
     this.state.airSpin = 0;
     this.state.airTilt = 0;
+    this.state.trickPose = "none";
+    this.state.tucking = false;
     this.state.airVelocity = verticalVelocity;
     this.state.jumpCount += 1;
     this.emit("jumped", `${source}-${this.state.jumpCount}`);
@@ -423,12 +463,23 @@ export class PlayerSimulation {
     deltaSeconds: number,
   ): void {
     const steer = clampSteer(input.steer);
-    this.state.airTilt = Math.max(
-      -1.25,
-      Math.min(
-        1.25,
-        this.state.airTilt + steer * PLAYER_TUNING.airTiltRate * deltaSeconds,
-      ),
+    if (input.jumpPressed) {
+      this.state.airRotationClicks += 1;
+      this.state.airPitchTarget =
+        this.state.airRotationClicks * (FULL_TRICK_ROTATION / 2);
+      const targetClicks = Math.ceil(this.state.airRotationClicks / 2) * 2;
+      this.emit(
+        "rotation-clicked",
+        `${this.state.airRotationClicks}-of-${targetClicks}`,
+      );
+    }
+    // Pointer/keyboard steering changes the flight line but must not silently
+    // turn into a failed aerial trick. Landing tilt is reserved for explicit
+    // trick rotation, matching the click-driven classic control contract.
+    this.state.airTilt = moveToward(
+      this.state.airTilt,
+      0,
+      PLAYER_TUNING.airTiltRate * deltaSeconds,
     );
     this.state.airSpin = Math.max(
       -FULL_TRICK_ROTATION,
@@ -440,16 +491,21 @@ export class PlayerSimulation {
             deltaSeconds,
       ),
     );
-    this.state.airPitch = Math.max(
-      -FULL_TRICK_ROTATION,
-      Math.min(
-        FULL_TRICK_ROTATION,
-        this.state.airPitch +
-          clampSteer(input.trickFlip) *
-            PLAYER_TUNING.airTrickRotationRate *
-            deltaSeconds,
-      ),
+    this.state.airPitch = moveToward(
+      this.state.airPitch,
+      this.state.airPitchTarget,
+      PLAYER_TUNING.airClickRotationRate * deltaSeconds,
     );
+    this.state.trickPose =
+      input.trickSpin < 0
+        ? "twist-left"
+        : input.trickSpin > 0
+          ? "twist-right"
+          : input.trickFlip < 0
+            ? "spread"
+            : input.trickFlip > 0
+              ? "daffy"
+              : "none";
     this.state.velocityX +=
       steer * PLAYER_TUNING.airControlAcceleration * deltaSeconds;
     this.state.airVelocity -= PLAYER_TUNING.airGravity * deltaSeconds;
@@ -475,6 +531,7 @@ export class PlayerSimulation {
 
     this.tryCrash(
       `landing-${this.state.airTilt.toFixed(2)}-${landingSpin.toFixed(2)}-${landingPitch.toFixed(2)}`,
+      "landing",
     );
   }
 
@@ -505,8 +562,12 @@ export class PlayerSimulation {
     this.state.motion = "grounded";
     this.state.heading = "downhill";
     this.state.airPitch = 0;
+    this.state.airPitchTarget = 0;
+    this.state.airRotationClicks = 0;
     this.state.airSpin = 0;
     this.state.airTilt = 0;
+    this.state.trickPose = "none";
+    this.state.tucking = false;
     this.state.recoveryGraceSeconds = PLAYER_TUNING.recoveryGraceSeconds;
     this.state.velocityY = PLAYER_TUNING.initialDownhillSpeed;
     this.emit("recovered", `crash-${this.state.crashCount}`);

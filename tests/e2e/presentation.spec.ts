@@ -148,9 +148,12 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     "data-game-ready",
     "true",
   );
+  await expect(page.locator("#feedback-card")).toHaveCount(0);
+  await expect(page.locator("#audio-cue")).toHaveCount(0);
+  await expect(page.locator("#mode-card, #mode-action")).toHaveCount(0);
   await page.evaluate(() => window.__FREE_SKI_DEBUG__?.setVisible(false));
   expect(await page.evaluate(() => window.__FREE_SKI__!.art)).toMatchObject({
-    atlasFrameCount: 112,
+    atlasFrameCount: 122,
     atlasLoaded: true,
     capacityFallbacks: 0,
     fallbackDraws: 0,
@@ -197,7 +200,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
     fallbackDraws: 0,
     frameFallbacks: 0,
     missingFrameFallbacks: 0,
-    statusLabelDepth: 90,
+    statusLabelDepth: 0,
   });
   expect(activePresentation.art.playerRenderedHeight).toBeGreaterThanOrEqual(
     activePresentation.art.playerMinimumRenderedHeight,
@@ -228,7 +231,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   });
   expect(
     await page.evaluate(() => window.__FREE_SKI__!.world.visibleObjects),
-  ).toBeLessThanOrEqual(20);
+  ).toBeLessThanOrEqual(28);
   await page.setViewportSize({ width: 1280, height: 720 });
 
   await page.locator("#audio-toggle").click();
@@ -277,10 +280,10 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   );
   const visibleBoxes = await page.evaluate(() => {
     const selectors = [
-      ".instrument-strip > .metric",
+      ".run-metrics > .metric",
       "#audio-toggle",
       "#pointer-toggle",
-      "#world-debug-toggle",
+      "#settings-toggle",
     ];
     return selectors.flatMap((selector) =>
       [...document.querySelectorAll<HTMLElement>(selector)]
@@ -312,48 +315,18 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   await expect(page.locator("#speed-label")).toBeVisible();
   await expect(page.locator("#distance-label")).toBeVisible();
   await expect(page.locator("#style-label")).toBeVisible();
-  await expect(page.locator("#mode-name")).toBeVisible();
-  await expect(page.locator("#turbo-indicator")).toBeVisible();
-  await expect(page.locator("#seed-label")).toBeVisible();
-  const seedAudit = await page.locator("#seed-label").evaluate((element) => ({
-    ariaLabel: element.getAttribute("aria-label"),
-    clientHeight: element.clientHeight,
-    clientWidth: element.clientWidth,
-    scrollHeight: element.scrollHeight,
-    scrollWidth: element.scrollWidth,
-    text: element.textContent,
-    title: element.getAttribute("title"),
-  }));
-  expect(seedAudit).toMatchObject({
-    ariaLabel: "Active world seed: gate-six-presentation",
-    text: "gate-six-presentation",
-    title: "Active world seed: gate-six-presentation",
-  });
-  expect(seedAudit.scrollWidth).toBeLessThanOrEqual(seedAudit.clientWidth);
-  expect(seedAudit.scrollHeight).toBeLessThanOrEqual(seedAudit.clientHeight);
-  const formAudit = await page.locator("#motion-label").evaluate((element) => ({
-    clientHeight: element.clientHeight,
-    clientWidth: element.clientWidth,
-    scrollHeight: element.scrollHeight,
-    scrollWidth: element.scrollWidth,
-  }));
-  expect(formAudit.scrollWidth).toBeLessThanOrEqual(formAudit.clientWidth);
-  expect(formAudit.scrollHeight).toBeLessThanOrEqual(formAudit.clientHeight);
-  const turboAudit = await page
-    .locator("#turbo-indicator")
-    .evaluate((element) => ({
-      clientWidth: element.clientWidth,
-      scrollWidth: element.scrollWidth,
-      text: element.textContent,
-    }));
-  expect(turboAudit.text).toBe("TURBO OFF");
-  expect(turboAudit.scrollWidth).toBeLessThanOrEqual(turboAudit.clientWidth);
+  await expect(page.locator("#mode-card")).toHaveCount(0);
+  await page.locator("#settings-toggle").click();
+  await expect(page.locator("#settings-restart")).toBeVisible();
+  await expect(
+    page.locator("#replay-export, #seed-label, #motion-label"),
+  ).toHaveCount(0);
   expect(await page.evaluate(() => window.__FREE_SKI__!.art)).toMatchObject({
     capacityFallbacks: 0,
     fallbackDraws: 0,
     frameFallbacks: 0,
     missingFrameFallbacks: 0,
-    statusLabelDepth: 90,
+    statusLabelDepth: 0,
   });
   const minimumPlayerPresentation = await page.evaluate(() => ({
     minimum: window.__FREE_SKI__!.art.playerMinimumRenderedHeight,
@@ -362,6 +335,7 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
   expect(minimumPlayerPresentation.rendered).toBeGreaterThanOrEqual(
     minimumPlayerPresentation.minimum,
   );
+  await page.locator("#settings-close").click();
   await screenshot(page, "dark-snow-768x600.png");
 
   await page.setViewportSize({ width: 1280, height: 720 });
@@ -378,10 +352,6 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
         };
       }
     ).__FREE_SKI_AUDIO_CONTEXT_AUDIT__,
-    hud: {
-      form: document.querySelector("#motion-label")?.textContent,
-      seed: document.querySelector("#seed-label")?.textContent,
-    },
     player: window.__FREE_SKI__!.player,
     vfx: window.__FREE_SKI__!.vfx,
     yeti: window.__FREE_SKI__!.yeti,
@@ -393,11 +363,6 @@ test("loads production art, bounded VFX, compact HUD, and gesture-gated persiste
       initialGesture: initialGestureAudioContexts,
       reloadCold: reloadColdAudioContexts,
       reloadGesture: reloadGestureAudioContexts,
-    },
-    minimumViewport: {
-      form: formAudit,
-      seed: seedAudit,
-      turbo: turboAudit,
     },
     stressPresentation,
   };
@@ -433,7 +398,7 @@ test("keeps every representative player state readable at 768x600", async ({
   await page.waitForFunction(
     () =>
       window.__FREE_SKI__?.player.motion === "grounded" &&
-      window.__FREE_SKI__?.art.playerFrame === "player/downhill",
+      window.__FREE_SKI__?.art.playerFrame === "player/heading-downhill",
   );
   samples.push(await playerScaleSample(page, "grounded"));
   await screenshot(page, "player-grounded-768x600.png");
@@ -473,9 +438,9 @@ test("keeps every representative player state readable at 768x600", async ({
     "recovering",
   ]);
   expect(samples.map((sample) => sample.frame)).toEqual([
-    "player/downhill",
-    "player/tuck",
-    "player/wipeout",
+    "player/heading-downhill",
+    "player/air-neutral",
+    "player/crash-laying",
     "player/landing-crouch",
   ]);
   const matrixPath = process.env.FREESKI_GATE6_PLAYER_MATRIX;

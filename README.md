@@ -32,44 +32,45 @@ Procedural sound requires Web Audio support and a user gesture before the browse
 
 ## Controls
 
-All gameplay devices feed the same engine-independent action layer. Keyboard bindings are centralized in `src/input/actions.ts` and can be replaced as a complete binding map without changing the simulation. Standard-layout gamepads support both held actions and one-shot button edges. The on-screen touch controls expose the same 14 actions and support simultaneous touches.
+All gameplay devices feed the same engine-independent action layer. Keyboard bindings are centralized in `src/input/actions.ts` and can be replaced as a complete binding map without changing the simulation. Standard-layout gamepads support both held actions and one-shot button edges. The on-screen touch controls expose the same actions and support simultaneous touches.
 
-| Action              | Keyboard                              | Standard gamepad               |
-| ------------------- | ------------------------------------- | ------------------------------ |
-| Carve left/right    | Left/right arrows, A/D, or numpad 4/6 | Left stick or D-pad left/right |
-| Traverse uphill     | Up arrow, W, or numpad 8              | D-pad up                       |
-| Point downhill/tuck | Down arrow, S, or numpad 2            | D-pad down                     |
-| Brake               | Shift, B, or numpad 5                 | B                              |
-| Jump                | Space                                 | A                              |
-| Spin left/right     | Q/E while airborne                    | Left/right shoulder            |
-| Back/front flip     | Z/X while airborne                    | Left/right trigger             |
-| Turbo               | F                                     | X                              |
-| Pause/resume        | Escape or F3                          | Start                          |
-| Reset run           | R or F2                               | Y                              |
-| World debug         | G                                     | Back                           |
-| Mute/unmute         | M or **SOUND**                        | UI control                     |
+| Action              | Keyboard                                  | Standard gamepad               |
+| ------------------- | ----------------------------------------- | ------------------------------ |
+| Turn left/right     | Left/right arrows, A/D, or numpad 1/3/4/6 | Left stick or D-pad left/right |
+| Point downhill/tuck | Down arrow, S, or numpad 2                | D-pad down                     |
+| Brake               | Shift, B, or numpad 5                     | B                              |
+| Jump/rotate stage   | Space, Up arrow, W, or numpad 8           | A or D-pad up                  |
+| Spin left/right     | Q/E while airborne                        | Left/right shoulder            |
+| Spread/daffy trick  | Z/X while airborne                        | Left/right trigger             |
+| Turbo               | F                                         | X                              |
+| Pause/resume        | Escape or F3                              | Start                          |
+| Reset run           | R or F2                                   | Y                              |
+| World debug         | G                                         | Back                           |
+| Mute/unmute         | M or **SOUND**                            | UI control                     |
 
-Pointer steering and click-to-jump are enabled by default and coexist with keyboard input. Disable them with **POINTER ON** below the game or add `?pointer=0` to the URL. Gameplay shortcuts are ignored while a text-entry control or editable element has focus; directional keys continue to work when ordinary UI buttons hold focus.
+Pointer steering and click-to-jump are enabled by default and coexist with keyboard input. Pointer aim is clamped to the downhill half-plane and quantized to the same seven directions as the keyboard. Disable it with **POINTER ON** below the game or add `?pointer=0` to the URL. Gameplay shortcuts are ignored while a text-entry control or editable element has focus; directional keys continue to work when ordinary UI buttons hold focus.
 
 ## Gameplay
 
-The player can deepen a carve, traverse or climb, tuck for speed, brake, jump, and combine airborne spin/flip input into scored tricks. Terrain uses compact ground footprints and separate air-clearance heights rather than treating visible sprite rectangles as collision boxes. Crashes recover automatically and the run can always be reset.
+The skier uses seven discrete headings at 30-degree intervals: stationary left, two down-left angles, downhill, two down-right angles, and stationary right. Player input never produces uphill motion. Tuck accelerates a straight descent; braking selects a stationary side pose. A click or jump key launches from the ground, while two additional airborne clicks advance the eight-pose somersault sequence through one full rotation. Q/E and Z/X select the helicopter, spread, and daffy trick poses. Terrain uses compact ground footprints and separate air-clearance heights rather than treating visible sprite rectangles as collision boxes. Ordinary crashes and NPC run-overs have distinct prone poses before automatic recovery.
+
+Seeded terrain and population sprites are retained through a 160-pixel off-screen render apron. They enter the sprite pool before reaching the viewport and leave only after clearing the opposite buffered edge, avoiding visible spawn/despawn transitions while keeping the on-screen density sparse.
 
 The three ski-through events share the open mountain:
 
 - **Slalom:** 24 gates, five-second missed/wrong-side penalties, adjusted-time result.
 - **Tree Slalom:** 39 markers threaded through a wooded lane, with the same time/penalty rules.
-- **Free Style:** ramps and airborne trick input produce a style total during a timed run.
+- **Free Style:** ramps and airborne trick input produce an untimed style total; completed tricks bank points only when the landing is clean.
 
 Ski through a labelled start gate to enter an event. Red arrow markers are passed on the left and blue arrow markers on the right; the HUD confirms clean, wrong-side, and missed crossings immediately.
 
-Crossing any finish line opens a compact result card with the final time and course high score. Closing it continues the same open-skiing run. Results are stored locally as top-ten time tables; the authored classic mountain and arbitrary generated seeds have separate record buckets. Leaving an event lane does not soft-lock or forcibly end open skiing.
+Crossing any finish line opens a compact result card. Slalom courses show the adjusted time and an ascending time leaderboard; Free Style shows style points and a descending score leaderboard. Closing the card continues the same open-skiing run. The authored classic mountain and arbitrary generated seeds retain separate local record buckets. Leaving an event lane does not soft-lock or forcibly end open skiing.
 
 The slope population is simulated with a hard actor bound: beginners fall and recover, snowboarders encounter ramps and obstacles, dogs react to contact, walking trees wake, lift chairs circulate, and chair riders can drop onto the slope. Past 1,800 m the weather begins to foreshadow danger. Crossing the formal 2,000 m boundary activates a protected Yeti chase; Turbo can create distance, while capture plays through a bounded sequence and then resets to a playable run.
 
 ## Mountain generation
 
-World generation is deterministic for a seed and generator version. The browser streams 64 m chunks around the player, generates extra rows in the direction of travel, and evicts distant chunks. Every required chunk is present before it becomes active. A seeded clear corridor remains traversable through blocking terrain, while an authored overlay supplies the classic lift and event courses. Terrain, moving slope actors, and active Yetis share a hard 20-item on-screen population cap; nearby terrain is prioritized and the three evergreen sizes are generated independently.
+World generation is deterministic for a seed and generator version. The browser streams 64 m chunks around the player, generates extra rows in the direction of travel, and evicts distant chunks. Every required chunk is present before it becomes active. A seeded clear corridor remains traversable through blocking terrain, while an authored overlay supplies the classic lift and event courses. Generation density is tuned so a normal viewport stays at or below 20 populated objects without a camera-relative ranking step; the 160-pixel apron therefore remains stable across reloads and chunk transitions. The three evergreen sizes are generated independently.
 
 Use `?seed=<text>` for a repeatable generated mountain. `classic-1991` selects the classic record bucket; it does not load any historical game resource. Useful development-only query switches are:
 
@@ -85,8 +86,9 @@ The read-only `window.__FREE_SKI__` bridge exposes bounded telemetry for automat
 
 ## Accessibility and lifecycle behavior
 
-Open **ACCESS** for a keyboard-accessible modal with:
+Open **SETTINGS** for a keyboard-accessible modal with:
 
+- restart game, preserving saved preferences and records;
 - reduced motion;
 - screen-shake enable/disable;
 - impact-flash enable/disable;
@@ -99,7 +101,7 @@ Blur, a hidden document, and the open settings dialog automatically pause simula
 
 ## Replay export and diagnostics
 
-**EXPORT REPLAY** in the ACCESS panel downloads a bounded `freeski-replay-v1` JSON document. It contains:
+The debug-only `window.__FREE_SKI_DEBUG__.exportReplay()` helper returns a bounded `freeski-replay-v2` object. Replay export is not part of the player interface. The diagnostic trace contains:
 
 - the seed and generator version;
 - normalized fixed-step action frames;
@@ -165,3 +167,16 @@ Audio is synthesized at runtime; no historical or recorded WAV/MIDI asset ships.
 - `docs/CLEAN_ROOM_AUDIT.md` — repeatable clean-room shipping audit.
 - `docs/WEB_UI_AUDIT.md` — browser UI/accessibility guideline review.
 - `assets/sprite-sheets/README.md` and `manifest.json` — concept review notes, cell layout, and atlas-production metadata.
+
+### Presentation cleanup
+
+The top bar keeps speed, distance, style, and elapsed time visible. Settings holds
+Restart Game, pointer controls, keyboard help, and accessibility preferences.
+The course/event overlay is removed; settings ends at the volume slider.
+The slope fills the remaining viewport, including on short mobile screens.
+
+Lift rendering shares calibrated source-art sheave positions with its cable
+endpoints. Chair hangers use per-pose offsets that reverse when mirrored.
+Snow trails start behind the ski contact in the direction opposite
+travel. Lateral yeti movement uses a four-frame cycle, mirrored for rightward
+travel, with one common source scale to avoid size changes between poses.

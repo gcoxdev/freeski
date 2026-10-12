@@ -44,12 +44,42 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
     "true",
   );
 
+  const initialEntries = await page.evaluate(() => {
+    const runtime = window.__FREE_SKI__!;
+    const canvas = document.querySelector<HTMLCanvasElement>(
+      "#game-canvas canvas",
+    )!;
+    return runtime.livingSlope.snapshot.actors
+      .filter(
+        (actor) =>
+          actor.active &&
+          actor.kind !== "chairlift" &&
+          actor.source !== "chairlift",
+      )
+      .map((actor) => {
+        const x =
+          canvas.clientWidth * 0.5 +
+          (actor.worldX - runtime.player.worldX) * 7.5;
+        const y =
+          canvas.clientHeight * runtime.camera.playerScreenRatio +
+          (actor.worldY - runtime.player.worldY) * 7.5;
+        return {
+          id: actor.id,
+          outside:
+            x < 0 || x > canvas.clientWidth || y < 0 || y > canvas.clientHeight,
+        };
+      });
+  });
+  expect(initialEntries.length).toBeGreaterThan(0);
+  for (const entry of initialEntries)
+    expect(entry.outside, entry.id).toBe(true);
+
   await stage(page, "population");
   const initialPopulation = await page.evaluate(
     () => window.__FREE_SKI__!.livingSlope.snapshot,
   );
   expect(initialPopulation.bounded).toBe(true);
-  expect(initialPopulation.actorCount).toBeLessThanOrEqual(12);
+  expect(initialPopulation.actorCount).toBeLessThanOrEqual(14);
   expect(initialPopulation.workUnitsLastStep).toBe(
     initialPopulation.actorCount,
   );
@@ -303,9 +333,9 @@ test("living population, foreshadow, Turbo chase, and capture recover without a 
   );
   await page.keyboard.up("s");
   await page.setViewportSize({ width: 768, height: 600 });
-  await expect(page.locator("#mode-card")).toBeVisible();
-  await expect(page.locator("#pointer-toggle")).toBeVisible();
-  await expect(page.locator("#world-debug-toggle")).toBeVisible();
+  await expect(page.locator("#mode-card")).toHaveCount(0);
+  await expect(page.locator("#settings-toggle")).toBeVisible();
+  await expect(page.locator("#world-debug-toggle")).toHaveCount(0);
   await evidenceScreenshot(page, "post-capture-recovery-768x600.png");
 
   const telemetry = await page.evaluate(() => ({

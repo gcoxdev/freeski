@@ -30,7 +30,9 @@ describe("interaction catalog", () => {
       expect(Object.isFrozen(metadata)).toBe(true);
       expect(Object.isFrozen(metadata.footprint)).toBe(true);
       expect(Object.isFrozen(metadata.spriteBounds)).toBe(true);
-      expect(metadata.footprint).toMatchObject({ shape: "circle" });
+      expect(metadata.footprint).toMatchObject({
+        shape: kind === "mogul" ? "polygon" : "circle",
+      });
       expect(metadata.footprint.radius).toBeGreaterThan(0);
       expect(metadata.clearanceHeight).toBeGreaterThanOrEqual(0);
       expect(metadata.spriteBounds.width).toBeGreaterThan(0);
@@ -45,5 +47,12 @@ describe("interaction catalog", () => {
     expect(tree.clearanceHeight).not.toBe(tree.spriteBounds.height);
     expect(interactionFor("lift-tower").blocksGroundedPlayer).toBe(true);
     expect(interactionFor("chairlift").blocksGroundedPlayer).toBe(false);
+  });
+
+  it("gives the speed-slowing mogul field a broad visible contact area", () => {
+    const mogul = interactionFor("mogul");
+    expect(mogul.footprint.shape).toBe("polygon");
+    expect(mogul.footprint.radius).toBeGreaterThanOrEqual(6);
+    expect(mogul.spriteBounds.width).toBeGreaterThanOrEqual(8);
   });
 });

@@ -45,6 +45,9 @@ export interface YetiPlayerState {
   readonly turbo: boolean;
   readonly velocityX: number;
   readonly velocityY: number;
+  readonly viewportBottomMeters?: number;
+  readonly viewportHalfWidthMeters?: number;
+  readonly viewportTopMeters?: number;
   readonly worldX: number;
   readonly worldY: number;
 }
@@ -138,34 +141,51 @@ function boundaryExceeded(
   return player.worldX > WORLD_BOUNDARIES_METERS.rightYeti;
 }
 
-const APPROACH_DIRECTIONS: readonly (readonly [number, number])[] =
-  Object.freeze([
-    Object.freeze([0, -1] as const),
-    Object.freeze([Math.SQRT1_2, -Math.SQRT1_2] as const),
-    Object.freeze([1, 0] as const),
-    Object.freeze([Math.SQRT1_2, Math.SQRT1_2] as const),
-    Object.freeze([0, 1] as const),
-    Object.freeze([-Math.SQRT1_2, Math.SQRT1_2] as const),
-    Object.freeze([-1, 0] as const),
-    Object.freeze([-Math.SQRT1_2, -Math.SQRT1_2] as const),
-  ]);
+const YETI_SPAWN_MARGIN_METERS = 10;
+const APPROACH_SIDES = Object.freeze([
+  "left",
+  "right",
+  "bottom",
+  "top",
+] as const);
 
 /** Deterministic perimeter entry so repeated chases can approach from anywhere. */
 export function yetiApproachOffset(
   player: Readonly<YetiPlayerState>,
   salt = 0,
 ): readonly [number, number] {
-  const distance = YETI_TUNING.safeRepositionDistanceMeters;
-  const hash =
-    Math.floor(player.worldX * 11) +
-    Math.floor(player.worldY * 7) +
-    Math.floor(player.simulationSeconds * 13) +
-    salt;
   const index =
-    ((hash % APPROACH_DIRECTIONS.length) + APPROACH_DIRECTIONS.length) %
-    APPROACH_DIRECTIONS.length;
-  const [x, y] = APPROACH_DIRECTIONS[index]!;
-  return Object.freeze([x * distance, y * distance]);
+    ((salt % APPROACH_SIDES.length) + APPROACH_SIDES.length) %
+    APPROACH_SIDES.length;
+  const side = APPROACH_SIDES[index]!;
+  const horizontalDistance = Math.max(
+    YETI_TUNING.safeRepositionDistanceMeters,
+    (player.viewportHalfWidthMeters ?? 0) + YETI_SPAWN_MARGIN_METERS,
+  );
+  const topDistance = Math.max(
+    YETI_TUNING.safeRepositionDistanceMeters,
+    (player.viewportTopMeters ?? 0) + YETI_SPAWN_MARGIN_METERS,
+  );
+  const bottomDistance = Math.max(
+    YETI_TUNING.safeRepositionDistanceMeters,
+    (player.viewportBottomMeters ?? 0) + YETI_SPAWN_MARGIN_METERS,
+  );
+  if (side === "left") return Object.freeze([-horizontalDistance, 0]);
+  if (side === "right") return Object.freeze([horizontalDistance, 0]);
+  if (side === "bottom") return Object.freeze([0, bottomDistance]);
+  return Object.freeze([0, -topDistance]);
+}
+
+function repositionThreshold(player: Readonly<YetiPlayerState>): number {
+  const viewportExtent = Math.max(
+    player.viewportHalfWidthMeters ?? 0,
+    player.viewportTopMeters ?? 0,
+    player.viewportBottomMeters ?? 0,
+  );
+  return Math.max(
+    YETI_TUNING.repositionDistanceMeters,
+    (viewportExtent + YETI_SPAWN_MARGIN_METERS) * 1.5,
+  );
 }
 
 function moveToward(
@@ -204,6 +224,7 @@ export function foreshadowFor(worldY: number): ForeshadowSnapshot {
 export class YetiSimulation {
   private controllers = initialControllers();
   private readonly events: YetiEvent[] = [];
+  private approachSequence = 0;
   private eventSequence = 0;
   private capturedBy: string | null = null;
   private lastEvent: YetiEventType | "none" = "none";
@@ -304,6 +325,7 @@ export class YetiSimulation {
   reset(): void {
     this.controllers = initialControllers();
     this.events.length = 0;
+    this.approachSequence = 0;
     this.eventSequence = 0;
     this.capturedBy = null;
     this.lastEvent = "none";
@@ -317,7 +339,10 @@ export class YetiSimulation {
     controller: MutableYetiController,
     player: Readonly<YetiPlayerState>,
   ): void {
-    const [offsetX, offsetY] = yetiApproachOffset(player, this.eventSequence);
+    const [offsetX, offsetY] = yetiApproachOffset(
+      player,
+      this.approachSequence++,
+    );
     controller.active = true;
     controller.state = "chasing";
     controller.stateSeconds = 0;
@@ -342,10 +367,10 @@ export class YetiSimulation {
     let deltaX = player.worldX - controller.worldX;
     let deltaY = player.worldY - controller.worldY;
     let distance = Math.hypot(deltaX, deltaY);
-    if (distance > YETI_TUNING.repositionDistanceMeters) {
+    if (distance > repositionThreshold(player)) {
       const [offsetX, offsetY] = yetiApproachOffset(
         player,
-        this.eventSequence + 1,
+        this.approachSequence++,
       );
       controller.worldX = player.worldX + offsetX;
       controller.worldY = player.worldY + offsetY;

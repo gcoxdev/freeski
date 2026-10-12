@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -14,11 +20,11 @@
     <link rel="stylesheet" href="/src/styles.css" />
     <link
       rel="preload"
-      href="/assets/production/freeski-atlas.png"
+      href="/assets/production/freeski-atlas.png?v=2026-10-12.4"
       as="image"
       fetchpriority="high"
     />
-    <title>FreeSki — Alpine Systems Online</title>
+    <title>FreeSki</title>
   </head>
   <body>
     <a class="skip-link" href="#game-canvas">Skip to playable mountain</a>
@@ -30,10 +36,53 @@
         <div class="wordmark" aria-label="FreeSki">
           <span>Free</span><strong>Ski</strong>
         </div>
-        <div class="system-state">
-          <span class="system-state__light" aria-hidden="true"></span>
-          <span id="system-label">Preparing mountain</span>
+        <div class="run-metrics" aria-label="Run information">
+          <div class="metric metric--speed">
+            <small
+              ><span class="speed-caption">SPEED</span
+              ><span class="boost-status">BOOST</span></small
+            ><span
+              ><strong id="speed-label">0</strong> <small>KM/H</small></span
+            >
+          </div>
+          <div class="metric">
+            <small>DISTANCE</small
+            ><span
+              ><strong id="distance-label">0</strong> <small>M</small></span
+            >
+          </div>
+          <div class="metric metric--style">
+            <small>STYLE</small><strong id="style-label">0</strong>
+          </div>
+          <div class="metric metric--time">
+            <small>TIME</small
+            ><span><strong id="time-label">0.0</strong> <small>S</small></span>
+          </div>
         </div>
+        <div class="header-actions">
+          <button
+            id="audio-toggle"
+            class="pointer-toggle audio-toggle"
+            type="button"
+            aria-pressed="false"
+            title="Mute or enable original procedural sound (M)"
+          >
+            SOUND ARMED
+          </button>
+          <button
+            id="settings-toggle"
+            class="pointer-toggle"
+            type="button"
+            aria-controls="settings-panel"
+            aria-expanded="false"
+            title="Open settings and controls"
+          >
+            SETTINGS
+          </button>
+        </div>
+        <span id="system-label" class="visually-hidden" role="status"
+          >Preparing mountain</span
+        >
       </header>
 
       <section
@@ -43,7 +92,7 @@
       >
         <div id="loading-screen" class="loading-screen" aria-live="polite">
           <div class="loading-screen__mark" aria-hidden="true">FS</div>
-          <small>ALPINE DISPATCH / 1991–2026</small>
+
           <strong>PREPARING THE MOUNTAIN</strong>
           <span id="loading-status">Loading skier and course equipment…</span>
           <span class="loading-screen__track" aria-hidden="true"
@@ -67,14 +116,6 @@
             aria-label="Carve left"
           >
             LEFT
-          </button>
-          <button
-            id="touch-uphill"
-            type="button"
-            data-action="uphill"
-            aria-label="Traverse uphill"
-          >
-            UP
           </button>
           <button
             id="touch-tuck"
@@ -106,17 +147,17 @@
             id="touch-flip-back"
             type="button"
             data-action="trick-back"
-            aria-label="Back flip while airborne"
+            aria-label="Spread trick while airborne"
           >
-            FLIP−
+            SPREAD
           </button>
           <button
             id="touch-flip-front"
             type="button"
             data-action="trick-front"
-            aria-label="Front flip while airborne"
+            aria-label="Daffy trick while airborne"
           >
-            FLIP+
+            DAFFY
           </button>
           <button
             id="touch-spin-right"
@@ -134,14 +175,6 @@
           >
             RESET
           </button>
-          <button
-            id="touch-debug"
-            type="button"
-            data-action="debug"
-            aria-label="Toggle world diagnostics"
-          >
-            GRID
-          </button>
         </div>
         <div class="touch-controls__cluster touch-controls__actions">
           <button
@@ -157,17 +190,18 @@
             class="touch-controls__primary"
             type="button"
             data-action="jump"
-            aria-label="Jump"
+            aria-label="Jump or advance airborne rotation"
           >
-            JUMP
+            JUMP / ROTATE
           </button>
           <button
             id="touch-turbo"
             type="button"
             data-action="turbo"
-            aria-label="Toggle Turbo"
+            aria-label="Toggle speed boost"
+            title="Speed boost: press F to toggle a faster descent and briefly knock chasing Yetis back"
           >
-            TURBO
+            SPEED BOOST
           </button>
           <button
             id="touch-pause"
@@ -181,7 +215,6 @@
       </nav>
 
       <aside id="pause-card" class="pause-card" hidden aria-live="polite">
-        <small>RUN SUSPENDED</small>
         <strong>PAUSED</strong>
         <span>Escape or F3 to return to the slope</span>
       </aside>
@@ -195,11 +228,6 @@
         <span id="world-debug-boundary">BOUNDARY CLEAR · PHASE NONE</span>
       </aside>
 
-      <aside id="feedback-card" class="feedback-card" hidden aria-live="polite">
-        <small id="audio-cue">FEEDBACK READY</small>
-        <strong id="feedback-label">LINE READY</strong>
-      </aside>
-
       <aside
         id="result-card"
         class="result-card"
@@ -211,23 +239,11 @@
         hidden
       >
         <small id="result-eyebrow">COURSE COMPLETE</small>
-        <h2 id="result-title">FINISH TIME</h2>
-        <strong id="result-time">0.0 S</strong>
-        <p id="result-summary">Your time has been recorded.</p>
+        <h2 id="result-title">COURSE RESULT</h2>
+        <strong id="result-time">—</strong>
+        <p id="result-summary">Your result has been recorded.</p>
         <span id="result-record">COURSE BEST —</span>
         <button id="result-close" type="button">CONTINUE SKIING</button>
-      </aside>
-
-      <aside id="mode-card" class="mode-card" aria-live="polite">
-        <small id="mode-eyebrow">MOUNTAIN EVENTS / LIVE</small>
-        <strong id="mode-name">OPEN SKIING</strong>
-        <div class="mode-card__metrics">
-          <span id="mode-time">CROSS A START GATE</span>
-          <span id="mode-markers">3 COURSES OPEN</span>
-          <span id="mode-penalty">PENALTY +0.0</span>
-        </div>
-        <span id="mode-final" class="mode-card__final">NO ACTIVE CLOCK</span>
-        <span id="mode-record">CLASSIC / NO RECORD</span>
       </aside>
 
       <aside
@@ -235,17 +251,31 @@
         class="settings-panel"
         role="dialog"
         aria-labelledby="settings-title"
-        aria-describedby="settings-status"
         aria-modal="true"
         aria-hidden="true"
         hidden
       >
         <div class="settings-panel__header">
           <div>
-            <small>RUN COMFORT / DEVICE</small>
-            <h2 id="settings-title">ACCESSIBILITY</h2>
+            <h2 id="settings-title">SETTINGS</h2>
           </div>
           <button id="settings-close" type="button">CLOSE</button>
+        </div>
+        <div class="settings-controls">
+          <button id="settings-restart" type="button">RESTART GAME</button>
+          <button
+            id="pointer-toggle"
+            class="pointer-toggle"
+            type="button"
+            aria-pressed="true"
+            title="Disable pointer steering, click-to-jump, and right-click tuck"
+          >
+            POINTER ON
+          </button>
+          <p>
+            ← → / A D steer · ↓ / S tuck<br />↑ / W / Space jump · Shift / B
+            brake<br />F boost · Esc pause · F2 restart · M sound
+          </p>
         </div>
         <form autocomplete="off">
           <label class="setting-row" for="setting-reduced-motion">
@@ -315,86 +345,7 @@
             />
           </label>
         </form>
-        <button id="replay-export" class="settings-panel__export" type="button">
-          EXPORT RECENT REPLAY
-        </button>
-        <p
-          id="settings-status"
-          class="settings-panel__status"
-          aria-live="polite"
-        >
-          Settings are saved on this device.
-        </p>
       </aside>
-
-      <footer class="instrument-strip" aria-label="Run information">
-        <div class="metric metric--time">
-          <small>TIME</small><span><strong id="time-label">0.0</strong> S</span>
-        </div>
-        <div class="metric metric--speed">
-          <small>SPEED</small
-          ><span><strong id="speed-label">0</strong> KM/H</span>
-        </div>
-        <div class="metric">
-          <small>DISTANCE</small
-          ><span><strong id="distance-label">0</strong> M</span>
-        </div>
-        <div class="metric">
-          <small>FORM</small><span id="motion-label">DOWNHILL</span>
-        </div>
-        <div class="metric metric--style">
-          <small>STYLE</small><span><strong id="style-label">0</strong></span>
-          <span id="trick-label">LINE READY</span>
-        </div>
-        <div class="metric metric--seed">
-          <small>WORLD / <span id="generator-label">—</span></small>
-          <span id="seed-label" tabindex="0">classic-1991</span>
-        </div>
-        <div class="metric metric--turbo">
-          <small>TURBO</small><span id="turbo-indicator">TURBO OFF</span>
-        </div>
-        <div class="instrument-strip__hint">
-          <small>SHIFT/B BRAKE · M SOUND</small>
-          <span>ARROWS/WASD · SPACE JUMP · Q/E SPIN · Z/X FLIP · F TURBO</span>
-        </div>
-        <button
-          id="audio-toggle"
-          class="pointer-toggle audio-toggle"
-          type="button"
-          aria-pressed="false"
-          title="Mute or enable original procedural sound (M)"
-        >
-          SOUND ARMED
-        </button>
-        <button
-          id="pointer-toggle"
-          class="pointer-toggle"
-          type="button"
-          aria-pressed="true"
-          title="Disable pointer steering and click-to-jump"
-        >
-          POINTER ON
-        </button>
-        <button
-          id="world-debug-toggle"
-          class="pointer-toggle"
-          type="button"
-          aria-pressed="false"
-          title="Toggle deterministic world diagnostics (G)"
-        >
-          WORLD GRID
-        </button>
-        <button
-          id="settings-toggle"
-          class="pointer-toggle"
-          type="button"
-          aria-controls="settings-panel"
-          aria-expanded="false"
-          title="Open accessibility and replay controls"
-        >
-          ACCESS
-        </button>
-      </footer>
     </main>
     <noscript>FreeSki requires JavaScript to run.</noscript>
     <script type="module" src="/src/main.ts"></script>

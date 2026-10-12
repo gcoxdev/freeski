@@ -2,7 +2,10 @@ import type { WorldGenerator } from "./generator";
 import { CHUNK_SIZE_METERS, chunkKey, type WorldChunk } from "./types";
 
 export interface StreamPosition {
+  readonly renderBufferMeters?: number;
   readonly velocityY: number;
+  readonly viewportBottomMeters?: number;
+  readonly viewportTopMeters?: number;
   readonly viewportWidthMeters: number;
   readonly worldX: number;
   readonly worldY: number;
@@ -31,6 +34,8 @@ export class MountainStream {
   private streamedCurrentX: number | undefined;
   private streamedCurrentY: number | undefined;
   private streamedDirection: "downhill" | "uphill" | undefined;
+  private streamedLowerRows: number | undefined;
+  private streamedUpperRows: number | undefined;
   private streamedXRadius: number | undefined;
   private snapshotValue: StreamSnapshot = Object.freeze({
     activeKeys: Object.freeze([]),
@@ -52,16 +57,39 @@ export class MountainStream {
       2,
       Math.ceil(position.viewportWidthMeters / 2 / CHUNK_SIZE_METERS) + 1,
     );
+    const renderBufferMeters = position.renderBufferMeters ?? 0;
+    const minimumUpperRows = direction === "downhill" ? 1 : 2;
+    const minimumLowerRows = direction === "downhill" ? 2 : 1;
+    const upperRows = position.viewportTopMeters
+      ? Math.max(
+          minimumUpperRows,
+          Math.ceil(
+            (position.viewportTopMeters + renderBufferMeters) /
+              CHUNK_SIZE_METERS,
+          ) + 1,
+        )
+      : minimumUpperRows;
+    const lowerRows = position.viewportBottomMeters
+      ? Math.max(
+          minimumLowerRows,
+          Math.ceil(
+            (position.viewportBottomMeters + renderBufferMeters) /
+              CHUNK_SIZE_METERS,
+          ) + 1,
+        )
+      : minimumLowerRows;
     if (
       currentX === this.streamedCurrentX &&
       currentY === this.streamedCurrentY &&
       direction === this.streamedDirection &&
-      xRadius === this.streamedXRadius
+      xRadius === this.streamedXRadius &&
+      upperRows === this.streamedUpperRows &&
+      lowerRows === this.streamedLowerRows
     ) {
       return this.snapshotValue;
     }
-    const firstY = direction === "downhill" ? currentY - 1 : currentY - 2;
-    const lastY = direction === "downhill" ? currentY + 2 : currentY + 1;
+    const firstY = currentY - upperRows;
+    const lastY = currentY + lowerRows;
     const required: string[] = [];
 
     for (let y = firstY; y <= lastY; y += 1) {
@@ -81,7 +109,11 @@ export class MountainStream {
 
     for (const key of this.cache.keys()) {
       const [x = 0, y = 0] = key.split(",").map(Number);
-      if (Math.abs(x - currentX) > xRadius + 1 || Math.abs(y - currentY) > 3) {
+      if (
+        Math.abs(x - currentX) > xRadius + 1 ||
+        y < firstY - 1 ||
+        y > lastY + 1
+      ) {
         this.cache.delete(key);
       }
     }
@@ -103,6 +135,8 @@ export class MountainStream {
     this.streamedCurrentY = currentY;
     this.streamedDirection = direction;
     this.streamedXRadius = xRadius;
+    this.streamedUpperRows = upperRows;
+    this.streamedLowerRows = lowerRows;
     return this.snapshotValue;
   }
 

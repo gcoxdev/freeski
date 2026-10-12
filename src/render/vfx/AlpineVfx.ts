@@ -24,6 +24,18 @@ export interface AlpineVfxSnapshot {
 
 type ToScreen = (worldX: number, worldY: number) => readonly [number, number];
 
+/** Emit just behind the ski contact, including across and uphill motion. */
+export function snowTrailPosition(
+  player: Pick<PlayerSnapshot, "worldX" | "worldY" | "velocityX" | "velocityY">,
+): readonly [number, number] {
+  const speed = Math.hypot(player.velocityX, player.velocityY);
+  const offset = speed > 0 ? 0.65 / speed : 0;
+  return [
+    player.worldX - player.velocityX * offset,
+    player.worldY - player.velocityY * offset,
+  ];
+}
+
 /** Cosmetic-only deterministic VFX with hard pool bounds. */
 export class AlpineVfx {
   static readonly MAX_EFFECTS = 56;
@@ -55,11 +67,14 @@ export class AlpineVfx {
     ) {
       if (now - this.lastTrackAt >= (this.reducedMotion ? 0.4 : 0.28)) {
         this.lastTrackAt = now;
-        this.spawnTrack(player.worldX, player.worldY + 0.45, now);
+        const [trailX, trailY] = snowTrailPosition(player);
+        this.spawnTrack(trailX, trailY, now);
       }
       if (now - this.lastPowderAt >= (this.reducedMotion ? 0.42 : 0.12)) {
         this.lastPowderAt = now;
-        const carving = player.heading.includes("carve");
+        const carving =
+          player.heading !== "downhill" && !player.heading.endsWith("stop");
+        const [trailX, trailY] = snowTrailPosition(player);
         this.spawn(
           carving
             ? player.heading.includes("left")
@@ -68,8 +83,8 @@ export class AlpineVfx {
             : player.speedMetersPerSecond > 17
               ? "vfx/powder-medium"
               : "vfx/powder-tiny",
-          player.worldX,
-          player.worldY + 0.5,
+          trailX,
+          trailY,
           now,
           0.48,
           carving ? 32 : 22,
@@ -97,11 +112,7 @@ export class AlpineVfx {
     event: Readonly<PlayerEvent>,
     player: Readonly<PlayerSnapshot>,
   ): void {
-    const common = [
-      player.worldX,
-      player.worldY + 0.45,
-      event.atSeconds,
-    ] as const;
+    const common = [player.worldX, player.worldY, event.atSeconds] as const;
     if (event.type === "jumped" && !this.reducedMotion)
       this.spawn("vfx/powder-medium", ...common, 0.5, 28);
     else if (event.type === "landed-clean")
@@ -112,7 +123,7 @@ export class AlpineVfx {
         this.spawn("vfx/ice-impact", ...common, 0.55, 36);
       this.spawnTrack(
         player.worldX,
-        player.worldY + 0.4,
+        player.worldY,
         event.atSeconds,
         "vfx/crash-decal",
         8,

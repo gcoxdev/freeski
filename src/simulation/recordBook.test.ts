@@ -17,12 +17,12 @@ function result(
   penaltySeconds = 0,
 ): ModeResult {
   return {
-    adjustedTimeSeconds: value,
+    adjustedTimeSeconds: mode === "free-style" ? null : value,
     finishedAtSeconds: 100,
     mode,
     penaltySeconds,
-    rawTimeSeconds: value - penaltySeconds,
-    score: mode === "free-style" ? 500 : null,
+    rawTimeSeconds: mode === "free-style" ? 30 : value - penaltySeconds,
+    score: mode === "free-style" ? value : null,
   };
 }
 
@@ -80,8 +80,13 @@ describe("record book", () => {
       );
     }
     expect(book.buckets.classic["free-style"].map((entry) => entry.id)).toEqual(
-      ["low", "mid", "high"],
+      ["high", "mid", "low"],
     );
+    expect(book.buckets.classic["free-style"][0]).toMatchObject({
+      metric: "score",
+      value: 900,
+    });
+    expect(book.buckets.classic.slalom[0]).toMatchObject({ metric: "time" });
   });
 
   it("caps every bucket/mode leaderboard at ten", () => {

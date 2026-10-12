@@ -10,6 +10,7 @@ import {
   type PlayerInputFrame,
 } from "./player";
 import {
+  RAMP_LAUNCH_VELOCITY,
   SlopeInteractionSimulation,
   type InteractiveWorldObject,
 } from "./slopeInteractions";
@@ -93,7 +94,7 @@ describe("SlopeInteractionSimulation terrain outcomes", () => {
 
     const diagonal = new PlayerSimulation();
     const diagonalInteractions = new SlopeInteractionSimulation();
-    stepPlayer(diagonal, 0.8, { steer: 1 });
+    stepPlayer(diagonal, 0.8, { aiming: true, steer: 0.5 });
     const diagonalSpeed = diagonal.getSnapshot().speedMetersPerSecond;
     expect(Math.abs(diagonal.getSnapshot().velocityX)).toBeGreaterThan(4.5);
     contact(diagonalInteractions, diagonal, atPlayer(diagonal, "mogul"));
@@ -115,20 +116,84 @@ describe("SlopeInteractionSimulation terrain outcomes", () => {
       { cue: "ramp-glint", kind: "visual" },
       { cue: "ramp-launch", kind: "audio" },
     ]);
+    stepPlayer(player, 1.8, {}, interactions);
+    expect(player.getSnapshot().motion).toBe("airborne");
+  });
+
+  it.each([
+    [-5.5, -3],
+    [-2, -5],
+    [3, -2.5],
+    [0, -0.2],
+  ])("slows on the visible mogul edge at (%s, %s)", (x, y) => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    player.reposition(x, y, 0, 12);
+    contact(interactions, player, {
+      id: "patch",
+      type: "mogul",
+      x: 0,
+      y: 0,
+      interaction: interactionFor("mogul"),
+    });
+    expect(player.getSnapshot().speedMetersPerSecond).toBeCloseTo(12 * 0.52);
+    expect(interactions.drainEvents().at(-1)?.type).toBe("mogul-slow");
+  });
+
+  it.each([
+    [-8, -3],
+    [5.5, -3],
+    [-2, -7.5],
+    [-2, 2],
+  ])("does not slow on bare snow outside the patch at (%s, %s)", (x, y) => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    player.reposition(x, y, 0, 12);
+    contact(interactions, player, {
+      id: "patch",
+      type: "mogul",
+      x: 0,
+      y: 0,
+      interaction: interactionFor("mogul"),
+    });
+    expect(player.getSnapshot().speedMetersPerSecond).toBe(12);
+    expect(interactions.drainEvents()).toEqual([]);
+  });
+
+  it("allows a landing inside the patch to trigger slowdown after an airborne crossing", () => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    player.reposition(-2, -4, 0, 12);
+    player.launch("jump", 1);
+    const patch = {
+      id: "patch",
+      type: "mogul" as const,
+      x: 0,
+      y: 0,
+      interaction: interactionFor("mogul"),
+    };
+    contact(interactions, player, patch);
+    expect(interactions.drainEvents()).toEqual([]);
+    stepPlayer(player, 0.3, {}, interactions, [patch]);
+    expect(interactions.drainEvents()).toContainEqual(
+      expect.objectContaining({ type: "mogul-slow" }),
+    );
   });
 
   it("honors an explicit staged-ramp airtime window", () => {
     const player = new PlayerSimulation();
     const interactions = new SlopeInteractionSimulation();
-    const launchVelocity = 9.4;
+    const launchVelocity = RAMP_LAUNCH_VELOCITY;
     contact(
       interactions,
       player,
-      atPlayer(player, "ramp", "staged-ramp", { rampLaunchVelocity: 9.4 }),
+      atPlayer(player, "ramp", "staged-ramp", {
+        rampLaunchVelocity: launchVelocity,
+      }),
     );
     stepPlayer(player, launchVelocity / 10.4, {}, interactions);
     expect(player.getSnapshot()).toMatchObject({ motion: "airborne" });
-    expect(player.getSnapshot().airHeight).toBeCloseTo(4.17, 2);
+    expect(player.getSnapshot().airHeight).toBeCloseTo(7.77, 2);
   });
 });
 
@@ -211,8 +276,6 @@ describe("SlopeInteractionSimulation tricks and secrets", () => {
   it.each([
     ["spin-left-360", { trickSpin: -1 }],
     ["spin-right-360", { trickSpin: 1 }],
-    ["back-flip", { trickFlip: -1 }],
-    ["front-flip", { trickFlip: 1 }],
   ] as const)(
     "awards named %s once and lands a wrapped rotation",
     (trick, input) => {
@@ -220,7 +283,8 @@ describe("SlopeInteractionSimulation tricks and secrets", () => {
       const interactions = new SlopeInteractionSimulation();
       contact(interactions, player, atPlayer(player, "ramp"));
       stepPlayer(player, 1, input, interactions);
-      stepPlayer(player, 0.8, {}, interactions);
+      expect(interactions.getSnapshot().style).toBe(25);
+      stepPlayer(player, 1.7, {}, interactions);
       expect(player.getSnapshot()).toMatchObject({
         lastLanding: "clean",
         motion: "grounded",
@@ -233,11 +297,31 @@ describe("SlopeInteractionSimulation tricks and secrets", () => {
     },
   );
 
-  it("records a failed off-axis landing and its named penalty", () => {
+  it("awards one full click rotation after two airborne jump clicks", () => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    contact(interactions, player, atPlayer(player, "ramp"));
+    stepPlayer(player, STEP, { jumpPressed: true }, interactions);
+    stepPlayer(player, 0.08, {}, interactions);
+    stepPlayer(player, STEP, { jumpPressed: true }, interactions);
+    stepPlayer(player, 2.5, {}, interactions);
+    expect(player.getSnapshot()).toMatchObject({
+      lastLanding: "clean",
+      motion: "grounded",
+    });
+    const styleEvents = interactions.drainStyleEvents();
+    expect(
+      styleEvents.filter((event) => event.type === "front-flip"),
+    ).toHaveLength(1);
+    expect(styleEvents.map((event) => event.type)).toContain("clean-landing");
+  });
+
+  it("records an incomplete half-rotation landing and its named penalty", () => {
     const player = new PlayerSimulation();
     const interactions = new SlopeInteractionSimulation();
     player.launch("test", 5.35);
-    stepPlayer(player, 1.3, { steer: 1 }, interactions);
+    stepPlayer(player, STEP, { jumpPressed: true }, interactions);
+    stepPlayer(player, 1.3, {}, interactions);
     expect(player.getSnapshot().lastLanding).toBe("crash");
     expect(interactions.drainEvents().map((event) => event.type)).toContain(
       "landing-crash",
@@ -247,11 +331,11 @@ describe("SlopeInteractionSimulation tricks and secrets", () => {
     ).toContain("failed-landing");
   });
 
-  it("transforms a reverse-hit stump, then consumes its mushroom for +100", () => {
+  it("transforms a stopped side-hit stump, then consumes its mushroom for +100", () => {
     const player = new PlayerSimulation();
     const interactions = new SlopeInteractionSimulation();
-    stepPlayer(player, 1.1, { steer: -1, uphill: true });
-    expect(player.getSnapshot().velocityY).toBeLessThan(-0.5);
+    stepPlayer(player, 0.4, { turn: -1 });
+    expect(player.getSnapshot().heading).toBe("left-stop");
     const stump = atPlayer(player, "stump", "secret-stump");
     contact(interactions, player, stump);
     expect(interactions.deltas.get(stump.id)).toMatchObject({

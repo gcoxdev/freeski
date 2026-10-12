@@ -168,7 +168,7 @@ describe("timed marker events", () => {
 });
 
 describe("Free Style result", () => {
-  it("finishes the 1000m course with time and Style earned during the run", () => {
+  it("finishes the course with an untimed Style score earned during the run", () => {
     const simulation = new MountainModeSimulation();
     const course = CLASSIC_COURSES.find((item) => item.id === "free-style")!;
     expect(course.lengthMeters).toBe(1_040);
@@ -179,7 +179,7 @@ describe("Free Style result", () => {
     cross(simulation, course.centerX, course.finishGate.y, 35, 620);
     expect(simulation.getSnapshot().courses["free-style"].result).toMatchObject(
       {
-        adjustedTimeSeconds: 30,
+        adjustedTimeSeconds: null,
         mode: "free-style",
         penaltySeconds: 0,
         rawTimeSeconds: 30,

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { SeededRandom } from "../world/seed";
+import { LIFT_ROUTE } from "../world/liftRoute";
 import {
   LIVING_SLOPE_TUNING,
   LivingSlopeSimulation,
@@ -33,13 +34,46 @@ function fixedRandom(value: number): SeededRandom {
 }
 
 describe("LivingSlopeSimulation", () => {
+  it("places every self-propelled actor beyond a viewport edge", () => {
+    const simulation = new LivingSlopeSimulation("offscreen-entry");
+    const viewport = {
+      simulationSeconds: 0,
+      viewportBottomMeters: 52,
+      viewportHalfWidthMeters: 80,
+      viewportTopMeters: 28,
+      worldX: 10,
+      worldY: 100,
+    };
+    simulation.placeMovingActorsOffscreen(viewport);
+    const moving = simulation
+      .getSnapshot()
+      .actors.filter(
+        (value) => value.source !== "chairlift" && value.kind !== "chairlift",
+      );
+    for (const value of moving) {
+      const outsideX =
+        Math.abs(value.worldX - viewport.worldX) >
+        viewport.viewportHalfWidthMeters;
+      const outsideY =
+        value.worldY < viewport.worldY - viewport.viewportTopMeters ||
+        value.worldY > viewport.worldY + viewport.viewportBottomMeters;
+      expect(outsideX || outsideY, value.id).toBe(true);
+    }
+  });
+
   it("keeps a deterministic, bounded, pooling-ready actor population", () => {
     const first = new LivingSlopeSimulation("living-seed");
     const second = new LivingSlopeSimulation("living-seed");
+    expect(
+      first
+        .getSnapshot()
+        .actors.filter((value) => value.kind === "chairlift")
+        .map((value) => value.worldY),
+    ).toEqual([-64, 320, 704, 1088, 128, 512, 896, 1280]);
     runFor(first, 1);
     runFor(second, 1);
     expect(first.getSnapshot()).toEqual(second.getSnapshot());
-    expect(first.getSnapshot().actorCount).toBe(11);
+    expect(first.getSnapshot().actorCount).toBe(14);
     expect(first.getSnapshot().actorCount).toBeLessThanOrEqual(
       LIVING_SLOPE_TUNING.maximumActors,
     );
@@ -54,14 +88,19 @@ describe("LivingSlopeSimulation", () => {
     const start = simulation
       .getSnapshot()
       .actors.find((value) => value.kind === "beginner")!;
+    expect(
+      simulation
+        .getSnapshot()
+        .actors.filter((value) => value.kind === "beginner"),
+    ).toHaveLength(2);
     runFor(simulation, 7);
     const events = simulation.drainEvents();
     expect(
-      events.filter((event) => event.type === "beginner-fell"),
-    ).toHaveLength(2);
+      events.filter((event) => event.type === "beginner-fell").length,
+    ).toBeGreaterThanOrEqual(4);
     expect(
-      events.filter((event) => event.type === "beginner-recovered"),
-    ).toHaveLength(2);
+      events.filter((event) => event.type === "beginner-recovered").length,
+    ).toBeGreaterThanOrEqual(4);
     const beginner = simulation
       .getSnapshot()
       .actors.find((value) => value.kind === "beginner")!;
@@ -181,7 +220,18 @@ describe("LivingSlopeSimulation", () => {
 
   it("loops chairs both ways and makes rider drops rare but seeded/injectable", () => {
     const noDrop = new LivingSlopeSimulation("chair-no-drop", fixedRandom(0.5));
-    runFor(noDrop, 0.1);
+    const chairs = noDrop
+      .getSnapshot()
+      .actors.filter((value) => value.kind === "chairlift");
+    expect(chairs).toHaveLength(8);
+    expect(new Set(chairs.map((value) => value.riderCount))).toEqual(
+      new Set([0, 1, 2]),
+    );
+    runFor(
+      noDrop,
+      LIFT_ROUTE.turnLength / LIVING_SLOPE_TUNING.chairSpeedMetersPerSecond +
+        0.1,
+    );
     expect(noDrop.drainEvents().map((event) => event.type)).toContain(
       "chair-looped",
     );
@@ -215,4 +265,50 @@ describe("LivingSlopeSimulation", () => {
       "chair-rider-dropped",
     );
   });
+
+  it.each(["bottom", "top"] as const)(
+    "keeps a chair attached and moving continuously through the %s turnaround",
+    (terminal) => {
+      const simulation = new LivingSlopeSimulation("turn", fixedRandom(1));
+      const bottom = terminal === "bottom";
+      const id = bottom ? "chair-down-0" : "chair-up-0";
+      const startX = bottom ? LIFT_ROUTE.leftX : LIFT_ROUTE.rightX;
+      const startY = bottom ? LIFT_ROUTE.bottomY : LIFT_ROUTE.topY;
+      simulation.repositionActor(id, startX, startY);
+      const getChair = () =>
+        simulation.getSnapshot().actors.find((value) => value.id === id)!;
+      const riders = getChair().riderCount;
+      let previous = getChair();
+      const speed = LIVING_SLOPE_TUNING.chairSpeedMetersPerSecond;
+      const duration = LIFT_ROUTE.turnLength / speed;
+      for (let time = 0; time < duration; time += STEP) {
+        runFor(simulation, STEP);
+        const current = getChair();
+        expect(current.active).toBe(true);
+        expect(current.riderCount).toBe(riders);
+        expect(
+          Math.hypot(
+            current.worldX - previous.worldX,
+            current.worldY - previous.worldY,
+          ),
+        ).toBeCloseTo(speed * STEP, 4);
+        expect(Math.abs(current.worldY - startY)).toBeLessThanOrEqual(
+          LIFT_ROUTE.radius + 0.04,
+        );
+        previous = current;
+      }
+      const afterTurn = getChair();
+      expect(afterTurn.worldX).toBeCloseTo(
+        bottom ? LIFT_ROUTE.rightX : LIFT_ROUTE.leftX,
+      );
+      expect(afterTurn.direction).toBe(bottom ? -1 : 1);
+      runFor(simulation, 1);
+      expect(
+        (getChair().worldY - afterTurn.worldY) * (bottom ? -1 : 1),
+      ).toBeGreaterThan(1.9);
+      expect(simulation.drainEvents()).toContainEqual(
+        expect.objectContaining({ actorId: id, type: "chair-looped" }),
+      );
+    },
+  );
 });

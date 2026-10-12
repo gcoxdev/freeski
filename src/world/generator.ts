@@ -1,6 +1,7 @@
 import {
   blocksTreeSlalomRoute,
   CLASSIC_EXCLUSIONS,
+  CLASSIC_FREESTYLE_RAMPS,
   pointInsideBounds,
 } from "./classicMountain";
 import { blocksGuaranteedCorridor, isBlockingType } from "./corridor";
@@ -22,6 +23,7 @@ import {
 
 const CELL_SIZE_METERS = 8;
 const CANDIDATE_MARGIN_METERS = 24;
+const RAMP_SEPARATION_PADDING_METERS = 1;
 
 interface Candidate extends GeneratedObject {
   readonly cellX: number;
@@ -207,6 +209,15 @@ export class WorldGenerator {
       return false;
     }
     if (
+      candidate.type === "ramp" &&
+      CLASSIC_FREESTYLE_RAMPS.some(
+        (ramp) =>
+          Math.hypot(candidate.x - ramp.x, candidate.y - ramp.y) <
+          candidate.footprintRadius * 2 + RAMP_SEPARATION_PADDING_METERS,
+      )
+    )
+      return false;
+    if (
       isBlockingType(candidate.type) &&
       (blocksGuaranteedCorridor(
         this.worldSeed,
@@ -218,11 +229,34 @@ export class WorldGenerator {
       return false;
     }
 
-    for (let y = candidate.cellY - 1; y <= candidate.cellY + 1; y += 1) {
-      for (let x = candidate.cellX - 1; x <= candidate.cellX + 1; x += 1) {
+    const neighborRadius =
+      candidate.type === "ramp"
+        ? Math.ceil(
+            (candidate.footprintRadius * 2 + RAMP_SEPARATION_PADDING_METERS) /
+              CELL_SIZE_METERS,
+          ) + 1
+        : 1;
+    for (
+      let y = candidate.cellY - neighborRadius;
+      y <= candidate.cellY + neighborRadius;
+      y += 1
+    ) {
+      for (
+        let x = candidate.cellX - neighborRadius;
+        x <= candidate.cellX + neighborRadius;
+        x += 1
+      ) {
         if (x === candidate.cellX && y === candidate.cellY) continue;
         const neighbor = this.candidateAt(x, y);
-        if (!neighbor.spawned || !intersects(candidate, neighbor)) continue;
+        const overlap =
+          intersects(candidate, neighbor) ||
+          (candidate.type === "ramp" &&
+            neighbor.type === "ramp" &&
+            Math.hypot(candidate.x - neighbor.x, candidate.y - neighbor.y) <
+              candidate.footprintRadius +
+                neighbor.footprintRadius +
+                RAMP_SEPARATION_PADDING_METERS);
+        if (!neighbor.spawned || !overlap) continue;
         if (
           neighbor.priority < candidate.priority ||
           (neighbor.priority === candidate.priority &&

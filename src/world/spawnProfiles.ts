@@ -31,10 +31,10 @@ export const SPAWN_PROFILES: Readonly<
 
 export const ZONE_SPAWN_CHANCE: Readonly<Record<WorldZone, number>> =
   Object.freeze({
-    open: 0.07,
-    "free-style": 0.12,
-    "tree-slalom": 0.08,
-    slalom: 0.02,
+    open: 0.035,
+    "free-style": 0.05,
+    "tree-slalom": 0.04,
+    slalom: 0.012,
   });
 
 export function zoneAt(x: number, y: number): WorldZone {
