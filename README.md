@@ -43,7 +43,3 @@ npm run preview
 ```
 
 The production build is written to `dist/`.
-
-## Deploy
-
-See the [Coolify deployment guide](docs/DEPLOYMENT.md) for the exact settings. FreeSki is a static site; no backend or database is required.
