@@ -1,7 +1,7 @@
 import { GENERATOR_VERSION } from "../world/generatorVersion";
 import { metricForMode, type EventModeId, type ModeResult } from "./modes";
 
-export const RECORD_SCHEMA_VERSION = 3;
+export const RECORD_SCHEMA_VERSION = 4;
 export const RECORD_LIMIT = 10;
 export type RecordBucket = "classic" | "seeded";
 
@@ -18,6 +18,8 @@ export interface RunRecord {
 }
 
 export interface RecordBook {
+  /** Previous terrain versions stay available without competing with current runs. */
+  readonly archived: readonly RunRecord[];
   readonly buckets: Readonly<
     Record<RecordBucket, Readonly<Record<EventModeId, readonly RunRecord[]>>>
   >;
@@ -30,6 +32,7 @@ function emptyModeBuckets(): Record<EventModeId, readonly RunRecord[]> {
 
 export function emptyRecordBook(): RecordBook {
   return Object.freeze({
+    archived: Object.freeze([]),
     buckets: Object.freeze({
       classic: Object.freeze(emptyModeBuckets()),
       seeded: Object.freeze(emptyModeBuckets()),
@@ -77,12 +80,18 @@ function compareRecords(a: RunRecord, b: RunRecord): number {
 }
 
 export function addRecord(book: RecordBook, record: RunRecord): RecordBook {
-  if (!isRunRecord(record)) return book;
+  if (
+    !isRunRecord(record) ||
+    record.generatorVersion !== GENERATOR_VERSION ||
+    record.metric !== metricForMode(record.mode)
+  )
+    return book;
   const bucket = record.bucket;
   const updated = [...book.buckets[bucket][record.mode], record]
     .sort(compareRecords)
     .slice(0, RECORD_LIMIT);
   return Object.freeze({
+    archived: book.archived,
     buckets: Object.freeze({
       classic: Object.freeze({
         ...book.buckets.classic,
@@ -107,14 +116,14 @@ function isRunRecord(value: unknown): value is RunRecord {
   return (
     (record.bucket === "classic" || record.bucket === "seeded") &&
     record.bucket === bucketForSeed(record.seed ?? "") &&
-    record.generatorVersion === GENERATOR_VERSION &&
+    typeof record.generatorVersion === "string" &&
+    record.generatorVersion.length > 0 &&
     typeof record.id === "string" &&
     record.id.length > 0 &&
     (record.metric === "score" || record.metric === "time") &&
     (record.mode === "free-style" ||
       record.mode === "slalom" ||
       record.mode === "tree-slalom") &&
-    record.metric === metricForMode(record.mode ?? "slalom") &&
     typeof record.penaltySeconds === "number" &&
     Number.isFinite(record.penaltySeconds) &&
     record.penaltySeconds >= 0 &&
@@ -131,20 +140,51 @@ function isRunRecord(value: unknown): value is RunRecord {
 export function parseRecordBook(serialized: string | null): RecordBook {
   if (!serialized) return emptyRecordBook();
   try {
-    const parsed = JSON.parse(serialized) as Partial<RecordBook>;
-    if (parsed.schemaVersion !== RECORD_SCHEMA_VERSION || !parsed.buckets)
+    const parsed = JSON.parse(serialized) as Omit<
+      Partial<RecordBook>,
+      "schemaVersion"
+    > & { schemaVersion?: number };
+    if (
+      ![2, 3, RECORD_SCHEMA_VERSION].includes(parsed.schemaVersion ?? 0) ||
+      !parsed.buckets
+    )
       return emptyRecordBook();
     let book = emptyRecordBook();
+    const archived = new Map<string, RunRecord>();
+    const preserve = (record: unknown) => {
+      if (!isRunRecord(record)) return;
+      archived.set(
+        JSON.stringify([
+          record.generatorVersion,
+          record.bucket,
+          record.mode,
+          record.id,
+        ]),
+        Object.freeze({ ...record }),
+      );
+    };
+    if (Array.isArray(parsed.archived)) parsed.archived.forEach(preserve);
     for (const bucket of ["classic", "seeded"] as const) {
       for (const mode of ["slalom", "tree-slalom", "free-style"] as const) {
         const records = parsed.buckets[bucket]?.[mode];
         if (!Array.isArray(records)) continue;
         for (const record of records) {
-          if (isRunRecord(record)) book = addRecord(book, record);
+          if (isRunRecord(record)) {
+            if (
+              parsed.schemaVersion !== 2 &&
+              record.generatorVersion === GENERATOR_VERSION &&
+              record.metric === metricForMode(record.mode)
+            )
+              book = addRecord(book, record);
+            else preserve(record);
+          }
         }
       }
     }
-    return book;
+    return Object.freeze({
+      ...book,
+      archived: Object.freeze([...archived.values()]),
+    });
   } catch {
     return emptyRecordBook();
   }

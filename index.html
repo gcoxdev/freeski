@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/src/styles.css" />
     <link
       rel="preload"
-      href="/assets/production/freeski-atlas.png?v=2026-10-12.4"
+      href="/assets/production/freeski-atlas.webp?v=2026-10-12.5"
       as="image"
       fetchpriority="high"
     />
@@ -52,10 +52,11 @@
             >
           </div>
           <div class="metric metric--style">
-            <small>STYLE</small><strong id="style-label">0</strong>
+            <small id="style-caption">STYLE</small
+            ><strong id="style-label">0</strong>
           </div>
           <div class="metric metric--time">
-            <small>TIME</small
+            <small id="time-caption">TIME</small
             ><span><strong id="time-label">0.0</strong> <small>S</small></span>
           </div>
         </div>
@@ -94,6 +95,7 @@
           <div class="loading-screen__mark" aria-hidden="true">FS</div>
 
           <strong>PREPARING THE MOUNTAIN</strong>
+          <button id="loading-retry" type="button" hidden>RETRY LOADING</button>
           <span id="loading-status">Loading skier and course equipment…</span>
           <span class="loading-screen__track" aria-hidden="true"
             ><i id="loading-progress"></i
@@ -134,7 +136,7 @@
             RIGHT
           </button>
         </div>
-        <div class="touch-controls__cluster touch-controls__air">
+        <div class="touch-controls__cluster touch-controls__air" hidden>
           <button
             id="touch-spin-left"
             type="button"
@@ -166,14 +168,6 @@
             aria-label="Spin right while airborne"
           >
             SPIN+
-          </button>
-          <button
-            id="touch-reset"
-            type="button"
-            data-action="reset"
-            aria-label="Reset the run"
-          >
-            RESET
           </button>
         </div>
         <div class="touch-controls__cluster touch-controls__actions">

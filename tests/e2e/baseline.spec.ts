@@ -5,6 +5,7 @@ import type { Page } from "@playwright/test";
 import type { FreeSkiRuntime } from "../../src/render/runtimeBridge";
 
 async function runtimeSnapshot(page: Page): Promise<FreeSkiRuntime> {
+  await page.waitForFunction(() => window.__FREE_SKI__?.ready);
   return page.evaluate(() => {
     if (!window.__FREE_SKI__) throw new Error("FreeSki runtime is not ready");
     return window.__FREE_SKI__;
@@ -70,7 +71,7 @@ test("loads an interactive Phaser baseline without console errors", async ({
   const runtime = await page.evaluate(() => window.__FREE_SKI__);
   expect(runtime).toMatchObject({
     engine: "phaser-3",
-    generatorVersion: "freeski-world-v4",
+    generatorVersion: "freeski-world-v5",
     ready: true,
     seed: "gate-zero-proof",
   });

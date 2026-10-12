@@ -31,7 +31,11 @@ describe("interaction catalog", () => {
       expect(Object.isFrozen(metadata.footprint)).toBe(true);
       expect(Object.isFrozen(metadata.spriteBounds)).toBe(true);
       expect(metadata.footprint).toMatchObject({
-        shape: kind === "mogul" ? "polygon" : "circle",
+        shape: ["mogul", "ramp", "bump-small", "bump-large", "stump"].includes(
+          kind,
+        )
+          ? "polygon"
+          : "circle",
       });
       expect(metadata.footprint.radius).toBeGreaterThan(0);
       expect(metadata.clearanceHeight).toBeGreaterThanOrEqual(0);

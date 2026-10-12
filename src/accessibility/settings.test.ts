@@ -19,6 +19,7 @@ function memoryStorage(initial?: string) {
 describe("accessibility settings", () => {
   it("derives sensible first-run defaults from reduced-motion preference", () => {
     expect(defaultAccessibilitySettings(false)).toEqual({
+      pointerSteering: true,
       flash: true,
       reducedMotion: false,
       screenShake: true,
@@ -26,6 +27,7 @@ describe("accessibility settings", () => {
       yetiPresentation: "full",
     });
     expect(defaultAccessibilitySettings(true)).toEqual({
+      pointerSteering: true,
       flash: false,
       reducedMotion: true,
       screenShake: false,
@@ -48,6 +50,7 @@ describe("accessibility settings", () => {
         fallback,
       ),
     ).toEqual({
+      pointerSteering: true,
       flash: true,
       reducedMotion: true,
       screenShake: false,
@@ -60,6 +63,7 @@ describe("accessibility settings", () => {
     const storage = memoryStorage();
     const first = new AccessibilitySettingsStore(storage, false);
     first.update({
+      pointerSteering: false,
       flash: false,
       reducedMotion: true,
       screenShake: false,
@@ -69,6 +73,7 @@ describe("accessibility settings", () => {
     expect(
       new AccessibilitySettingsStore(storage, false).getSnapshot(),
     ).toEqual({
+      pointerSteering: false,
       flash: false,
       reducedMotion: true,
       screenShake: false,

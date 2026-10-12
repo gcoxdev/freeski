@@ -1,3 +1,4 @@
+import { LoadingScene } from "./scenes/LoadingScene";
 import Phaser from "phaser";
 import { AlpineScene } from "./scenes/AlpineScene";
 
@@ -8,6 +9,7 @@ export function createGame(parent: string, seed: string): Phaser.Game {
       noAudio: true,
     },
     parent,
+    loader: { timeout: 20_000, maxRetries: 1 },
     backgroundColor: "#dbe9e9",
     scale: {
       mode: Phaser.Scale.RESIZE,
@@ -20,6 +22,6 @@ export function createGame(parent: string, seed: string): Phaser.Game {
       roundPixels: false,
     },
     banner: false,
-    scene: [new AlpineScene(seed)],
+    scene: [new LoadingScene(), new AlpineScene(seed)],
   });
 }

@@ -1,4 +1,5 @@
 import type { GeneratedObjectType, InteractionMetadata } from "./types";
+import { terrainFootprint } from "./terrainFootprints";
 import { MOGUL_FOOTPRINT, MOGUL_PATCH } from "./mogulPatch";
 
 export type InteractionObjectKind =
@@ -34,8 +35,14 @@ export const INTERACTION_CATALOG: Readonly<
   Record<InteractionObjectKind, Readonly<InteractionMetadata>>
 > = Object.freeze({
   beginner: metadata(0.75, 1.45, true, 1.8, 2.8),
-  "bump-large": metadata(1.5, 0.16, false, 4.2, 1.1, 0.78),
-  "bump-small": metadata(0.8, 0.08, false, 2.4, 0.6, 0.78),
+  "bump-large": Object.freeze({
+    ...metadata(1.5, 0.16, false, 4.2, 1.1, 0.78),
+    footprint: terrainFootprint("bump-large"),
+  }),
+  "bump-small": Object.freeze({
+    ...metadata(0.8, 0.08, false, 2.4, 0.6, 0.78),
+    footprint: terrainFootprint("bump-small"),
+  }),
   chairlift: metadata(0.7, 3.2, false, 2.8, 2.2, 0.5),
   dog: metadata(0.65, 0.42, false, 1.8, 1.2, 0.84),
   "lift-tower": metadata(1.4, 2.6, true, 4.4, 6.2),
@@ -51,9 +58,15 @@ export const INTERACTION_CATALOG: Readonly<
     ),
     footprint: MOGUL_FOOTPRINT,
   }),
-  ramp: metadata(3, 0.2, false, 8.2, 5.6, 0.88),
+  ramp: Object.freeze({
+    ...metadata(3, 0.2, false, 8.2, 5.6, 0.88),
+    footprint: terrainFootprint("ramp"),
+  }),
   rock: metadata(1.35, 0.72, true, 3.6, 2.1, 0.82),
-  stump: metadata(1, 0.68, true, 2.4, 1.8, 0.84),
+  stump: Object.freeze({
+    ...metadata(1, 0.68, true, 2.4, 1.8, 0.84),
+    footprint: terrainFootprint("stump"),
+  }),
   tree: metadata(2.2, 2.35, true, 5.8, 8.6),
   "walking-tree": metadata(2.2, 2.35, true, 5.8, 8.6),
 });

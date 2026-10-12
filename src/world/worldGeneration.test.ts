@@ -195,7 +195,7 @@ describe("deterministic chunk generation", () => {
       };
     };
     const generator = new WorldGenerator("injected", factory);
-    expect(generator.generateChunk(0, 0).version).toBe("freeski-world-v4");
+    expect(generator.generateChunk(0, 0).version).toBe("freeski-world-v5");
     expect(requestedSeeds.length).toBeGreaterThan(64);
     expect(new Set(requestedSeeds).size).toBe(requestedSeeds.length);
   });

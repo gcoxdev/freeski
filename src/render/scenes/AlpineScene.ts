@@ -1,13 +1,14 @@
-import { yetiPresentation } from "../yetiPresentation";
+import { updateRunMetrics } from "../runMetrics";
 import {
-  chairCableOffset,
-  liftCableHeight,
-  liftTowerPresentation,
-  liftTerminalPresentation,
-  LIFT_TERMINAL_APPROACH_METERS,
-} from "../liftPresentation";
-import { LIFT_ROUTE, liftRoutePoint } from "../../world/liftRoute";
-import { MOGUL_PATCH } from "../../world/mogulPatch";
+  COLORS,
+  PIXELS_PER_METER,
+  PLAYER_SCREEN_RATIO,
+} from "../presentationConstants";
+import { worldDepth } from "../worldDepth";
+import { TerrainRenderer } from "../TerrainRenderer";
+import { drawLift } from "../drawLift";
+import { yetiPresentation } from "../yetiPresentation";
+import { chairCableOffset, liftCableHeight } from "../liftPresentation";
 import Phaser from "phaser";
 import {
   AccessibilitySettingsStore,
@@ -92,7 +93,6 @@ import { MountainStream } from "../../world/mountainStream";
 import { hashSeed } from "../../world/seed";
 import { CHUNK_SIZE_METERS, type WorldChunk } from "../../world/types";
 import { LocalRecordStorage } from "../localRecordStorage";
-import { burningTreeFrame } from "../burningTreePresentation";
 import { livingActorPresentation } from "../livingActorPresentation";
 import {
   insideBufferedViewport,
@@ -108,8 +108,6 @@ import {
 } from "../playerPresentation";
 import {
   AtlasSpritePool,
-  PRODUCTION_ATLAS_DATA,
-  PRODUCTION_ATLAS_IMAGE,
   PRODUCTION_ATLAS_KEY,
 } from "../atlas/AtlasSpritePool";
 import { AccessibilityControls } from "../accessibilityControls";
@@ -124,8 +122,6 @@ import type {
   TelemetrySample,
 } from "../runtimeBridge";
 
-const PLAYER_SCREEN_RATIO = 0.35;
-const PIXELS_PER_METER = 7.5;
 const MAX_TELEMETRY_EVENTS = 240;
 const MAX_TELEMETRY_SAMPLES = 600;
 const PRESENTATION_SYNC_FIXED_STEPS = 30;
@@ -142,20 +138,8 @@ const CLASSIC_FREESTYLE_RAMP_OBJECTS: readonly InteractiveWorldObject[] =
     ),
   );
 
-const COLORS = {
-  blueSuit: 0x1d5b85,
-  glacierShadow: 0xc3dadc,
-  ink: 0x102933,
-  powder: 0xf7f9f5,
-  redHelmet: 0xe84d2a,
-  signal: 0xe84d2a,
-  skiYellow: 0xf5c844,
-  spruce: 0x174f45,
-  stone: 0x71858a,
-  white: 0xffffff,
-} as const;
-
 export class AlpineScene extends Phaser.Scene {
+  private terrainRenderer!: TerrainRenderer;
   private readonly worldSeed: string;
   private readonly generator: WorldGenerator;
   private readonly stream: MountainStream;
@@ -234,7 +218,16 @@ export class AlpineScene extends Phaser.Scene {
   private flashPresented = false;
   private flashCount = 0;
   private shakeCount = 0;
-  private readonly unlockAudio = (): void => {
+  private readonly unlockAudio = (event: Event): void => {
+    // The audio button unlocks on click. Changing its label between pointerdown
+    // and pointerup can suppress WebKit's click, especially on the first gesture.
+    if (
+      event.target instanceof Element &&
+      event.target.closest("#audio-toggle") &&
+      (event.type === "pointerdown" ||
+        (event instanceof KeyboardEvent && ["Enter", " "].includes(event.key)))
+    )
+      return;
     void this.audio?.unlock().then(() => this.updateAudioControl());
   };
   private readonly handleAudioKey = (event: KeyboardEvent): void => {
@@ -279,27 +272,13 @@ export class AlpineScene extends Phaser.Scene {
     );
   }
 
-  preload(): void {
-    const status = document.querySelector<HTMLElement>("#loading-status");
-    const progress = document.querySelector<HTMLElement>("#loading-progress");
-    this.load.on("progress", (value: number) => {
-      if (status) status.textContent = "Loading alpine atlas…";
-      if (progress) progress.style.width = `${Math.round(58 + value * 38)}%`;
-    });
-    this.load.once("complete", () => {
-      if (status) status.textContent = "Opening the slope…";
-      if (progress) progress.style.width = "100%";
-    });
-    this.load.atlas(
-      PRODUCTION_ATLAS_KEY,
-      PRODUCTION_ATLAS_IMAGE,
-      PRODUCTION_ATLAS_DATA,
-    );
-  }
-
   create(): void {
     this.background = this.add.graphics().setDepth(0);
     this.spritePool = new AtlasSpritePool(this);
+    this.terrainRenderer = new TerrainRenderer(
+      this.background,
+      this.spritePool,
+    );
     try {
       this.audio = new AlpineAudio(window.localStorage);
     } catch {
@@ -318,7 +297,7 @@ export class AlpineScene extends Phaser.Scene {
     );
 
     const search = new URLSearchParams(window.location.search);
-    const pointerFromUrl = search.get("pointer") !== "0";
+    let pointerFromUrl = search.get("pointer") !== "0";
     const touchFromUrl = search.get("touch") === "1";
     const coarsePointer =
       window.matchMedia("(pointer: coarse)").matches &&
@@ -328,7 +307,6 @@ export class AlpineScene extends Phaser.Scene {
     this.debugVisible = search.get("debug") === "1";
     this.game.canvas.tabIndex = 0;
     this.game.canvas.setAttribute("aria-label", "FreeSki downhill playfield");
-    this.setPointerSteering(pointerFromUrl);
     this.inputAdapter.setTouchEnabled(touchFromUrl || coarsePointer);
 
     let settingsStorage: Storage | undefined;
@@ -341,6 +319,10 @@ export class AlpineScene extends Phaser.Scene {
       settingsStorage,
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
+    pointerFromUrl = search.has("pointer")
+      ? pointerFromUrl
+      : this.accessibilityStore.getSnapshot().pointerSteering;
+    this.setPointerSteering(pointerFromUrl);
     this.accessibilityControls = new AccessibilityControls(
       this.accessibilityStore,
       {
@@ -358,12 +340,18 @@ export class AlpineScene extends Phaser.Scene {
     this.applyAccessibilitySettings(this.accessibilityControls.settings);
     const pointerToggle =
       document.querySelector<HTMLButtonElement>("#pointer-toggle");
-    pointerToggle?.addEventListener("click", () =>
-      this.setPointerSteering(!(this.inputAdapter?.isPointerEnabled ?? false)),
-    );
+    pointerToggle?.addEventListener("click", () => {
+      const enabled = !(this.inputAdapter?.isPointerEnabled ?? false);
+      const settings = this.accessibilityStore?.update({
+        pointerSteering: enabled,
+      });
+      if (settings) this.applyAccessibilitySettings(settings);
+      this.setPointerSteering(enabled);
+    });
     const audioToggle =
       document.querySelector<HTMLButtonElement>("#audio-toggle");
     audioToggle?.addEventListener("click", () => {
+      void this.audio?.unlock().then(() => this.updateAudioControl());
       this.audio?.toggleMuted();
       this.audio?.play("ui-toggle");
       this.updateAudioControl();
@@ -696,6 +684,7 @@ export class AlpineScene extends Phaser.Scene {
       (worldX, worldY) => this.toScreen(worldX, worldY, player),
       this.spritePool,
     );
+    this.inputAdapter?.setAirborne(player.motion === "airborne");
     this.updateSkier(player);
     this.spritePool.endFrame();
     this.audio.update(
@@ -922,12 +911,7 @@ export class AlpineScene extends Phaser.Scene {
           presentation.originY * presentation.displayHeight
         : y + 8;
     this.spritePool.draw(presentation.frame, x + chairCableOffsetX, spriteY, {
-      depth:
-        actor.kind === "chairlift"
-          ? actor.worldY < LIFT_ROUTE.topY
-            ? 7
-            : 12
-          : 14,
+      depth: worldDepth(y),
       displayHeight: presentation.displayHeight,
       flipX: presentation.flipX,
       originY: presentation.originY,
@@ -966,14 +950,14 @@ export class AlpineScene extends Phaser.Scene {
     if (
       this.spritePool.draw("vfx/ground-shadow", x + 3, y + 15, {
         alpha: 0.3,
-        depth: 16,
+        depth: 4,
         displayHeight: 13,
         displayWidth: 58,
         originY: 0.5,
       })
     ) {
       this.spritePool.draw(atlasFrame, x, y + 14, {
-        depth: 17,
+        depth: worldDepth(y),
         displayHeight: presentation.displayHeight,
         flipX: presentation.flipX,
         originY: presentation.originY,
@@ -1025,7 +1009,13 @@ export class AlpineScene extends Phaser.Scene {
     this.visibleObjects = 0;
     this.bufferedObjects = 0;
     this.drawClassicCourses(player, width, height);
-    this.drawClassicLift(player, width, height);
+    drawLift(
+      this.background,
+      this.spritePool,
+      (x, y) => this.toScreen(x, y, player),
+      width,
+      height,
+    );
     const terrainCandidates: Array<{
       readonly delta: Readonly<ObjectDelta> | undefined;
       readonly object: InteractiveWorldObject;
@@ -1097,11 +1087,12 @@ export class AlpineScene extends Phaser.Scene {
         width,
         height,
       );
-      this.drawInteractiveObject(
+      this.terrainRenderer.draw(
         candidate.object,
         candidate.screenX,
         candidate.screenY,
         candidate.delta,
+        player.simulationSeconds,
       );
     }
     this.drawLivingSlope(player, width, height);
@@ -1132,7 +1123,7 @@ export class AlpineScene extends Phaser.Scene {
               ? "course/tree-slalom-sign"
               : "course/free-style-sign";
         this.spritePool.draw(signFrame, signX, signY + 15, {
-          depth: 9,
+          depth: worldDepth(signY),
           displayHeight: 62,
           originY: 0.94,
         });
@@ -1208,7 +1199,7 @@ export class AlpineScene extends Phaser.Scene {
                 : "course/blue-right-marker";
         if (
           this.spritePool.draw(markerFrame, x, y + 9, {
-            depth: 7,
+            depth: worldDepth(y),
             displayHeight: markerState === "pending" ? 46 : 38,
             originY: 0.94,
           })
@@ -1258,14 +1249,14 @@ export class AlpineScene extends Phaser.Scene {
     const gateKind = color === COLORS.signal ? "finish" : "start";
     if (
       this.spritePool.draw(`course/${gateKind}-left`, left, y + 10, {
-        depth: 6,
+        depth: worldDepth(y),
         displayHeight: 46,
         originX: 0.18,
         originY: 0.94,
       })
     ) {
       this.spritePool.draw(`course/${gateKind}-right`, right, y + 10, {
-        depth: 6,
+        depth: worldDepth(y),
         displayHeight: 46,
         originX: 0.82,
         originY: 0.94,
@@ -1287,351 +1278,6 @@ export class AlpineScene extends Phaser.Scene {
       right,
       y - 3,
     );
-  }
-
-  private drawClassicLift(
-    player: PlayerSnapshot,
-    width: number,
-    height: number,
-  ): void {
-    if (!this.background) return;
-    const topTower = CLASSIC_LIFT.towers[0]!;
-    const bottomTower = CLASSIC_LIFT.towers.at(-1)!;
-    const towerPresentation = liftTowerPresentation(PIXELS_PER_METER);
-    for (const chair of CLASSIC_LIFT.chairs) {
-      this.background.lineStyle(1, COLORS.ink, 0.35);
-      this.background.beginPath();
-      for (const [index, worldY] of [
-        topTower.y,
-        topTower.y + LIFT_TERMINAL_APPROACH_METERS,
-        bottomTower.y - LIFT_TERMINAL_APPROACH_METERS,
-        bottomTower.y,
-      ].entries()) {
-        const [x, y] = this.toScreen(chair.laneX, worldY, player);
-        const cableY =
-          y + liftCableHeight(chair.laneX, PIXELS_PER_METER, worldY);
-        if (index === 0) this.background.moveTo(x, cableY);
-        else this.background.lineTo(x, cableY);
-      }
-      this.background.strokePath();
-    }
-    // Both cable ends turn continuously onto the opposite lane. The same route
-    // samples drive chair motion, with the same sheave-height projection.
-    for (const start of [
-      LIFT_ROUTE.straightLength,
-      2 * LIFT_ROUTE.straightLength + LIFT_ROUTE.turnLength,
-    ]) {
-      const terminal = liftRoutePoint(start);
-      const [centerX, groundY] = this.toScreen(
-        LIFT_ROUTE.centerX,
-        terminal.y,
-        player,
-      );
-      if (!insideBufferedViewport(centerX, groundY, width, height)) continue;
-      this.spritePool.draw("lift/terminal", centerX, groundY, {
-        ...liftTerminalPresentation(PIXELS_PER_METER),
-        depth: 8,
-      });
-      this.background.lineStyle(1, COLORS.ink, 0.35);
-      this.background.beginPath();
-      for (let step = 0; step <= 32; step += 1) {
-        const point = liftRoutePoint(
-          start + (LIFT_ROUTE.turnLength * step) / 32,
-        );
-        const [x, y] = this.toScreen(point.x, point.y, player);
-        const cableY = y + liftCableHeight(point.x, PIXELS_PER_METER, point.y);
-        if (step === 0) this.background.moveTo(x, cableY);
-        else this.background.lineTo(x, cableY);
-      }
-      this.background.strokePath();
-    }
-    for (const tower of CLASSIC_LIFT.towers) {
-      if (tower === topTower || tower === bottomTower) continue;
-      const [x, y] = this.toScreen(tower.x, tower.y, player);
-      if (!insideBufferedViewport(x, y, width, height)) continue;
-      if (
-        this.spritePool.draw("lift/tower", x, y, {
-          depth: 8,
-          displayHeight: towerPresentation.displayHeight,
-          displayWidth: towerPresentation.displayWidth,
-          originX: towerPresentation.originX,
-          originY: towerPresentation.originY,
-        })
-      )
-        continue;
-      this.background.lineStyle(3, COLORS.ink, 0.62);
-      const leftX = x + towerPresentation.leftCableX;
-      const rightX = x + towerPresentation.rightCableX;
-      const leftY = y + towerPresentation.leftCableY;
-      const rightY = y + towerPresentation.rightCableY;
-      this.background.lineBetween(x, (leftY + rightY) / 2, x, y);
-      this.background.lineBetween(leftX, leftY, rightX, rightY);
-      this.background.lineStyle(2, COLORS.signal, 0.75);
-      this.background.lineBetween(x - 9, y + 14, x + 9, y + 14);
-    }
-  }
-
-  private drawInteractiveObject(
-    object: Pick<
-      InteractiveWorldObject,
-      "id" | "interaction" | "type" | "variant" | "x" | "y"
-    >,
-    x: number,
-    y: number,
-    delta?: Readonly<ObjectDelta>,
-  ): void {
-    if (!this.background) return;
-    const scale = Math.max(0.75, object.interaction.footprint.radius * 0.75);
-    const atlasFrame = this.interactiveAtlasFrame(object, delta);
-    if (atlasFrame) {
-      const display = this.interactiveAtlasDisplay(object, delta);
-      const shadowWidth = Math.max(18, display.height * display.shadowScale);
-      const needsProjectedShadow =
-        display.height >= 75 &&
-        ["lift-tower", "tree", "walking-tree"].includes(object.type);
-      const shadowReady =
-        !needsProjectedShadow ||
-        Boolean(
-          this.spritePool.draw("vfx/ground-shadow", x + 2, y + 7, {
-            alpha: 0.2,
-            depth: 4,
-            displayHeight: Math.max(5, display.height * 0.12),
-            displayWidth: shadowWidth,
-            originY: 0.5,
-          }),
-        );
-      if (
-        shadowReady &&
-        this.spritePool.draw(
-          atlasFrame,
-          x,
-          y +
-            (object.type === "mogul"
-              ? MOGUL_PATCH.drawOffsetYMeters * PIXELS_PER_METER
-              : 7),
-          {
-            depth: display.depth,
-            displayHeight: display.height,
-            originY: display.originY,
-            tint: delta?.burned ? 0x879397 : undefined,
-          },
-        )
-      ) {
-        return;
-      }
-    }
-    if (delta?.form === "mushroom") {
-      this.background.fillStyle(0xf7f0d8, 1);
-      this.background.fillRect(x - 2, y, 4, 7);
-      this.background.fillStyle(COLORS.signal, 0.96);
-      this.background.fillEllipse(x, y - 1, 16, 9);
-      this.background.fillStyle(COLORS.powder, 0.92);
-      this.background.fillCircle(x - 4, y - 2, 1.5);
-      this.background.fillCircle(x + 3, y, 1.5);
-      return;
-    }
-    if (object.type === "tree" || object.type === "walking-tree") {
-      this.background.fillStyle(COLORS.ink, 0.2);
-      this.background.fillEllipse(x + 2, y + 8, 14 * scale, 5 * scale);
-      this.background.fillStyle(0x5d3c2d, 0.9);
-      this.background.fillRect(x - 2, y, 4, 10 * scale);
-      this.background.fillStyle(
-        delta?.burned
-          ? COLORS.stone
-          : object.variant === "dead-tree"
-            ? 0x765443
-            : object.type === "walking-tree"
-              ? COLORS.blueSuit
-              : COLORS.spruce,
-        0.95,
-      );
-      if (object.variant === "dead-tree") {
-        this.background.lineStyle(
-          3,
-          delta?.burned ? COLORS.stone : 0x765443,
-          1,
-        );
-        this.background.lineBetween(x, y + 3, x - 8, y - 11 * scale);
-        this.background.lineBetween(x, y - 3, x + 8, y - 13 * scale);
-      } else {
-        this.background.fillTriangle(
-          x,
-          y - 13 * scale,
-          x - 9 * scale,
-          y + 4,
-          x + 9 * scale,
-          y + 4,
-        );
-      }
-      if (delta?.burning) {
-        this.background.fillStyle(0xf5c844, 0.96);
-        this.background.fillTriangle(x - 6, y + 4, x, y - 13, x + 6, y + 4);
-        this.background.fillStyle(COLORS.signal, 0.92);
-        this.background.fillTriangle(x - 4, y + 4, x + 2, y - 8, x + 5, y + 4);
-      }
-      return;
-    }
-    if (object.type === "rock" || object.type === "stump") {
-      this.background.fillStyle(
-        object.type === "rock" ? COLORS.stone : 0x79513a,
-        0.9,
-      );
-      this.background.fillTriangle(
-        x - 7 * scale,
-        y + 5,
-        x,
-        y - 6 * scale,
-        x + 8 * scale,
-        y + 5,
-      );
-      return;
-    }
-    if (object.type === "ramp") {
-      this.background.fillStyle(COLORS.blueSuit, 0.23);
-      this.background.fillTriangle(x - 14, y - 16, x + 14, y - 16, x, y + 18);
-      this.background.lineStyle(2, COLORS.blueSuit, 0.72);
-      this.background.lineBetween(x - 14, y - 16, x, y + 18);
-      this.background.lineBetween(x + 14, y - 16, x, y + 18);
-      return;
-    }
-    if (object.type === "lift-tower") {
-      this.background.lineStyle(4, COLORS.ink, 0.78);
-      this.background.lineBetween(x, y - 18, x, y + 14);
-      this.background.lineBetween(x - 14, y - 15, x + 14, y - 15);
-      this.background.lineStyle(2, COLORS.signal, 0.85);
-      this.background.lineBetween(x - 10, y + 13, x + 10, y + 13);
-      return;
-    }
-    if (object.type === "chairlift") {
-      this.background.lineStyle(2, COLORS.ink, 0.72);
-      this.background.lineBetween(x, y - 10, x, y + 2);
-      this.background.lineBetween(x - 7, y + 2, x + 7, y + 2);
-      return;
-    }
-    if (
-      object.type === "mogul" &&
-      object.interaction.footprint.shape === "polygon"
-    ) {
-      this.background.fillStyle(COLORS.glacierShadow, 0.8);
-      this.background.fillPoints(
-        object.interaction.footprint.points.map(
-          (point) =>
-            new Phaser.Geom.Point(
-              x + point.x * PIXELS_PER_METER,
-              y + point.y * PIXELS_PER_METER,
-            ),
-        ),
-        true,
-      );
-      return;
-    }
-    if (object.type === "bump-small" || object.type === "bump-large") {
-      this.background.fillStyle(COLORS.glacierShadow, 0.8);
-      this.background.fillEllipse(x, y + 2, 12 * scale, 6 * scale);
-      this.background.lineStyle(1, COLORS.ink, 0.22);
-      this.background.strokeEllipse(x, y, 12 * scale, 6 * scale);
-      return;
-    }
-    this.background.fillStyle(
-      object.type === "dog"
-        ? delta?.yellowSnow
-          ? 0xd9b73d
-          : 0xb96d35
-        : COLORS.signal,
-      0.9,
-    );
-    this.background.fillCircle(x, y, object.type === "dog" ? 4 : 5);
-    this.background.lineStyle(2, COLORS.ink, 0.55);
-    this.background.lineBetween(x - 4, y + 5, x - 6, y + 10);
-    this.background.lineBetween(x + 4, y + 5, x + 6, y + 10);
-  }
-
-  private interactiveAtlasFrame(
-    object: Pick<
-      InteractiveWorldObject,
-      "id" | "interaction" | "type" | "variant" | "x" | "y"
-    >,
-    delta?: Readonly<ObjectDelta>,
-  ): string | null {
-    if (delta?.form === "mushroom") return "secret/mushroom";
-    if (object.type === "tree") {
-      if (delta?.burning) {
-        return burningTreeFrame(
-          this.simulation.getSnapshot().simulationSeconds,
-          object.id,
-        );
-      }
-      return object.variant === "dead-tree"
-        ? "terrain/dead-tree"
-        : object.variant === "evergreen-large"
-          ? "terrain/evergreen-large"
-          : object.variant === "evergreen-medium" ||
-              object.variant === "evergreen"
-            ? "terrain/evergreen-medium"
-            : "terrain/evergreen-small";
-    }
-    if (object.type === "walking-tree") return "walking-tree/idle";
-    if (object.type === "rock") return "terrain/rock";
-    if (object.type === "stump") return "terrain/stump";
-    if (object.type === "bump-small") return "terrain/bump-small";
-    if (object.type === "bump-large") return "terrain/bump-large";
-    if (object.type === "mogul") return "terrain/mogul-field";
-    if (object.type === "ramp") return "terrain/rainbow-ramp";
-    if (object.type === "lift-tower") return "lift/tower";
-    if (object.type === "chairlift") return "chairlift/empty";
-    if (object.type === "dog")
-      return delta?.npcState === "knocked" ? "dog/knocked-over" : "dog/alert";
-    if (object.type === "beginner") return "beginner/downhill";
-    return null;
-  }
-
-  private interactiveAtlasDisplay(
-    object: Pick<InteractiveWorldObject, "interaction" | "type" | "variant">,
-    delta?: Readonly<ObjectDelta>,
-  ): { depth: number; height: number; originY: number; shadowScale: number } {
-    if (delta?.form === "mushroom")
-      return { depth: 8, height: 30, originY: 0.88, shadowScale: 0.75 };
-    const heights: Readonly<
-      Partial<Record<InteractiveWorldObject["type"], number>>
-    > = {
-      beginner: 48,
-      "bump-large": 40,
-      "bump-small": 28,
-      chairlift: 46,
-      dog: 30,
-      "lift-tower": 128,
-      mogul: MOGUL_PATCH.heightMeters * PIXELS_PER_METER,
-      ramp: 108,
-      rock: 31,
-      stump: 27,
-      tree:
-        object.variant === "evergreen-small"
-          ? 54
-          : object.variant === "evergreen-large"
-            ? 88
-            : object.variant === "dead-tree"
-              ? 82
-              : 70,
-      "walking-tree": 68,
-    };
-    const ground = ["bump-large", "bump-small", "mogul", "ramp"].includes(
-      object.type,
-    );
-    return {
-      depth: ground ? 5 : 8,
-      height: heights[object.type] ?? 38,
-      originY:
-        object.type === "mogul"
-          ? MOGUL_PATCH.originY
-          : object.type === "ramp"
-            ? 0.79
-            : object.type === "chairlift"
-              ? 0.52
-              : object.type === "dog"
-                ? 0.88
-                : 0.94,
-      shadowScale: ground ? 1.15 : 0.72,
-    };
   }
 
   private drawWorldDiagnostics(
@@ -1712,6 +1358,7 @@ export class AlpineScene extends Phaser.Scene {
       Math.atan2(player.velocityY, player.velocityX) - Math.PI / 2;
     const airOffset = player.airHeight * 19;
     const skier = this.skier ?? this.fallbackSkier!;
+    skier.setDepth(worldDepth(anchorY, player.airHeight));
     let groundedAnchorOffset = 0;
     if (this.skier) {
       const frameName = playerAtlasFrame(player);
@@ -1768,20 +1415,13 @@ export class AlpineScene extends Phaser.Scene {
 
   private updateHud(player: PlayerSnapshot): void {
     const shell = document.querySelector<HTMLElement>("#game-shell");
-    const speed = document.querySelector<HTMLElement>("#speed-label");
-    const time = document.querySelector<HTMLElement>("#time-label");
-    const distance = document.querySelector<HTMLElement>("#distance-label");
-    const style = document.querySelector<HTMLElement>("#style-label");
     const pauseCard = document.querySelector<HTMLElement>("#pause-card");
     const status = document.querySelector<HTMLElement>("#system-label");
-    if (speed)
-      speed.textContent = Math.round(
-        player.speedMetersPerSecond * 3.6,
-      ).toString();
-    if (time) time.textContent = player.simulationSeconds.toFixed(1);
-    if (distance) distance.textContent = Math.floor(player.worldY).toString();
-    const interaction = this.interactions.getSnapshot();
-    if (style) style.textContent = interaction.style.toString();
+    updateRunMetrics(
+      player,
+      this.interactions.getSnapshot().style,
+      this.modes.getSnapshot(),
+    );
     if (pauseCard) pauseCard.hidden = !player.paused || this.resultCardOpen;
     if (status)
       status.textContent = this.resultCardOpen
@@ -2675,12 +2315,12 @@ export class AlpineScene extends Phaser.Scene {
     const button = document.querySelector<HTMLButtonElement>("#audio-toggle");
     const shell = document.querySelector<HTMLElement>("#game-shell");
     button?.setAttribute("aria-pressed", snapshot.muted.toString());
-    if (button)
-      button.textContent = snapshot.muted
-        ? "SOUND MUTED"
-        : snapshot.unlocked
-          ? "SOUND ON"
-          : "SOUND ARMED";
+    const label = snapshot.muted
+      ? "SOUND MUTED"
+      : snapshot.unlocked
+        ? "SOUND ON"
+        : "SOUND ARMED";
+    if (button && button.textContent !== label) button.textContent = label;
     shell?.setAttribute("data-audio-unlocked", snapshot.unlocked.toString());
     shell?.setAttribute("data-audio-muted", snapshot.muted.toString());
   }

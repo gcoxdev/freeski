@@ -87,9 +87,11 @@ const provenanceChecks = {
     atlasMetadata.sourceManifestSha256.length === 64,
   atlasIdentifiesSourceManifest:
     atlasMetadata.sourceManifest === "assets/sprite-sheets/manifest.json",
-  conceptGenerationDeclaresNoReferenceImagery: conceptReadme.includes(
-    "no input/reference imagery",
-  ),
+  conceptGenerationDeclaresNoOutsideReferenceImagery: conceptReadme
+    .replace(/\s+/g, " ")
+    .includes(
+      "no outside or original-game imagery used as a generation reference",
+    ),
   proceduralAudioShipsNoRecordedAudio: !inventory.some((entry) =>
     [".mid", ".midi", ".wav"].includes(extname(entry.file).toLowerCase()),
   ),

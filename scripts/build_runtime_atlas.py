@@ -23,6 +23,7 @@ PADDING = 4
 ALPHA_CROP_THRESHOLD = 8
 PIPELINE_VERSION = "freeski-atlas-v3"
 RUNTIME_SCALE = 0.55
+TERRAIN_GEOMETRY = json.loads((ROOT / "src/world/terrainFootprints.json").read_text())
 MOGUL_GEOMETRY = json.loads((ROOT / "src/world/mogulPatchGeometry.json").read_text())
 MOGUL_POINTS = [
     {"x": (x - MOGUL_GEOMETRY["sourceWidth"] / 2) * MOGUL_GEOMETRY["heightMeters"] / MOGUL_GEOMETRY["sourceHeight"],
@@ -397,6 +398,8 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     atlas_path = OUTPUT_DIR / "freeski-atlas.png"
     atlas.save(atlas_path, optimize=True, compress_level=9)
+    # Lossless runtime compression; retain PNG as the pixel-audit reference.
+    atlas.save(OUTPUT_DIR / "freeski-atlas.webp", lossless=True, method=6, exact=True)
 
     phaser_frames: dict[str, Any] = {}
     metadata_frames: dict[str, Any] = {}
@@ -481,12 +484,23 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
                 "radiusMeters": MOGUL_RADIUS, "pointsMeters": MOGUL_POINTS,
             }
 
+        geometry_name = frame.name.removeprefix("terrain/")
+        if geometry_name == "rainbow-ramp":
+            geometry_name = "ramp"
+        if geometry_name in TERRAIN_GEOMETRY:
+            shape = TERRAIN_GEOMETRY[geometry_name]
+            radius = max(math.hypot(p["x"], p["y"]) for p in shape["points"]) + math.hypot(shape["offsetX"], shape["offsetY"])
+            metadata_frames[frame.name]["footprint"] = {
+                "shape": "polygon", "offsetXMeters": shape["offsetX"], "offsetYMeters": shape["offsetY"],
+                "radiusMeters": radius, "pointsMeters": shape["points"],
+            }
+
     phaser = {
         "frames": phaser_frames,
         "meta": {
             "app": PIPELINE_VERSION,
             "version": "1.0",
-            "image": "freeski-atlas.png",
+            "image": "freeski-atlas.webp",
             "format": "RGBA8888",
             "size": {"w": width, "h": height},
             "scale": "1",
@@ -505,6 +519,8 @@ def write_outputs(frames: list[Frame], manifest: dict[str, Any]) -> None:
             "height": height,
             "extrudedPaddingPixels": PADDING,
             "sha256": sha256(atlas_path),
+            "runtimeImage": "freeski-atlas.webp",
+            "runtimeSha256": sha256(OUTPUT_DIR / "freeski-atlas.webp"),
         },
         "frames": metadata_frames,
         "sourceStatus": manifest["status"],
@@ -534,6 +550,12 @@ def validate() -> None:
         raise RuntimeError("atlas padding metadata is invalid")
     if metadata["atlas"]["sha256"] != sha256(atlas_path):
         raise RuntimeError("atlas checksum mismatch")
+    runtime_path = OUTPUT_DIR / "freeski-atlas.webp"
+    if metadata["atlas"]["runtimeSha256"] != sha256(runtime_path):
+        raise RuntimeError("runtime atlas checksum mismatch")
+    runtime = Image.open(runtime_path).convert("RGBA")
+    if runtime.size != atlas.size or runtime.tobytes() != atlas.tobytes():
+        raise RuntimeError("lossless runtime atlas differs from PNG reference")
     magenta_pixels = 0
     opaque_pixels = 0
     transparent_corners = True

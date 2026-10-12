@@ -29,6 +29,7 @@ run(
     "test",
     "--config",
     "playwright.production.config.ts",
+    "--project=production-chromium",
     "tests/e2e/soak.spec.ts",
   ],
   {

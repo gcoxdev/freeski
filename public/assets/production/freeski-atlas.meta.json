@@ -10,7 +10,9 @@
     "width": 1024,
     "height": 4096,
     "extrudedPaddingPixels": 4,
-    "sha256": "c337fc5e6a80aae8597ba9c38402f2feedcf0f222512599de30fd9bfdebbff30"
+    "sha256": "c337fc5e6a80aae8597ba9c38402f2feedcf0f222512599de30fd9bfdebbff30",
+    "runtimeImage": "freeski-atlas.webp",
+    "runtimeSha256": "7811736234704a7f304449eb9d8f2737d946da3b9e5e4380a88e517629b4cf9e"
   },
   "frames": {
     "beginner/carve-left": {
@@ -3372,10 +3374,44 @@
         "pixelY": 109.2
       },
       "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 1.5
+        "shape": "polygon",
+        "offsetXMeters": -0.45,
+        "offsetYMeters": -0.85,
+        "radiusMeters": 3.511769203083567,
+        "pointsMeters": [
+          {
+            "x": 2.55,
+            "y": 0.0
+          },
+          {
+            "x": 1.803,
+            "y": 0.955
+          },
+          {
+            "x": 0.0,
+            "y": 1.35
+          },
+          {
+            "x": -1.803,
+            "y": 0.955
+          },
+          {
+            "x": -2.55,
+            "y": 0.0
+          },
+          {
+            "x": -1.803,
+            "y": -0.955
+          },
+          {
+            "x": -0.0,
+            "y": -1.35
+          },
+          {
+            "x": 1.803,
+            "y": -0.955
+          }
+        ]
       },
       "clearanceHeightMeters": 0.16
     },
@@ -3423,10 +3459,44 @@
         "pixelY": 109.98
       },
       "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 0.8
+        "shape": "polygon",
+        "offsetXMeters": -0.3,
+        "offsetYMeters": -0.25,
+        "radiusMeters": 1.5105124837953328,
+        "pointsMeters": [
+          {
+            "x": 1.12,
+            "y": 0.0
+          },
+          {
+            "x": 0.792,
+            "y": 0.424
+          },
+          {
+            "x": 0.0,
+            "y": 0.6
+          },
+          {
+            "x": -0.792,
+            "y": 0.424
+          },
+          {
+            "x": -1.12,
+            "y": 0.0
+          },
+          {
+            "x": -0.792,
+            "y": -0.424
+          },
+          {
+            "x": -0.0,
+            "y": -0.6
+          },
+          {
+            "x": 0.792,
+            "y": -0.424
+          }
+        ]
       },
       "clearanceHeightMeters": 0.08
     },
@@ -3992,10 +4062,28 @@
         "pixelY": 607.2
       },
       "footprint": {
-        "shape": "circle",
+        "shape": "polygon",
         "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 3.0
+        "offsetYMeters": 1.8,
+        "radiusMeters": 6.495210325427393,
+        "pointsMeters": [
+          {
+            "x": -4.4,
+            "y": -0.65
+          },
+          {
+            "x": 4.4,
+            "y": -0.65
+          },
+          {
+            "x": 4.65,
+            "y": 0.65
+          },
+          {
+            "x": -4.65,
+            "y": 0.65
+          }
+        ]
       },
       "clearanceHeightMeters": 0.2
     },
@@ -4145,10 +4233,44 @@
         "pixelY": 121.26
       },
       "footprint": {
-        "shape": "circle",
-        "offsetXMeters": 0,
-        "offsetYMeters": 0.15,
-        "radiusMeters": 1.0
+        "shape": "polygon",
+        "offsetXMeters": -0.7,
+        "offsetYMeters": 0.65,
+        "radiusMeters": 2.09524865872714,
+        "pointsMeters": [
+          {
+            "x": 1.14,
+            "y": 0.0
+          },
+          {
+            "x": 0.806,
+            "y": 0.354
+          },
+          {
+            "x": 0.0,
+            "y": 0.5
+          },
+          {
+            "x": -0.806,
+            "y": 0.354
+          },
+          {
+            "x": -1.14,
+            "y": 0.0
+          },
+          {
+            "x": -0.806,
+            "y": -0.354
+          },
+          {
+            "x": -0.0,
+            "y": -0.5
+          },
+          {
+            "x": 0.806,
+            "y": -0.354
+          }
+        ]
       },
       "clearanceHeightMeters": 0.68
     },

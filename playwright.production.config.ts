@@ -34,6 +34,8 @@ export default defineConfig({
         launchOptions,
       },
     },
+    { name: "production-firefox", use: { ...devices["Desktop Firefox"] } },
+    { name: "production-webkit", use: { ...devices["Desktop Safari"] } },
   ],
   webServer: {
     command: "npm run preview -- --port 4174",

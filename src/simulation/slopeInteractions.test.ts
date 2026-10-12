@@ -412,4 +412,64 @@ describe("SlopeInteractionSimulation tricks and secrets", () => {
       "walking-tree-awake",
     );
   });
+  it.each([-4.3, 0, 4.3])(
+    "launches from the full ramp lip at x=%s, but not its approach",
+    (x) => {
+      const player = new PlayerSimulation();
+      const interactions = new SlopeInteractionSimulation();
+      const ramp: InteractiveWorldObject = {
+        id: "wide-ramp",
+        type: "ramp",
+        x: 0,
+        y: 0,
+        interaction: interactionFor("ramp"),
+      };
+      player.reposition(x, -3, 0, 12);
+      contact(interactions, player, ramp);
+      expect(player.getSnapshot().motion).toBe("grounded");
+      player.reposition(x, 1.8, 0, 12);
+      contact(interactions, player, ramp);
+      expect(player.getSnapshot().motion).toBe("airborne");
+      expect(interactions.drainEvents().at(-1)?.type).toBe("ramp-launch");
+    },
+  );
+
+  it.each([
+    ["bump-small", -1.35, -0.25],
+    ["bump-large", -2.9, -0.85],
+    ["stump", -1.75, 0.65],
+  ] as const)("contacts the visible %s edge", (type, x, y) => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    player.reposition(x, y, 0, 12);
+    contact(interactions, player, {
+      id: type,
+      type,
+      x: 0,
+      y: 0,
+      interaction: interactionFor(type),
+    });
+    expect(player.getSnapshot().motion).toBe(
+      type === "stump" ? "crashed" : "airborne",
+    );
+  });
+
+  it.each([
+    [-5.5, 1.8],
+    [5.5, 1.8],
+    [0, -2],
+    [0, 4],
+  ])("does not launch outside the ramp lip at (%s, %s)", (x, y) => {
+    const player = new PlayerSimulation();
+    const interactions = new SlopeInteractionSimulation();
+    player.reposition(x, y, 0, 12);
+    contact(interactions, player, {
+      id: "ramp",
+      type: "ramp",
+      x: 0,
+      y: 0,
+      interaction: interactionFor("ramp"),
+    });
+    expect(player.getSnapshot().motion).toBe("grounded");
+  });
 });

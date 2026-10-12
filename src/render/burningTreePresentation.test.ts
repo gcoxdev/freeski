@@ -12,5 +12,4 @@ describe("burning tree presentation", () => {
       "terrain/burning-tree-c",
     ]);
   });
-
 });

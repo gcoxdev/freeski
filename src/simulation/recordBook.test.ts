@@ -133,4 +133,47 @@ describe("record book", () => {
     expect(parseRecordBook(invalid)).toEqual(emptyRecordBook());
     expect(record.generatorVersion).toBe(GENERATOR_VERSION);
   });
+  it("archives older worlds and preserves history across new results and reloads", () => {
+    const previous = {
+      ...recordFromResult(result("slalom", 42, 5), "classic-1991", 1, "old"),
+      generatorVersion: "freeski-world-v4",
+    };
+    const legacy = {
+      ...emptyRecordBook(),
+      schemaVersion: 3,
+      buckets: {
+        ...emptyRecordBook().buckets,
+        classic: { ...emptyRecordBook().buckets.classic, slalom: [previous] },
+      },
+    };
+    let migrated = parseRecordBook(JSON.stringify(legacy));
+    expect(migrated.buckets.classic.slalom).toEqual([]);
+    expect(migrated.archived).toEqual([previous]);
+    migrated = addRecord(
+      migrated,
+      recordFromResult(result("slalom", 38), "classic-1991", 2, "new"),
+    );
+    expect(parseRecordBook(serializeRecordBook(migrated))).toEqual(migrated);
+    expect(migrated.archived).toEqual([previous]);
+    expect(migrated.buckets.classic.slalom[0]?.id).toBe("new");
+  });
+
+  it("archives the old timed Freestyle format without treating it as a score", () => {
+    const old = {
+      ...recordFromResult(result("free-style", 10), "classic-1991", 1, "timed"),
+      metric: "time",
+      generatorVersion: "freeski-world-v2",
+    };
+    const legacy = {
+      ...emptyRecordBook(),
+      schemaVersion: 2,
+      buckets: {
+        ...emptyRecordBook().buckets,
+        classic: { ...emptyRecordBook().buckets.classic, "free-style": [old] },
+      },
+    };
+    const migrated = parseRecordBook(JSON.stringify(legacy));
+    expect(migrated.archived).toEqual([old]);
+    expect(migrated.buckets.classic["free-style"]).toEqual([]);
+  });
 });

@@ -4,6 +4,7 @@ export type YetiPresentation = "full" | "reduced";
 
 export interface AccessibilitySettings {
   readonly flash: boolean;
+  readonly pointerSteering: boolean;
   readonly reducedMotion: boolean;
   readonly screenShake: boolean;
   readonly volume: number;
@@ -17,6 +18,7 @@ export function defaultAccessibilitySettings(
 ): AccessibilitySettings {
   return Object.freeze({
     flash: !prefersReducedMotion,
+    pointerSteering: true,
     reducedMotion: prefersReducedMotion,
     screenShake: !prefersReducedMotion,
     volume: 0.8,
@@ -36,6 +38,10 @@ export function sanitizeAccessibilitySettings(
   if (!value || typeof value !== "object") return fallback;
   const candidate = value as Partial<AccessibilitySettings>;
   return Object.freeze({
+    pointerSteering:
+      typeof candidate.pointerSteering === "boolean"
+        ? candidate.pointerSteering
+        : fallback.pointerSteering,
     flash:
       typeof candidate.flash === "boolean" ? candidate.flash : fallback.flash,
     reducedMotion:

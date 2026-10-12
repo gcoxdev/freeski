@@ -162,7 +162,6 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
     "brake",
     "jump",
     "pause",
-    "reset",
     "steer-left",
     "steer-right",
     "trick-back",
@@ -275,7 +274,7 @@ test("keyboard, standard gamepad, and touch feed equivalent bounded actions", as
     capacity: 7_200,
     droppedFrames: 0,
     format: "freeski-replay-v2",
-    generatorVersion: "freeski-world-v4",
+    generatorVersion: "freeski-world-v5",
     seed: "gate-seven-input",
   });
   expect(releaseAudit.replay.frames.length).toBeGreaterThan(0);
@@ -301,6 +300,8 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
   page.on("pageerror", (error) => pageErrors.push(error.message));
   await instrumentAudioContexts(page);
   await page.goto("/?seed=gate-seven-accessibility&training=1");
+  // Finish loading before the setup reload; WebKit reports aborted in-flight XHRs.
+  await waitUntilReady(page);
   await page.evaluate(() =>
     localStorage.removeItem("freeski.accessibility.v1"),
   );
@@ -406,10 +407,12 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
   await page.waitForFunction(() =>
     window.__FREE_SKI__?.settings.heldActions.includes("steer-right"),
   );
-  const beforeBlur = await page.evaluate(
-    () => window.__FREE_SKI__!.player.simulationSeconds,
-  );
-  await page.evaluate(() => window.dispatchEvent(new Event("blur")));
+  // Measure and blur in one browser task, excluding automation round-trip latency.
+  const beforeBlur = await page.evaluate(() => {
+    const seconds = window.__FREE_SKI__!.player.simulationSeconds;
+    window.dispatchEvent(new Event("blur"));
+    return seconds;
+  });
   await page.waitForFunction(
     () =>
       window.__FREE_SKI__?.lifecycle.reasons.includes("blur") &&
@@ -418,7 +421,7 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
   const pausedAtBlur = await page.evaluate(
     () => window.__FREE_SKI__!.player.simulationSeconds,
   );
-  expect(pausedAtBlur - beforeBlur).toBeLessThan(0.1);
+  expect(pausedAtBlur).toBe(beforeBlur);
   await page.waitForTimeout(250);
   expect(
     await page.evaluate(() => window.__FREE_SKI__!.player.simulationSeconds),
@@ -496,6 +499,7 @@ test("accessibility settings persist and lifecycle transitions resume cleanly", 
     await page.evaluate(() => window.__FREE_SKI__!.settings.accessibility),
   ).toEqual({
     flash: true,
+    pointerSteering: true,
     reducedMotion: false,
     screenShake: true,
     volume: 0.35,

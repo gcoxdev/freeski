@@ -151,6 +151,26 @@ export class BrowserInputAdapter {
     }
   }
 
+  setAirborne(airborne: boolean): void {
+    const cluster = this.touchRoot?.querySelector<HTMLElement>(
+      ".touch-controls__air",
+    );
+    if (!cluster || cluster.hidden === !airborne) return;
+    cluster.hidden = !airborne;
+    for (const button of this.touchButtons) {
+      if (!button.dataset.action?.startsWith("trick-")) continue;
+      button.disabled = !airborne;
+      if (!airborne) delete button.dataset.active;
+    }
+    if (!airborne) {
+      for (const [pointerId, touch] of this.activeTouches) {
+        if (!touch.action.startsWith("trick-")) continue;
+        this.actions.releaseSource(touch.source);
+        this.activeTouches.delete(pointerId);
+      }
+    }
+  }
+
   sample(): ActionFrame {
     this.pollGamepads();
     const frame = this.actions.sample();
@@ -268,7 +288,7 @@ export class BrowserInputAdapter {
     if (!this.touchEnabled) return;
     const button = event.currentTarget as HTMLButtonElement;
     const action = button.dataset.action as GameAction | undefined;
-    if (!action) return;
+    if (!action || button.disabled) return;
     event.preventDefault();
     this.lastTouchPointerAt = performance.now();
     const source = `touch:${event.pointerId}:${action}`;
