@@ -19,14 +19,18 @@ Open the local URL printed in the terminal.
 
 ## Controls
 
-| Action          | Keyboard                     |
-| --------------- | ---------------------------- |
-| Steer           | Left/right arrows or A/D     |
-| Tuck / brake    | Down arrow or S / Shift or B |
-| Jump / rotate   | Space, Up arrow, or W        |
-| Airborne tricks | Q/E to spin, Z/X for poses   |
-| Boost           | F                            |
-| Pause / restart | Escape / R                   |
+| Action                       | Keyboard                 |
+| ---------------------------- | ------------------------ |
+| Steer                        | Left/right arrows or A/D |
+| Tuck                         | Down arrow or S          |
+| Brake                        | Shift or B               |
+| Jump / rotate                | Space, Up arrow, or W    |
+| Spin left / right (airborne) | Q / E                    |
+| Spread / daffy (airborne)    | Z / X                    |
+| Boost                        | F                        |
+| Pause                        | Escape or F3             |
+| Restart                      | R or F2                  |
+| Mute / unmute                | M                        |
 
 Mouse steering, click-to-jump, touch controls, and standard gamepads are also supported. Open **Settings** to change pointer controls, sound, and accessibility options. Preferences and records stay in your browser.
 
