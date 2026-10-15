@@ -22,6 +22,16 @@ jobs:
       - run: npm run audit:clean-room
       - run: npm run build
       - run: npx playwright install --with-deps chromium firefox webkit
+      - name: Set up virtual audio output
+        # Firefox needs an audio server to resume Web Audio on headless Linux.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pulseaudio pulseaudio-utils
+          pulseaudio --start --exit-idle-time=-1
+          pactl load-module module-null-sink sink_name=freeski_ci
+          pactl set-default-sink freeski_ci
+          pactl info
+          pactl list short sinks
       - run: npm run test:e2e:production
       - uses: actions/upload-artifact@v4
         if: failure()
